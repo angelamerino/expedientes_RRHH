@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<faces-config version="2.2"
+              xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>inicio</from-outcome>
+            <to-view-id>/contenido/inicio.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>empleado</from-outcome>
+            <to-view-id>/contenido/add_empleados.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+  <!--      
+        <navigation-case>
+            <from-outcome>capacitacion</from-outcome>
+            <to-view-id>/contenido/capacitacion.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>solicitudes</from-outcome>
+            <to-view-id>/contenido/solicitudes.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>administracion</from-outcome>
+            <to-view-id>/contenido/administracion.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+          -->
+        <navigation-case>
+            <from-outcome>ayuda</from-outcome>
+            <to-view-id>/contenido/ayuda.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+      
+        <navigation-case>
+            <from-outcome>salir</from-outcome>
+            <to-view-id>/index.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        
+    </navigation-rule>
+</faces-config>

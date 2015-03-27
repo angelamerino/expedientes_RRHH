@@ -1,0 +1,204 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../resources/plantilla/plantilla.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <h:form>
+            <!-- Código para acordeón  -->
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                <div class="panel panel-info">
+                    <div class="panel-heading" role="tab" id="headingOne">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                <strong>Datos Personales</strong>
+                            </a>
+                        </h4>
+                    </div>
+                    
+                    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                        <div class="panel-body">
+                            <p:panelGrid style="width: 100%;">
+                                <p:row>
+                                    <p:column colspan="4">
+                                        <p:outputLabel value="Foto del Empleado" for="UrlFotoEmp"/>
+                                        <p:fileUpload fileUploadListener="#{fileUploadView.handleFileUpload}" mode="advanced" dragDropSupport="false"
+                                                      update="messages" sizeLimit="100000" fileLimit="3" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" id="UrlFotoEmp"/>
+                                        <p:growl id="messages" showDetail="true" />
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column><p:outputLabel value="NrEmpleado:" for="nrEmpleado" /></p:column>
+                                    <p:column><h:inputText id="nrEmpleado" value="#{manejadorGestionEmpleado.nuevoEmpleado.nrEmpleado}" title="NrEmpleado" required="true" requiredMessage="The NrEmpleado field is required." class="form-control"/></p:column>
+                                    <p:column><p:outputLabel value="Número de Documento Único de Identidad (DUI):" for="numDui" /></p:column>
+                                    <p:column><h:inputText id="numDui" value="#{manejadorGestionEmpleado.nuevoEmpleado.numDui}" title="NumDui" class="form-control"/></p:column>
+                                </p:row>
+                                
+                                <p:row>
+                                    <p:column><p:outputLabel value="NombreEmpleado:" for="nombreEmpleado" /></p:column>
+                                    <p:column colspan="3"><h:inputText id="nombreEmpleado" value="#{manejadorGestionEmpleado.nuevoEmpleado.nombreEmpleado}" title="NombreEmpleado" class="form-control"/></p:column>
+                                </p:row>
+                                
+                                <p:row>
+                                    <p:column><p:outputLabel value="Nombre según ISSS:" for="nombreIsss" /></p:column>
+                                    <p:column><h:inputText id="nombreIsss" value="#{manejadorGestionEmpleado.nuevoEmpleado.nombreIsss}" title="NombreIsss" class="form-control"/></p:column>
+                                    <p:column><p:outputLabel value="Número de Seguro Social (ISSS):" for="numIsss" /></p:column>
+                                    <p:column><h:inputText id="numIsss" value="#{manejadorGestionEmpleado.nuevoEmpleado.numIsss}" title="NumIsss" class="form-control"/></p:column>
+                                </p:row>
+                                
+                                <p:row>
+                                    <p:column><p:outputLabel value="Nombre según NIT:" for="nombreNit"/></p:column>
+                                    <p:column><h:inputText id="nombreNit" value="#{manejadorGestionEmpleado.nuevoEmpleado.nombreNit}" title="NombreNit" class="form-control"/></p:column>
+                                    <p:column><p:outputLabel value="Número de Identificación Tributaria (NIT):" for="numNit" /></p:column>
+                                    <p:column><h:inputText id="numNit" value="#{manejadorGestionEmpleado.nuevoEmpleado.numNit}" title="NumNit" class="form-control"/></p:column>
+                                </p:row>
+                                
+                                <p:row>
+                                    <p:column><p:outputLabel value="Número Único de Previsión (NUP):" for="numNup" /></p:column>
+                                    <p:column><h:inputText id="numNup" value="#{manejadorGestionEmpleado.nuevoEmpleado.numNup}" title="NumNup" class="form-control"/></p:column>
+                                    <p:column><p:outputLabel value="Número NIP:" for="numNip" /></p:column>
+                                    <p:column><h:inputText id="numNip" value="#{manejadorGestionEmpleado.nuevoEmpleado.numNip}" title="NumNip" class="form-control"/></p:column>
+                                </p:row>
+                                
+                                <!--<p:row>
+                                    <p:column><p:outputLabel value="País de Nacimiento:" for="paisnac" /></p:column>
+                                    <p:column><h:inputText id="paisNac" value="{manejadorGestionEmpleado.nuevoEmpleado.paisNac}" title="paisNac" /></p:column>
+                                    <p:column><p:outputLabel value="Naturalizado:" for="naturalizado" /></p:column>
+                                    <p:column><h:inputText id="naturalizado" value="{manejadorGestionEmpleado.nuevoEmpleado.naturalizado}" title="Naturalizado" /></p:column>
+                                </p:row> -->
+                                
+                                
+                                <p:row>
+                                    <p:column></p:column>
+                                    <p:column></p:column>
+                                    <p:column></p:column>
+                                    <p:column></p:column>
+                                </p:row>
+                                
+                                <p:row>
+                                    <p:column><p:outputLabel value="Correo Personal:" for="correoPersonal" /></p:column>
+                                    <p:column><h:inputText id="correoPersonal" value="#{manejadorGestionEmpleado.nuevoEmpleado.correoPersonal}" title="CorreoPersonal" class="form-control"/></p:column>
+                                    <p:column><p:outputLabel value="Fecha de Nacimiento:" for="fechaNac" /></p:column>
+                                    <p:column><h:inputText id="fechaNac" value="#{manejadorGestionEmpleado.nuevoEmpleado.fechaNac}" title="FechaNac" class="form-control">
+                                    <f:convertDateTime pattern="MM/dd/yyyy" /></h:inputText></p:column>
+                                </p:row>
+                              
+                                </p:panelGrid>
+                        </div>
+                    </div>
+                    
+                    <div class="panel panel-info">
+                        <div class="panel-heading" role="tab" id="headingTwo">
+                            <h4 class="panel-title">
+                                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    <strong>Datos de Contacto</strong>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                            <div class="panel-body">
+                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="panel panel-info">
+                        <div class="panel-heading" role="tab" id="headingThree">
+                            <h4 class="panel-title">
+                                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    <strong>Contactos de Emergencia</strong>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                            <div class="panel-body">
+                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+        </h:form>
+
+
+        <f:view>
+            <h:form>
+                <h1><h:outputText value="Crear/Editar"/></h1>
+                <h:panelGrid columns="4" class="table">
+                    <p:outputLabel value="NrEmpleado:" for="nrEmpleado" />
+                    <h:inputText id="nrEmpleado" value="#{manejadorGestionEmpleado.nuevoEmpleado.nrEmpleado}" title="NrEmpleado" required="true" requiredMessage="The NrEmpleado field is required." />
+                    <p:outputLabel value="NombreEmpleado:" for="nombreEmpleado" />
+                    <h:inputText id="nombreEmpleado" value="#{manejadorGestionEmpleado.nuevoEmpleado.nombreEmpleado}" title="NombreEmpleado" />
+                    <p:outputLabel value="UrlFotoEmp:" for="urlFotoEmp" />
+                    <h:inputText id="urlFotoEmp" value="#{manejadorGestionEmpleado.nuevoEmpleado.urlFotoEmp}" title="UrlFotoEmp" />
+                    <p:outputLabel value="NombreIsss:" for="nombreIsss" />
+                    <h:inputText id="nombreIsss" value="#{manejadorGestionEmpleado.nuevoEmpleado.nombreIsss}" title="NombreIsss" />
+                    <p:outputLabel value="NombreNit:" for="nombreNit" />
+                    <h:inputText id="nombreNit" value="#{manejadorGestionEmpleado.nuevoEmpleado.nombreNit}" title="NombreNit" />
+                    <p:outputLabel value="CorreoPersonal:" for="correoPersonal" />
+                    <h:inputText id="correoPersonal" value="#{manejadorGestionEmpleado.nuevoEmpleado.correoPersonal}" title="CorreoPersonal" />
+                    <p:outputLabel value="FechaNac:" for="fechaNac" />
+                    <h:inputText id="fechaNac" value="#{manejadorGestionEmpleado.nuevoEmpleado.fechaNac}" title="FechaNac" >
+                        <f:convertDateTime pattern="MM/dd/yyyy" />
+                    </h:inputText>
+                    <p:outputLabel value="Naturalizado:" for="naturalizado" />
+                    <h:inputText id="naturalizado" value="#{manejadorGestionEmpleado.nuevoEmpleado.naturalizado}" title="Naturalizado" />
+                    <p:outputLabel value="Direccion:" for="direccion" />
+                    <h:inputText id="direccion" value="#{manejadorGestionEmpleado.nuevoEmpleado.direccion}" title="Direccion" />
+                    <p:outputLabel value="TelefonoCasa:" for="telefonoCasa" />
+                    <h:inputText id="telefonoCasa" value="#{manejadorGestionEmpleado.nuevoEmpleado.telefonoCasa}" title="TelefonoCasa" />
+                    <p:outputLabel value="TelefonoCelular:" for="telefonoCelular" />
+                    <h:inputText id="telefonoCelular" value="#{manejadorGestionEmpleado.nuevoEmpleado.telefonoCelular}" title="TelefonoCelular" />
+                    <p:outputLabel value="NumDui:" for="numDui" />
+                    <h:inputText id="numDui" value="#{manejadorGestionEmpleado.nuevoEmpleado.numDui}" title="NumDui" />
+                    <p:outputLabel value="NumIsss:" for="numIsss" />
+                    <h:inputText id="numIsss" value="#{manejadorGestionEmpleado.nuevoEmpleado.numIsss}" title="NumIsss" />
+                    <p:outputLabel value="NumNit:" for="numNit" />
+                    <h:inputText id="numNit" value="#{manejadorGestionEmpleado.nuevoEmpleado.numNit}" title="NumNit" />
+                    <p:outputLabel value="NumNup:" for="numNup" />
+                    <h:inputText id="numNup" value="#{manejadorGestionEmpleado.nuevoEmpleado.numNup}" title="NumNup" />
+                    <p:outputLabel value="NumNip:" for="numNip" />
+                    <h:inputText id="numNip" value="#{manejadorGestionEmpleado.nuevoEmpleado.numNip}" title="NumNip" />
+                    <p:outputLabel value="DocCurriculum:" for="docCurriculum" />
+                    <h:inputText id="docCurriculum" value="#{manejadorGestionEmpleado.nuevoEmpleado.docCurriculum}" title="DocCurriculum" />
+                    <p:outputLabel value="FechaIngresoPublico:" for="fechaIngresoPublico" />
+                    <h:inputText id="fechaIngresoPublico" value="#{manejadorGestionEmpleado.nuevoEmpleado.fechaIngresoPublico}" title="FechaIngresoPublico" >
+                        <f:convertDateTime pattern="MM/dd/yyyy" />
+                    </h:inputText>
+                    <p:outputLabel value="Comentarios:" for="comentarios" />
+                    <h:inputText id="comentarios" value="#{manejadorGestionEmpleado.nuevoEmpleado.comentarios}" title="Comentarios" />
+                    <p:outputLabel value="Jefe:" for="jefe" />
+                    <h:inputText id="jefe" value="#{manejadorGestionEmpleado.nuevoEmpleado.jefe}" title="Jefe" />
+                    <p:outputLabel value="CargoNominal:" for="cargoNominal" />
+                    <h:inputText id="cargoNominal" value="#{manejadorGestionEmpleado.nuevoEmpleado.cargoNominal}" title="CargoNominal" />
+                    <p:outputLabel value="CargoFuncional:" for="cargoFuncional" />
+                    <h:inputText id="cargoFuncional" value="#{manejadorGestionEmpleado.nuevoEmpleado.cargoFuncional}" title="CargoFuncional" />
+                    <p:outputLabel value="SalarioEmp:" for="salarioEmp" />
+                    <h:inputText id="salarioEmp" value="#{manejadorGestionEmpleado.nuevoEmpleado.salarioEmp}" title="SalarioEmp" />
+                    <p:outputLabel value="CorreoInstitucional:" for="correoInstitucional" />
+                    <h:inputText id="correoInstitucional" value="#{manejadorGestionEmpleado.nuevoEmpleado.correoInstitucional}" title="CorreoInstitucional" />
+                    <p:outputLabel value="FechaIngresoInsti:" for="fechaIngresoInsti" />
+                    <h:inputText id="fechaIngresoInsti" value="#{manejadorGestionEmpleado.nuevoEmpleado.fechaIngresoInsti}" title="FechaIngresoInsti" >
+                        <f:convertDateTime pattern="MM/dd/yyyy" />
+                    </h:inputText>
+                    <p:outputLabel value="DocDescPuesto:" for="docDescPuesto" />
+                    <h:inputText id="docDescPuesto" value="#{manejadorGestionEmpleado.nuevoEmpleado.docDescPuesto}" title="DocDescPuesto" />
+                    <p:outputLabel value="EmpNrEmpleado:" for="empNrEmpleado" />
+                    <h:selectOneMenu id="empNrEmpleado" value="#{manejadorGestionEmpleado.nuevoEmpleado.empNrEmpleado}" title="EmpNrEmpleado" >
+                        <!-- TODO: update below reference to list of available items-->
+                        <f:selectItems value="#{fixme}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+            </h:form>
+        </f:view>
+
+
+    </ui:define>
+
+</ui:composition>
