@@ -6,6 +6,7 @@
 package sv.gob.cultura.rrhh.entidades;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -18,6 +19,9 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -35,17 +39,43 @@ public class Capacitaciones implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_cap")
     private Integer idCap;
-    @Size(max = 1024)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 1024)
     @Column(name = "tema_cap")
     private String temaCap;
-    @Size(max = 200)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 200)
     @Column(name = "facilitador_cap")
     private String facilitadorCap;
-    @Size(max = 200)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 200)
     @Column(name = "institucion_cap")
     private String institucionCap;
     @Column(name = "num_horas_cap")
     private Integer numHorasCap;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "anio_cap")
+    @Temporal(TemporalType.DATE)
+    private Date anioCap;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 5)
+    @Column(name = "num_grupo")
+    private String numGrupo;
+    @Column(name = "user_crea_cap")
+    private Integer userCreaCap;
+    @Column(name = "fecha_crea_cap")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCreaCap;
+    @Column(name = "user_mod_cap")
+    private Integer userModCap;
+    @Column(name = "fecha_mod_cap")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaModCap;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCap")
     private List<HorariosCap> horariosCapList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCap")
@@ -56,6 +86,15 @@ public class Capacitaciones implements Serializable {
 
     public Capacitaciones(Integer idCap) {
         this.idCap = idCap;
+    }
+
+    public Capacitaciones(Integer idCap, String temaCap, String facilitadorCap, String institucionCap, Date anioCap, String numGrupo) {
+        this.idCap = idCap;
+        this.temaCap = temaCap;
+        this.facilitadorCap = facilitadorCap;
+        this.institucionCap = institucionCap;
+        this.anioCap = anioCap;
+        this.numGrupo = numGrupo;
     }
 
     public Integer getIdCap() {
@@ -98,6 +137,54 @@ public class Capacitaciones implements Serializable {
         this.numHorasCap = numHorasCap;
     }
 
+    public Date getAnioCap() {
+        return anioCap;
+    }
+
+    public void setAnioCap(Date anioCap) {
+        this.anioCap = anioCap;
+    }
+
+    public String getNumGrupo() {
+        return numGrupo;
+    }
+
+    public void setNumGrupo(String numGrupo) {
+        this.numGrupo = numGrupo;
+    }
+
+    public Integer getUserCreaCap() {
+        return userCreaCap;
+    }
+
+    public void setUserCreaCap(Integer userCreaCap) {
+        this.userCreaCap = userCreaCap;
+    }
+
+    public Date getFechaCreaCap() {
+        return fechaCreaCap;
+    }
+
+    public void setFechaCreaCap(Date fechaCreaCap) {
+        this.fechaCreaCap = fechaCreaCap;
+    }
+
+    public Integer getUserModCap() {
+        return userModCap;
+    }
+
+    public void setUserModCap(Integer userModCap) {
+        this.userModCap = userModCap;
+    }
+
+    public Date getFechaModCap() {
+        return fechaModCap;
+    }
+
+    public void setFechaModCap(Date fechaModCap) {
+        this.fechaModCap = fechaModCap;
+    }
+
     public List<HorariosCap> getHorariosCapList() {
         return horariosCapList;
     }
@@ -136,7 +223,7 @@ public class Capacitaciones implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.Capacitaciones[ idCap=" + idCap + " ]";
+        return "sv.gob.cultura.rrhh.entidades.Capacitaciones[ idCap=" + idCap + " ]";
     }
     
 }

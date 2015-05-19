@@ -6,6 +6,7 @@
 package sv.gob.cultura.rrhh.entidades;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +18,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -34,18 +38,30 @@ public class ContactoEmergenciaEmp implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_contacto_emer")
     private Integer idContactoEmer;
-    @Size(max = 200)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 200)
     @Column(name = "nombre_contacto")
     private String nombreContacto;
     @Size(max = 9)
-    @Column(name = "tel_casa_contacto")
-    private String telCasaContacto;
+    @Column(name = "tel_fijo_contacto")
+    private String telFijoContacto;
     @Size(max = 9)
-    @Column(name = "tel_celular_contacto")
-    private String telCelularContacto;
-    @Size(max = 9)
-    @Column(name = "tel_trabajo_contacto")
-    private String telTrabajoContacto;
+    @Column(name = "tel_movil_contacto")
+    private String telMovilContacto;
+    @Column(name = "user_crea_contac")
+    private Integer userCreaContac;
+    @Column(name = "fecha_crea_contac")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCreaContac;
+    @Column(name = "user_mod_contac")
+    private Integer userModContac;
+    @Column(name = "fecha_mod_contac")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaModContac;
+    @JoinColumn(name = "id_parentesco", referencedColumnName = "id_parentesco")
+    @ManyToOne(optional = false)
+    private Parentesco idParentesco;
     @JoinColumn(name = "nr_empleado", referencedColumnName = "nr_empleado")
     @ManyToOne(optional = false)
     private Empleados nrEmpleado;
@@ -55,6 +71,11 @@ public class ContactoEmergenciaEmp implements Serializable {
 
     public ContactoEmergenciaEmp(Integer idContactoEmer) {
         this.idContactoEmer = idContactoEmer;
+    }
+
+    public ContactoEmergenciaEmp(Integer idContactoEmer, String nombreContacto) {
+        this.idContactoEmer = idContactoEmer;
+        this.nombreContacto = nombreContacto;
     }
 
     public Integer getIdContactoEmer() {
@@ -73,28 +94,60 @@ public class ContactoEmergenciaEmp implements Serializable {
         this.nombreContacto = nombreContacto;
     }
 
-    public String getTelCasaContacto() {
-        return telCasaContacto;
+    public String getTelFijoContacto() {
+        return telFijoContacto;
     }
 
-    public void setTelCasaContacto(String telCasaContacto) {
-        this.telCasaContacto = telCasaContacto;
+    public void setTelFijoContacto(String telFijoContacto) {
+        this.telFijoContacto = telFijoContacto;
     }
 
-    public String getTelCelularContacto() {
-        return telCelularContacto;
+    public String getTelMovilContacto() {
+        return telMovilContacto;
     }
 
-    public void setTelCelularContacto(String telCelularContacto) {
-        this.telCelularContacto = telCelularContacto;
+    public void setTelMovilContacto(String telMovilContacto) {
+        this.telMovilContacto = telMovilContacto;
     }
 
-    public String getTelTrabajoContacto() {
-        return telTrabajoContacto;
+    public Integer getUserCreaContac() {
+        return userCreaContac;
     }
 
-    public void setTelTrabajoContacto(String telTrabajoContacto) {
-        this.telTrabajoContacto = telTrabajoContacto;
+    public void setUserCreaContac(Integer userCreaContac) {
+        this.userCreaContac = userCreaContac;
+    }
+
+    public Date getFechaCreaContac() {
+        return fechaCreaContac;
+    }
+
+    public void setFechaCreaContac(Date fechaCreaContac) {
+        this.fechaCreaContac = fechaCreaContac;
+    }
+
+    public Integer getUserModContac() {
+        return userModContac;
+    }
+
+    public void setUserModContac(Integer userModContac) {
+        this.userModContac = userModContac;
+    }
+
+    public Date getFechaModContac() {
+        return fechaModContac;
+    }
+
+    public void setFechaModContac(Date fechaModContac) {
+        this.fechaModContac = fechaModContac;
+    }
+
+    public Parentesco getIdParentesco() {
+        return idParentesco;
+    }
+
+    public void setIdParentesco(Parentesco idParentesco) {
+        this.idParentesco = idParentesco;
     }
 
     public Empleados getNrEmpleado() {
@@ -127,7 +180,7 @@ public class ContactoEmergenciaEmp implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.ContactoEmergenciaEmp[ idContactoEmer=" + idContactoEmer + " ]";
+        return "sv.gob.cultura.rrhh.entidades.ContactoEmergenciaEmp[ idContactoEmer=" + idContactoEmer + " ]";
     }
     
 }

@@ -18,6 +18,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -35,7 +36,9 @@ public class Estados implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_estado")
     private Integer idEstado;
-    @Size(max = 150)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 150)
     @Column(name = "nombre_estado")
     private String nombreEstado;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEstado")
@@ -46,6 +49,11 @@ public class Estados implements Serializable {
 
     public Estados(Integer idEstado) {
         this.idEstado = idEstado;
+    }
+
+    public Estados(Integer idEstado, String nombreEstado) {
+        this.idEstado = idEstado;
+        this.nombreEstado = nombreEstado;
     }
 
     public Integer getIdEstado() {
@@ -94,7 +102,7 @@ public class Estados implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.Estados[ idEstado=" + idEstado + " ]";
+        return "sv.gob.cultura.rrhh.entidades.Estados[ idEstado=" + idEstado + " ]";
     }
     
 }

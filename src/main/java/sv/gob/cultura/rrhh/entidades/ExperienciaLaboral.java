@@ -20,6 +20,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -37,21 +38,41 @@ public class ExperienciaLaboral implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_exp_lab")
     private Integer idExpLab;
-    @Size(max = 1024)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 1024)
     @Column(name = "institucion_empresa")
     private String institucionEmpresa;
-    @Size(max = 200)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 200)
     @Column(name = "cargo_exp_lab")
     private String cargoExpLab;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "fecha_desde_exp_lab")
     @Temporal(TemporalType.DATE)
     private Date fechaDesdeExpLab;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "fecha_hasta_exp_lab")
     @Temporal(TemporalType.DATE)
     private Date fechaHastaExpLab;
-    @Size(max = 25)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 25)
     @Column(name = "sector_exp_lab")
     private String sectorExpLab;
+    @Column(name = "user_crea_exp")
+    private Integer userCreaExp;
+    @Column(name = "fecha_crea_exp")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCreaExp;
+    @Column(name = "user_mod_exp")
+    private Integer userModExp;
+    @Column(name = "fecha_mod_exp")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaModExp;
     @JoinColumn(name = "nr_empleado", referencedColumnName = "nr_empleado")
     @ManyToOne(optional = false)
     private Empleados nrEmpleado;
@@ -61,6 +82,15 @@ public class ExperienciaLaboral implements Serializable {
 
     public ExperienciaLaboral(Integer idExpLab) {
         this.idExpLab = idExpLab;
+    }
+
+    public ExperienciaLaboral(Integer idExpLab, String institucionEmpresa, String cargoExpLab, Date fechaDesdeExpLab, Date fechaHastaExpLab, String sectorExpLab) {
+        this.idExpLab = idExpLab;
+        this.institucionEmpresa = institucionEmpresa;
+        this.cargoExpLab = cargoExpLab;
+        this.fechaDesdeExpLab = fechaDesdeExpLab;
+        this.fechaHastaExpLab = fechaHastaExpLab;
+        this.sectorExpLab = sectorExpLab;
     }
 
     public Integer getIdExpLab() {
@@ -111,6 +141,38 @@ public class ExperienciaLaboral implements Serializable {
         this.sectorExpLab = sectorExpLab;
     }
 
+    public Integer getUserCreaExp() {
+        return userCreaExp;
+    }
+
+    public void setUserCreaExp(Integer userCreaExp) {
+        this.userCreaExp = userCreaExp;
+    }
+
+    public Date getFechaCreaExp() {
+        return fechaCreaExp;
+    }
+
+    public void setFechaCreaExp(Date fechaCreaExp) {
+        this.fechaCreaExp = fechaCreaExp;
+    }
+
+    public Integer getUserModExp() {
+        return userModExp;
+    }
+
+    public void setUserModExp(Integer userModExp) {
+        this.userModExp = userModExp;
+    }
+
+    public Date getFechaModExp() {
+        return fechaModExp;
+    }
+
+    public void setFechaModExp(Date fechaModExp) {
+        this.fechaModExp = fechaModExp;
+    }
+
     public Empleados getNrEmpleado() {
         return nrEmpleado;
     }
@@ -141,7 +203,7 @@ public class ExperienciaLaboral implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.ExperienciaLaboral[ idExpLab=" + idExpLab + " ]";
+        return "sv.gob.cultura.rrhh.entidades.ExperienciaLaboral[ idExpLab=" + idExpLab + " ]";
     }
     
 }

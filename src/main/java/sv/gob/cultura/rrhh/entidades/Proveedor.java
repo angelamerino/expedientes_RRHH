@@ -17,6 +17,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -34,7 +35,9 @@ public class Proveedor implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_proveedor")
     private Integer idProveedor;
-    @Size(max = 1024)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 1024)
     @Column(name = "nombre_prov")
     private String nombreProv;
     @ManyToMany(mappedBy = "proveedorList")
@@ -45,6 +48,11 @@ public class Proveedor implements Serializable {
 
     public Proveedor(Integer idProveedor) {
         this.idProveedor = idProveedor;
+    }
+
+    public Proveedor(Integer idProveedor, String nombreProv) {
+        this.idProveedor = idProveedor;
+        this.nombreProv = nombreProv;
     }
 
     public Integer getIdProveedor() {
@@ -93,7 +101,7 @@ public class Proveedor implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.Proveedor[ idProveedor=" + idProveedor + " ]";
+        return "sv.gob.cultura.rrhh.entidades.Proveedor[ idProveedor=" + idProveedor + " ]";
     }
     
 }

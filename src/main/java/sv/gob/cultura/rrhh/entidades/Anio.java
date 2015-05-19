@@ -18,6 +18,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -34,8 +35,10 @@ public class Anio implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_anio")
     private Integer idAnio;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "anio")
-    private Integer anio;
+    private int anio;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idAnio")
     private List<Prestacion> prestacionList;
 
@@ -46,6 +49,11 @@ public class Anio implements Serializable {
         this.idAnio = idAnio;
     }
 
+    public Anio(Integer idAnio, int anio) {
+        this.idAnio = idAnio;
+        this.anio = anio;
+    }
+
     public Integer getIdAnio() {
         return idAnio;
     }
@@ -54,11 +62,11 @@ public class Anio implements Serializable {
         this.idAnio = idAnio;
     }
 
-    public Integer getAnio() {
+    public int getAnio() {
         return anio;
     }
 
-    public void setAnio(Integer anio) {
+    public void setAnio(int anio) {
         this.anio = anio;
     }
 
@@ -92,7 +100,7 @@ public class Anio implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.Anio[ idAnio=" + idAnio + " ]";
+        return "sv.gob.cultura.rrhh.entidades.Anio[ idAnio=" + idAnio + " ]";
     }
     
 }

@@ -13,10 +13,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -34,10 +36,14 @@ public class ImgDoc implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_img_doc")
     private Integer idImgDoc;
-    @Size(max = 25)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 25)
     @Column(name = "ref_img_doc")
     private String refImgDoc;
-    @Size(max = 100)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 100)
     @Column(name = "nombre_archivo")
     private String nombreArchivo;
     @Column(name = "size_archivo")
@@ -45,21 +51,56 @@ public class ImgDoc implements Serializable {
     @Size(max = 1024)
     @Column(name = "descripcion")
     private String descripcion;
-    @Size(max = 200)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 200)
     @Column(name = "ruta_archivo")
     private String rutaArchivo;
-    @Size(max = 200)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 200)
     @Column(name = "tipo_archivo")
     private String tipoArchivo;
+    @JoinColumn(name = "id_sancion", referencedColumnName = "id_sancion")
+    @ManyToOne(optional = false)
+    private Sanciones idSancion;
+    @JoinColumn(name = "id_reconocimiento", referencedColumnName = "id_reconocimiento")
+    @ManyToOne
+    private Reconocimientos idReconocimiento;
+    @JoinColumn(name = "id_mov_emp", referencedColumnName = "id_mov_emp")
+    @ManyToOne
+    private MovimientosEmp idMovEmp;
+    @JoinColumns({
+        @JoinColumn(name = "id_caract_idioma", referencedColumnName = "id_caract_idioma"),
+        @JoinColumn(name = "id_idioma", referencedColumnName = "id_idioma")})
+    @ManyToOne
+    private IdiomasCaracteristicas idiomasCaracteristicas;
+    @JoinColumn(name = "id_hsalarial", referencedColumnName = "id_hsalarial")
+    @ManyToOne
+    private HistorialSalarial idHsalarial;
+    @JoinColumn(name = "id_estudio", referencedColumnName = "id_estudio")
+    @ManyToOne
+    private EstudiosEmp idEstudio;
     @JoinColumn(name = "nr_empleado", referencedColumnName = "nr_empleado")
     @ManyToOne(optional = false)
     private Empleados nrEmpleado;
+    @JoinColumn(name = "id_descuento_emp", referencedColumnName = "id_descuento_emp")
+    @ManyToOne(optional = false)
+    private DescuentosEmp idDescuentoEmp;
 
     public ImgDoc() {
     }
 
     public ImgDoc(Integer idImgDoc) {
         this.idImgDoc = idImgDoc;
+    }
+
+    public ImgDoc(Integer idImgDoc, String refImgDoc, String nombreArchivo, String rutaArchivo, String tipoArchivo) {
+        this.idImgDoc = idImgDoc;
+        this.refImgDoc = refImgDoc;
+        this.nombreArchivo = nombreArchivo;
+        this.rutaArchivo = rutaArchivo;
+        this.tipoArchivo = tipoArchivo;
     }
 
     public Integer getIdImgDoc() {
@@ -118,12 +159,68 @@ public class ImgDoc implements Serializable {
         this.tipoArchivo = tipoArchivo;
     }
 
+    public Sanciones getIdSancion() {
+        return idSancion;
+    }
+
+    public void setIdSancion(Sanciones idSancion) {
+        this.idSancion = idSancion;
+    }
+
+    public Reconocimientos getIdReconocimiento() {
+        return idReconocimiento;
+    }
+
+    public void setIdReconocimiento(Reconocimientos idReconocimiento) {
+        this.idReconocimiento = idReconocimiento;
+    }
+
+    public MovimientosEmp getIdMovEmp() {
+        return idMovEmp;
+    }
+
+    public void setIdMovEmp(MovimientosEmp idMovEmp) {
+        this.idMovEmp = idMovEmp;
+    }
+
+    public IdiomasCaracteristicas getIdiomasCaracteristicas() {
+        return idiomasCaracteristicas;
+    }
+
+    public void setIdiomasCaracteristicas(IdiomasCaracteristicas idiomasCaracteristicas) {
+        this.idiomasCaracteristicas = idiomasCaracteristicas;
+    }
+
+    public HistorialSalarial getIdHsalarial() {
+        return idHsalarial;
+    }
+
+    public void setIdHsalarial(HistorialSalarial idHsalarial) {
+        this.idHsalarial = idHsalarial;
+    }
+
+    public EstudiosEmp getIdEstudio() {
+        return idEstudio;
+    }
+
+    public void setIdEstudio(EstudiosEmp idEstudio) {
+        this.idEstudio = idEstudio;
+    }
+
     public Empleados getNrEmpleado() {
         return nrEmpleado;
     }
 
     public void setNrEmpleado(Empleados nrEmpleado) {
         this.nrEmpleado = nrEmpleado;
+    }
+
+    public DescuentosEmp getIdDescuentoEmp() {
+        return idDescuentoEmp;
+    }
+
+    public void setIdDescuentoEmp(DescuentosEmp idDescuentoEmp) {
+        this.idDescuentoEmp = idDescuentoEmp;
     }
 
     @Override
@@ -148,7 +245,7 @@ public class ImgDoc implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.ImgDoc[ idImgDoc=" + idImgDoc + " ]";
+        return "sv.gob.cultura.rrhh.entidades.ImgDoc[ idImgDoc=" + idImgDoc + " ]";
     }
     
 }

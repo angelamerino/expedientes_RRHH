@@ -76,7 +76,7 @@ public class IdiomasCaracteristicasPK implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.IdiomasCaracteristicasPK[ idCaractIdioma=" + idCaractIdioma + ", idIdioma=" + idIdioma + " ]";
+        return "sv.gob.cultura.rrhh.entidades.IdiomasCaracteristicasPK[ idCaractIdioma=" + idCaractIdioma + ", idIdioma=" + idIdioma + " ]";
     }
     
 }

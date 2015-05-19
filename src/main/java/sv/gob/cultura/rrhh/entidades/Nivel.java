@@ -8,7 +8,6 @@ package sv.gob.cultura.rrhh.entidades;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,10 +37,10 @@ public class Nivel implements Serializable {
     private Integer idNivel;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 2147483647)
+    @Size(min = 1, max = 200)
     @Column(name = "nombre_nivel")
     private String nombreNivel;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idNivel")
+    @OneToMany(mappedBy = "idNivel")
     private List<IdiomasCaracteristicas> idiomasCaracteristicasList;
 
     public Nivel() {
@@ -102,7 +101,7 @@ public class Nivel implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.Nivel[ idNivel=" + idNivel + " ]";
+        return "sv.gob.cultura.rrhh.entidades.Nivel[ idNivel=" + idNivel + " ]";
     }
     
 }

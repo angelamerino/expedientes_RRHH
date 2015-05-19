@@ -7,6 +7,7 @@ package sv.gob.cultura.rrhh.entidades;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,9 +18,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -40,18 +43,16 @@ public class MovimientosEmp implements Serializable {
     @Size(max = 200)
     @Column(name = "cargo_actual_mov")
     private String cargoActualMov;
-    @Size(max = 200)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 200)
     @Column(name = "nuevo_cargo_mov")
     private String nuevoCargoMov;
     @Size(max = 1024)
     @Column(name = "dependencia_actual")
     private String dependenciaActual;
-    @Size(max = 1024)
-    @Column(name = "nueva_dependencia")
-    private String nuevaDependencia;
-    @Size(max = 1024)
-    @Column(name = "dependencia_temp")
-    private String dependenciaTemp;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "fecha_mov")
     @Temporal(TemporalType.DATE)
     private Date fechaMov;
@@ -64,21 +65,42 @@ public class MovimientosEmp implements Serializable {
     @Column(name = "fecha_fin_temp")
     @Temporal(TemporalType.DATE)
     private Date fechaFinTemp;
-    @Size(max = 25)
-    @Column(name = "doc_respaldo_mov")
-    private String docRespaldoMov;
+    @Column(name = "user_crea_mov")
+    private Integer userCreaMov;
+    @Column(name = "fecha_crea_mov")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCreaMov;
+    @Column(name = "user_mod_mov")
+    private Integer userModMov;
+    @Column(name = "fecha_mod_mov")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaModMov;
+    @OneToMany(mappedBy = "idMovEmp")
+    private List<ImgDoc> imgDocList;
     @JoinColumn(name = "id_tipo_mov", referencedColumnName = "id_tipo_mov")
     @ManyToOne(optional = false)
     private TipoMov idTipoMov;
     @JoinColumn(name = "nr_empleado", referencedColumnName = "nr_empleado")
     @ManyToOne(optional = false)
     private Empleados nrEmpleado;
+    @JoinColumn(name = "dep_id_dependencia", referencedColumnName = "id_dependencia")
+    @ManyToOne(optional = false)
+    private Dependencias depIdDependencia;
+    @JoinColumn(name = "id_dependencia", referencedColumnName = "id_dependencia")
+    @ManyToOne(optional = false)
+    private Dependencias idDependencia;
 
     public MovimientosEmp() {
     }
 
     public MovimientosEmp(Integer idMovEmp) {
         this.idMovEmp = idMovEmp;
+    }
+
+    public MovimientosEmp(Integer idMovEmp, String nuevoCargoMov, Date fechaMov) {
+        this.idMovEmp = idMovEmp;
+        this.nuevoCargoMov = nuevoCargoMov;
+        this.fechaMov = fechaMov;
     }
 
     public Integer getIdMovEmp() {
@@ -113,22 +135,6 @@ public class MovimientosEmp implements Serializable {
         this.dependenciaActual = dependenciaActual;
     }
 
-    public String getNuevaDependencia() {
-        return nuevaDependencia;
-    }
-
-    public void setNuevaDependencia(String nuevaDependencia) {
-        this.nuevaDependencia = nuevaDependencia;
-    }
-
-    public String getDependenciaTemp() {
-        return dependenciaTemp;
-    }
-
-    public void setDependenciaTemp(String dependenciaTemp) {
-        this.dependenciaTemp = dependenciaTemp;
-    }
-
     public Date getFechaMov() {
         return fechaMov;
     }
@@ -161,12 +167,44 @@ public class MovimientosEmp implements Serializable {
         this.fechaFinTemp = fechaFinTemp;
     }
 
-    public String getDocRespaldoMov() {
-        return docRespaldoMov;
+    public Integer getUserCreaMov() {
+        return userCreaMov;
     }
 
-    public void setDocRespaldoMov(String docRespaldoMov) {
-        this.docRespaldoMov = docRespaldoMov;
+    public void setUserCreaMov(Integer userCreaMov) {
+        this.userCreaMov = userCreaMov;
+    }
+
+    public Date getFechaCreaMov() {
+        return fechaCreaMov;
+    }
+
+    public void setFechaCreaMov(Date fechaCreaMov) {
+        this.fechaCreaMov = fechaCreaMov;
+    }
+
+    public Integer getUserModMov() {
+        return userModMov;
+    }
+
+    public void setUserModMov(Integer userModMov) {
+        this.userModMov = userModMov;
+    }
+
+    public Date getFechaModMov() {
+        return fechaModMov;
+    }
+
+    public void setFechaModMov(Date fechaModMov) {
+        this.fechaModMov = fechaModMov;
+    }
+
+    public List<ImgDoc> getImgDocList() {
+        return imgDocList;
+    }
+
+    public void setImgDocList(List<ImgDoc> imgDocList) {
+        this.imgDocList = imgDocList;
     }
 
     public TipoMov getIdTipoMov() {
@@ -183,6 +221,22 @@ public class MovimientosEmp implements Serializable {
 
     public void setNrEmpleado(Empleados nrEmpleado) {
         this.nrEmpleado = nrEmpleado;
+    }
+
+    public Dependencias getDepIdDependencia() {
+        return depIdDependencia;
+    }
+
+    public void setDepIdDependencia(Dependencias depIdDependencia) {
+        this.depIdDependencia = depIdDependencia;
+    }
+
+    public Dependencias getIdDependencia() {
+        return idDependencia;
+    }
+
+    public void setIdDependencia(Dependencias idDependencia) {
+        this.idDependencia = idDependencia;
     }
 
     @Override
@@ -207,7 +261,7 @@ public class MovimientosEmp implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.MovimientosEmp[ idMovEmp=" + idMovEmp + " ]";
+        return "sv.gob.cultura.rrhh.entidades.MovimientosEmp[ idMovEmp=" + idMovEmp + " ]";
     }
     
 }

@@ -6,6 +6,7 @@
 package sv.gob.cultura.rrhh.entidades;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -19,6 +20,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -36,15 +40,28 @@ public class Producto implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_producto")
     private Integer idProducto;
-    @Size(max = 1024)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 1024)
     @Column(name = "nombre_prod")
     private String nombreProd;
     @Size(max = 1024)
     @Column(name = "descripcion_prod")
     private String descripcionProd;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "costo_unit")
-    private Double costoUnit;
+    private double costoUnit;
+    @Column(name = "user_crea_prod")
+    private Integer userCreaProd;
+    @Column(name = "fecha_crea_prod")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCreaProd;
+    @Column(name = "user_mod_prod")
+    private Integer userModProd;
+    @Column(name = "fecha_mod_prod")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaModProd;
     @ManyToMany(mappedBy = "productoList")
     private List<Prestacion> prestacionList;
     @JoinTable(name = "prod_prov", joinColumns = {
@@ -58,6 +75,12 @@ public class Producto implements Serializable {
 
     public Producto(Integer idProducto) {
         this.idProducto = idProducto;
+    }
+
+    public Producto(Integer idProducto, String nombreProd, double costoUnit) {
+        this.idProducto = idProducto;
+        this.nombreProd = nombreProd;
+        this.costoUnit = costoUnit;
     }
 
     public Integer getIdProducto() {
@@ -84,12 +107,44 @@ public class Producto implements Serializable {
         this.descripcionProd = descripcionProd;
     }
 
-    public Double getCostoUnit() {
+    public double getCostoUnit() {
         return costoUnit;
     }
 
-    public void setCostoUnit(Double costoUnit) {
+    public void setCostoUnit(double costoUnit) {
         this.costoUnit = costoUnit;
+    }
+
+    public Integer getUserCreaProd() {
+        return userCreaProd;
+    }
+
+    public void setUserCreaProd(Integer userCreaProd) {
+        this.userCreaProd = userCreaProd;
+    }
+
+    public Date getFechaCreaProd() {
+        return fechaCreaProd;
+    }
+
+    public void setFechaCreaProd(Date fechaCreaProd) {
+        this.fechaCreaProd = fechaCreaProd;
+    }
+
+    public Integer getUserModProd() {
+        return userModProd;
+    }
+
+    public void setUserModProd(Integer userModProd) {
+        this.userModProd = userModProd;
+    }
+
+    public Date getFechaModProd() {
+        return fechaModProd;
+    }
+
+    public void setFechaModProd(Date fechaModProd) {
+        this.fechaModProd = fechaModProd;
     }
 
     public List<Prestacion> getPrestacionList() {
@@ -130,7 +185,7 @@ public class Producto implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.Producto[ idProducto=" + idProducto + " ]";
+        return "sv.gob.cultura.rrhh.entidades.Producto[ idProducto=" + idProducto + " ]";
     }
     
 }

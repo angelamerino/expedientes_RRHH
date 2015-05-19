@@ -18,6 +18,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -35,7 +36,9 @@ public class AdministradoraPensiones implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_admin_pension")
     private Integer idAdminPension;
-    @Size(max = 200)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 200)
     @Column(name = "nombre_admin_pension")
     private String nombreAdminPension;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idAdminPension")
@@ -46,6 +49,11 @@ public class AdministradoraPensiones implements Serializable {
 
     public AdministradoraPensiones(Integer idAdminPension) {
         this.idAdminPension = idAdminPension;
+    }
+
+    public AdministradoraPensiones(Integer idAdminPension, String nombreAdminPension) {
+        this.idAdminPension = idAdminPension;
+        this.nombreAdminPension = nombreAdminPension;
     }
 
     public Integer getIdAdminPension() {
@@ -94,7 +102,7 @@ public class AdministradoraPensiones implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.AdministradoraPensiones[ idAdminPension=" + idAdminPension + " ]";
+        return "sv.gob.cultura.rrhh.entidades.AdministradoraPensiones[ idAdminPension=" + idAdminPension + " ]";
     }
     
 }

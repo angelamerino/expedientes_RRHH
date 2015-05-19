@@ -18,6 +18,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -35,17 +36,26 @@ public class Parentesco implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_parentesco")
     private Integer idParentesco;
-    @Size(max = 100)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 100)
     @Column(name = "nombre_parentesco")
     private String nombreParentesco;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idParentesco")
     private List<FamiliaDependientesEmp> familiaDependientesEmpList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idParentesco")
+    private List<ContactoEmergenciaEmp> contactoEmergenciaEmpList;
 
     public Parentesco() {
     }
 
     public Parentesco(Integer idParentesco) {
         this.idParentesco = idParentesco;
+    }
+
+    public Parentesco(Integer idParentesco, String nombreParentesco) {
+        this.idParentesco = idParentesco;
+        this.nombreParentesco = nombreParentesco;
     }
 
     public Integer getIdParentesco() {
@@ -72,6 +82,14 @@ public class Parentesco implements Serializable {
         this.familiaDependientesEmpList = familiaDependientesEmpList;
     }
 
+    public List<ContactoEmergenciaEmp> getContactoEmergenciaEmpList() {
+        return contactoEmergenciaEmpList;
+    }
+
+    public void setContactoEmergenciaEmpList(List<ContactoEmergenciaEmp> contactoEmergenciaEmpList) {
+        this.contactoEmergenciaEmpList = contactoEmergenciaEmpList;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -94,7 +112,7 @@ public class Parentesco implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.Parentesco[ idParentesco=" + idParentesco + " ]";
+        return "sv.gob.cultura.rrhh.entidades.Parentesco[ idParentesco=" + idParentesco + " ]";
     }
     
 }

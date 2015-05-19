@@ -14,12 +14,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -37,29 +41,51 @@ public class EstudiosEmp implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_estudio")
     private Integer idEstudio;
-    @Size(max = 200)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 200)
     @Column(name = "institucion_estudio")
     private String institucionEstudio;
-    @Size(max = 1024)
-    @Column(name = "descripcion_estudio")
-    private String descripcionEstudio;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "anio_estudio")
     @Temporal(TemporalType.DATE)
     private Date anioEstudio;
-    @Size(max = 1024)
-    @Column(name = "documento_estudio")
-    private String documentoEstudio;
-    @Size(max = 9)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 9)
     @Column(name = "tipo_estudio")
     private String tipoEstudio;
+    @Column(name = "user_crea_estudios")
+    private Integer userCreaEstudios;
+    @Column(name = "fecha_crea_estudios")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCreaEstudios;
+    @Column(name = "user_mod_estudios")
+    private Integer userModEstudios;
+    @Column(name = "fecha_mod_estudios")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaModEstudios;
     @ManyToMany(mappedBy = "estudiosEmpList")
     private List<Empleados> empleadosList;
+    @OneToMany(mappedBy = "idEstudio")
+    private List<ImgDoc> imgDocList;
+    @JoinColumn(name = "id_prof_oficio", referencedColumnName = "id_prof_oficio")
+    @ManyToOne(optional = false)
+    private ProfOficios idProfOficio;
 
     public EstudiosEmp() {
     }
 
     public EstudiosEmp(Integer idEstudio) {
         this.idEstudio = idEstudio;
+    }
+
+    public EstudiosEmp(Integer idEstudio, String institucionEstudio, Date anioEstudio, String tipoEstudio) {
+        this.idEstudio = idEstudio;
+        this.institucionEstudio = institucionEstudio;
+        this.anioEstudio = anioEstudio;
+        this.tipoEstudio = tipoEstudio;
     }
 
     public Integer getIdEstudio() {
@@ -78,28 +104,12 @@ public class EstudiosEmp implements Serializable {
         this.institucionEstudio = institucionEstudio;
     }
 
-    public String getDescripcionEstudio() {
-        return descripcionEstudio;
-    }
-
-    public void setDescripcionEstudio(String descripcionEstudio) {
-        this.descripcionEstudio = descripcionEstudio;
-    }
-
     public Date getAnioEstudio() {
         return anioEstudio;
     }
 
     public void setAnioEstudio(Date anioEstudio) {
         this.anioEstudio = anioEstudio;
-    }
-
-    public String getDocumentoEstudio() {
-        return documentoEstudio;
-    }
-
-    public void setDocumentoEstudio(String documentoEstudio) {
-        this.documentoEstudio = documentoEstudio;
     }
 
     public String getTipoEstudio() {
@@ -110,12 +120,60 @@ public class EstudiosEmp implements Serializable {
         this.tipoEstudio = tipoEstudio;
     }
 
+    public Integer getUserCreaEstudios() {
+        return userCreaEstudios;
+    }
+
+    public void setUserCreaEstudios(Integer userCreaEstudios) {
+        this.userCreaEstudios = userCreaEstudios;
+    }
+
+    public Date getFechaCreaEstudios() {
+        return fechaCreaEstudios;
+    }
+
+    public void setFechaCreaEstudios(Date fechaCreaEstudios) {
+        this.fechaCreaEstudios = fechaCreaEstudios;
+    }
+
+    public Integer getUserModEstudios() {
+        return userModEstudios;
+    }
+
+    public void setUserModEstudios(Integer userModEstudios) {
+        this.userModEstudios = userModEstudios;
+    }
+
+    public Date getFechaModEstudios() {
+        return fechaModEstudios;
+    }
+
+    public void setFechaModEstudios(Date fechaModEstudios) {
+        this.fechaModEstudios = fechaModEstudios;
+    }
+
     public List<Empleados> getEmpleadosList() {
         return empleadosList;
     }
 
     public void setEmpleadosList(List<Empleados> empleadosList) {
         this.empleadosList = empleadosList;
+    }
+
+    public List<ImgDoc> getImgDocList() {
+        return imgDocList;
+    }
+
+    public void setImgDocList(List<ImgDoc> imgDocList) {
+        this.imgDocList = imgDocList;
+    }
+
+    public ProfOficios getIdProfOficio() {
+        return idProfOficio;
+    }
+
+    public void setIdProfOficio(ProfOficios idProfOficio) {
+        this.idProfOficio = idProfOficio;
     }
 
     @Override
@@ -140,7 +198,7 @@ public class EstudiosEmp implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.EstudiosEmp[ idEstudio=" + idEstudio + " ]";
+        return "sv.gob.cultura.rrhh.entidades.EstudiosEmp[ idEstudio=" + idEstudio + " ]";
     }
     
 }

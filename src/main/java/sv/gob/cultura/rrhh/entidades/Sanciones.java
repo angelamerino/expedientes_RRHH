@@ -7,7 +7,9 @@ package sv.gob.cultura.rrhh.entidades;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,9 +19,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -37,15 +41,28 @@ public class Sanciones implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_sancion")
     private Integer idSancion;
-    @Size(max = 1024)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 1024)
     @Column(name = "descripcion_sancion")
     private String descripcionSancion;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "fecha_sancion")
     @Temporal(TemporalType.DATE)
     private Date fechaSancion;
-    @Size(max = 25)
-    @Column(name = "doc_sancion")
-    private String docSancion;
+    @Column(name = "user_crea_sancion")
+    private Integer userCreaSancion;
+    @Column(name = "fecha_crea_sancion")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCreaSancion;
+    @Column(name = "user_mod_sancion")
+    private Integer userModSancion;
+    @Column(name = "fecha_mod_sancion")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaModSancion;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idSancion")
+    private List<ImgDoc> imgDocList;
     @JoinColumn(name = "id_tipo_sancion", referencedColumnName = "id_tipo_sancion")
     @ManyToOne(optional = false)
     private TipoSancion idTipoSancion;
@@ -58,6 +75,12 @@ public class Sanciones implements Serializable {
 
     public Sanciones(Integer idSancion) {
         this.idSancion = idSancion;
+    }
+
+    public Sanciones(Integer idSancion, String descripcionSancion, Date fechaSancion) {
+        this.idSancion = idSancion;
+        this.descripcionSancion = descripcionSancion;
+        this.fechaSancion = fechaSancion;
     }
 
     public Integer getIdSancion() {
@@ -84,12 +107,44 @@ public class Sanciones implements Serializable {
         this.fechaSancion = fechaSancion;
     }
 
-    public String getDocSancion() {
-        return docSancion;
+    public Integer getUserCreaSancion() {
+        return userCreaSancion;
     }
 
-    public void setDocSancion(String docSancion) {
-        this.docSancion = docSancion;
+    public void setUserCreaSancion(Integer userCreaSancion) {
+        this.userCreaSancion = userCreaSancion;
+    }
+
+    public Date getFechaCreaSancion() {
+        return fechaCreaSancion;
+    }
+
+    public void setFechaCreaSancion(Date fechaCreaSancion) {
+        this.fechaCreaSancion = fechaCreaSancion;
+    }
+
+    public Integer getUserModSancion() {
+        return userModSancion;
+    }
+
+    public void setUserModSancion(Integer userModSancion) {
+        this.userModSancion = userModSancion;
+    }
+
+    public Date getFechaModSancion() {
+        return fechaModSancion;
+    }
+
+    public void setFechaModSancion(Date fechaModSancion) {
+        this.fechaModSancion = fechaModSancion;
+    }
+
+    public List<ImgDoc> getImgDocList() {
+        return imgDocList;
+    }
+
+    public void setImgDocList(List<ImgDoc> imgDocList) {
+        this.imgDocList = imgDocList;
     }
 
     public TipoSancion getIdTipoSancion() {
@@ -130,7 +185,7 @@ public class Sanciones implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.Sanciones[ idSancion=" + idSancion + " ]";
+        return "sv.gob.cultura.rrhh.entidades.Sanciones[ idSancion=" + idSancion + " ]";
     }
     
 }

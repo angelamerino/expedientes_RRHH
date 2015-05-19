@@ -42,10 +42,12 @@ public class Empleados implements Serializable {
     @Size(min = 1, max = 25)
     @Column(name = "nr_empleado")
     private String nrEmpleado;
-    @Size(max = 1024)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 1024)
     @Column(name = "nombre_empleado")
     private String nombreEmpleado;
-    @Size(max = 50)
+    @Size(max = 1024)
     @Column(name = "url_foto_emp")
     private String urlFotoEmp;
     @Size(max = 1024)
@@ -60,6 +62,8 @@ public class Empleados implements Serializable {
     @Column(name = "fecha_nac")
     @Temporal(TemporalType.DATE)
     private Date fechaNac;
+    @Column(name = "edad_emp")
+    private Integer edadEmp;
     @Size(max = 2)
     @Column(name = "naturalizado")
     private String naturalizado;
@@ -67,12 +71,14 @@ public class Empleados implements Serializable {
     @Column(name = "direccion")
     private String direccion;
     @Size(max = 9)
-    @Column(name = "telefono_casa")
-    private String telefonoCasa;
+    @Column(name = "telefono_fijo")
+    private String telefonoFijo;
     @Size(max = 9)
-    @Column(name = "telefono_celular")
-    private String telefonoCelular;
-    @Size(max = 13)
+    @Column(name = "telefono_movil")
+    private String telefonoMovil;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 13)
     @Column(name = "num_dui")
     private String numDui;
     @Size(max = 13)
@@ -87,9 +93,9 @@ public class Empleados implements Serializable {
     @Size(max = 20)
     @Column(name = "num_nip")
     private String numNip;
-    @Size(max = 100)
-    @Column(name = "doc_curriculum")
-    private String docCurriculum;
+    @Size(max = 50)
+    @Column(name = "num_cuenta")
+    private String numCuenta;
     @Column(name = "fecha_ingreso_publico")
     @Temporal(TemporalType.DATE)
     private Date fechaIngresoPublico;
@@ -99,10 +105,14 @@ public class Empleados implements Serializable {
     @Size(max = 2)
     @Column(name = "jefe")
     private String jefe;
-    @Size(max = 200)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 200)
     @Column(name = "cargo_nominal")
     private String cargoNominal;
-    @Size(max = 200)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 200)
     @Column(name = "cargo_funcional")
     private String cargoFuncional;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -114,9 +124,20 @@ public class Empleados implements Serializable {
     @Column(name = "fecha_ingreso_insti")
     @Temporal(TemporalType.DATE)
     private Date fechaIngresoInsti;
-    @Size(max = 100)
+    @Size(max = 1024)
     @Column(name = "doc_desc_puesto")
     private String docDescPuesto;
+    @Column(name = "user_crea_emp")
+    private Integer userCreaEmp;
+    @Column(name = "fecha_crea_emp")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCreaEmp;
+    @Column(name = "user_mod_emp")
+    @Temporal(TemporalType.DATE)
+    private Date userModEmp;
+    @Column(name = "fecha_mod_emp")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaModEmp;
     @JoinTable(name = "emp_prestacion", joinColumns = {
         @JoinColumn(name = "nr_empleado", referencedColumnName = "nr_empleado")}, inverseJoinColumns = {
         @JoinColumn(name = "id_prestacion", referencedColumnName = "id_prestacion")})
@@ -132,11 +153,6 @@ public class Empleados implements Serializable {
         @JoinColumn(name = "id_estudio", referencedColumnName = "id_estudio")})
     @ManyToMany
     private List<EstudiosEmp> estudiosEmpList;
-    @JoinTable(name = "emp_prof_oficios", joinColumns = {
-        @JoinColumn(name = "nr_empleado", referencedColumnName = "nr_empleado")}, inverseJoinColumns = {
-        @JoinColumn(name = "id_prof_oficio", referencedColumnName = "id_prof_oficio")})
-    @ManyToMany
-    private List<ProfOficios> profOficiosList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "nrEmpleado")
     private List<HistorialSalarial> historialSalarialList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "nrEmpleado")
@@ -161,12 +177,15 @@ public class Empleados implements Serializable {
     @JoinColumn(name = "id_pais", referencedColumnName = "id_pais")
     @ManyToOne(optional = false)
     private Paises idPais;
+    @JoinColumn(name = "mun_id_municipio", referencedColumnName = "id_municipio")
+    @ManyToOne(optional = false)
+    private Municipios munIdMunicipio;
     @JoinColumn(name = "id_municipio", referencedColumnName = "id_municipio")
     @ManyToOne(optional = false)
     private Municipios idMunicipio;
-    @JoinColumn(name = "id_genero", referencedColumnName = "id_genero")
+    @JoinColumn(name = "id_banco", referencedColumnName = "id_banco")
     @ManyToOne(optional = false)
-    private Genero idGenero;
+    private InstBancaria idBanco;
     @JoinColumn(name = "id_estado", referencedColumnName = "id_estado")
     @ManyToOne(optional = false)
     private Estados idEstado;
@@ -178,18 +197,31 @@ public class Empleados implements Serializable {
     @JoinColumn(name = "emp_nr_empleado", referencedColumnName = "nr_empleado")
     @ManyToOne
     private Empleados empNrEmpleado;
+    @JoinColumn(name = "dep_id_dependencia", referencedColumnName = "id_dependencia")
+    @ManyToOne(optional = false)
+    private Dependencias depIdDependencia;
     @JoinColumn(name = "id_dependencia", referencedColumnName = "id_dependencia")
     @ManyToOne(optional = false)
     private Dependencias idDependencia;
     @JoinColumn(name = "id_admin_pension", referencedColumnName = "id_admin_pension")
     @ManyToOne(optional = false)
     private AdministradoraPensiones idAdminPension;
+    @OneToMany(mappedBy = "nrEmpleado")
+    private List<Reconocimientos> reconocimientosList;
 
     public Empleados() {
     }
 
     public Empleados(String nrEmpleado) {
         this.nrEmpleado = nrEmpleado;
+    }
+
+    public Empleados(String nrEmpleado, String nombreEmpleado, String numDui, String cargoNominal, String cargoFuncional) {
+        this.nrEmpleado = nrEmpleado;
+        this.nombreEmpleado = nombreEmpleado;
+        this.numDui = numDui;
+        this.cargoNominal = cargoNominal;
+        this.cargoFuncional = cargoFuncional;
     }
 
     public String getNrEmpleado() {
@@ -248,6 +280,14 @@ public class Empleados implements Serializable {
         this.fechaNac = fechaNac;
     }
 
+    public Integer getEdadEmp() {
+        return edadEmp;
+    }
+
+    public void setEdadEmp(Integer edadEmp) {
+        this.edadEmp = edadEmp;
+    }
+
     public String getNaturalizado() {
         return naturalizado;
     }
@@ -264,20 +304,20 @@ public class Empleados implements Serializable {
         this.direccion = direccion;
     }
 
-    public String getTelefonoCasa() {
-        return telefonoCasa;
+    public String getTelefonoFijo() {
+        return telefonoFijo;
     }
 
-    public void setTelefonoCasa(String telefonoCasa) {
-        this.telefonoCasa = telefonoCasa;
+    public void setTelefonoFijo(String telefonoFijo) {
+        this.telefonoFijo = telefonoFijo;
     }
 
-    public String getTelefonoCelular() {
-        return telefonoCelular;
+    public String getTelefonoMovil() {
+        return telefonoMovil;
     }
 
-    public void setTelefonoCelular(String telefonoCelular) {
-        this.telefonoCelular = telefonoCelular;
+    public void setTelefonoMovil(String telefonoMovil) {
+        this.telefonoMovil = telefonoMovil;
     }
 
     public String getNumDui() {
@@ -320,12 +360,12 @@ public class Empleados implements Serializable {
         this.numNip = numNip;
     }
 
-    public String getDocCurriculum() {
-        return docCurriculum;
+    public String getNumCuenta() {
+        return numCuenta;
     }
 
-    public void setDocCurriculum(String docCurriculum) {
-        this.docCurriculum = docCurriculum;
+    public void setNumCuenta(String numCuenta) {
+        this.numCuenta = numCuenta;
     }
 
     public Date getFechaIngresoPublico() {
@@ -400,6 +440,38 @@ public class Empleados implements Serializable {
         this.docDescPuesto = docDescPuesto;
     }
 
+    public Integer getUserCreaEmp() {
+        return userCreaEmp;
+    }
+
+    public void setUserCreaEmp(Integer userCreaEmp) {
+        this.userCreaEmp = userCreaEmp;
+    }
+
+    public Date getFechaCreaEmp() {
+        return fechaCreaEmp;
+    }
+
+    public void setFechaCreaEmp(Date fechaCreaEmp) {
+        this.fechaCreaEmp = fechaCreaEmp;
+    }
+
+    public Date getUserModEmp() {
+        return userModEmp;
+    }
+
+    public void setUserModEmp(Date userModEmp) {
+        this.userModEmp = userModEmp;
+    }
+
+    public Date getFechaModEmp() {
+        return fechaModEmp;
+    }
+
+    public void setFechaModEmp(Date fechaModEmp) {
+        this.fechaModEmp = fechaModEmp;
+    }
+
     public List<Prestacion> getPrestacionList() {
         return prestacionList;
     }
@@ -422,14 +494,6 @@ public class Empleados implements Serializable {
 
     public void setEstudiosEmpList(List<EstudiosEmp> estudiosEmpList) {
         this.estudiosEmpList = estudiosEmpList;
-    }
-
-    public List<ProfOficios> getProfOficiosList() {
-        return profOficiosList;
-    }
-
-    public void setProfOficiosList(List<ProfOficios> profOficiosList) {
-        this.profOficiosList = profOficiosList;
     }
 
     public List<HistorialSalarial> getHistorialSalarialList() {
@@ -520,6 +584,14 @@ public class Empleados implements Serializable {
         this.idPais = idPais;
     }
 
+    public Municipios getMunIdMunicipio() {
+        return munIdMunicipio;
+    }
+
+    public void setMunIdMunicipio(Municipios munIdMunicipio) {
+        this.munIdMunicipio = munIdMunicipio;
+    }
+
     public Municipios getIdMunicipio() {
         return idMunicipio;
     }
@@ -528,12 +600,12 @@ public class Empleados implements Serializable {
         this.idMunicipio = idMunicipio;
     }
 
-    public Genero getIdGenero() {
-        return idGenero;
+    public InstBancaria getIdBanco() {
+        return idBanco;
     }
 
-    public void setIdGenero(Genero idGenero) {
-        this.idGenero = idGenero;
+    public void setIdBanco(InstBancaria idBanco) {
+        this.idBanco = idBanco;
     }
 
     public Estados getIdEstado() {
@@ -568,6 +640,14 @@ public class Empleados implements Serializable {
         this.empNrEmpleado = empNrEmpleado;
     }
 
+    public Dependencias getDepIdDependencia() {
+        return depIdDependencia;
+    }
+
+    public void setDepIdDependencia(Dependencias depIdDependencia) {
+        this.depIdDependencia = depIdDependencia;
+    }
+
     public Dependencias getIdDependencia() {
         return idDependencia;
     }
@@ -582,6 +662,14 @@ public class Empleados implements Serializable {
 
     public void setIdAdminPension(AdministradoraPensiones idAdminPension) {
         this.idAdminPension = idAdminPension;
+    }
+
+    public List<Reconocimientos> getReconocimientosList() {
+        return reconocimientosList;
+    }
+
+    public void setReconocimientosList(List<Reconocimientos> reconocimientosList) {
+        this.reconocimientosList = reconocimientosList;
     }
 
     @Override
@@ -606,7 +694,7 @@ public class Empleados implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.Empleados[ nrEmpleado=" + nrEmpleado + " ]";
+        return "sv.gob.cultura.rrhh.entidades.Empleados[ nrEmpleado=" + nrEmpleado + " ]";
     }
     
 }

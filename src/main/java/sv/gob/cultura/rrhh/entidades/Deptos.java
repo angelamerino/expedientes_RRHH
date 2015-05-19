@@ -18,6 +18,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -35,7 +36,9 @@ public class Deptos implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_departamento")
     private Integer idDepartamento;
-    @Size(max = 1024)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 1024)
     @Column(name = "nombre_departamento")
     private String nombreDepartamento;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idDepartamento")
@@ -46,6 +49,11 @@ public class Deptos implements Serializable {
 
     public Deptos(Integer idDepartamento) {
         this.idDepartamento = idDepartamento;
+    }
+
+    public Deptos(Integer idDepartamento, String nombreDepartamento) {
+        this.idDepartamento = idDepartamento;
+        this.nombreDepartamento = nombreDepartamento;
     }
 
     public Integer getIdDepartamento() {
@@ -94,7 +102,7 @@ public class Deptos implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.Deptos[ idDepartamento=" + idDepartamento + " ]";
+        return "sv.gob.cultura.rrhh.entidades.Deptos[ idDepartamento=" + idDepartamento + " ]";
     }
     
 }

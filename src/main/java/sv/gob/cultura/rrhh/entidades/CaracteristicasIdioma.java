@@ -18,6 +18,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -35,7 +36,9 @@ public class CaracteristicasIdioma implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_caract_idioma")
     private Integer idCaractIdioma;
-    @Size(max = 25)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 25)
     @Column(name = "caracteristica_idioma")
     private String caracteristicaIdioma;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "caracteristicasIdioma")
@@ -46,6 +49,11 @@ public class CaracteristicasIdioma implements Serializable {
 
     public CaracteristicasIdioma(Integer idCaractIdioma) {
         this.idCaractIdioma = idCaractIdioma;
+    }
+
+    public CaracteristicasIdioma(Integer idCaractIdioma, String caracteristicaIdioma) {
+        this.idCaractIdioma = idCaractIdioma;
+        this.caracteristicaIdioma = caracteristicaIdioma;
     }
 
     public Integer getIdCaractIdioma() {
@@ -94,7 +102,7 @@ public class CaracteristicasIdioma implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.CaracteristicasIdioma[ idCaractIdioma=" + idCaractIdioma + " ]";
+        return "sv.gob.cultura.rrhh.entidades.CaracteristicasIdioma[ idCaractIdioma=" + idCaractIdioma + " ]";
     }
     
 }

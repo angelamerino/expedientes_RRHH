@@ -7,6 +7,7 @@ package sv.gob.cultura.rrhh.entidades;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,9 +18,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -37,31 +40,58 @@ public class HistorialSalarial implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_hsalarial")
     private Integer idHsalarial;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "salario_actual_hsalarial")
-    private Double salarioActualHsalarial;
+    private double salarioActualHsalarial;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "nuevo_salario_hsalarial")
-    private Double nuevoSalarioHsalarial;
+    private double nuevoSalarioHsalarial;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "porcentaje_hsalarial")
-    private Integer porcentajeHsalarial;
+    private int porcentajeHsalarial;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "fecha_hsalarial")
     @Temporal(TemporalType.DATE)
     private Date fechaHsalarial;
-    @Size(max = 25)
-    @Column(name = "doc_hsalarial")
-    private String docHsalarial;
+    @Size(max = 1024)
+    @Column(name = "num_doc_decreto")
+    private String numDocDecreto;
+    @Column(name = "user_crea_hsal")
+    private Integer userCreaHsal;
+    @Column(name = "fecha_crea_hsal")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCreaHsal;
+    @Column(name = "user_mod_hsal")
+    private Integer userModHsal;
+    @Column(name = "fecha_mod_hsal")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaModHsal;
     @JoinColumn(name = "id_mejora_sal", referencedColumnName = "id_mejora_sal")
     @ManyToOne(optional = false)
     private TipoMejoraSalarial idMejoraSal;
     @JoinColumn(name = "nr_empleado", referencedColumnName = "nr_empleado")
     @ManyToOne(optional = false)
     private Empleados nrEmpleado;
+    @OneToMany(mappedBy = "idHsalarial")
+    private List<ImgDoc> imgDocList;
 
     public HistorialSalarial() {
     }
 
     public HistorialSalarial(Integer idHsalarial) {
         this.idHsalarial = idHsalarial;
+    }
+
+    public HistorialSalarial(Integer idHsalarial, double salarioActualHsalarial, double nuevoSalarioHsalarial, int porcentajeHsalarial, Date fechaHsalarial) {
+        this.idHsalarial = idHsalarial;
+        this.salarioActualHsalarial = salarioActualHsalarial;
+        this.nuevoSalarioHsalarial = nuevoSalarioHsalarial;
+        this.porcentajeHsalarial = porcentajeHsalarial;
+        this.fechaHsalarial = fechaHsalarial;
     }
 
     public Integer getIdHsalarial() {
@@ -72,27 +102,27 @@ public class HistorialSalarial implements Serializable {
         this.idHsalarial = idHsalarial;
     }
 
-    public Double getSalarioActualHsalarial() {
+    public double getSalarioActualHsalarial() {
         return salarioActualHsalarial;
     }
 
-    public void setSalarioActualHsalarial(Double salarioActualHsalarial) {
+    public void setSalarioActualHsalarial(double salarioActualHsalarial) {
         this.salarioActualHsalarial = salarioActualHsalarial;
     }
 
-    public Double getNuevoSalarioHsalarial() {
+    public double getNuevoSalarioHsalarial() {
         return nuevoSalarioHsalarial;
     }
 
-    public void setNuevoSalarioHsalarial(Double nuevoSalarioHsalarial) {
+    public void setNuevoSalarioHsalarial(double nuevoSalarioHsalarial) {
         this.nuevoSalarioHsalarial = nuevoSalarioHsalarial;
     }
 
-    public Integer getPorcentajeHsalarial() {
+    public int getPorcentajeHsalarial() {
         return porcentajeHsalarial;
     }
 
-    public void setPorcentajeHsalarial(Integer porcentajeHsalarial) {
+    public void setPorcentajeHsalarial(int porcentajeHsalarial) {
         this.porcentajeHsalarial = porcentajeHsalarial;
     }
 
@@ -104,12 +134,44 @@ public class HistorialSalarial implements Serializable {
         this.fechaHsalarial = fechaHsalarial;
     }
 
-    public String getDocHsalarial() {
-        return docHsalarial;
+    public String getNumDocDecreto() {
+        return numDocDecreto;
     }
 
-    public void setDocHsalarial(String docHsalarial) {
-        this.docHsalarial = docHsalarial;
+    public void setNumDocDecreto(String numDocDecreto) {
+        this.numDocDecreto = numDocDecreto;
+    }
+
+    public Integer getUserCreaHsal() {
+        return userCreaHsal;
+    }
+
+    public void setUserCreaHsal(Integer userCreaHsal) {
+        this.userCreaHsal = userCreaHsal;
+    }
+
+    public Date getFechaCreaHsal() {
+        return fechaCreaHsal;
+    }
+
+    public void setFechaCreaHsal(Date fechaCreaHsal) {
+        this.fechaCreaHsal = fechaCreaHsal;
+    }
+
+    public Integer getUserModHsal() {
+        return userModHsal;
+    }
+
+    public void setUserModHsal(Integer userModHsal) {
+        this.userModHsal = userModHsal;
+    }
+
+    public Date getFechaModHsal() {
+        return fechaModHsal;
+    }
+
+    public void setFechaModHsal(Date fechaModHsal) {
+        this.fechaModHsal = fechaModHsal;
     }
 
     public TipoMejoraSalarial getIdMejoraSal() {
@@ -126,6 +188,14 @@ public class HistorialSalarial implements Serializable {
 
     public void setNrEmpleado(Empleados nrEmpleado) {
         this.nrEmpleado = nrEmpleado;
+    }
+
+    public List<ImgDoc> getImgDocList() {
+        return imgDocList;
+    }
+
+    public void setImgDocList(List<ImgDoc> imgDocList) {
+        this.imgDocList = imgDocList;
     }
 
     @Override
@@ -150,7 +220,7 @@ public class HistorialSalarial implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.HistorialSalarial[ idHsalarial=" + idHsalarial + " ]";
+        return "sv.gob.cultura.rrhh.entidades.HistorialSalarial[ idHsalarial=" + idHsalarial + " ]";
     }
     
 }

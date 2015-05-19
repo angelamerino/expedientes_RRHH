@@ -20,6 +20,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -37,7 +38,9 @@ public class Municipios implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_municipio")
     private Integer idMunicipio;
-    @Size(max = 150)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 150)
     @Column(name = "nombre_municipio")
     private String nombreMunicipio;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idMunicipio")
@@ -45,14 +48,21 @@ public class Municipios implements Serializable {
     @JoinColumn(name = "id_departamento", referencedColumnName = "id_departamento")
     @ManyToOne(optional = false)
     private Deptos idDepartamento;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idMunicipio")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "munIdMunicipio")
     private List<Empleados> empleadosList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idMunicipio")
+    private List<Empleados> empleadosList1;
 
     public Municipios() {
     }
 
     public Municipios(Integer idMunicipio) {
         this.idMunicipio = idMunicipio;
+    }
+
+    public Municipios(Integer idMunicipio, String nombreMunicipio) {
+        this.idMunicipio = idMunicipio;
+        this.nombreMunicipio = nombreMunicipio;
     }
 
     public Integer getIdMunicipio() {
@@ -95,6 +105,14 @@ public class Municipios implements Serializable {
         this.empleadosList = empleadosList;
     }
 
+    public List<Empleados> getEmpleadosList1() {
+        return empleadosList1;
+    }
+
+    public void setEmpleadosList1(List<Empleados> empleadosList1) {
+        this.empleadosList1 = empleadosList1;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -117,7 +135,7 @@ public class Municipios implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.Municipios[ idMunicipio=" + idMunicipio + " ]";
+        return "sv.gob.cultura.rrhh.entidades.Municipios[ idMunicipio=" + idMunicipio + " ]";
     }
     
 }

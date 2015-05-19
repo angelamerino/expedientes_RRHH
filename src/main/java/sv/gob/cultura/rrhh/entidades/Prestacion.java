@@ -6,6 +6,7 @@
 package sv.gob.cultura.rrhh.entidades;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -20,6 +21,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -38,6 +41,16 @@ public class Prestacion implements Serializable {
     private Integer idPrestacion;
     @Column(name = "cantidad")
     private Integer cantidad;
+    @Column(name = "user_crea_prestacion")
+    private Integer userCreaPrestacion;
+    @Column(name = "fecha_crea_prestacion")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCreaPrestacion;
+    @Column(name = "user_mod_prestacion")
+    private Integer userModPrestacion;
+    @Column(name = "fecha_mod_prestacion")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaModPrestacion;
     @JoinTable(name = "producto_prestacion", joinColumns = {
         @JoinColumn(name = "id_prestacion", referencedColumnName = "id_prestacion")}, inverseJoinColumns = {
         @JoinColumn(name = "id_producto", referencedColumnName = "id_producto")})
@@ -73,6 +86,38 @@ public class Prestacion implements Serializable {
 
     public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
+    }
+
+    public Integer getUserCreaPrestacion() {
+        return userCreaPrestacion;
+    }
+
+    public void setUserCreaPrestacion(Integer userCreaPrestacion) {
+        this.userCreaPrestacion = userCreaPrestacion;
+    }
+
+    public Date getFechaCreaPrestacion() {
+        return fechaCreaPrestacion;
+    }
+
+    public void setFechaCreaPrestacion(Date fechaCreaPrestacion) {
+        this.fechaCreaPrestacion = fechaCreaPrestacion;
+    }
+
+    public Integer getUserModPrestacion() {
+        return userModPrestacion;
+    }
+
+    public void setUserModPrestacion(Integer userModPrestacion) {
+        this.userModPrestacion = userModPrestacion;
+    }
+
+    public Date getFechaModPrestacion() {
+        return fechaModPrestacion;
+    }
+
+    public void setFechaModPrestacion(Date fechaModPrestacion) {
+        this.fechaModPrestacion = fechaModPrestacion;
     }
 
     public List<Producto> getProductoList() {
@@ -129,7 +174,7 @@ public class Prestacion implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.Prestacion[ idPrestacion=" + idPrestacion + " ]";
+        return "sv.gob.cultura.rrhh.entidades.Prestacion[ idPrestacion=" + idPrestacion + " ]";
     }
     
 }

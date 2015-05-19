@@ -20,6 +20,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -37,12 +38,26 @@ public class FamiliaDependientesEmp implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_familia")
     private Integer idFamilia;
-    @Size(max = 200)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 200)
     @Column(name = "nombre_familia")
     private String nombreFamilia;
     @Column(name = "fecha_nac_familia")
     @Temporal(TemporalType.DATE)
     private Date fechaNacFamilia;
+    @Column(name = "edad_familia")
+    private Integer edadFamilia;
+    @Column(name = "user_crea_fam")
+    private Integer userCreaFam;
+    @Column(name = "fecha_crea_fam")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCreaFam;
+    @Column(name = "user_mod_fam")
+    private Integer userModFam;
+    @Column(name = "fecha_mod_fam")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaModFam;
     @JoinColumn(name = "id_parentesco", referencedColumnName = "id_parentesco")
     @ManyToOne(optional = false)
     private Parentesco idParentesco;
@@ -55,6 +70,11 @@ public class FamiliaDependientesEmp implements Serializable {
 
     public FamiliaDependientesEmp(Integer idFamilia) {
         this.idFamilia = idFamilia;
+    }
+
+    public FamiliaDependientesEmp(Integer idFamilia, String nombreFamilia) {
+        this.idFamilia = idFamilia;
+        this.nombreFamilia = nombreFamilia;
     }
 
     public Integer getIdFamilia() {
@@ -79,6 +99,46 @@ public class FamiliaDependientesEmp implements Serializable {
 
     public void setFechaNacFamilia(Date fechaNacFamilia) {
         this.fechaNacFamilia = fechaNacFamilia;
+    }
+
+    public Integer getEdadFamilia() {
+        return edadFamilia;
+    }
+
+    public void setEdadFamilia(Integer edadFamilia) {
+        this.edadFamilia = edadFamilia;
+    }
+
+    public Integer getUserCreaFam() {
+        return userCreaFam;
+    }
+
+    public void setUserCreaFam(Integer userCreaFam) {
+        this.userCreaFam = userCreaFam;
+    }
+
+    public Date getFechaCreaFam() {
+        return fechaCreaFam;
+    }
+
+    public void setFechaCreaFam(Date fechaCreaFam) {
+        this.fechaCreaFam = fechaCreaFam;
+    }
+
+    public Integer getUserModFam() {
+        return userModFam;
+    }
+
+    public void setUserModFam(Integer userModFam) {
+        this.userModFam = userModFam;
+    }
+
+    public Date getFechaModFam() {
+        return fechaModFam;
+    }
+
+    public void setFechaModFam(Date fechaModFam) {
+        this.fechaModFam = fechaModFam;
     }
 
     public Parentesco getIdParentesco() {
@@ -119,7 +179,7 @@ public class FamiliaDependientesEmp implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.FamiliaDependientesEmp[ idFamilia=" + idFamilia + " ]";
+        return "sv.gob.cultura.rrhh.entidades.FamiliaDependientesEmp[ idFamilia=" + idFamilia + " ]";
     }
     
 }

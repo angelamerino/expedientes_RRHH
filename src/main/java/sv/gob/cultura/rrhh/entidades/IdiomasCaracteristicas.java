@@ -6,13 +6,17 @@
 package sv.gob.cultura.rrhh.entidades;
 
 import java.io.Serializable;
+import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -26,8 +30,13 @@ public class IdiomasCaracteristicas implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected IdiomasCaracteristicasPK idiomasCaracteristicasPK;
+    @Size(max = 1024)
+    @Column(name = "institucion_idioma")
+    private String institucionIdioma;
+    @OneToMany(mappedBy = "idiomasCaracteristicas")
+    private List<ImgDoc> imgDocList;
     @JoinColumn(name = "id_nivel", referencedColumnName = "id_nivel")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Nivel idNivel;
     @JoinColumn(name = "id_idioma", referencedColumnName = "id_idioma", insertable = false, updatable = false)
     @ManyToOne(optional = false)
@@ -53,6 +62,22 @@ public class IdiomasCaracteristicas implements Serializable {
 
     public void setIdiomasCaracteristicasPK(IdiomasCaracteristicasPK idiomasCaracteristicasPK) {
         this.idiomasCaracteristicasPK = idiomasCaracteristicasPK;
+    }
+
+    public String getInstitucionIdioma() {
+        return institucionIdioma;
+    }
+
+    public void setInstitucionIdioma(String institucionIdioma) {
+        this.institucionIdioma = institucionIdioma;
+    }
+
+    public List<ImgDoc> getImgDocList() {
+        return imgDocList;
+    }
+
+    public void setImgDocList(List<ImgDoc> imgDocList) {
+        this.imgDocList = imgDocList;
     }
 
     public Nivel getIdNivel() {
@@ -101,7 +126,7 @@ public class IdiomasCaracteristicas implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.IdiomasCaracteristicas[ idiomasCaracteristicasPK=" + idiomasCaracteristicasPK + " ]";
+        return "sv.gob.cultura.rrhh.entidades.IdiomasCaracteristicas[ idiomasCaracteristicasPK=" + idiomasCaracteristicasPK + " ]";
     }
     
 }

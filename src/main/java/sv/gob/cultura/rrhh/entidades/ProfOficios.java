@@ -8,15 +8,17 @@ package sv.gob.cultura.rrhh.entidades;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -34,17 +36,24 @@ public class ProfOficios implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_prof_oficio")
     private Integer idProfOficio;
-    @Size(max = 1024)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 1024)
     @Column(name = "nombre_prof_oficio")
     private String nombreProfOficio;
-    @ManyToMany(mappedBy = "profOficiosList")
-    private List<Empleados> empleadosList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProfOficio")
+    private List<EstudiosEmp> estudiosEmpList;
 
     public ProfOficios() {
     }
 
     public ProfOficios(Integer idProfOficio) {
         this.idProfOficio = idProfOficio;
+    }
+
+    public ProfOficios(Integer idProfOficio, String nombreProfOficio) {
+        this.idProfOficio = idProfOficio;
+        this.nombreProfOficio = nombreProfOficio;
     }
 
     public Integer getIdProfOficio() {
@@ -63,12 +72,12 @@ public class ProfOficios implements Serializable {
         this.nombreProfOficio = nombreProfOficio;
     }
 
-    public List<Empleados> getEmpleadosList() {
-        return empleadosList;
+    public List<EstudiosEmp> getEstudiosEmpList() {
+        return estudiosEmpList;
     }
 
-    public void setEmpleadosList(List<Empleados> empleadosList) {
-        this.empleadosList = empleadosList;
+    public void setEstudiosEmpList(List<EstudiosEmp> estudiosEmpList) {
+        this.estudiosEmpList = estudiosEmpList;
     }
 
     @Override
@@ -93,7 +102,7 @@ public class ProfOficios implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.ProfOficios[ idProfOficio=" + idProfOficio + " ]";
+        return "sv.gob.cultura.rrhh.entidades.ProfOficios[ idProfOficio=" + idProfOficio + " ]";
     }
     
 }

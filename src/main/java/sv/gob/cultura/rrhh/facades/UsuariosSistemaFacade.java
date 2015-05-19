@@ -8,14 +8,14 @@ package sv.gob.cultura.rrhh.facades;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import sv.gob.cultura.rrhh.entidades.Genero;
+import sv.gob.cultura.rrhh.entidades.UsuariosSistema;
 
 /**
  *
  * @author Angela
  */
 @Stateless
-public class GeneroFacade extends AbstractFacade<Genero> {
+public class UsuariosSistemaFacade extends AbstractFacade<UsuariosSistema> {
     @PersistenceContext(unitName = "rrhhPU")
     private EntityManager em;
 
@@ -24,8 +24,8 @@ public class GeneroFacade extends AbstractFacade<Genero> {
         return em;
     }
 
-    public GeneroFacade() {
-        super(Genero.class);
+    public UsuariosSistemaFacade() {
+        super(UsuariosSistema.class);
     }
     
 }

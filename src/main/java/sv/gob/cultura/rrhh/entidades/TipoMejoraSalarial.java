@@ -18,6 +18,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -35,7 +36,9 @@ public class TipoMejoraSalarial implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_mejora_sal")
     private Integer idMejoraSal;
-    @Size(max = 100)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 100)
     @Column(name = "nombre_mejora_sal")
     private String nombreMejoraSal;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idMejoraSal")
@@ -46,6 +49,11 @@ public class TipoMejoraSalarial implements Serializable {
 
     public TipoMejoraSalarial(Integer idMejoraSal) {
         this.idMejoraSal = idMejoraSal;
+    }
+
+    public TipoMejoraSalarial(Integer idMejoraSal, String nombreMejoraSal) {
+        this.idMejoraSal = idMejoraSal;
+        this.nombreMejoraSal = nombreMejoraSal;
     }
 
     public Integer getIdMejoraSal() {
@@ -94,7 +102,7 @@ public class TipoMejoraSalarial implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.TipoMejoraSalarial[ idMejoraSal=" + idMejoraSal + " ]";
+        return "sv.gob.cultura.rrhh.entidades.TipoMejoraSalarial[ idMejoraSal=" + idMejoraSal + " ]";
     }
     
 }

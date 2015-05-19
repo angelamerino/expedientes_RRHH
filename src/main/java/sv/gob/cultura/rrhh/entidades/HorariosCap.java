@@ -20,6 +20,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -36,12 +37,18 @@ public class HorariosCap implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_horario_cap")
     private Integer idHorarioCap;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "fecha_cap")
     @Temporal(TemporalType.DATE)
     private Date fechaCap;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "hora_inicio_cap")
     @Temporal(TemporalType.TIME)
     private Date horaInicioCap;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "hora_fin_cap")
     @Temporal(TemporalType.TIME)
     private Date horaFinCap;
@@ -54,6 +61,13 @@ public class HorariosCap implements Serializable {
 
     public HorariosCap(Integer idHorarioCap) {
         this.idHorarioCap = idHorarioCap;
+    }
+
+    public HorariosCap(Integer idHorarioCap, Date fechaCap, Date horaInicioCap, Date horaFinCap) {
+        this.idHorarioCap = idHorarioCap;
+        this.fechaCap = fechaCap;
+        this.horaInicioCap = horaInicioCap;
+        this.horaFinCap = horaFinCap;
     }
 
     public Integer getIdHorarioCap() {
@@ -118,7 +132,7 @@ public class HorariosCap implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.HorariosCap[ idHorarioCap=" + idHorarioCap + " ]";
+        return "sv.gob.cultura.rrhh.entidades.HorariosCap[ idHorarioCap=" + idHorarioCap + " ]";
     }
     
 }

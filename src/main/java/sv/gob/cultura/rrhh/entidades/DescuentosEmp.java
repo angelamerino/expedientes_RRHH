@@ -7,7 +7,9 @@ package sv.gob.cultura.rrhh.entidades;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,9 +19,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -37,28 +41,48 @@ public class DescuentosEmp implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_descuento_emp")
     private Integer idDescuentoEmp;
-    @Size(max = 1024)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 1024)
     @Column(name = "nombre_institucion_desc")
     private String nombreInstitucionDesc;
-    @Size(max = 25)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 25)
     @Column(name = "num_ref_credito")
     private String numRefCredito;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "num_cuotas")
-    private Integer numCuotas;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    private int numCuotas;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "cuota_mensual")
-    private Double cuotaMensual;
+    private double cuotaMensual;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "monto_total")
-    private Double montoTotal;
+    private double montoTotal;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "fecha_ini_desc")
     @Temporal(TemporalType.DATE)
     private Date fechaIniDesc;
     @Column(name = "fecha_fin_desc")
     @Temporal(TemporalType.DATE)
     private Date fechaFinDesc;
-    @Size(max = 25)
-    @Column(name = "doc_desc")
-    private String docDesc;
+    @Column(name = "user_crea_desc")
+    private Integer userCreaDesc;
+    @Column(name = "fecha_crea_desc")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCreaDesc;
+    @Column(name = "user_mod_desc")
+    private Integer userModDesc;
+    @Column(name = "fecha_mod_desc")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaModDesc;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idDescuentoEmp")
+    private List<ImgDoc> imgDocList;
     @JoinColumn(name = "id_descuento", referencedColumnName = "id_descuento")
     @ManyToOne(optional = false)
     private TipoDescuento idDescuento;
@@ -71,6 +95,16 @@ public class DescuentosEmp implements Serializable {
 
     public DescuentosEmp(Integer idDescuentoEmp) {
         this.idDescuentoEmp = idDescuentoEmp;
+    }
+
+    public DescuentosEmp(Integer idDescuentoEmp, String nombreInstitucionDesc, String numRefCredito, int numCuotas, double cuotaMensual, double montoTotal, Date fechaIniDesc) {
+        this.idDescuentoEmp = idDescuentoEmp;
+        this.nombreInstitucionDesc = nombreInstitucionDesc;
+        this.numRefCredito = numRefCredito;
+        this.numCuotas = numCuotas;
+        this.cuotaMensual = cuotaMensual;
+        this.montoTotal = montoTotal;
+        this.fechaIniDesc = fechaIniDesc;
     }
 
     public Integer getIdDescuentoEmp() {
@@ -97,27 +131,27 @@ public class DescuentosEmp implements Serializable {
         this.numRefCredito = numRefCredito;
     }
 
-    public Integer getNumCuotas() {
+    public int getNumCuotas() {
         return numCuotas;
     }
 
-    public void setNumCuotas(Integer numCuotas) {
+    public void setNumCuotas(int numCuotas) {
         this.numCuotas = numCuotas;
     }
 
-    public Double getCuotaMensual() {
+    public double getCuotaMensual() {
         return cuotaMensual;
     }
 
-    public void setCuotaMensual(Double cuotaMensual) {
+    public void setCuotaMensual(double cuotaMensual) {
         this.cuotaMensual = cuotaMensual;
     }
 
-    public Double getMontoTotal() {
+    public double getMontoTotal() {
         return montoTotal;
     }
 
-    public void setMontoTotal(Double montoTotal) {
+    public void setMontoTotal(double montoTotal) {
         this.montoTotal = montoTotal;
     }
 
@@ -137,12 +171,44 @@ public class DescuentosEmp implements Serializable {
         this.fechaFinDesc = fechaFinDesc;
     }
 
-    public String getDocDesc() {
-        return docDesc;
+    public Integer getUserCreaDesc() {
+        return userCreaDesc;
     }
 
-    public void setDocDesc(String docDesc) {
-        this.docDesc = docDesc;
+    public void setUserCreaDesc(Integer userCreaDesc) {
+        this.userCreaDesc = userCreaDesc;
+    }
+
+    public Date getFechaCreaDesc() {
+        return fechaCreaDesc;
+    }
+
+    public void setFechaCreaDesc(Date fechaCreaDesc) {
+        this.fechaCreaDesc = fechaCreaDesc;
+    }
+
+    public Integer getUserModDesc() {
+        return userModDesc;
+    }
+
+    public void setUserModDesc(Integer userModDesc) {
+        this.userModDesc = userModDesc;
+    }
+
+    public Date getFechaModDesc() {
+        return fechaModDesc;
+    }
+
+    public void setFechaModDesc(Date fechaModDesc) {
+        this.fechaModDesc = fechaModDesc;
+    }
+
+    public List<ImgDoc> getImgDocList() {
+        return imgDocList;
+    }
+
+    public void setImgDocList(List<ImgDoc> imgDocList) {
+        this.imgDocList = imgDocList;
     }
 
     public TipoDescuento getIdDescuento() {
@@ -183,7 +249,7 @@ public class DescuentosEmp implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.DescuentosEmp[ idDescuentoEmp=" + idDescuentoEmp + " ]";
+        return "sv.gob.cultura.rrhh.entidades.DescuentosEmp[ idDescuentoEmp=" + idDescuentoEmp + " ]";
     }
     
 }

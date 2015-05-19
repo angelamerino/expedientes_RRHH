@@ -19,6 +19,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -36,7 +37,9 @@ public class Idiomas implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_idioma")
     private Integer idIdioma;
-    @Size(max = 100)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 100)
     @Column(name = "nombre_idioma")
     private String nombreIdioma;
     @ManyToMany(mappedBy = "idiomasList")
@@ -49,6 +52,11 @@ public class Idiomas implements Serializable {
 
     public Idiomas(Integer idIdioma) {
         this.idIdioma = idIdioma;
+    }
+
+    public Idiomas(Integer idIdioma, String nombreIdioma) {
+        this.idIdioma = idIdioma;
+        this.nombreIdioma = nombreIdioma;
     }
 
     public Integer getIdIdioma() {
@@ -105,7 +113,7 @@ public class Idiomas implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.Idiomas[ idIdioma=" + idIdioma + " ]";
+        return "sv.gob.cultura.rrhh.entidades.Idiomas[ idIdioma=" + idIdioma + " ]";
     }
     
 }

@@ -18,6 +18,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -35,7 +36,9 @@ public class TipoSangre implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_tipo_sangre")
     private Integer idTipoSangre;
-    @Size(max = 50)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 50)
     @Column(name = "nombre_tipo_sangre")
     private String nombreTipoSangre;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipoSangre")
@@ -46,6 +49,11 @@ public class TipoSangre implements Serializable {
 
     public TipoSangre(Integer idTipoSangre) {
         this.idTipoSangre = idTipoSangre;
+    }
+
+    public TipoSangre(Integer idTipoSangre, String nombreTipoSangre) {
+        this.idTipoSangre = idTipoSangre;
+        this.nombreTipoSangre = nombreTipoSangre;
     }
 
     public Integer getIdTipoSangre() {
@@ -94,7 +102,7 @@ public class TipoSangre implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.TipoSangre[ idTipoSangre=" + idTipoSangre + " ]";
+        return "sv.gob.cultura.rrhh.entidades.TipoSangre[ idTipoSangre=" + idTipoSangre + " ]";
     }
     
 }

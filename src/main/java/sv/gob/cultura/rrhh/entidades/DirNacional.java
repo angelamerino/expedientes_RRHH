@@ -6,6 +6,7 @@
 package sv.gob.cultura.rrhh.entidades;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -18,6 +19,9 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -35,9 +39,21 @@ public class DirNacional implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_dir_nac")
     private Integer idDirNac;
-    @Size(max = 1024)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 1024)
     @Column(name = "nombre_dir_nac")
     private String nombreDirNac;
+    @Column(name = "user_crea_dir")
+    private Integer userCreaDir;
+    @Column(name = "fecha_crea_dir")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCreaDir;
+    @Column(name = "user_mod_dir")
+    private Integer userModDir;
+    @Column(name = "fecha_mod_dir")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaModDir;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idDirNac")
     private List<Dependencias> dependenciasList;
 
@@ -46,6 +62,11 @@ public class DirNacional implements Serializable {
 
     public DirNacional(Integer idDirNac) {
         this.idDirNac = idDirNac;
+    }
+
+    public DirNacional(Integer idDirNac, String nombreDirNac) {
+        this.idDirNac = idDirNac;
+        this.nombreDirNac = nombreDirNac;
     }
 
     public Integer getIdDirNac() {
@@ -62,6 +83,38 @@ public class DirNacional implements Serializable {
 
     public void setNombreDirNac(String nombreDirNac) {
         this.nombreDirNac = nombreDirNac;
+    }
+
+    public Integer getUserCreaDir() {
+        return userCreaDir;
+    }
+
+    public void setUserCreaDir(Integer userCreaDir) {
+        this.userCreaDir = userCreaDir;
+    }
+
+    public Date getFechaCreaDir() {
+        return fechaCreaDir;
+    }
+
+    public void setFechaCreaDir(Date fechaCreaDir) {
+        this.fechaCreaDir = fechaCreaDir;
+    }
+
+    public Integer getUserModDir() {
+        return userModDir;
+    }
+
+    public void setUserModDir(Integer userModDir) {
+        this.userModDir = userModDir;
+    }
+
+    public Date getFechaModDir() {
+        return fechaModDir;
+    }
+
+    public void setFechaModDir(Date fechaModDir) {
+        this.fechaModDir = fechaModDir;
     }
 
     public List<Dependencias> getDependenciasList() {
@@ -94,7 +147,7 @@ public class DirNacional implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.DirNacional[ idDirNac=" + idDirNac + " ]";
+        return "sv.gob.cultura.rrhh.entidades.DirNacional[ idDirNac=" + idDirNac + " ]";
     }
     
 }

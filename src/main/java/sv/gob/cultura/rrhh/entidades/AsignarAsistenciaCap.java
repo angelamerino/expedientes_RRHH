@@ -6,6 +6,7 @@
 package sv.gob.cultura.rrhh.entidades;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +18,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
 /**
@@ -40,6 +43,16 @@ public class AsignarAsistenciaCap implements Serializable {
     @Size(max = 2)
     @Column(name = "cap_asistida")
     private String capAsistida;
+    @Column(name = "user_crea_asig_asis")
+    private Integer userCreaAsigAsis;
+    @Column(name = "fecha_crea_asig_asis")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCreaAsigAsis;
+    @Column(name = "user_mod_asig_asis")
+    private Integer userModAsigAsis;
+    @Column(name = "fecha_mod_aisg_asis")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaModAisgAsis;
     @JoinColumn(name = "nr_empleado", referencedColumnName = "nr_empleado")
     @ManyToOne(optional = false)
     private Empleados nrEmpleado;
@@ -76,6 +89,38 @@ public class AsignarAsistenciaCap implements Serializable {
 
     public void setCapAsistida(String capAsistida) {
         this.capAsistida = capAsistida;
+    }
+
+    public Integer getUserCreaAsigAsis() {
+        return userCreaAsigAsis;
+    }
+
+    public void setUserCreaAsigAsis(Integer userCreaAsigAsis) {
+        this.userCreaAsigAsis = userCreaAsigAsis;
+    }
+
+    public Date getFechaCreaAsigAsis() {
+        return fechaCreaAsigAsis;
+    }
+
+    public void setFechaCreaAsigAsis(Date fechaCreaAsigAsis) {
+        this.fechaCreaAsigAsis = fechaCreaAsigAsis;
+    }
+
+    public Integer getUserModAsigAsis() {
+        return userModAsigAsis;
+    }
+
+    public void setUserModAsigAsis(Integer userModAsigAsis) {
+        this.userModAsigAsis = userModAsigAsis;
+    }
+
+    public Date getFechaModAisgAsis() {
+        return fechaModAisgAsis;
+    }
+
+    public void setFechaModAisgAsis(Date fechaModAisgAsis) {
+        this.fechaModAisgAsis = fechaModAisgAsis;
     }
 
     public Empleados getNrEmpleado() {
@@ -116,7 +161,7 @@ public class AsignarAsistenciaCap implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.AsignarAsistenciaCap[ idAsigAsis=" + idAsigAsis + " ]";
+        return "sv.gob.cultura.rrhh.entidades.AsignarAsistenciaCap[ idAsigAsis=" + idAsigAsis + " ]";
     }
     
 }

@@ -14,10 +14,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -35,11 +38,14 @@ public class TipoSancion implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_tipo_sancion")
     private Integer idTipoSancion;
-    @Size(max = 100)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 100)
     @Column(name = "nombre_tipo_sancion")
     private String nombreTipoSancion;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipoSancion")
-    private List<GradoSancion> gradoSancionList;
+    @JoinColumn(name = "id_grado_sancion", referencedColumnName = "id_grado_sancion")
+    @ManyToOne(optional = false)
+    private GradoSancion idGradoSancion;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipoSancion")
     private List<Sanciones> sancionesList;
 
@@ -48,6 +54,11 @@ public class TipoSancion implements Serializable {
 
     public TipoSancion(Integer idTipoSancion) {
         this.idTipoSancion = idTipoSancion;
+    }
+
+    public TipoSancion(Integer idTipoSancion, String nombreTipoSancion) {
+        this.idTipoSancion = idTipoSancion;
+        this.nombreTipoSancion = nombreTipoSancion;
     }
 
     public Integer getIdTipoSancion() {
@@ -66,12 +77,12 @@ public class TipoSancion implements Serializable {
         this.nombreTipoSancion = nombreTipoSancion;
     }
 
-    public List<GradoSancion> getGradoSancionList() {
-        return gradoSancionList;
+    public GradoSancion getIdGradoSancion() {
+        return idGradoSancion;
     }
 
-    public void setGradoSancionList(List<GradoSancion> gradoSancionList) {
-        this.gradoSancionList = gradoSancionList;
+    public void setIdGradoSancion(GradoSancion idGradoSancion) {
+        this.idGradoSancion = idGradoSancion;
     }
 
     public List<Sanciones> getSancionesList() {
@@ -104,7 +115,7 @@ public class TipoSancion implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.facades.TipoSancion[ idTipoSancion=" + idTipoSancion + " ]";
+        return "sv.gob.cultura.rrhh.entidades.TipoSancion[ idTipoSancion=" + idTipoSancion + " ]";
     }
     
 }
