@@ -35,6 +35,12 @@
             <redirect/>
         </navigation-case>
           -->
+          <navigation-case>
+            <from-outcome>catalogos</from-outcome>
+            <to-view-id>/contenido/catalogos.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        
         <navigation-case>
             <from-outcome>ayuda</from-outcome>
             <to-view-id>/contenido/ayuda.xhtml</to-view-id>
