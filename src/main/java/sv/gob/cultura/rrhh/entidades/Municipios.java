@@ -30,7 +30,9 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "municipios")
 @NamedQueries({
-    @NamedQuery(name = "Municipios.findAll", query = "SELECT m FROM Municipios m")})
+    @NamedQuery(name = "Municipios.findAll", query = "SELECT m FROM Municipios m"),
+    @NamedQuery(name = "Municipios.buscarDep", query = "SELECT m FROM Municipios m WHERE m.idDepartamento.idDepartamento =:depto")
+})
 public class Municipios implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
