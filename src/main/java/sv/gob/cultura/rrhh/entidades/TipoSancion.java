@@ -61,6 +61,11 @@ public class TipoSancion implements Serializable {
         this.nombreTipoSancion = nombreTipoSancion;
     }
 
+    public TipoSancion(String nombreTipoSancion) {
+        this.nombreTipoSancion = nombreTipoSancion;
+    }
+
+ 
     public Integer getIdTipoSancion() {
         return idTipoSancion;
     }

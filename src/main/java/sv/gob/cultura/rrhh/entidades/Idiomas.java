@@ -54,6 +54,11 @@ public class Idiomas implements Serializable {
         this.idIdioma = idIdioma;
     }
 
+    public Idiomas(String nombreIdioma) {
+        this.nombreIdioma = nombreIdioma;
+    }
+
+    
     public Idiomas(Integer idIdioma, String nombreIdioma) {
         this.idIdioma = idIdioma;
         this.nombreIdioma = nombreIdioma;

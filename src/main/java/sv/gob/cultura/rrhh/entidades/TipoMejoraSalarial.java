@@ -51,6 +51,10 @@ public class TipoMejoraSalarial implements Serializable {
         this.idMejoraSal = idMejoraSal;
     }
 
+    public TipoMejoraSalarial(String nombreMejoraSal) {
+        this.nombreMejoraSal = nombreMejoraSal;
+    }
+
     public TipoMejoraSalarial(Integer idMejoraSal, String nombreMejoraSal) {
         this.idMejoraSal = idMejoraSal;
         this.nombreMejoraSal = nombreMejoraSal;

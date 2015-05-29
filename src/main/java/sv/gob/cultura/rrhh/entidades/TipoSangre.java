@@ -56,6 +56,11 @@ public class TipoSangre implements Serializable {
         this.nombreTipoSangre = nombreTipoSangre;
     }
 
+    public TipoSangre(String nombreTipoSangre) {
+        this.nombreTipoSangre = nombreTipoSangre;
+    }
+
+ 
     public Integer getIdTipoSangre() {
         return idTipoSangre;
     }

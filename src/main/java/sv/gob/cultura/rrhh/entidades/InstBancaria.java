@@ -51,6 +51,12 @@ public class InstBancaria implements Serializable {
         this.idBanco = idBanco;
     }
 
+    public InstBancaria(String nombreBanco) {
+        this.nombreBanco = nombreBanco;
+    }
+
+    
+    
     public InstBancaria(Integer idBanco, String nombreBanco) {
         this.idBanco = idBanco;
         this.nombreBanco = nombreBanco;

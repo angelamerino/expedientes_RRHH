@@ -56,6 +56,11 @@ public class TipoPrestacion implements Serializable {
         this.nombreTipoPrestacion = nombreTipoPrestacion;
     }
 
+    public TipoPrestacion(String nombreTipoPrestacion) {
+        this.nombreTipoPrestacion = nombreTipoPrestacion;
+    }
+
+ 
     public Integer getIdTipoPrestacion() {
         return idTipoPrestacion;
     }

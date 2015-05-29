@@ -51,11 +51,18 @@ public class EstadoCivil implements Serializable {
         this.idEstadoCivil = idEstadoCivil;
     }
 
+    public EstadoCivil(String nombreEstadoCivil) {
+        this.nombreEstadoCivil = nombreEstadoCivil;
+    }
+
+    
+    
     public EstadoCivil(Integer idEstadoCivil, String nombreEstadoCivil) {
         this.idEstadoCivil = idEstadoCivil;
         this.nombreEstadoCivil = nombreEstadoCivil;
     }
 
+    
     public Integer getIdEstadoCivil() {
         return idEstadoCivil;
     }

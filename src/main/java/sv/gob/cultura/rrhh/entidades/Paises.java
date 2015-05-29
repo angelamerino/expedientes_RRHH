@@ -56,6 +56,10 @@ public class Paises implements Serializable {
         this.nombrePais = nombrePais;
     }
 
+    public Paises(String nuevo_item) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public Integer getIdPais() {
         return idPais;
     }

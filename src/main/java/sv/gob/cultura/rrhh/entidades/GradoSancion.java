@@ -56,6 +56,11 @@ public class GradoSancion implements Serializable {
         this.nombreGradoSancion = nombreGradoSancion;
     }
 
+    public GradoSancion(String nombreGradoSancion) {
+        this.nombreGradoSancion = nombreGradoSancion;
+    }
+
+
     public Integer getIdGradoSancion() {
         return idGradoSancion;
     }

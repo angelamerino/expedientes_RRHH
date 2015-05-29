@@ -4,53 +4,754 @@
                 template="./../resources/plantilla/plantilla.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="content">
         
-<h:form>
-    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5" columnClasses="label, value">
-        <p:outputLabel for="basic" value="Basic:" />
-        <p:selectManyMenu id="basic" value="#{selectManyView.selectedOptions}">
-            <f:selectItem itemLabel="Option 1" itemValue="1" />
-            <f:selectItem itemLabel="Option 2" itemValue="2" />
-            <f:selectItem itemLabel="Option 3" itemValue="3" />
-        </p:selectManyMenu>
- 
-        <p:outputLabel for="advanced" value="Advanced:" />
-        <p:selectManyMenu id="advanced" value="#{selectManyView.selectedThemes}" 
-                          var="t" filter="true" filterMatchMode="contains" showCheckbox="true">
-            <f:selectItems value="#{selectManyView.themes}" var="theme" itemLabel="#{theme.displayName}" itemValue="#{theme}" />
- 
-            <p:column>
-                <h:outputText styleClass="ui-theme ui-theme-#{t.name}" />
-            </p:column>
- 
-            <p:column>
-                <h:outputText value="#{t.displayName}" />
-            </p:column>
-        </p:selectManyMenu>
-    </h:panelGrid>
- 
-    <p:separator />
- 
-    <p:commandButton value="Submit" update="display" oncomplete="PF('dlg').show()" icon="ui-icon-check" />
- 
-    <p:dialog header="Selected Values" modal="true" showEffect="fade" widgetVar="dlg" resizable="false">
-        <p:panelGrid columns="2" id="display" columnClasses="label,output">
-            <h:outputText value="Basic:" />
-            <p:dataList value="#{selectManyView.selectedOptions}" var="option">
-                <h:outputText value="#{option}" />
-            </p:dataList>
- 
-            <h:outputText value="Advanced:" />
-            <p:dataList value="#{selectManyView.selectedThemes}" var="t">
-                <h:outputText value="#{t}" />
-            </p:dataList>
-        </p:panelGrid>
-    </p:dialog>
-</h:form>
+   <h:form class="form-horizontal" role="form" prependId="false">
+            <div class="page-header">
+                <h1>Gestionar registros de catálogos</h1>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-info">
+                    <div class="panel-heading"><strong>Seleccione un Catálogo</strong></div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <p:selectOneListbox value="#{manejadorCat.opcion}" style="width: 100%;" scrollHeight="300" filter="true" filterMatchMode="contains">
+                                <f:selectItem itemLabel="Administradora de Pensiones" itemValue="1"/>
+                                <f:selectItem itemLabel="Características del Idioma" itemValue="2"/>
+                                <f:selectItem itemLabel="Estado Civil" itemValue="3"/>
+                                <f:selectItem itemLabel="Estados del Empleado" itemValue="4"/>
+                                <f:selectItem itemLabel="Grado de Sanción" itemValue="5"/>
+                                <f:selectItem itemLabel="Idiomas" itemValue="6"/>
+                                <f:selectItem itemLabel="Institucion Bancaria" itemValue="7"/>
+                                <f:selectItem itemLabel="Nivel de Conocimiento" itemValue="8"/>
+                                <f:selectItem itemLabel="Países" itemValue="9"/>
+                                <f:selectItem itemLabel="Parentesco" itemValue="10"/>
+                                <f:selectItem itemLabel="Profesiones u Oficios" itemValue="11"/>
+                                <f:selectItem itemLabel="Proveedor" itemValue="12"/>
+                                <f:selectItem itemLabel="Tipo de Descuento" itemValue="13"/>
+                                <f:selectItem itemLabel="Tipo de Mejora Salarial" itemValue="14"/>
+                                <f:selectItem itemLabel="Tipo de Movimiento" itemValue="15"/>
+                                <f:selectItem itemLabel="Tipo de Prestación" itemValue="16"/>
+                                <f:selectItem itemLabel="Tipo de Sangre" itemValue="17"/>
+                                <p:ajax update="@form"/>
+                            </p:selectOneListbox>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <div class="col-md-6">
+                <div class="panel panel-info">
+                    <div class="panel-heading"><strong>Items</strong></div>
+                    <div class="panel-body">
+                        <div class="table-responsive">                            
+                            <p:dataTable id="cat-pensiones" value="#{manejadorCat.administradoraPensiones}" var="admin_pensiones" rendered="#{manejadorCat.opcion eq 1}" paginator="true" rows="5">
+                                <p:column width="10%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{admin_pensiones.idAdminPension}"/>
+                                </p:column>
+                                
+                                <p:column width="90%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Nombre Administradora de Pensiones"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{admin_pensiones.nombreAdminPension}"/>
+                                </p:column>
+                                
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-pencil" title="Icon Only"></p:button>
+                                </p:column>
+
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
+                                </p:column>
+                                
+                                <!-- <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                    </f:facet>
+
+                                    <button type="button" class="btn btn-primary">
+                                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                    </button>
+                                </p:column>
+
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                    </f:facet>
+
+                                    <button type="button" class="btn btn-primary">
+                                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                    </button>
+                                </p:column> -->
+                                
+                                <f:facet name="footer">
+                                    <h3>
+                                        <!-- <span class="label label-primary">Nuevo Registro</span>-->
+                                        <span class="panel-info"><strong>Nuevo Registro</strong></span>
+                                    </h3>
+                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
+                                        <p:ajax process="cat-pensiones" update="cat-pensiones"/>
+                                    </h:commandButton>
+                                </f:facet>
+                            </p:dataTable>
+
+                            <p:dataTable id="cat-caractidiomas" value="#{manejadorCat.caracteristicasIdioma}" var="carac_idioma" rendered="#{manejadorCat.opcion eq 2}" class="table" paginator="true" rows="5">
+                                <p:column width="10%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{carac_idioma.idCaractIdioma}"/>
+                                </p:column>
+                                <p:column width="90%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Nombre de la Característica"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{carac_idioma.caracteristicaIdioma}"/>
+                                </p:column>
+
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-pencil" onclick="confirm(alert(Seguro que desea editar))" title="Icon Only"></p:button>
+                                </p:column>
+
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
+                                </p:column>
+
+                                <f:facet name="footer">
+                                    <h3>
+                                        <span class="panel-info"><strong>Nuevo Registro</strong></span>
+                                    </h3>
+                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
+                                        <p:ajax process="cat-caractidiomas" update="cat-caractidiomas"/>
+                                    </h:commandButton>
+                                </f:facet>
+                            </p:dataTable>
+
+                            <p:dataTable id="cat-estadocivil" value="#{manejadorCat.estadoCivil}" var="estado_civil" rendered="#{manejadorCat.opcion eq 3}" class="table" paginator="true" rows="5">
+                                <p:column width="10%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{estado_civil.idEstadoCivil}"/>
+                                </p:column>
+                                
+                                <p:column width="90%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Nombre del Estado Civil"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{estado_civil.nombreEstadoCivil}"/>
+                                </p:column>
+                                
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-pencil" title="Icon Only"></p:button>
+                                </p:column>
+
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
+                                </p:column>
+                                <f:facet name="footer">
+                                    <h3>
+                                        <span class="panel-info"><strong>Nuevo Registro</strong></span>
+                                    </h3>
+                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
+                                        <p:ajax process="cat-estadocivil" update="cat-estadocivil"/>
+                                    </h:commandButton>
+                                </f:facet>
+                            </p:dataTable>
+
+                            <p:dataTable id="cat-estados" value="#{manejadorCat.estados}" var="estados" rendered="#{manejadorCat.opcion eq 4}" class="table" paginator="true" rows="5">
+                                <p:column width="10%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{estados.idEstado}"/>
+                                </p:column>
+                                
+                                <p:column width="90%">   
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Nombre del Estado"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{estados.nombreEstado}"/>
+                                </p:column>
+                                
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-pencil" title="Icon Only"></p:button>
+                                </p:column>
+
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
+                                </p:column>
+                                <f:facet name="footer">
+                                    <h3>
+                                        <span class="panel-info"><strong>Nuevo Registro</strong></span>
+                                    </h3>
+                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
+                                        <p:ajax process="cat-estados" update="cat-estados"/>
+                                    </h:commandButton>
+                                </f:facet>
+                            </p:dataTable>
+
+                            <p:dataTable id="cat-gradosancion" value="#{manejadorCat.gradoSancions}" var="grado_sancion" rendered="#{manejadorCat.opcion eq 5}" class="table" paginator="true" rows="5">
+                                <p:column width="10%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{grado_sancion.idGradoSancion}"/>
+                                </p:column>
+                                
+                                <p:column width="90%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Nombre del Grado de la Sanción"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{grado_sancion.nombreGradoSancion}"/>
+                                </p:column>
+                                
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-pencil" title="Icon Only"></p:button>
+                                </p:column>
+
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
+                                </p:column>
+                                
+                                <f:facet name="footer">
+                                    <h3>
+                                        <span class="panel-info"><strong>Nuevo Registro</strong></span>
+                                    </h3>
+                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
+                                        <p:ajax process="cat-gradosancion" update="cat-gradosancion"/>
+                                    </h:commandButton>
+                                </f:facet>
+                            </p:dataTable>
+
+                            <p:dataTable id="cat-idiomas" value="#{manejadorCat.idiomas}" var="idiomas" rendered="#{manejadorCat.opcion eq 6}" class="table" paginator="true" rows="5">
+                                <p:column width="10%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{idiomas.idIdioma}"/>
+                                </p:column>
+                                
+                                <p:column width="90%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Nombre del Idioma"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{idiomas.nombreIdioma}"/>
+                                </p:column>
+                                
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-pencil" title="Icon Only"></p:button>
+                                </p:column>
+
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
+                                </p:column>
+                                
+                                <f:facet name="footer">
+                                    <h3>
+                                        <span class="panel-info"><strong>Nuevo Registro</strong></span>
+                                    </h3>
+                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
+                                        <p:ajax process="cat-idiomas" update="cat-idiomas"/>
+                                    </h:commandButton>
+                                </f:facet>
+                            </p:dataTable>
+
+                            <p:dataTable id="cat-bancos" value="#{manejadorCat.instBancaria}" var="instBanco" rendered="#{manejadorCat.opcion eq 7}" class="table" paginator="true" rows="5">
+                                <p:column width="10%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{instBanco.idBanco}"/>
+                                </p:column>
+                                
+                                <p:column width="90%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Nombre de la Institución Bancaria"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{instBanco.nombreBanco}"/>
+                                </p:column>
+                                
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-pencil" title="Icon Only"></p:button>
+                                </p:column>
+
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
+                                </p:column>
+                                
+                                <f:facet name="footer">
+                                    <h3>
+                                        <span class="panel-info"><strong>Nuevo Registro</strong></span>
+                                    </h3>
+                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
+                                        <p:ajax process="cat-bancos" update="cat-bancos"/>
+                                    </h:commandButton>
+                                </f:facet>
+                            </p:dataTable>
+
+                            <p:dataTable id="cat-nivel" value="#{manejadorCat.nivel}" var="nivel" rendered="#{manejadorCat.opcion eq 8}" class="table" paginator="true" rows="5">
+                                <p:column width="10%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{nivel.idNivel}"/>
+                                </p:column>
+                                
+                                <p:column width="90%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Nivel de conocimiento"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{nivel.nombreNivel}"/>
+                                </p:column>
+                                
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-pencil" title="Icon Only"></p:button>
+                                </p:column>
+
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
+                                </p:column>
+                                
+                                <f:facet name="footer">
+                                    <h3>
+                                        <span class="panel-info"><strong>Nuevo Registro</strong></span>
+                                    </h3>
+                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
+                                        <p:ajax process="cat-nivel" update="cat-nivel"/>
+                                    </h:commandButton>
+                                </f:facet>
+                            </p:dataTable>
+
+                            <p:dataTable id="cat-pais" value="#{manejadorCat.paiseses}" var="pais" rendered="#{manejadorCat.opcion eq 9}" class="table" paginator="true" rows="5">
+                                <p:column width="10%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{pais.idPais}"/>
+                                </p:column>
+                                
+                                <p:column width="90%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Nombre del País"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{pais.nombrePais}"/>
+                                </p:column>
+                                
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-pencil" title="Icon Only"></p:button>
+                                </p:column>
+
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
+                                </p:column>
+                                
+                                <f:facet name="footer">
+                                    <h3>
+                                        <span class="panel-info"><strong>Nuevo Registro</strong></span>
+                                    </h3>
+                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
+                                        <p:ajax process="cat-pais" update="cat-pais"/>
+                                    </h:commandButton>
+                                </f:facet>
+                            </p:dataTable>
+
+                            <p:dataTable id="cat-parentesco" value="#{manejadorCat.parentesco}" var="parentesco" rendered="#{manejadorCat.opcion eq 10}" class="table" paginator="true" rows="5">
+                                <p:column width="10%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{parentesco.idParentesco}"/>
+                                </p:column>
+                                
+                                <p:column width="90%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Nombre del Parentesco"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{parentesco.nombreParentesco}"/>
+                                </p:column>
+                                
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-pencil" title="Icon Only"></p:button>
+                                </p:column>
+
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
+                                </p:column>
+                                
+                                <f:facet name="footer">
+                                    <h3>
+                                        <span class="panel-info"><strong>Nuevo Registro</strong></span>
+                                    </h3>
+                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
+                                        <p:ajax process="cat-parentesco" update="cat-parentesco"/>
+                                    </h:commandButton>
+                                </f:facet>
+                            </p:dataTable>
+
+                            <p:dataTable id="cat-prof-oficios" value="#{manejadorCat.profOficioses}" var="prof_oficios" rendered="#{manejadorCat.opcion eq 11}" class="table" paginator="true" rows="5">
+                                <p:column width="10%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{prof_oficios.idProfOficio}"/>
+                                </p:column>
+                                
+                                <p:column width="90%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Nombre de la Profesión u Oficio"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{prof_oficios.nombreProfOficio}"/>
+                                </p:column>
+                                
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-pencil" title="Icon Only"></p:button>
+                                </p:column>
+
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
+                                </p:column>
+                                
+                                <f:facet name="footer">
+                                    <h3>
+                                        <span class="panel-info"><strong>Nuevo Registro</strong></span>
+                                    </h3>
+                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
+                                        <p:ajax process="cat-prof-oficios" update="cat-prof-oficios"/>
+                                    </h:commandButton>
+                                </f:facet>
+                            </p:dataTable>
+
+                            <p:dataTable id="cat-prov" value="#{manejadorCat.proveedors}" var="prov" rendered="#{manejadorCat.opcion eq 12}" class="table" paginator="true" rows="5">
+                                <p:column width="10%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{prov.idProveedor}"/>
+                                </p:column>
+                                
+                                <p:column width="90%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Nombre del Proveedor"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{prov.nombreProv}"/>
+                                </p:column>
+                                
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-pencil" title="Icon Only"></p:button>
+                                </p:column>
+
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
+                                </p:column>
+                                
+                                <f:facet name="footer">
+                                    <h3>
+                                        <span class="panel-info"><strong>Nuevo Registro</strong></span>
+                                    </h3>
+                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
+                                        <p:ajax process="cat-prov" update="cat-prov"/>
+                                    </h:commandButton>
+                                </f:facet>
+                            </p:dataTable>
+
+                            <p:dataTable id="cat-descuento" value="#{manejadorCat.tipoDescuentos}" var="descuento" rendered="#{manejadorCat.opcion eq 13}" class="table" paginator="true" rows="5">
+                                <p:column width="10%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{descuento.idDescuento}"/>
+                                </p:column>
+                                
+                                <p:column width="90%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Nombre del Tipo de Descuento"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{descuento.nombreDescuento}"/>
+                                </p:column>
+                                
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-pencil" title="Icon Only"></p:button>
+                                </p:column>
+
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
+                                </p:column>
+                                
+                                <f:facet name="footer">
+                                    <h3>
+                                        <span class="panel-info"><strong>Nuevo Registro</strong></span>
+                                    </h3>
+                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
+                                        <p:ajax process="cat-descuento" update="cat-descuento"/>
+                                    </h:commandButton>
+                                </f:facet>
+                            </p:dataTable>
+
+                            <p:dataTable id="cat-mejorasal" value="#{manejadorCat.tipoMejoraSalarials}" var="mejorasal" rendered="#{manejadorCat.opcion eq 14}" class="table" paginator="true" rows="5">
+                                <p:column width="10%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{mejorasal.idMejoraSal}"/>
+                                </p:column>
+                                
+                                <p:column width="90%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Nombre del Tipo de Mejora Salarial"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{mejorasal.nombreMejoraSal}"/>
+                                </p:column>
+                                
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-pencil" title="Icon Only"></p:button>
+                                </p:column>
+
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
+                                </p:column>
+                                
+                                <f:facet name="footer">
+                                    <h3>
+                                        <span class="panel-info"><strong>Nuevo Registro</strong></span>
+                                    </h3>
+                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
+                                        <p:ajax process="cat-mejorasal" update="cat-mejorasal"/>
+                                    </h:commandButton>
+                                </f:facet>
+                            </p:dataTable>
+
+                            <p:dataTable id="cat-mov" value="#{manejadorCat.tipoMov}" var="mov" rendered="#{manejadorCat.opcion eq 15}" class="table" paginator="true" rows="5">
+                                <p:column width="10%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{mov.idTipoMov}"/>
+                                </p:column>
+                                
+                                <p:column width="90%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Nombre del Tipo de Movimiento"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{mov.nombreMov}"/>
+                                </p:column>
+                                
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-pencil" title="Icon Only"></p:button>
+                                </p:column>
+
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
+                                </p:column>
+                                
+                                <f:facet name="footer">
+                                    <h3>
+                                        <span class="panel-info"><strong>Nuevo Registro</strong></span>
+                                    </h3>
+                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
+                                        <p:ajax process="cat-mov" update="cat-mov"/>
+                                    </h:commandButton>
+                                </f:facet>
+                            </p:dataTable>
+
+                            <p:dataTable id="cat-prestacion" value="#{manejadorCat.tipoPrestacions}" var="prestacion" rendered="#{manejadorCat.opcion eq 16}" class="table" paginator="true" rows="5">
+                                <p:column width="10%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{prestacion.idTipoPrestacion}"/>
+                                </p:column>
+                                
+                                <p:column width="90%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Nombre del Tipo de Prestación"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{prestacion.nombreTipoPrestacion}"/>
+                                </p:column>
+                                
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-pencil" title="Icon Only"></p:button>
+                                </p:column>
+
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
+                                </p:column>
+                                
+                                <f:facet name="footer">
+                                    <h3>
+                                        <span class="panel-info"><strong>Nuevo Registro</strong></span>
+                                    </h3>
+                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
+                                        <p:ajax process="cat-prestacion" update="cat-prestacion"/>
+                                    </h:commandButton>
+                                </f:facet>
+                            </p:dataTable>
+
+                            <p:dataTable id="cat-tipo-sangre" value="#{manejadorCat.tipoSangres}" var="tipo_sangre" rendered="#{manejadorCat.opcion eq 17}" class="table" paginator="true" rows="5">
+                                <p:column width="10%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{tipo_sangre.idTipoSangre}"/>
+                                </p:column>
+                                
+                                <p:column width="90%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Nombre del Tipo de Sangre"/>
+                                    </f:facet>
+                                    <h:outputText style="font-size: 12px;" value="#{tipo_sangre.nombreTipoSangre}"/>
+                                </p:column>
+                                
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-pencil" title="Icon Only"></p:button>
+                                </p:column>
+
+                                <p:column width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                    </f:facet>
+                                    <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
+                                </p:column>
+                                
+                                <f:facet name="footer">
+                                    <h3>
+                                        <span class="panel-info"><strong>Nuevo Registro</strong></span>
+                                    </h3>
+                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
+                                        <p:ajax process="cat-tipo-sangre" update="cat-tipo-sangre"/>
+                                    </h:commandButton>
+                                </f:facet>
+                            </p:dataTable>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </h:form>
     </ui:define>
 
 </ui:composition>

@@ -50,6 +50,10 @@ public class Proveedor implements Serializable {
         this.idProveedor = idProveedor;
     }
 
+    public Proveedor(String nombreProv) {
+        this.nombreProv = nombreProv;
+    }
+
     public Proveedor(Integer idProveedor, String nombreProv) {
         this.idProveedor = idProveedor;
         this.nombreProv = nombreProv;

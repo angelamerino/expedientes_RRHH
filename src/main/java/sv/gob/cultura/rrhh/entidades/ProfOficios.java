@@ -56,6 +56,12 @@ public class ProfOficios implements Serializable {
         this.nombreProfOficio = nombreProfOficio;
     }
 
+    public ProfOficios(String nombreProfOficio) {
+        this.nombreProfOficio = nombreProfOficio;
+    }
+
+    
+    
     public Integer getIdProfOficio() {
         return idProfOficio;
     }

@@ -51,6 +51,10 @@ public class AdministradoraPensiones implements Serializable {
         this.idAdminPension = idAdminPension;
     }
 
+    public AdministradoraPensiones(String nombreAdminPension) {
+        this.nombreAdminPension = nombreAdminPension;
+    }
+
     public AdministradoraPensiones(Integer idAdminPension, String nombreAdminPension) {
         this.idAdminPension = idAdminPension;
         this.nombreAdminPension = nombreAdminPension;

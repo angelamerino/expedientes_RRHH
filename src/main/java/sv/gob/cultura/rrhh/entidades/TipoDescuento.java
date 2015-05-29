@@ -51,10 +51,15 @@ public class TipoDescuento implements Serializable {
         this.idDescuento = idDescuento;
     }
 
+    public TipoDescuento(String nombreDescuento) {
+        this.nombreDescuento = nombreDescuento;
+    }
+
     public TipoDescuento(Integer idDescuento, String nombreDescuento) {
         this.idDescuento = idDescuento;
         this.nombreDescuento = nombreDescuento;
     }
+
 
     public Integer getIdDescuento() {
         return idDescuento;

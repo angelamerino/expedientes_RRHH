@@ -53,6 +53,12 @@ public class Parentesco implements Serializable {
         this.idParentesco = idParentesco;
     }
 
+    public Parentesco(String nombreParentesco) {
+        this.nombreParentesco = nombreParentesco;
+    }
+
+    
+    
     public Parentesco(Integer idParentesco, String nombreParentesco) {
         this.idParentesco = idParentesco;
         this.nombreParentesco = nombreParentesco;

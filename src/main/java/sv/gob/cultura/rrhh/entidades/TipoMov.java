@@ -56,6 +56,11 @@ public class TipoMov implements Serializable {
         this.nombreMov = nombreMov;
     }
 
+    public TipoMov(String nombreMov) {
+        this.nombreMov = nombreMov;
+    }
+
+ 
     public Integer getIdTipoMov() {
         return idTipoMov;
     }

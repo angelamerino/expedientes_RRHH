@@ -50,6 +50,12 @@ public class Nivel implements Serializable {
         this.idNivel = idNivel;
     }
 
+    public Nivel(String nombreNivel) {
+        this.nombreNivel = nombreNivel;
+    }
+
+    
+    
     public Nivel(Integer idNivel, String nombreNivel) {
         this.idNivel = idNivel;
         this.nombreNivel = nombreNivel;

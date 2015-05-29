@@ -51,6 +51,10 @@ public class CaracteristicasIdioma implements Serializable {
         this.idCaractIdioma = idCaractIdioma;
     }
 
+    public CaracteristicasIdioma(String caracteristicaIdioma) {
+        this.caracteristicaIdioma = caracteristicaIdioma;
+    }
+
     public CaracteristicasIdioma(Integer idCaractIdioma, String caracteristicaIdioma) {
         this.idCaractIdioma = idCaractIdioma;
         this.caracteristicaIdioma = caracteristicaIdioma;

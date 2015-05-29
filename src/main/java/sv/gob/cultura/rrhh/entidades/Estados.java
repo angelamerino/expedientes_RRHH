@@ -51,11 +51,17 @@ public class Estados implements Serializable {
         this.idEstado = idEstado;
     }
 
+    public Estados(String nombreEstado) {
+        this.nombreEstado = nombreEstado;
+    }
+
+    
     public Estados(Integer idEstado, String nombreEstado) {
         this.idEstado = idEstado;
         this.nombreEstado = nombreEstado;
     }
 
+  
     public Integer getIdEstado() {
         return idEstado;
     }
