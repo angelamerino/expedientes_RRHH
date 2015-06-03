@@ -63,15 +63,15 @@
                                 </p:row>
 
                                 <p:row>
-                                    <p:column><h:outputLabel value="Lugar de Nacimiento" for="munIdMunicipio" /></p:column>
-                                    <p:column><h:selectOneMenu id="munIdMunicipio" value="#{manejadorGestionEmpleado.depto}" title="MunIdMunicipio" required="true" requiredMessage="The MunIdMunicipio field is required.">
+                                    <p:column><h:outputLabel value="Lugar de Nacimiento" for="muniNac" /></p:column>
+                                    <p:column><h:selectOneMenu id="deptonac" value="#{manejadorGestionEmpleado.deptonac}" title="deptoNac" required="true" requiredMessage="The MunIdMunicipio field is required.">
                                             <!-- TODO: update below reference to list of available items-->
                                             <f:selectItems value="#{manejadorGestionEmpleado.todosDeptos()}" var="depto" itemLabel="#{depto.nombreDepartamento}" itemValue="#{depto.idDepartamento}"/>
-                                            <p:ajax update="idMunicipio"/>
+                                            <p:ajax update="codMunicipio"/>
                                         </h:selectOneMenu></p:column>
-                                    <p:column colspan="2"><h:selectOneMenu id="idMunicipio" value="#{manejadorGestionEmpleado.empleado.idMunicipio}" title="IdMunicipio" required="true" requiredMessage="The IdMunicipio field is required.">
+                                    <p:column colspan="2"><h:selectOneMenu id="codMunicipio" value="#{manejadorGestionEmpleado.empleado.municipioNac}" title="codMunicipio" required="true" requiredMessage="The IdMunicipio field is required.">
                                             <!-- TODO: update below reference to list of available items-->
-                                            <f:selectItems value="#{manejadorGestionEmpleado.municipiosFiltrados()}" var="muni" itemLabel="#{muni.nombreMunicipio}" itemValue="#{muni.idMunicipio}"/>
+                                            <f:selectItems value="#{manejadorGestionEmpleado.municipiosFiltradosNac()}" var="muni" itemLabel="#{muni.nombreMunicipio}" itemValue="#{muni.idMunicipio}"/>
                                         </h:selectOneMenu></p:column>
 
                                 </p:row>
@@ -235,7 +235,7 @@
                                     <p:column></p:column>
                                     <p:column></p:column>
                                     <p:column><h:outputLabel value="Dependencia/Unidad Organizativa:" for="depIdDependencia" /></p:column>
-                                    <p:column><h:selectOneMenu id="depIdDependencia" value="#{manejadorGestionEmpleado.empleado.depIdDependencia}" title="DepIdDependencia" required="true" requiredMessage="The DepIdDependencia field is required.">
+                                    <p:column><h:selectOneMenu id="depIdDependencia" value="#{manejadorGestionEmpleado.empleado.idDependenciaN}" title="idDependenciaN" required="true" requiredMessage="The DepIdDependencia field is required.">
                                             <!-- TODO: update below reference to list of available items-->
                                             <f:selectItems value="#{fixme}"/>
                                         </h:selectOneMenu></p:column>
@@ -252,7 +252,7 @@
                                     <p:column></p:column>
                                     <p:column></p:column>
                                     <p:column><h:outputLabel value="Dependencia/Unidad Organizativa:" for="idDependencia" /></p:column>
-                                    <p:column> <h:selectOneMenu id="idDependencia" value="#{manejadorGestionEmpleado.empleado.idDependencia}" title="IdDependencia" required="true" requiredMessage="The IdDependencia field is required.">
+                                    <p:column> <h:selectOneMenu id="idDependencia" value="#{manejadorGestionEmpleado.empleado.idDependenciaF}" title="idDependenciaF" required="true" requiredMessage="The IdDependencia field is required.">
                                             <!-- TODO: update below reference to list of available items-->
                                             <f:selectItems value="#{fixme}"/>
                                         </h:selectOneMenu></p:column>
@@ -318,8 +318,8 @@
                                 </p:row>
 
                                 <p:row>
-                                    <p:column><h:outputLabel value="Empleado:" for="empNrEmpleado" /></p:column>
-                                    <p:column><h:selectOneMenu id="empNrEmpleado" value="#{manejadorGestionEmpleado.empleado.empNrEmpleado}" title="EmpNrEmpleado" >
+                                    <p:column><h:outputLabel value="Empleado:" for="idEmpleadoJefe" /></p:column>
+                                    <p:column><h:selectOneMenu id="empNrEmpleado" value="#{manejadorGestionEmpleado.empleado.idEmpleadoJefe}" title="idEmpleadoJefe" >
                                             <!-- TODO: update below reference to list of available items-->
                                             <f:selectItems value="#{fixme}"/>
                                         </h:selectOneMenu></p:column>
@@ -434,9 +434,9 @@
                                     </h:column>
                                     <h:column>
                                         <f:facet name="header">
-                                            <h:outputText value="NrEmpleado"/>
+                                            <h:outputText value="idEmpleado"/>
                                         </f:facet>
-                                        <h:outputText value="#{item.nrEmpleado}"/>
+                                        <h:outputText value="#{item.idEmpleado}"/>
                                     </h:column>
                                 </h:dataTable>
                             </h:form>

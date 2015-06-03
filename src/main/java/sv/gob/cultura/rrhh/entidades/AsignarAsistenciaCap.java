@@ -29,7 +29,14 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "asignar_asistencia_cap")
 @NamedQueries({
-    @NamedQuery(name = "AsignarAsistenciaCap.findAll", query = "SELECT a FROM AsignarAsistenciaCap a")})
+    @NamedQuery(name = "AsignarAsistenciaCap.findAll", query = "SELECT a FROM AsignarAsistenciaCap a"),
+    @NamedQuery(name = "AsignarAsistenciaCap.findByIdAsigAsis", query = "SELECT a FROM AsignarAsistenciaCap a WHERE a.idAsigAsis = :idAsigAsis"),
+    @NamedQuery(name = "AsignarAsistenciaCap.findByCapAsignada", query = "SELECT a FROM AsignarAsistenciaCap a WHERE a.capAsignada = :capAsignada"),
+    @NamedQuery(name = "AsignarAsistenciaCap.findByCapAsistida", query = "SELECT a FROM AsignarAsistenciaCap a WHERE a.capAsistida = :capAsistida"),
+    @NamedQuery(name = "AsignarAsistenciaCap.findByUserCreaAsigAsis", query = "SELECT a FROM AsignarAsistenciaCap a WHERE a.userCreaAsigAsis = :userCreaAsigAsis"),
+    @NamedQuery(name = "AsignarAsistenciaCap.findByFechaCreaAsigAsis", query = "SELECT a FROM AsignarAsistenciaCap a WHERE a.fechaCreaAsigAsis = :fechaCreaAsigAsis"),
+    @NamedQuery(name = "AsignarAsistenciaCap.findByUserModAsigAsis", query = "SELECT a FROM AsignarAsistenciaCap a WHERE a.userModAsigAsis = :userModAsigAsis"),
+    @NamedQuery(name = "AsignarAsistenciaCap.findByFechaModAisgAsis", query = "SELECT a FROM AsignarAsistenciaCap a WHERE a.fechaModAisgAsis = :fechaModAisgAsis")})
 public class AsignarAsistenciaCap implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -53,9 +60,9 @@ public class AsignarAsistenciaCap implements Serializable {
     @Column(name = "fecha_mod_aisg_asis")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaModAisgAsis;
-    @JoinColumn(name = "nr_empleado", referencedColumnName = "nr_empleado")
-    @ManyToOne(optional = false)
-    private Empleados nrEmpleado;
+    @JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")
+    @ManyToOne
+    private Empleados idEmpleado;
     @JoinColumn(name = "id_cap", referencedColumnName = "id_cap")
     @ManyToOne(optional = false)
     private Capacitaciones idCap;
@@ -123,12 +130,12 @@ public class AsignarAsistenciaCap implements Serializable {
         this.fechaModAisgAsis = fechaModAisgAsis;
     }
 
-    public Empleados getNrEmpleado() {
-        return nrEmpleado;
+    public Empleados getIdEmpleado() {
+        return idEmpleado;
     }
 
-    public void setNrEmpleado(Empleados nrEmpleado) {
-        this.nrEmpleado = nrEmpleado;
+    public void setIdEmpleado(Empleados idEmpleado) {
+        this.idEmpleado = idEmpleado;
     }
 
     public Capacitaciones getIdCap() {

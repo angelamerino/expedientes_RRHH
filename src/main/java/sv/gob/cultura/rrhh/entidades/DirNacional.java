@@ -31,7 +31,13 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "dir_nacional")
 @NamedQueries({
-    @NamedQuery(name = "DirNacional.findAll", query = "SELECT d FROM DirNacional d")})
+    @NamedQuery(name = "DirNacional.findAll", query = "SELECT d FROM DirNacional d"),
+    @NamedQuery(name = "DirNacional.findByIdDirNac", query = "SELECT d FROM DirNacional d WHERE d.idDirNac = :idDirNac"),
+    @NamedQuery(name = "DirNacional.findByNombreDirNac", query = "SELECT d FROM DirNacional d WHERE d.nombreDirNac = :nombreDirNac"),
+    @NamedQuery(name = "DirNacional.findByUserCreaDir", query = "SELECT d FROM DirNacional d WHERE d.userCreaDir = :userCreaDir"),
+    @NamedQuery(name = "DirNacional.findByFechaCreaDir", query = "SELECT d FROM DirNacional d WHERE d.fechaCreaDir = :fechaCreaDir"),
+    @NamedQuery(name = "DirNacional.findByUserModDir", query = "SELECT d FROM DirNacional d WHERE d.userModDir = :userModDir"),
+    @NamedQuery(name = "DirNacional.findByFechaModDir", query = "SELECT d FROM DirNacional d WHERE d.fechaModDir = :fechaModDir")})
 public class DirNacional implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

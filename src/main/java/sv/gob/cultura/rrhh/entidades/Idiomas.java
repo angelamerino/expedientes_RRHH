@@ -29,7 +29,9 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "idiomas")
 @NamedQueries({
-    @NamedQuery(name = "Idiomas.findAll", query = "SELECT i FROM Idiomas i")})
+    @NamedQuery(name = "Idiomas.findAll", query = "SELECT i FROM Idiomas i"),
+    @NamedQuery(name = "Idiomas.findByIdIdioma", query = "SELECT i FROM Idiomas i WHERE i.idIdioma = :idIdioma"),
+    @NamedQuery(name = "Idiomas.findByNombreIdioma", query = "SELECT i FROM Idiomas i WHERE i.nombreIdioma = :nombreIdioma")})
 public class Idiomas implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -54,14 +56,13 @@ public class Idiomas implements Serializable {
         this.idIdioma = idIdioma;
     }
 
-    public Idiomas(String nombreIdioma) {
-        this.nombreIdioma = nombreIdioma;
-    }
-
-    
     public Idiomas(Integer idIdioma, String nombreIdioma) {
         this.idIdioma = idIdioma;
         this.nombreIdioma = nombreIdioma;
+    }
+
+    public Idiomas(String nuevo_item) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public Integer getIdIdioma() {

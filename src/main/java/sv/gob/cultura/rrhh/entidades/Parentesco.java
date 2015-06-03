@@ -28,7 +28,9 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "parentesco")
 @NamedQueries({
-    @NamedQuery(name = "Parentesco.findAll", query = "SELECT p FROM Parentesco p")})
+    @NamedQuery(name = "Parentesco.findAll", query = "SELECT p FROM Parentesco p"),
+    @NamedQuery(name = "Parentesco.findByIdParentesco", query = "SELECT p FROM Parentesco p WHERE p.idParentesco = :idParentesco"),
+    @NamedQuery(name = "Parentesco.findByNombreParentesco", query = "SELECT p FROM Parentesco p WHERE p.nombreParentesco = :nombreParentesco")})
 public class Parentesco implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -53,15 +55,13 @@ public class Parentesco implements Serializable {
         this.idParentesco = idParentesco;
     }
 
-    public Parentesco(String nombreParentesco) {
-        this.nombreParentesco = nombreParentesco;
-    }
-
-    
-    
     public Parentesco(Integer idParentesco, String nombreParentesco) {
         this.idParentesco = idParentesco;
         this.nombreParentesco = nombreParentesco;
+    }
+
+    public Parentesco(String nuevo_item) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public Integer getIdParentesco() {

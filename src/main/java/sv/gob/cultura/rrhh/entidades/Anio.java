@@ -27,7 +27,9 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "anio")
 @NamedQueries({
-    @NamedQuery(name = "Anio.findAll", query = "SELECT a FROM Anio a")})
+    @NamedQuery(name = "Anio.findAll", query = "SELECT a FROM Anio a"),
+    @NamedQuery(name = "Anio.findByIdAnio", query = "SELECT a FROM Anio a WHERE a.idAnio = :idAnio"),
+    @NamedQuery(name = "Anio.findByAnio", query = "SELECT a FROM Anio a WHERE a.anio = :anio")})
 public class Anio implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

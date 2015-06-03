@@ -8,8 +8,8 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="content">
-        
-   <h:form class="form-horizontal" role="form" prependId="false">
+
+        <h:form class="form-horizontal" role="form" prependId="false">
             <div class="page-header">
                 <h1>Gestionar registros de catálogos</h1>
             </div>
@@ -55,19 +55,20 @@
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{admin_pensiones.idAdminPension}"/>
                                 </p:column>
-                                
+
                                 <p:column width="90%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Nombre Administradora de Pensiones"/>
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{admin_pensiones.nombreAdminPension}"/>
                                 </p:column>
-                                
+
                                 <p:column width="15%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Editar"/>
                                     </f:facet>
-                                    <p:button icon="ui-icon-pencil" title="Icon Only"></p:button>
+                                    <p:button icon="ui-icon-pencil" title="Icon Only" onclick="PF('DialogoEditarPensiones').show();" >
+                                    </p:button>
                                 </p:column>
 
                                 <p:column width="15%">
@@ -76,7 +77,7 @@
                                     </f:facet>
                                     <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
                                 </p:column>
-                                
+
                                 <!-- <p:column width="15%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Editar"/>
@@ -96,7 +97,7 @@
                                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                                     </button>
                                 </p:column> -->
-                                
+
                                 <f:facet name="footer">
                                     <h3>
                                         <!-- <span class="label label-primary">Nuevo Registro</span>-->
@@ -155,14 +156,14 @@
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{estado_civil.idEstadoCivil}"/>
                                 </p:column>
-                                
+
                                 <p:column width="90%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Nombre del Estado Civil"/>
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{estado_civil.nombreEstadoCivil}"/>
                                 </p:column>
-                                
+
                                 <p:column width="15%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Editar"/>
@@ -194,14 +195,14 @@
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{estados.idEstado}"/>
                                 </p:column>
-                                
+
                                 <p:column width="90%">   
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Nombre del Estado"/>
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{estados.nombreEstado}"/>
                                 </p:column>
-                                
+
                                 <p:column width="15%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Editar"/>
@@ -233,14 +234,14 @@
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{grado_sancion.idGradoSancion}"/>
                                 </p:column>
-                                
+
                                 <p:column width="90%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Nombre del Grado de la Sanción"/>
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{grado_sancion.nombreGradoSancion}"/>
                                 </p:column>
-                                
+
                                 <p:column width="15%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Editar"/>
@@ -254,7 +255,7 @@
                                     </f:facet>
                                     <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
                                 </p:column>
-                                
+
                                 <f:facet name="footer">
                                     <h3>
                                         <span class="panel-info"><strong>Nuevo Registro</strong></span>
@@ -273,14 +274,14 @@
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{idiomas.idIdioma}"/>
                                 </p:column>
-                                
+
                                 <p:column width="90%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Nombre del Idioma"/>
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{idiomas.nombreIdioma}"/>
                                 </p:column>
-                                
+
                                 <p:column width="15%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Editar"/>
@@ -294,7 +295,7 @@
                                     </f:facet>
                                     <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
                                 </p:column>
-                                
+
                                 <f:facet name="footer">
                                     <h3>
                                         <span class="panel-info"><strong>Nuevo Registro</strong></span>
@@ -313,14 +314,14 @@
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{instBanco.idBanco}"/>
                                 </p:column>
-                                
+
                                 <p:column width="90%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Nombre de la Institución Bancaria"/>
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{instBanco.nombreBanco}"/>
                                 </p:column>
-                                
+
                                 <p:column width="15%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Editar"/>
@@ -334,7 +335,7 @@
                                     </f:facet>
                                     <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
                                 </p:column>
-                                
+
                                 <f:facet name="footer">
                                     <h3>
                                         <span class="panel-info"><strong>Nuevo Registro</strong></span>
@@ -353,14 +354,14 @@
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{nivel.idNivel}"/>
                                 </p:column>
-                                
+
                                 <p:column width="90%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Nivel de conocimiento"/>
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{nivel.nombreNivel}"/>
                                 </p:column>
-                                
+
                                 <p:column width="15%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Editar"/>
@@ -374,7 +375,7 @@
                                     </f:facet>
                                     <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
                                 </p:column>
-                                
+
                                 <f:facet name="footer">
                                     <h3>
                                         <span class="panel-info"><strong>Nuevo Registro</strong></span>
@@ -393,14 +394,14 @@
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{pais.idPais}"/>
                                 </p:column>
-                                
+
                                 <p:column width="90%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Nombre del País"/>
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{pais.nombrePais}"/>
                                 </p:column>
-                                
+
                                 <p:column width="15%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Editar"/>
@@ -414,7 +415,7 @@
                                     </f:facet>
                                     <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
                                 </p:column>
-                                
+
                                 <f:facet name="footer">
                                     <h3>
                                         <span class="panel-info"><strong>Nuevo Registro</strong></span>
@@ -433,14 +434,14 @@
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{parentesco.idParentesco}"/>
                                 </p:column>
-                                
+
                                 <p:column width="90%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Nombre del Parentesco"/>
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{parentesco.nombreParentesco}"/>
                                 </p:column>
-                                
+
                                 <p:column width="15%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Editar"/>
@@ -454,7 +455,7 @@
                                     </f:facet>
                                     <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
                                 </p:column>
-                                
+
                                 <f:facet name="footer">
                                     <h3>
                                         <span class="panel-info"><strong>Nuevo Registro</strong></span>
@@ -473,14 +474,14 @@
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{prof_oficios.idProfOficio}"/>
                                 </p:column>
-                                
+
                                 <p:column width="90%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Nombre de la Profesión u Oficio"/>
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{prof_oficios.nombreProfOficio}"/>
                                 </p:column>
-                                
+
                                 <p:column width="15%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Editar"/>
@@ -494,7 +495,7 @@
                                     </f:facet>
                                     <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
                                 </p:column>
-                                
+
                                 <f:facet name="footer">
                                     <h3>
                                         <span class="panel-info"><strong>Nuevo Registro</strong></span>
@@ -513,14 +514,14 @@
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{prov.idProveedor}"/>
                                 </p:column>
-                                
+
                                 <p:column width="90%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Nombre del Proveedor"/>
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{prov.nombreProv}"/>
                                 </p:column>
-                                
+
                                 <p:column width="15%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Editar"/>
@@ -534,7 +535,7 @@
                                     </f:facet>
                                     <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
                                 </p:column>
-                                
+
                                 <f:facet name="footer">
                                     <h3>
                                         <span class="panel-info"><strong>Nuevo Registro</strong></span>
@@ -553,14 +554,14 @@
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{descuento.idDescuento}"/>
                                 </p:column>
-                                
+
                                 <p:column width="90%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Nombre del Tipo de Descuento"/>
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{descuento.nombreDescuento}"/>
                                 </p:column>
-                                
+
                                 <p:column width="15%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Editar"/>
@@ -574,7 +575,7 @@
                                     </f:facet>
                                     <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
                                 </p:column>
-                                
+
                                 <f:facet name="footer">
                                     <h3>
                                         <span class="panel-info"><strong>Nuevo Registro</strong></span>
@@ -593,14 +594,14 @@
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{mejorasal.idMejoraSal}"/>
                                 </p:column>
-                                
+
                                 <p:column width="90%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Nombre del Tipo de Mejora Salarial"/>
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{mejorasal.nombreMejoraSal}"/>
                                 </p:column>
-                                
+
                                 <p:column width="15%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Editar"/>
@@ -614,7 +615,7 @@
                                     </f:facet>
                                     <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
                                 </p:column>
-                                
+
                                 <f:facet name="footer">
                                     <h3>
                                         <span class="panel-info"><strong>Nuevo Registro</strong></span>
@@ -633,14 +634,14 @@
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{mov.idTipoMov}"/>
                                 </p:column>
-                                
+
                                 <p:column width="90%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Nombre del Tipo de Movimiento"/>
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{mov.nombreMov}"/>
                                 </p:column>
-                                
+
                                 <p:column width="15%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Editar"/>
@@ -654,7 +655,7 @@
                                     </f:facet>
                                     <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
                                 </p:column>
-                                
+
                                 <f:facet name="footer">
                                     <h3>
                                         <span class="panel-info"><strong>Nuevo Registro</strong></span>
@@ -673,14 +674,14 @@
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{prestacion.idTipoPrestacion}"/>
                                 </p:column>
-                                
+
                                 <p:column width="90%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Nombre del Tipo de Prestación"/>
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{prestacion.nombreTipoPrestacion}"/>
                                 </p:column>
-                                
+
                                 <p:column width="15%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Editar"/>
@@ -694,7 +695,7 @@
                                     </f:facet>
                                     <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
                                 </p:column>
-                                
+
                                 <f:facet name="footer">
                                     <h3>
                                         <span class="panel-info"><strong>Nuevo Registro</strong></span>
@@ -713,14 +714,14 @@
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{tipo_sangre.idTipoSangre}"/>
                                 </p:column>
-                                
+
                                 <p:column width="90%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Nombre del Tipo de Sangre"/>
                                     </f:facet>
                                     <h:outputText style="font-size: 12px;" value="#{tipo_sangre.nombreTipoSangre}"/>
                                 </p:column>
-                                
+
                                 <p:column width="15%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Editar"/>
@@ -734,7 +735,7 @@
                                     </f:facet>
                                     <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
                                 </p:column>
-                                
+
                                 <f:facet name="footer">
                                     <h3>
                                         <span class="panel-info"><strong>Nuevo Registro</strong></span>
@@ -746,10 +747,26 @@
                                 </f:facet>
                             </p:dataTable>
 
+
                         </div>
                     </div>
                 </div>
             </div>
+
+        </h:form>
+
+        <h:form id="frmEditar">
+            <p:dialog header="Información Guardada" modal="true" widgetVar="DialogoEditarPensiones">
+                <h:panelGrid id="panelEditar" columns="2" >
+                    <h:outputLabel value="Nombre:" for="txtNombre" >   </h:outputLabel>
+                    <h:inputText id="txtNombre" label="Nombre:" size="10" value="">   
+                        
+                    </h:inputText>
+                    <p:message for="txtNombre" />
+
+                </h:panelGrid>                   
+
+            </p:dialog>
 
         </h:form>
     </ui:define>

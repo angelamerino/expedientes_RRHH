@@ -30,7 +30,15 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "contacto_emergencia_emp")
 @NamedQueries({
-    @NamedQuery(name = "ContactoEmergenciaEmp.findAll", query = "SELECT c FROM ContactoEmergenciaEmp c")})
+    @NamedQuery(name = "ContactoEmergenciaEmp.findAll", query = "SELECT c FROM ContactoEmergenciaEmp c"),
+    @NamedQuery(name = "ContactoEmergenciaEmp.findByIdContactoEmer", query = "SELECT c FROM ContactoEmergenciaEmp c WHERE c.idContactoEmer = :idContactoEmer"),
+    @NamedQuery(name = "ContactoEmergenciaEmp.findByNombreContacto", query = "SELECT c FROM ContactoEmergenciaEmp c WHERE c.nombreContacto = :nombreContacto"),
+    @NamedQuery(name = "ContactoEmergenciaEmp.findByTelFijoContacto", query = "SELECT c FROM ContactoEmergenciaEmp c WHERE c.telFijoContacto = :telFijoContacto"),
+    @NamedQuery(name = "ContactoEmergenciaEmp.findByTelMovilContacto", query = "SELECT c FROM ContactoEmergenciaEmp c WHERE c.telMovilContacto = :telMovilContacto"),
+    @NamedQuery(name = "ContactoEmergenciaEmp.findByUserCreaContac", query = "SELECT c FROM ContactoEmergenciaEmp c WHERE c.userCreaContac = :userCreaContac"),
+    @NamedQuery(name = "ContactoEmergenciaEmp.findByFechaCreaContac", query = "SELECT c FROM ContactoEmergenciaEmp c WHERE c.fechaCreaContac = :fechaCreaContac"),
+    @NamedQuery(name = "ContactoEmergenciaEmp.findByUserModContac", query = "SELECT c FROM ContactoEmergenciaEmp c WHERE c.userModContac = :userModContac"),
+    @NamedQuery(name = "ContactoEmergenciaEmp.findByFechaModContac", query = "SELECT c FROM ContactoEmergenciaEmp c WHERE c.fechaModContac = :fechaModContac")})
 public class ContactoEmergenciaEmp implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -62,9 +70,9 @@ public class ContactoEmergenciaEmp implements Serializable {
     @JoinColumn(name = "id_parentesco", referencedColumnName = "id_parentesco")
     @ManyToOne(optional = false)
     private Parentesco idParentesco;
-    @JoinColumn(name = "nr_empleado", referencedColumnName = "nr_empleado")
-    @ManyToOne(optional = false)
-    private Empleados nrEmpleado;
+    @JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")
+    @ManyToOne
+    private Empleados idEmpleado;
 
     public ContactoEmergenciaEmp() {
     }
@@ -150,12 +158,12 @@ public class ContactoEmergenciaEmp implements Serializable {
         this.idParentesco = idParentesco;
     }
 
-    public Empleados getNrEmpleado() {
-        return nrEmpleado;
+    public Empleados getIdEmpleado() {
+        return idEmpleado;
     }
 
-    public void setNrEmpleado(Empleados nrEmpleado) {
-        this.nrEmpleado = nrEmpleado;
+    public void setIdEmpleado(Empleados idEmpleado) {
+        this.idEmpleado = idEmpleado;
     }
 
     @Override

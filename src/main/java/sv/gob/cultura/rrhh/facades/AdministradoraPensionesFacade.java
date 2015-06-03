@@ -5,10 +5,12 @@
  */
 package sv.gob.cultura.rrhh.facades;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import sv.gob.cultura.rrhh.entidades.AdministradoraPensiones;
+import sv.gob.cultura.rrhh.manejadores.manejadorCat;
 
 /**
  *
@@ -27,5 +29,7 @@ public class AdministradoraPensionesFacade extends AbstractFacade<Administradora
     public AdministradoraPensionesFacade() {
         super(AdministradoraPensiones.class);
     }
+    
+    
     
 }

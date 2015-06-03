@@ -28,7 +28,9 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "tipo_mejora_salarial")
 @NamedQueries({
-    @NamedQuery(name = "TipoMejoraSalarial.findAll", query = "SELECT t FROM TipoMejoraSalarial t")})
+    @NamedQuery(name = "TipoMejoraSalarial.findAll", query = "SELECT t FROM TipoMejoraSalarial t"),
+    @NamedQuery(name = "TipoMejoraSalarial.findByIdMejoraSal", query = "SELECT t FROM TipoMejoraSalarial t WHERE t.idMejoraSal = :idMejoraSal"),
+    @NamedQuery(name = "TipoMejoraSalarial.findByNombreMejoraSal", query = "SELECT t FROM TipoMejoraSalarial t WHERE t.nombreMejoraSal = :nombreMejoraSal")})
 public class TipoMejoraSalarial implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -51,13 +53,13 @@ public class TipoMejoraSalarial implements Serializable {
         this.idMejoraSal = idMejoraSal;
     }
 
-    public TipoMejoraSalarial(String nombreMejoraSal) {
-        this.nombreMejoraSal = nombreMejoraSal;
-    }
-
     public TipoMejoraSalarial(Integer idMejoraSal, String nombreMejoraSal) {
         this.idMejoraSal = idMejoraSal;
         this.nombreMejoraSal = nombreMejoraSal;
+    }
+
+    public TipoMejoraSalarial(String nuevo_item) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public Integer getIdMejoraSal() {

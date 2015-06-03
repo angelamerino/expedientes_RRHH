@@ -4,11 +4,13 @@
  * and open the template in the editor.
  */
 package sv.gob.cultura.rrhh.manejadores;
+
 import java.io.Serializable;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import org.primefaces.context.RequestContext;
 import sv.gob.cultura.rrhh.entidades.AdministradoraPensiones;
 import sv.gob.cultura.rrhh.entidades.CaracteristicasIdioma;
 import sv.gob.cultura.rrhh.entidades.EstadoCivil;
@@ -52,7 +54,7 @@ import sv.gob.cultura.rrhh.facades.TipoSangreFacade;
 @Named(value = "manejadorCat")
 @ViewScoped
 public class manejadorCat implements Serializable {
-    
+
     /* 1. INSERTO CODIGO PARA CADA FACADE CON "Call Enterprice Beans"  */
     @EJB
     private GradoSancionFacade gradoSancionFacade;
@@ -92,6 +94,10 @@ public class manejadorCat implements Serializable {
     /* 3. Declaro la variable opcion y nuevo item para seleccionar del listado y agregar nuevo registro a los catálogos*/
     private int opcion;
     private String nuevo_item;
+
+    /*Declaro variable para capturar id del catálogo seleccionado*/
+    private idPensionSeleccionada idPensionSeleccionada;
+    
 
     /**
      * Creates a new instance of manejadorCat-- 2. Inserto "getter" de los
@@ -222,7 +228,7 @@ public class manejadorCat implements Serializable {
         return getParentescoFacade().findAll();
     }
 
-    public List<ProfOficios> getProfOficioses()  {
+    public List<ProfOficios> getProfOficioses() {
         return getProfOficiosFacade().findAll();
     }
 
@@ -254,7 +260,6 @@ public class manejadorCat implements Serializable {
         return getTipoSangreFacade().findAll();
     }
 
-    
     /* 6. Inserto código para los métodos de agregar nuevo item*/
     public void guardarNuevo() {
         System.out.println("entrando guardar");
@@ -328,9 +333,19 @@ public class manejadorCat implements Serializable {
                 getTipoSangreFacade().create(new TipoSangre(nuevo_item));
                 nuevo_item = "";
                 break;
-            
+
             default:
                 throw new AssertionError();
+        }
+    }
+
+    public void cargarEditarCat(String nombrePension) {
+    
+    }
+
+    private static class idPensionSeleccionada {
+
+        public idPensionSeleccionada() {
         }
     }
 }

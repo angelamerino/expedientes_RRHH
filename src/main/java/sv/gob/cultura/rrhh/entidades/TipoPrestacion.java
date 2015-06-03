@@ -28,7 +28,9 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "tipo_prestacion")
 @NamedQueries({
-    @NamedQuery(name = "TipoPrestacion.findAll", query = "SELECT t FROM TipoPrestacion t")})
+    @NamedQuery(name = "TipoPrestacion.findAll", query = "SELECT t FROM TipoPrestacion t"),
+    @NamedQuery(name = "TipoPrestacion.findByIdTipoPrestacion", query = "SELECT t FROM TipoPrestacion t WHERE t.idTipoPrestacion = :idTipoPrestacion"),
+    @NamedQuery(name = "TipoPrestacion.findByNombreTipoPrestacion", query = "SELECT t FROM TipoPrestacion t WHERE t.nombreTipoPrestacion = :nombreTipoPrestacion")})
 public class TipoPrestacion implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -56,11 +58,10 @@ public class TipoPrestacion implements Serializable {
         this.nombreTipoPrestacion = nombreTipoPrestacion;
     }
 
-    public TipoPrestacion(String nombreTipoPrestacion) {
-        this.nombreTipoPrestacion = nombreTipoPrestacion;
+    public TipoPrestacion(String nuevo_item) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
- 
     public Integer getIdTipoPrestacion() {
         return idTipoPrestacion;
     }

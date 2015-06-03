@@ -32,7 +32,14 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "reconocimientos")
 @NamedQueries({
-    @NamedQuery(name = "Reconocimientos.findAll", query = "SELECT r FROM Reconocimientos r")})
+    @NamedQuery(name = "Reconocimientos.findAll", query = "SELECT r FROM Reconocimientos r"),
+    @NamedQuery(name = "Reconocimientos.findByIdReconocimiento", query = "SELECT r FROM Reconocimientos r WHERE r.idReconocimiento = :idReconocimiento"),
+    @NamedQuery(name = "Reconocimientos.findByDescripcionReconocimiento", query = "SELECT r FROM Reconocimientos r WHERE r.descripcionReconocimiento = :descripcionReconocimiento"),
+    @NamedQuery(name = "Reconocimientos.findByFechaReconocimiento", query = "SELECT r FROM Reconocimientos r WHERE r.fechaReconocimiento = :fechaReconocimiento"),
+    @NamedQuery(name = "Reconocimientos.findByUserCreaRec", query = "SELECT r FROM Reconocimientos r WHERE r.userCreaRec = :userCreaRec"),
+    @NamedQuery(name = "Reconocimientos.findByFechaCreaRec", query = "SELECT r FROM Reconocimientos r WHERE r.fechaCreaRec = :fechaCreaRec"),
+    @NamedQuery(name = "Reconocimientos.findByUserModRec", query = "SELECT r FROM Reconocimientos r WHERE r.userModRec = :userModRec"),
+    @NamedQuery(name = "Reconocimientos.findByFechaModRec", query = "SELECT r FROM Reconocimientos r WHERE r.fechaModRec = :fechaModRec")})
 public class Reconocimientos implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -62,9 +69,9 @@ public class Reconocimientos implements Serializable {
     private Date fechaModRec;
     @OneToMany(mappedBy = "idReconocimiento")
     private List<ImgDoc> imgDocList;
-    @JoinColumn(name = "nr_empleado", referencedColumnName = "nr_empleado")
+    @JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")
     @ManyToOne
-    private Empleados nrEmpleado;
+    private Empleados idEmpleado;
 
     public Reconocimientos() {
     }
@@ -143,12 +150,12 @@ public class Reconocimientos implements Serializable {
         this.imgDocList = imgDocList;
     }
 
-    public Empleados getNrEmpleado() {
-        return nrEmpleado;
+    public Empleados getIdEmpleado() {
+        return idEmpleado;
     }
 
-    public void setNrEmpleado(Empleados nrEmpleado) {
-        this.nrEmpleado = nrEmpleado;
+    public void setIdEmpleado(Empleados idEmpleado) {
+        this.idEmpleado = idEmpleado;
     }
 
     @Override

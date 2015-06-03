@@ -28,7 +28,14 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "img_doc")
 @NamedQueries({
-    @NamedQuery(name = "ImgDoc.findAll", query = "SELECT i FROM ImgDoc i")})
+    @NamedQuery(name = "ImgDoc.findAll", query = "SELECT i FROM ImgDoc i"),
+    @NamedQuery(name = "ImgDoc.findByIdImgDoc", query = "SELECT i FROM ImgDoc i WHERE i.idImgDoc = :idImgDoc"),
+    @NamedQuery(name = "ImgDoc.findByRefImgDoc", query = "SELECT i FROM ImgDoc i WHERE i.refImgDoc = :refImgDoc"),
+    @NamedQuery(name = "ImgDoc.findByNombreArchivo", query = "SELECT i FROM ImgDoc i WHERE i.nombreArchivo = :nombreArchivo"),
+    @NamedQuery(name = "ImgDoc.findBySizeArchivo", query = "SELECT i FROM ImgDoc i WHERE i.sizeArchivo = :sizeArchivo"),
+    @NamedQuery(name = "ImgDoc.findByDescripcion", query = "SELECT i FROM ImgDoc i WHERE i.descripcion = :descripcion"),
+    @NamedQuery(name = "ImgDoc.findByRutaArchivo", query = "SELECT i FROM ImgDoc i WHERE i.rutaArchivo = :rutaArchivo"),
+    @NamedQuery(name = "ImgDoc.findByTipoArchivo", query = "SELECT i FROM ImgDoc i WHERE i.tipoArchivo = :tipoArchivo")})
 public class ImgDoc implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -81,9 +88,9 @@ public class ImgDoc implements Serializable {
     @JoinColumn(name = "id_estudio", referencedColumnName = "id_estudio")
     @ManyToOne
     private EstudiosEmp idEstudio;
-    @JoinColumn(name = "nr_empleado", referencedColumnName = "nr_empleado")
-    @ManyToOne(optional = false)
-    private Empleados nrEmpleado;
+    @JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")
+    @ManyToOne
+    private Empleados idEmpleado;
     @JoinColumn(name = "id_descuento_emp", referencedColumnName = "id_descuento_emp")
     @ManyToOne(optional = false)
     private DescuentosEmp idDescuentoEmp;
@@ -207,12 +214,12 @@ public class ImgDoc implements Serializable {
         this.idEstudio = idEstudio;
     }
 
-    public Empleados getNrEmpleado() {
-        return nrEmpleado;
+    public Empleados getIdEmpleado() {
+        return idEmpleado;
     }
 
-    public void setNrEmpleado(Empleados nrEmpleado) {
-        this.nrEmpleado = nrEmpleado;
+    public void setIdEmpleado(Empleados idEmpleado) {
+        this.idEmpleado = idEmpleado;
     }
 
     public DescuentosEmp getIdDescuentoEmp() {

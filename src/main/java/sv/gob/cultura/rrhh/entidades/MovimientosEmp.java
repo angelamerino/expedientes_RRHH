@@ -32,7 +32,19 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "movimientos_emp")
 @NamedQueries({
-    @NamedQuery(name = "MovimientosEmp.findAll", query = "SELECT m FROM MovimientosEmp m")})
+    @NamedQuery(name = "MovimientosEmp.findAll", query = "SELECT m FROM MovimientosEmp m"),
+    @NamedQuery(name = "MovimientosEmp.findByIdMovEmp", query = "SELECT m FROM MovimientosEmp m WHERE m.idMovEmp = :idMovEmp"),
+    @NamedQuery(name = "MovimientosEmp.findByCargoActualMov", query = "SELECT m FROM MovimientosEmp m WHERE m.cargoActualMov = :cargoActualMov"),
+    @NamedQuery(name = "MovimientosEmp.findByNuevoCargoMov", query = "SELECT m FROM MovimientosEmp m WHERE m.nuevoCargoMov = :nuevoCargoMov"),
+    @NamedQuery(name = "MovimientosEmp.findByDependenciaActual", query = "SELECT m FROM MovimientosEmp m WHERE m.dependenciaActual = :dependenciaActual"),
+    @NamedQuery(name = "MovimientosEmp.findByFechaMov", query = "SELECT m FROM MovimientosEmp m WHERE m.fechaMov = :fechaMov"),
+    @NamedQuery(name = "MovimientosEmp.findByFechaNoti", query = "SELECT m FROM MovimientosEmp m WHERE m.fechaNoti = :fechaNoti"),
+    @NamedQuery(name = "MovimientosEmp.findByFechaIniTemp", query = "SELECT m FROM MovimientosEmp m WHERE m.fechaIniTemp = :fechaIniTemp"),
+    @NamedQuery(name = "MovimientosEmp.findByFechaFinTemp", query = "SELECT m FROM MovimientosEmp m WHERE m.fechaFinTemp = :fechaFinTemp"),
+    @NamedQuery(name = "MovimientosEmp.findByUserCreaMov", query = "SELECT m FROM MovimientosEmp m WHERE m.userCreaMov = :userCreaMov"),
+    @NamedQuery(name = "MovimientosEmp.findByFechaCreaMov", query = "SELECT m FROM MovimientosEmp m WHERE m.fechaCreaMov = :fechaCreaMov"),
+    @NamedQuery(name = "MovimientosEmp.findByUserModMov", query = "SELECT m FROM MovimientosEmp m WHERE m.userModMov = :userModMov"),
+    @NamedQuery(name = "MovimientosEmp.findByFechaModMov", query = "SELECT m FROM MovimientosEmp m WHERE m.fechaModMov = :fechaModMov")})
 public class MovimientosEmp implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -80,9 +92,9 @@ public class MovimientosEmp implements Serializable {
     @JoinColumn(name = "id_tipo_mov", referencedColumnName = "id_tipo_mov")
     @ManyToOne(optional = false)
     private TipoMov idTipoMov;
-    @JoinColumn(name = "nr_empleado", referencedColumnName = "nr_empleado")
-    @ManyToOne(optional = false)
-    private Empleados nrEmpleado;
+    @JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")
+    @ManyToOne
+    private Empleados idEmpleado;
     @JoinColumn(name = "dep_id_dependencia", referencedColumnName = "id_dependencia")
     @ManyToOne(optional = false)
     private Dependencias depIdDependencia;
@@ -215,12 +227,12 @@ public class MovimientosEmp implements Serializable {
         this.idTipoMov = idTipoMov;
     }
 
-    public Empleados getNrEmpleado() {
-        return nrEmpleado;
+    public Empleados getIdEmpleado() {
+        return idEmpleado;
     }
 
-    public void setNrEmpleado(Empleados nrEmpleado) {
-        this.nrEmpleado = nrEmpleado;
+    public void setIdEmpleado(Empleados idEmpleado) {
+        this.idEmpleado = idEmpleado;
     }
 
     public Dependencias getDepIdDependencia() {

@@ -33,7 +33,19 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "descuentos_emp")
 @NamedQueries({
-    @NamedQuery(name = "DescuentosEmp.findAll", query = "SELECT d FROM DescuentosEmp d")})
+    @NamedQuery(name = "DescuentosEmp.findAll", query = "SELECT d FROM DescuentosEmp d"),
+    @NamedQuery(name = "DescuentosEmp.findByIdDescuentoEmp", query = "SELECT d FROM DescuentosEmp d WHERE d.idDescuentoEmp = :idDescuentoEmp"),
+    @NamedQuery(name = "DescuentosEmp.findByNombreInstitucionDesc", query = "SELECT d FROM DescuentosEmp d WHERE d.nombreInstitucionDesc = :nombreInstitucionDesc"),
+    @NamedQuery(name = "DescuentosEmp.findByNumRefCredito", query = "SELECT d FROM DescuentosEmp d WHERE d.numRefCredito = :numRefCredito"),
+    @NamedQuery(name = "DescuentosEmp.findByNumCuotas", query = "SELECT d FROM DescuentosEmp d WHERE d.numCuotas = :numCuotas"),
+    @NamedQuery(name = "DescuentosEmp.findByCuotaMensual", query = "SELECT d FROM DescuentosEmp d WHERE d.cuotaMensual = :cuotaMensual"),
+    @NamedQuery(name = "DescuentosEmp.findByMontoTotal", query = "SELECT d FROM DescuentosEmp d WHERE d.montoTotal = :montoTotal"),
+    @NamedQuery(name = "DescuentosEmp.findByFechaIniDesc", query = "SELECT d FROM DescuentosEmp d WHERE d.fechaIniDesc = :fechaIniDesc"),
+    @NamedQuery(name = "DescuentosEmp.findByFechaFinDesc", query = "SELECT d FROM DescuentosEmp d WHERE d.fechaFinDesc = :fechaFinDesc"),
+    @NamedQuery(name = "DescuentosEmp.findByUserCreaDesc", query = "SELECT d FROM DescuentosEmp d WHERE d.userCreaDesc = :userCreaDesc"),
+    @NamedQuery(name = "DescuentosEmp.findByFechaCreaDesc", query = "SELECT d FROM DescuentosEmp d WHERE d.fechaCreaDesc = :fechaCreaDesc"),
+    @NamedQuery(name = "DescuentosEmp.findByUserModDesc", query = "SELECT d FROM DescuentosEmp d WHERE d.userModDesc = :userModDesc"),
+    @NamedQuery(name = "DescuentosEmp.findByFechaModDesc", query = "SELECT d FROM DescuentosEmp d WHERE d.fechaModDesc = :fechaModDesc")})
 public class DescuentosEmp implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -86,9 +98,9 @@ public class DescuentosEmp implements Serializable {
     @JoinColumn(name = "id_descuento", referencedColumnName = "id_descuento")
     @ManyToOne(optional = false)
     private TipoDescuento idDescuento;
-    @JoinColumn(name = "nr_empleado", referencedColumnName = "nr_empleado")
-    @ManyToOne(optional = false)
-    private Empleados nrEmpleado;
+    @JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")
+    @ManyToOne
+    private Empleados idEmpleado;
 
     public DescuentosEmp() {
     }
@@ -219,12 +231,12 @@ public class DescuentosEmp implements Serializable {
         this.idDescuento = idDescuento;
     }
 
-    public Empleados getNrEmpleado() {
-        return nrEmpleado;
+    public Empleados getIdEmpleado() {
+        return idEmpleado;
     }
 
-    public void setNrEmpleado(Empleados nrEmpleado) {
-        this.nrEmpleado = nrEmpleado;
+    public void setIdEmpleado(Empleados idEmpleado) {
+        this.idEmpleado = idEmpleado;
     }
 
     @Override

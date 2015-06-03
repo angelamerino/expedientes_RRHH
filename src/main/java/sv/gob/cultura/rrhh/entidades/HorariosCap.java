@@ -29,7 +29,11 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "horarios_cap")
 @NamedQueries({
-    @NamedQuery(name = "HorariosCap.findAll", query = "SELECT h FROM HorariosCap h")})
+    @NamedQuery(name = "HorariosCap.findAll", query = "SELECT h FROM HorariosCap h"),
+    @NamedQuery(name = "HorariosCap.findByIdHorarioCap", query = "SELECT h FROM HorariosCap h WHERE h.idHorarioCap = :idHorarioCap"),
+    @NamedQuery(name = "HorariosCap.findByFechaCap", query = "SELECT h FROM HorariosCap h WHERE h.fechaCap = :fechaCap"),
+    @NamedQuery(name = "HorariosCap.findByHoraInicioCap", query = "SELECT h FROM HorariosCap h WHERE h.horaInicioCap = :horaInicioCap"),
+    @NamedQuery(name = "HorariosCap.findByHoraFinCap", query = "SELECT h FROM HorariosCap h WHERE h.horaFinCap = :horaFinCap")})
 public class HorariosCap implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

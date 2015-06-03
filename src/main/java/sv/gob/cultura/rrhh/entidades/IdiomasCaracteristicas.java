@@ -25,7 +25,10 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "idiomas_caracteristicas")
 @NamedQueries({
-    @NamedQuery(name = "IdiomasCaracteristicas.findAll", query = "SELECT i FROM IdiomasCaracteristicas i")})
+    @NamedQuery(name = "IdiomasCaracteristicas.findAll", query = "SELECT i FROM IdiomasCaracteristicas i"),
+    @NamedQuery(name = "IdiomasCaracteristicas.findByIdCaractIdioma", query = "SELECT i FROM IdiomasCaracteristicas i WHERE i.idiomasCaracteristicasPK.idCaractIdioma = :idCaractIdioma"),
+    @NamedQuery(name = "IdiomasCaracteristicas.findByIdIdioma", query = "SELECT i FROM IdiomasCaracteristicas i WHERE i.idiomasCaracteristicasPK.idIdioma = :idIdioma"),
+    @NamedQuery(name = "IdiomasCaracteristicas.findByInstitucionIdioma", query = "SELECT i FROM IdiomasCaracteristicas i WHERE i.institucionIdioma = :institucionIdioma")})
 public class IdiomasCaracteristicas implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId

@@ -32,7 +32,15 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "producto")
 @NamedQueries({
-    @NamedQuery(name = "Producto.findAll", query = "SELECT p FROM Producto p")})
+    @NamedQuery(name = "Producto.findAll", query = "SELECT p FROM Producto p"),
+    @NamedQuery(name = "Producto.findByIdProducto", query = "SELECT p FROM Producto p WHERE p.idProducto = :idProducto"),
+    @NamedQuery(name = "Producto.findByNombreProd", query = "SELECT p FROM Producto p WHERE p.nombreProd = :nombreProd"),
+    @NamedQuery(name = "Producto.findByDescripcionProd", query = "SELECT p FROM Producto p WHERE p.descripcionProd = :descripcionProd"),
+    @NamedQuery(name = "Producto.findByCostoUnit", query = "SELECT p FROM Producto p WHERE p.costoUnit = :costoUnit"),
+    @NamedQuery(name = "Producto.findByUserCreaProd", query = "SELECT p FROM Producto p WHERE p.userCreaProd = :userCreaProd"),
+    @NamedQuery(name = "Producto.findByFechaCreaProd", query = "SELECT p FROM Producto p WHERE p.fechaCreaProd = :fechaCreaProd"),
+    @NamedQuery(name = "Producto.findByUserModProd", query = "SELECT p FROM Producto p WHERE p.userModProd = :userModProd"),
+    @NamedQuery(name = "Producto.findByFechaModProd", query = "SELECT p FROM Producto p WHERE p.fechaModProd = :fechaModProd")})
 public class Producto implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

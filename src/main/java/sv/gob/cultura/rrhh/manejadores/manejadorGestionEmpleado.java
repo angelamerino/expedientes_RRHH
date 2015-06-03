@@ -72,6 +72,7 @@ public class manejadorGestionEmpleado implements Serializable {
     private String dirMuni;
     private int parentescoId;
     private String nr = "NR 0111-111111-111-0";
+    private int empleadoId; // Agregado por Angela el 01/Junio/2015
     private ExperienciaLaboral experienciaLaboral = new ExperienciaLaboral();
     private EstudiosEmp estudiosEmp = new EstudiosEmp();
     private FamiliaDependientesEmp familiaDependientesEmp = new FamiliaDependientesEmp();
@@ -88,9 +89,17 @@ public class manejadorGestionEmpleado implements Serializable {
     private Parentesco parentesco = new Parentesco();
     private Dependencias dependencias = new Dependencias();
     private DirNacional dirNacional = new DirNacional();
-    private int depto;
+    private int depto, deptonac;
+    
+    public int getDeptonac() {
+        return deptonac;
+    }
 
     //****** GET DE ENTERPRICE JAVA BEAN *********
+    public void setDeptonac(int deptonac) {    
+        this.deptonac = deptonac;
+    }
+
     public ExperienciaLaboralFacade getExperienciaLaboralFacade() {
         return experienciaLaboralFacade;
     }
@@ -312,10 +321,19 @@ public class manejadorGestionEmpleado implements Serializable {
         return nr;
     }
 
-    public void setNr(String nr) {
+   public void setNr(String nr) {
         this.nr = nr;
     }
+    
+    /////agregado por Angela el 01/Junio/2015/////////////
+    public int getempleadoId() {
+        return empleadoId;
+    }
 
+    public void setempleadoId(int empleadoId) {
+        this.empleadoId = empleadoId;
+    }
+////////////////////////////////////////////////////////
     public int getDepto() {
         return depto;
     }
@@ -376,12 +394,33 @@ public class manejadorGestionEmpleado implements Serializable {
      public List<Municipios> municipiosFiltrados(){
          return getMunicipiosFacade().buscarDep(depto);
      }
+     
+     public List<Municipios> municipiosFiltradosNac(){
+         return getMunicipiosFacade().buscarDep(deptonac);
+     }
 
     //********* FUNCIONES DE GUARDAR ******
+    ///////////////////public void guardarContactosEmergencia() {
+        //contactoEmergenciaEmp.setFechaCreaContac(new Date());
+        //contactoEmergenciaEmp.setUserCreaContac(parentescoId);
+    /////////////    contactoEmergenciaEmp.setNrEmpleado(new Empleados(nr));
+        //System.out.println(contactoEmergenciaEmp.getNrEmpleado());
+    //////////    getContactoEmergenciaEmpFacade().create(contactoEmergenciaEmp);
+    //////////        contactoEmergenciaEmp = new ContactoEmergenciaEmp();
+
+    //////////    }
+
+    //////////    public void guardarFamiliaDependiente() {
+    //////////        familiaDependientesEmp.setNrEmpleado(new Empleados(nr));
+    //////////        getFamiliaDependientesEmpFacade().create(familiaDependientesEmp);
+    //////////        familiaDependientesEmp = new FamiliaDependientesEmp();
+    //////////    }
+    
+     /////Agregado por Angela el 01/Junio/2015/////////////
     public void guardarContactosEmergencia() {
         //contactoEmergenciaEmp.setFechaCreaContac(new Date());
         //contactoEmergenciaEmp.setUserCreaContac(parentescoId);
-        contactoEmergenciaEmp.setNrEmpleado(new Empleados(nr));
+        contactoEmergenciaEmp.setIdEmpleado(new Empleados (empleadoId));
         //System.out.println(contactoEmergenciaEmp.getNrEmpleado());
         getContactoEmergenciaEmpFacade().create(contactoEmergenciaEmp);
         contactoEmergenciaEmp = new ContactoEmergenciaEmp();
@@ -389,8 +428,9 @@ public class manejadorGestionEmpleado implements Serializable {
     }
 
     public void guardarFamiliaDependiente() {
-        familiaDependientesEmp.setNrEmpleado(new Empleados(nr));
+        familiaDependientesEmp.setIdEmpleado(new Empleados (empleadoId));
         getFamiliaDependientesEmpFacade().create(familiaDependientesEmp);
         familiaDependientesEmp = new FamiliaDependientesEmp();
     }
+    
 }

@@ -30,7 +30,17 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "experiencia_laboral")
 @NamedQueries({
-    @NamedQuery(name = "ExperienciaLaboral.findAll", query = "SELECT e FROM ExperienciaLaboral e")})
+    @NamedQuery(name = "ExperienciaLaboral.findAll", query = "SELECT e FROM ExperienciaLaboral e"),
+    @NamedQuery(name = "ExperienciaLaboral.findByIdExpLab", query = "SELECT e FROM ExperienciaLaboral e WHERE e.idExpLab = :idExpLab"),
+    @NamedQuery(name = "ExperienciaLaboral.findByInstitucionEmpresa", query = "SELECT e FROM ExperienciaLaboral e WHERE e.institucionEmpresa = :institucionEmpresa"),
+    @NamedQuery(name = "ExperienciaLaboral.findByCargoExpLab", query = "SELECT e FROM ExperienciaLaboral e WHERE e.cargoExpLab = :cargoExpLab"),
+    @NamedQuery(name = "ExperienciaLaboral.findByFechaDesdeExpLab", query = "SELECT e FROM ExperienciaLaboral e WHERE e.fechaDesdeExpLab = :fechaDesdeExpLab"),
+    @NamedQuery(name = "ExperienciaLaboral.findByFechaHastaExpLab", query = "SELECT e FROM ExperienciaLaboral e WHERE e.fechaHastaExpLab = :fechaHastaExpLab"),
+    @NamedQuery(name = "ExperienciaLaboral.findBySectorExpLab", query = "SELECT e FROM ExperienciaLaboral e WHERE e.sectorExpLab = :sectorExpLab"),
+    @NamedQuery(name = "ExperienciaLaboral.findByUserCreaExp", query = "SELECT e FROM ExperienciaLaboral e WHERE e.userCreaExp = :userCreaExp"),
+    @NamedQuery(name = "ExperienciaLaboral.findByFechaCreaExp", query = "SELECT e FROM ExperienciaLaboral e WHERE e.fechaCreaExp = :fechaCreaExp"),
+    @NamedQuery(name = "ExperienciaLaboral.findByUserModExp", query = "SELECT e FROM ExperienciaLaboral e WHERE e.userModExp = :userModExp"),
+    @NamedQuery(name = "ExperienciaLaboral.findByFechaModExp", query = "SELECT e FROM ExperienciaLaboral e WHERE e.fechaModExp = :fechaModExp")})
 public class ExperienciaLaboral implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -73,9 +83,9 @@ public class ExperienciaLaboral implements Serializable {
     @Column(name = "fecha_mod_exp")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaModExp;
-    @JoinColumn(name = "nr_empleado", referencedColumnName = "nr_empleado")
-    @ManyToOne(optional = false)
-    private Empleados nrEmpleado;
+    @JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")
+    @ManyToOne
+    private Empleados idEmpleado;
 
     public ExperienciaLaboral() {
     }
@@ -173,12 +183,12 @@ public class ExperienciaLaboral implements Serializable {
         this.fechaModExp = fechaModExp;
     }
 
-    public Empleados getNrEmpleado() {
-        return nrEmpleado;
+    public Empleados getIdEmpleado() {
+        return idEmpleado;
     }
 
-    public void setNrEmpleado(Empleados nrEmpleado) {
-        this.nrEmpleado = nrEmpleado;
+    public void setIdEmpleado(Empleados idEmpleado) {
+        this.idEmpleado = idEmpleado;
     }
 
     @Override

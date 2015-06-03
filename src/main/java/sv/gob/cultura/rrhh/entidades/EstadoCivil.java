@@ -28,7 +28,9 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "estado_civil")
 @NamedQueries({
-    @NamedQuery(name = "EstadoCivil.findAll", query = "SELECT e FROM EstadoCivil e")})
+    @NamedQuery(name = "EstadoCivil.findAll", query = "SELECT e FROM EstadoCivil e"),
+    @NamedQuery(name = "EstadoCivil.findByIdEstadoCivil", query = "SELECT e FROM EstadoCivil e WHERE e.idEstadoCivil = :idEstadoCivil"),
+    @NamedQuery(name = "EstadoCivil.findByNombreEstadoCivil", query = "SELECT e FROM EstadoCivil e WHERE e.nombreEstadoCivil = :nombreEstadoCivil")})
 public class EstadoCivil implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -51,18 +53,15 @@ public class EstadoCivil implements Serializable {
         this.idEstadoCivil = idEstadoCivil;
     }
 
-    public EstadoCivil(String nombreEstadoCivil) {
-        this.nombreEstadoCivil = nombreEstadoCivil;
-    }
-
-    
-    
     public EstadoCivil(Integer idEstadoCivil, String nombreEstadoCivil) {
         this.idEstadoCivil = idEstadoCivil;
         this.nombreEstadoCivil = nombreEstadoCivil;
     }
 
-    
+    public EstadoCivil(String nuevo_item) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public Integer getIdEstadoCivil() {
         return idEstadoCivil;
     }

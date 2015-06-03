@@ -30,7 +30,15 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "usuarios_sistema")
 @NamedQueries({
-    @NamedQuery(name = "UsuariosSistema.findAll", query = "SELECT u FROM UsuariosSistema u")})
+    @NamedQuery(name = "UsuariosSistema.findAll", query = "SELECT u FROM UsuariosSistema u"),
+    @NamedQuery(name = "UsuariosSistema.findByIdUsuario", query = "SELECT u FROM UsuariosSistema u WHERE u.idUsuario = :idUsuario"),
+    @NamedQuery(name = "UsuariosSistema.findByNombreCompleto", query = "SELECT u FROM UsuariosSistema u WHERE u.nombreCompleto = :nombreCompleto"),
+    @NamedQuery(name = "UsuariosSistema.findByUsuario", query = "SELECT u FROM UsuariosSistema u WHERE u.usuario = :usuario"),
+    @NamedQuery(name = "UsuariosSistema.findByClave", query = "SELECT u FROM UsuariosSistema u WHERE u.clave = :clave"),
+    @NamedQuery(name = "UsuariosSistema.findByUserCreaUsistema", query = "SELECT u FROM UsuariosSistema u WHERE u.userCreaUsistema = :userCreaUsistema"),
+    @NamedQuery(name = "UsuariosSistema.findByFechaCreaUsistema", query = "SELECT u FROM UsuariosSistema u WHERE u.fechaCreaUsistema = :fechaCreaUsistema"),
+    @NamedQuery(name = "UsuariosSistema.findByUserModUsistema", query = "SELECT u FROM UsuariosSistema u WHERE u.userModUsistema = :userModUsistema"),
+    @NamedQuery(name = "UsuariosSistema.findByFechaModUsistema", query = "SELECT u FROM UsuariosSistema u WHERE u.fechaModUsistema = :fechaModUsistema")})
 public class UsuariosSistema implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

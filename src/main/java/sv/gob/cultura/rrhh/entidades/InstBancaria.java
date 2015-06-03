@@ -28,7 +28,9 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "inst_bancaria")
 @NamedQueries({
-    @NamedQuery(name = "InstBancaria.findAll", query = "SELECT i FROM InstBancaria i")})
+    @NamedQuery(name = "InstBancaria.findAll", query = "SELECT i FROM InstBancaria i"),
+    @NamedQuery(name = "InstBancaria.findByIdBanco", query = "SELECT i FROM InstBancaria i WHERE i.idBanco = :idBanco"),
+    @NamedQuery(name = "InstBancaria.findByNombreBanco", query = "SELECT i FROM InstBancaria i WHERE i.nombreBanco = :nombreBanco")})
 public class InstBancaria implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -51,15 +53,13 @@ public class InstBancaria implements Serializable {
         this.idBanco = idBanco;
     }
 
-    public InstBancaria(String nombreBanco) {
-        this.nombreBanco = nombreBanco;
-    }
-
-    
-    
     public InstBancaria(Integer idBanco, String nombreBanco) {
         this.idBanco = idBanco;
         this.nombreBanco = nombreBanco;
+    }
+
+    public InstBancaria(String nuevo_item) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public Integer getIdBanco() {

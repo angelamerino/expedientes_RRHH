@@ -33,7 +33,14 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "sanciones")
 @NamedQueries({
-    @NamedQuery(name = "Sanciones.findAll", query = "SELECT s FROM Sanciones s")})
+    @NamedQuery(name = "Sanciones.findAll", query = "SELECT s FROM Sanciones s"),
+    @NamedQuery(name = "Sanciones.findByIdSancion", query = "SELECT s FROM Sanciones s WHERE s.idSancion = :idSancion"),
+    @NamedQuery(name = "Sanciones.findByDescripcionSancion", query = "SELECT s FROM Sanciones s WHERE s.descripcionSancion = :descripcionSancion"),
+    @NamedQuery(name = "Sanciones.findByFechaSancion", query = "SELECT s FROM Sanciones s WHERE s.fechaSancion = :fechaSancion"),
+    @NamedQuery(name = "Sanciones.findByUserCreaSancion", query = "SELECT s FROM Sanciones s WHERE s.userCreaSancion = :userCreaSancion"),
+    @NamedQuery(name = "Sanciones.findByFechaCreaSancion", query = "SELECT s FROM Sanciones s WHERE s.fechaCreaSancion = :fechaCreaSancion"),
+    @NamedQuery(name = "Sanciones.findByUserModSancion", query = "SELECT s FROM Sanciones s WHERE s.userModSancion = :userModSancion"),
+    @NamedQuery(name = "Sanciones.findByFechaModSancion", query = "SELECT s FROM Sanciones s WHERE s.fechaModSancion = :fechaModSancion")})
 public class Sanciones implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -66,9 +73,9 @@ public class Sanciones implements Serializable {
     @JoinColumn(name = "id_tipo_sancion", referencedColumnName = "id_tipo_sancion")
     @ManyToOne(optional = false)
     private TipoSancion idTipoSancion;
-    @JoinColumn(name = "nr_empleado", referencedColumnName = "nr_empleado")
-    @ManyToOne(optional = false)
-    private Empleados nrEmpleado;
+    @JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")
+    @ManyToOne
+    private Empleados idEmpleado;
 
     public Sanciones() {
     }
@@ -155,12 +162,12 @@ public class Sanciones implements Serializable {
         this.idTipoSancion = idTipoSancion;
     }
 
-    public Empleados getNrEmpleado() {
-        return nrEmpleado;
+    public Empleados getIdEmpleado() {
+        return idEmpleado;
     }
 
-    public void setNrEmpleado(Empleados nrEmpleado) {
-        this.nrEmpleado = nrEmpleado;
+    public void setIdEmpleado(Empleados idEmpleado) {
+        this.idEmpleado = idEmpleado;
     }
 
     @Override

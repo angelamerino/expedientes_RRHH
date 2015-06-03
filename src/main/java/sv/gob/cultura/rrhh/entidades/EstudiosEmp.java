@@ -33,7 +33,15 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "estudios_emp")
 @NamedQueries({
-    @NamedQuery(name = "EstudiosEmp.findAll", query = "SELECT e FROM EstudiosEmp e")})
+    @NamedQuery(name = "EstudiosEmp.findAll", query = "SELECT e FROM EstudiosEmp e"),
+    @NamedQuery(name = "EstudiosEmp.findByIdEstudio", query = "SELECT e FROM EstudiosEmp e WHERE e.idEstudio = :idEstudio"),
+    @NamedQuery(name = "EstudiosEmp.findByInstitucionEstudio", query = "SELECT e FROM EstudiosEmp e WHERE e.institucionEstudio = :institucionEstudio"),
+    @NamedQuery(name = "EstudiosEmp.findByAnioEstudio", query = "SELECT e FROM EstudiosEmp e WHERE e.anioEstudio = :anioEstudio"),
+    @NamedQuery(name = "EstudiosEmp.findByTipoEstudio", query = "SELECT e FROM EstudiosEmp e WHERE e.tipoEstudio = :tipoEstudio"),
+    @NamedQuery(name = "EstudiosEmp.findByUserCreaEstudios", query = "SELECT e FROM EstudiosEmp e WHERE e.userCreaEstudios = :userCreaEstudios"),
+    @NamedQuery(name = "EstudiosEmp.findByFechaCreaEstudios", query = "SELECT e FROM EstudiosEmp e WHERE e.fechaCreaEstudios = :fechaCreaEstudios"),
+    @NamedQuery(name = "EstudiosEmp.findByUserModEstudios", query = "SELECT e FROM EstudiosEmp e WHERE e.userModEstudios = :userModEstudios"),
+    @NamedQuery(name = "EstudiosEmp.findByFechaModEstudios", query = "SELECT e FROM EstudiosEmp e WHERE e.fechaModEstudios = :fechaModEstudios")})
 public class EstudiosEmp implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

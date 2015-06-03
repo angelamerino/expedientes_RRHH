@@ -27,7 +27,9 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "nivel")
 @NamedQueries({
-    @NamedQuery(name = "Nivel.findAll", query = "SELECT n FROM Nivel n")})
+    @NamedQuery(name = "Nivel.findAll", query = "SELECT n FROM Nivel n"),
+    @NamedQuery(name = "Nivel.findByIdNivel", query = "SELECT n FROM Nivel n WHERE n.idNivel = :idNivel"),
+    @NamedQuery(name = "Nivel.findByNombreNivel", query = "SELECT n FROM Nivel n WHERE n.nombreNivel = :nombreNivel")})
 public class Nivel implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -50,15 +52,13 @@ public class Nivel implements Serializable {
         this.idNivel = idNivel;
     }
 
-    public Nivel(String nombreNivel) {
-        this.nombreNivel = nombreNivel;
-    }
-
-    
-    
     public Nivel(Integer idNivel, String nombreNivel) {
         this.idNivel = idNivel;
         this.nombreNivel = nombreNivel;
+    }
+
+    public Nivel(String nuevo_item) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public Integer getIdNivel() {

@@ -33,7 +33,15 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "dependencias")
 @NamedQueries({
-    @NamedQuery(name = "Dependencias.findAll", query = "SELECT d FROM Dependencias d")})
+    @NamedQuery(name = "Dependencias.findAll", query = "SELECT d FROM Dependencias d"),
+    @NamedQuery(name = "Dependencias.findByIdDependencia", query = "SELECT d FROM Dependencias d WHERE d.idDependencia = :idDependencia"),
+    @NamedQuery(name = "Dependencias.findByNombreDependencia", query = "SELECT d FROM Dependencias d WHERE d.nombreDependencia = :nombreDependencia"),
+    @NamedQuery(name = "Dependencias.findByLatitud", query = "SELECT d FROM Dependencias d WHERE d.latitud = :latitud"),
+    @NamedQuery(name = "Dependencias.findByLongitud", query = "SELECT d FROM Dependencias d WHERE d.longitud = :longitud"),
+    @NamedQuery(name = "Dependencias.findByUserCreaDependencia", query = "SELECT d FROM Dependencias d WHERE d.userCreaDependencia = :userCreaDependencia"),
+    @NamedQuery(name = "Dependencias.findByFechaCreaDependencia", query = "SELECT d FROM Dependencias d WHERE d.fechaCreaDependencia = :fechaCreaDependencia"),
+    @NamedQuery(name = "Dependencias.findByUserModDependencia", query = "SELECT d FROM Dependencias d WHERE d.userModDependencia = :userModDependencia"),
+    @NamedQuery(name = "Dependencias.findByFechaModDependencia", query = "SELECT d FROM Dependencias d WHERE d.fechaModDependencia = :fechaModDependencia")})
 public class Dependencias implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -73,9 +81,9 @@ public class Dependencias implements Serializable {
     private List<MovimientosEmp> movimientosEmpList1;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idDependencia")
     private List<UsuariosSistema> usuariosSistemaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "depIdDependencia")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idDependenciaF")
     private List<Empleados> empleadosList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idDependencia")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idDependenciaN")
     private List<Empleados> empleadosList1;
 
     public Dependencias() {

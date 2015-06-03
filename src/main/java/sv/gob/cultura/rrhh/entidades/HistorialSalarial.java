@@ -32,7 +32,17 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "historial_salarial")
 @NamedQueries({
-    @NamedQuery(name = "HistorialSalarial.findAll", query = "SELECT h FROM HistorialSalarial h")})
+    @NamedQuery(name = "HistorialSalarial.findAll", query = "SELECT h FROM HistorialSalarial h"),
+    @NamedQuery(name = "HistorialSalarial.findByIdHsalarial", query = "SELECT h FROM HistorialSalarial h WHERE h.idHsalarial = :idHsalarial"),
+    @NamedQuery(name = "HistorialSalarial.findBySalarioActualHsalarial", query = "SELECT h FROM HistorialSalarial h WHERE h.salarioActualHsalarial = :salarioActualHsalarial"),
+    @NamedQuery(name = "HistorialSalarial.findByNuevoSalarioHsalarial", query = "SELECT h FROM HistorialSalarial h WHERE h.nuevoSalarioHsalarial = :nuevoSalarioHsalarial"),
+    @NamedQuery(name = "HistorialSalarial.findByPorcentajeHsalarial", query = "SELECT h FROM HistorialSalarial h WHERE h.porcentajeHsalarial = :porcentajeHsalarial"),
+    @NamedQuery(name = "HistorialSalarial.findByFechaHsalarial", query = "SELECT h FROM HistorialSalarial h WHERE h.fechaHsalarial = :fechaHsalarial"),
+    @NamedQuery(name = "HistorialSalarial.findByNumDocDecreto", query = "SELECT h FROM HistorialSalarial h WHERE h.numDocDecreto = :numDocDecreto"),
+    @NamedQuery(name = "HistorialSalarial.findByUserCreaHsal", query = "SELECT h FROM HistorialSalarial h WHERE h.userCreaHsal = :userCreaHsal"),
+    @NamedQuery(name = "HistorialSalarial.findByFechaCreaHsal", query = "SELECT h FROM HistorialSalarial h WHERE h.fechaCreaHsal = :fechaCreaHsal"),
+    @NamedQuery(name = "HistorialSalarial.findByUserModHsal", query = "SELECT h FROM HistorialSalarial h WHERE h.userModHsal = :userModHsal"),
+    @NamedQuery(name = "HistorialSalarial.findByFechaModHsal", query = "SELECT h FROM HistorialSalarial h WHERE h.fechaModHsal = :fechaModHsal")})
 public class HistorialSalarial implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -73,9 +83,9 @@ public class HistorialSalarial implements Serializable {
     @JoinColumn(name = "id_mejora_sal", referencedColumnName = "id_mejora_sal")
     @ManyToOne(optional = false)
     private TipoMejoraSalarial idMejoraSal;
-    @JoinColumn(name = "nr_empleado", referencedColumnName = "nr_empleado")
-    @ManyToOne(optional = false)
-    private Empleados nrEmpleado;
+    @JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")
+    @ManyToOne
+    private Empleados idEmpleado;
     @OneToMany(mappedBy = "idHsalarial")
     private List<ImgDoc> imgDocList;
 
@@ -182,12 +192,12 @@ public class HistorialSalarial implements Serializable {
         this.idMejoraSal = idMejoraSal;
     }
 
-    public Empleados getNrEmpleado() {
-        return nrEmpleado;
+    public Empleados getIdEmpleado() {
+        return idEmpleado;
     }
 
-    public void setNrEmpleado(Empleados nrEmpleado) {
-        this.nrEmpleado = nrEmpleado;
+    public void setIdEmpleado(Empleados idEmpleado) {
+        this.idEmpleado = idEmpleado;
     }
 
     public List<ImgDoc> getImgDocList() {

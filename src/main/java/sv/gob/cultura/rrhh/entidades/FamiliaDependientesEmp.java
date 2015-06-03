@@ -30,7 +30,15 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "familia_dependientes_emp")
 @NamedQueries({
-    @NamedQuery(name = "FamiliaDependientesEmp.findAll", query = "SELECT f FROM FamiliaDependientesEmp f")})
+    @NamedQuery(name = "FamiliaDependientesEmp.findAll", query = "SELECT f FROM FamiliaDependientesEmp f"),
+    @NamedQuery(name = "FamiliaDependientesEmp.findByIdFamilia", query = "SELECT f FROM FamiliaDependientesEmp f WHERE f.idFamilia = :idFamilia"),
+    @NamedQuery(name = "FamiliaDependientesEmp.findByNombreFamilia", query = "SELECT f FROM FamiliaDependientesEmp f WHERE f.nombreFamilia = :nombreFamilia"),
+    @NamedQuery(name = "FamiliaDependientesEmp.findByFechaNacFamilia", query = "SELECT f FROM FamiliaDependientesEmp f WHERE f.fechaNacFamilia = :fechaNacFamilia"),
+    @NamedQuery(name = "FamiliaDependientesEmp.findByEdadFamilia", query = "SELECT f FROM FamiliaDependientesEmp f WHERE f.edadFamilia = :edadFamilia"),
+    @NamedQuery(name = "FamiliaDependientesEmp.findByUserCreaFam", query = "SELECT f FROM FamiliaDependientesEmp f WHERE f.userCreaFam = :userCreaFam"),
+    @NamedQuery(name = "FamiliaDependientesEmp.findByFechaCreaFam", query = "SELECT f FROM FamiliaDependientesEmp f WHERE f.fechaCreaFam = :fechaCreaFam"),
+    @NamedQuery(name = "FamiliaDependientesEmp.findByUserModFam", query = "SELECT f FROM FamiliaDependientesEmp f WHERE f.userModFam = :userModFam"),
+    @NamedQuery(name = "FamiliaDependientesEmp.findByFechaModFam", query = "SELECT f FROM FamiliaDependientesEmp f WHERE f.fechaModFam = :fechaModFam")})
 public class FamiliaDependientesEmp implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -61,9 +69,9 @@ public class FamiliaDependientesEmp implements Serializable {
     @JoinColumn(name = "id_parentesco", referencedColumnName = "id_parentesco")
     @ManyToOne(optional = false)
     private Parentesco idParentesco;
-    @JoinColumn(name = "nr_empleado", referencedColumnName = "nr_empleado")
-    @ManyToOne(optional = false)
-    private Empleados nrEmpleado;
+    @JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")
+    @ManyToOne
+    private Empleados idEmpleado;
 
     public FamiliaDependientesEmp() {
     }
@@ -149,12 +157,12 @@ public class FamiliaDependientesEmp implements Serializable {
         this.idParentesco = idParentesco;
     }
 
-    public Empleados getNrEmpleado() {
-        return nrEmpleado;
+    public Empleados getIdEmpleado() {
+        return idEmpleado;
     }
 
-    public void setNrEmpleado(Empleados nrEmpleado) {
-        this.nrEmpleado = nrEmpleado;
+    public void setIdEmpleado(Empleados idEmpleado) {
+        this.idEmpleado = idEmpleado;
     }
 
     @Override

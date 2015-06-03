@@ -31,7 +31,18 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "capacitaciones")
 @NamedQueries({
-    @NamedQuery(name = "Capacitaciones.findAll", query = "SELECT c FROM Capacitaciones c")})
+    @NamedQuery(name = "Capacitaciones.findAll", query = "SELECT c FROM Capacitaciones c"),
+    @NamedQuery(name = "Capacitaciones.findByIdCap", query = "SELECT c FROM Capacitaciones c WHERE c.idCap = :idCap"),
+    @NamedQuery(name = "Capacitaciones.findByTemaCap", query = "SELECT c FROM Capacitaciones c WHERE c.temaCap = :temaCap"),
+    @NamedQuery(name = "Capacitaciones.findByFacilitadorCap", query = "SELECT c FROM Capacitaciones c WHERE c.facilitadorCap = :facilitadorCap"),
+    @NamedQuery(name = "Capacitaciones.findByInstitucionCap", query = "SELECT c FROM Capacitaciones c WHERE c.institucionCap = :institucionCap"),
+    @NamedQuery(name = "Capacitaciones.findByNumHorasCap", query = "SELECT c FROM Capacitaciones c WHERE c.numHorasCap = :numHorasCap"),
+    @NamedQuery(name = "Capacitaciones.findByAnioCap", query = "SELECT c FROM Capacitaciones c WHERE c.anioCap = :anioCap"),
+    @NamedQuery(name = "Capacitaciones.findByNumGrupo", query = "SELECT c FROM Capacitaciones c WHERE c.numGrupo = :numGrupo"),
+    @NamedQuery(name = "Capacitaciones.findByUserCreaCap", query = "SELECT c FROM Capacitaciones c WHERE c.userCreaCap = :userCreaCap"),
+    @NamedQuery(name = "Capacitaciones.findByFechaCreaCap", query = "SELECT c FROM Capacitaciones c WHERE c.fechaCreaCap = :fechaCreaCap"),
+    @NamedQuery(name = "Capacitaciones.findByUserModCap", query = "SELECT c FROM Capacitaciones c WHERE c.userModCap = :userModCap"),
+    @NamedQuery(name = "Capacitaciones.findByFechaModCap", query = "SELECT c FROM Capacitaciones c WHERE c.fechaModCap = :fechaModCap")})
 public class Capacitaciones implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
