@@ -11,7 +11,7 @@ import javax.persistence.PersistenceContext;
 import sv.gob.cultura.rrhh.entidades.Estados;
 
 /**
- *
+ *****
  * @author Angela
  */
 @Stateless

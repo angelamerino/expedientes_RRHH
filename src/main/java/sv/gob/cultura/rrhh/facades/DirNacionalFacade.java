@@ -10,7 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import sv.gob.cultura.rrhh.entidades.DirNacional;
 
-/**
+/*****
  *
  * @author Angela
  */
