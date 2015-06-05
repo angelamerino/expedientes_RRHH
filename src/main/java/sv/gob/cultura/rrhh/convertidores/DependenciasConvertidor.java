@@ -5,11 +5,16 @@
  */
 package sv.gob.cultura.rrhh.convertidores;
 
+import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.faces.convert.ConverterException;
+import sv.gob.cultura.rrhh.entidades.Dependencias;
+import sv.gob.cultura.rrhh.facades.DependenciasFacade;
 
 /**
  *
@@ -18,21 +23,38 @@ import javax.faces.convert.Converter;
 @Named(value = "dependenciasConvertidor")
 @Dependent
 public class DependenciasConvertidor implements Converter {
+    
+    @EJB
+    private DependenciasFacade dependenciasFacade;
 
-    /**
-     * Creates a new instance of DependenciasConvertidor
-     */
+    public DependenciasFacade getDependenciasFacade() {
+        return dependenciasFacade;
+    }
+    
     public DependenciasConvertidor() {
     }
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         if (value.trim().equals("") || value.trim().equals("Seleccione uno...")) {
+            return null;
+        } else {
+            try {
+                int id = Integer.parseInt(value);
+                Dependencias dependencias = getDependenciasFacade().find(id);
+                return dependencias;
+            } catch (Exception e) {
+                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de conversión", "No es una Dependencia válido"));
+            }
+        }
     }
 
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (!(value instanceof Dependencias)) {
+            return null;
+        }
+        return String.valueOf(((Dependencias) value).getIdDependencia());
     }
     
 }

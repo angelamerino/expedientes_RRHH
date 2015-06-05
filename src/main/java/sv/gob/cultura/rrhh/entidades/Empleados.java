@@ -73,6 +73,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Empleados.findByMunicipioResidencia", query = "SELECT e FROM Empleados e WHERE e.municipioResidencia = :municipioResidencia"),
     @NamedQuery(name = "Empleados.findByDeptoNac", query = "SELECT e FROM Empleados e WHERE e.deptoNac = :deptoNac"),
     @NamedQuery(name = "Empleados.findByDeptoResidencia", query = "SELECT e FROM Empleados e WHERE e.deptoResidencia = :deptoResidencia"),
+    @NamedQuery(name = "Empleados.findByDependencia", query = "SELECT e FROM Empleados e WHERE e.idDependenciaN.idDependencia = :dependencia"),
     @NamedQuery(name = "Empleados.findByDeptoResidencia", query = "SELECT e FROM Empleados e WHERE e.deptoResidencia = :deptoResidencia")
 })
 public class Empleados implements Serializable {

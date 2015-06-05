@@ -23,6 +23,7 @@ import sv.gob.cultura.rrhh.facades.ParentescoFacade;
 @Named(value = "parentescoConvertidor")
 @Dependent
 public class ParentescoConvertidor implements Converter {
+   
     @EJB
     private ParentescoFacade parentescoFacade;
 
@@ -30,9 +31,6 @@ public class ParentescoConvertidor implements Converter {
         return parentescoFacade;
     }
 
-    /**
-     * Creates a new instance of ParentescoConvertidor
-     */
     public ParentescoConvertidor() {
     }
 

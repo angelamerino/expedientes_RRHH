@@ -5,11 +5,16 @@
  */
 package sv.gob.cultura.rrhh.convertidores;
 
+import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.faces.convert.ConverterException;
+import sv.gob.cultura.rrhh.entidades.TipoSangre;
+import sv.gob.cultura.rrhh.facades.TipoSangreFacade;
 
 /**
  *
@@ -18,21 +23,38 @@ import javax.faces.convert.Converter;
 @Named(value = "tipoSangreConvertidor")
 @Dependent
 public class TipoSangreConvertidor implements Converter {
+    
+    @EJB
+    private TipoSangreFacade tipoSangreFacade;
 
-    /**
-     * Creates a new instance of TipoSangreConvertidor
-     */
+    public TipoSangreFacade getTipoSangreFacade() {
+        return tipoSangreFacade;
+    }
+    
     public TipoSangreConvertidor() {
     }
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         if (value.trim().equals("") || value.trim().equals("Seleccione uno...")) {
+            return null;
+        } else {
+            try {
+                int id = Integer.parseInt(value);
+                TipoSangre tipoSangre = getTipoSangreFacade().find(id);
+                return tipoSangre;
+            } catch (Exception e) {
+                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de conversión", "No es un Tipo de Sangre válido"));
+            }
+        }
     }
 
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (!(value instanceof TipoSangre)) {
+            return null;
+        }
+        return String.valueOf(((TipoSangre) value).getIdTipoSangre());
     }
     
 }

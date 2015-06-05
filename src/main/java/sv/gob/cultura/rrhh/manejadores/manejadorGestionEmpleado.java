@@ -1,6 +1,8 @@
 package sv.gob.cultura.rrhh.manejadores;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
@@ -68,11 +70,11 @@ public class manejadorGestionEmpleado implements Serializable {
     private DirNacionalFacade dirNacionalFacade;
 
     //***** OBJETOS DE LOS ENTIDADES ******
-    private String dirDepto;
-    private String dirMuni;
+    private int dirDepto;
+    private int dirMuni;
     private int parentescoId;
     private String nr = "NR 0111-111111-111-0";
-    private int empleadoId; // Agregado por Angela el 01/Junio/2015
+    private int empleadoId = 3; // Agregado por Angela el 01/Junio/2015
     private ExperienciaLaboral experienciaLaboral = new ExperienciaLaboral();
     private EstudiosEmp estudiosEmp = new EstudiosEmp();
     private FamiliaDependientesEmp familiaDependientesEmp = new FamiliaDependientesEmp();
@@ -90,13 +92,19 @@ public class manejadorGestionEmpleado implements Serializable {
     private Dependencias dependencias = new Dependencias();
     private DirNacional dirNacional = new DirNacional();
     private int depto, deptonac;
-    
+    private int muni;
+    private String fechaNacFamiliaDependiente;
+    private int edadFamiliaDependiente;
+    private String fechaNacEmpleado;
+    private int edadEmpleado;
+    private int dirNacionalFiltrarJefe, dependeciasFiltrarJefe;
+
     public int getDeptonac() {
         return deptonac;
     }
 
     //****** GET DE ENTERPRICE JAVA BEAN *********
-    public void setDeptonac(int deptonac) {    
+    public void setDeptonac(int deptonac) {
         this.deptonac = deptonac;
     }
 
@@ -269,19 +277,19 @@ public class manejadorGestionEmpleado implements Serializable {
         this.administradoraPensiones = administradoraPensiones;
     }
 
-    public String getDirDepto() {
+    public int getDirDepto() {
         return dirDepto;
     }
 
-    public void setDirDepto(String dirDepto) {
+    public void setDirDepto(int dirDepto) {
         this.dirDepto = dirDepto;
     }
 
-    public String getDirMuni() {
+    public int getDirMuni() {
         return dirMuni;
     }
 
-    public void setDirMuni(String dirMuni) {
+    public void setDirMuni(int dirMuni) {
         this.dirMuni = dirMuni;
     }
 
@@ -321,10 +329,10 @@ public class manejadorGestionEmpleado implements Serializable {
         return nr;
     }
 
-   public void setNr(String nr) {
+    public void setNr(String nr) {
         this.nr = nr;
     }
-    
+
     /////agregado por Angela el 01/Junio/2015/////////////
     public int getempleadoId() {
         return empleadoId;
@@ -334,6 +342,7 @@ public class manejadorGestionEmpleado implements Serializable {
         this.empleadoId = empleadoId;
     }
 ////////////////////////////////////////////////////////
+
     public int getDepto() {
         return depto;
     }
@@ -341,6 +350,66 @@ public class manejadorGestionEmpleado implements Serializable {
     public void setDepto(int depto) {
         this.depto = depto;
     }
+
+    public int getMuni() {
+        return muni;
+    }
+
+    public void setMuni(int muni) {
+        this.muni = muni;
+    }
+
+    public String getFechaNacFamiliaDependiente() {
+        return fechaNacFamiliaDependiente;
+    }
+
+    public void setFechaNacFamiliaDependiente(String fechaNacFamiliaDependiente) {       
+        this.fechaNacFamiliaDependiente = fechaNacFamiliaDependiente;        
+        this.setEdadFamiliaDependiente(edad(fechaNacFamiliaDependiente));
+    }
+
+    public int getEdadFamiliaDependiente() {
+        return edadFamiliaDependiente;
+    }
+
+    public void setEdadFamiliaDependiente(int edadFamiliaDependiente) {
+        this.edadFamiliaDependiente = edadFamiliaDependiente;
+    }
+
+    public String getFechaNacEmpleado() {
+        return fechaNacEmpleado;
+    }
+
+    public void setFechaNacEmpleado(String fechaNacEmpleado) {
+        this.fechaNacEmpleado = fechaNacEmpleado;
+        this.setEdadEmpleado(edad(fechaNacEmpleado));
+    }
+
+    public int getEdadEmpleado() {
+        return edadEmpleado;
+    }
+
+    public void setEdadEmpleado(int edadEmpleado) {
+        this.edadEmpleado = edadEmpleado;
+    }
+
+    public int getDirNacionalFiltrarJefe() {
+        return dirNacionalFiltrarJefe;
+    }
+
+    public void setDirNacionalFiltrarJefe(int dirNacionalFiltrarJefe) {
+        this.dirNacionalFiltrarJefe = dirNacionalFiltrarJefe;
+    }
+
+    public int getDependeciasFiltrarJefe() {
+        return dependeciasFiltrarJefe;
+    }
+
+    public void setDependeciasFiltrarJefe(int dependeciasFiltrarJefe) {
+        this.dependeciasFiltrarJefe = dependeciasFiltrarJefe;
+    }
+    
+    
 
     // ********* LLENADO DE SELECIONABLES *****
     public List<Estados> todosEstados() {
@@ -383,54 +452,74 @@ public class manejadorGestionEmpleado implements Serializable {
         return getDirNacionalFacade().findAll();
     }
 
-    public List<Dependencias> todosDependencias() {
-        return getDependenciasFacade().findAll();
-    }
     
-     public List<ContactoEmergenciaEmp> todosContactoEmergenciaEmp() {
+
+    public List<ContactoEmergenciaEmp> todosContactoEmergenciaEmp() {
         return getContactoEmergenciaEmpFacade().findAll();
     }
+
+    public List<FamiliaDependientesEmp> todosFamiliaDependientesEmp() {
+        return getFamiliaDependientesEmpFacade().findAll();
+    }
+
+    public List<Municipios> municipiosFiltrados() {
+        return getMunicipiosFacade().buscarDep(depto);
+    }
+
+    public List<Municipios> municipiosFiltradosNac() {
+        return getMunicipiosFacade().buscarDep(dirDepto);
+    }
     
-     public List<Municipios> municipiosFiltrados(){
-         return getMunicipiosFacade().buscarDep(depto);
-     }
-     
-     public List<Municipios> municipiosFiltradosNac(){
-         return getMunicipiosFacade().buscarDep(deptonac);
-     }
-
-    //********* FUNCIONES DE GUARDAR ******
-    ///////////////////public void guardarContactosEmergencia() {
-        //contactoEmergenciaEmp.setFechaCreaContac(new Date());
-        //contactoEmergenciaEmp.setUserCreaContac(parentescoId);
-    /////////////    contactoEmergenciaEmp.setNrEmpleado(new Empleados(nr));
-        //System.out.println(contactoEmergenciaEmp.getNrEmpleado());
-    //////////    getContactoEmergenciaEmpFacade().create(contactoEmergenciaEmp);
-    //////////        contactoEmergenciaEmp = new ContactoEmergenciaEmp();
-
-    //////////    }
-
-    //////////    public void guardarFamiliaDependiente() {
-    //////////        familiaDependientesEmp.setNrEmpleado(new Empleados(nr));
-    //////////        getFamiliaDependientesEmpFacade().create(familiaDependientesEmp);
-    //////////        familiaDependientesEmp = new FamiliaDependientesEmp();
-    //////////    }
+    public List<Dependencias> dependenciasFiltradas() {
+        System.out.println(dirNacionalFiltrarJefe);
+        return getDependenciasFacade().buscarDependencias(dirNacionalFiltrarJefe);
+    }
     
-     /////Agregado por Angela el 01/Junio/2015/////////////
+    public List<Empleados> empleadoJefeDependencia() {
+        System.out.println(dependeciasFiltrarJefe);
+        return getEmpleadosFacade().buscarEmp(dependeciasFiltrarJefe);
+    }
+   
+
+    //********* FUNCIONES DE GUARDAR ****** 
+    public int edad(String fecha_nac) {     //fecha_nac debe tener el formato dd/MM/yyyy
+
+    Date fechaNac = new Date(fecha_nac);
+    Date fechaActual = new Date();
+    SimpleDateFormat formato = new SimpleDateFormat("MM/dd/yyyy");
+    String hoy = formato.format(fechaActual);
+    String nacimiento = formato.format(fechaNac);
+    //String fechaNac = formato.format(fecha_nac);
+    String[] dat1 = nacimiento.split("/");
+    String[] dat2 = hoy.split("/");
+    int anios = Integer.parseInt(dat2[2]) - Integer.parseInt(dat1[2]);
+    int mes = Integer.parseInt(dat2[1]) - Integer.parseInt(dat1[1]);
+    if (mes < 0) {
+      anios = anios - 1;
+    } else if (mes == 0) {
+      int dia = Integer.parseInt(dat2[0]) - Integer.parseInt(dat1[0]);
+      if (dia > 0) {
+        anios = anios - 1;
+      }
+    }
+    return anios;
+  }
+
     public void guardarContactosEmergencia() {
-        //contactoEmergenciaEmp.setFechaCreaContac(new Date());
-        //contactoEmergenciaEmp.setUserCreaContac(parentescoId);
-        contactoEmergenciaEmp.setIdEmpleado(new Empleados (empleadoId));
-        //System.out.println(contactoEmergenciaEmp.getNrEmpleado());
+
+        contactoEmergenciaEmp.setIdEmpleado(new Empleados(empleadoId));
         getContactoEmergenciaEmpFacade().create(contactoEmergenciaEmp);
         contactoEmergenciaEmp = new ContactoEmergenciaEmp();
 
     }
 
-    public void guardarFamiliaDependiente() {
-        familiaDependientesEmp.setIdEmpleado(new Empleados (empleadoId));
+    public void guardarFamiliaDependiente() {        
+        familiaDependientesEmp.setIdEmpleado(new Empleados(empleadoId));
+        familiaDependientesEmp.setEdadFamilia(this.getEdadFamiliaDependiente());
+        familiaDependientesEmp.setFechaNacFamilia(new Date(this.getFechaNacFamiliaDependiente()));
+        
         getFamiliaDependientesEmpFacade().create(familiaDependientesEmp);
         familiaDependientesEmp = new FamiliaDependientesEmp();
     }
-    
+
 }

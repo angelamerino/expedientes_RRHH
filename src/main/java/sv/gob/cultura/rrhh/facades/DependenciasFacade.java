@@ -5,6 +5,7 @@
  */
 package sv.gob.cultura.rrhh.facades;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,4 +29,8 @@ public class DependenciasFacade extends AbstractFacade<Dependencias> {
         super(Dependencias.class);
     }
     
+    public List<Dependencias> buscarDependencias(int dirNacional){
+        return getEntityManager().createNamedQuery("Dependencias.findByIdDirNacional").setParameter("idDirNac", dirNacional).getResultList();
+    }
+
 }

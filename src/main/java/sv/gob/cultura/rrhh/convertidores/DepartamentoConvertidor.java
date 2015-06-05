@@ -5,11 +5,16 @@
  */
 package sv.gob.cultura.rrhh.convertidores;
 
+import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.faces.convert.ConverterException;
+import sv.gob.cultura.rrhh.entidades.Deptos;
+import sv.gob.cultura.rrhh.facades.DeptosFacade;
 
 /**
  *
@@ -18,21 +23,38 @@ import javax.faces.convert.Converter;
 @Named(value = "departamentoConvertidor")
 @Dependent
 public class DepartamentoConvertidor implements Converter {
+    
+    @EJB
+    private DeptosFacade deptosFacade;
 
-    /**
-     * Creates a new instance of DepartamentoConvertidor
-     */
+    public DeptosFacade getDeptosFacade() {
+        return deptosFacade;
+    }
+ 
     public DepartamentoConvertidor() {
     }
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         if (value.trim().equals("") || value.trim().equals("Seleccione uno...")) {
+            return null;
+        } else {
+            try {
+                int id = Integer.parseInt(value);
+                Deptos depto = getDeptosFacade().find(id);
+                return depto;
+            } catch (Exception e) {
+                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de conversión", "No Departamento válido"));
+            }
+        }
     }
 
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (!(value instanceof Deptos)) {
+            return null;
+        }
+        return String.valueOf(((Deptos) value).getIdDepartamento());
     }
     
 }

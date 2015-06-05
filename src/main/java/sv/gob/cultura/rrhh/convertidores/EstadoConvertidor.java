@@ -5,11 +5,16 @@
  */
 package sv.gob.cultura.rrhh.convertidores;
 
+import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.faces.convert.ConverterException;
+import sv.gob.cultura.rrhh.entidades.Estados;
+import sv.gob.cultura.rrhh.facades.EstadosFacade;
 
 /**
  *
@@ -18,21 +23,38 @@ import javax.faces.convert.Converter;
 @Named(value = "estadoConvertidor")
 @Dependent
 public class EstadoConvertidor implements Converter {
+    
+    @EJB
+    private EstadosFacade estadosFacade;
 
-    /**
-     * Creates a new instance of EstadoConvertidor
-     */
+    public EstadosFacade getEstadosFacade() {
+        return estadosFacade;
+    }
+    
     public EstadoConvertidor() {
     }
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         if (value.trim().equals("") || value.trim().equals("Seleccione uno...")) {
+            return null;
+        } else {
+            try {
+                int id = Integer.parseInt(value);
+                Estados estado = getEstadosFacade().find(id);
+                return estado;
+            } catch (Exception e) {
+                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de conversión", "No es Estado de Empleado válido"));
+            }
+        }
     }
 
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (!(value instanceof Estados)) {
+            return null;
+        }
+        return String.valueOf(((Estados) value).getIdEstado());
     }
     
 }

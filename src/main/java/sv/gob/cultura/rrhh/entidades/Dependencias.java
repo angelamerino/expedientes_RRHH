@@ -35,6 +35,7 @@ import javax.validation.constraints.Size;
 @NamedQueries({
     @NamedQuery(name = "Dependencias.findAll", query = "SELECT d FROM Dependencias d"),
     @NamedQuery(name = "Dependencias.findByIdDependencia", query = "SELECT d FROM Dependencias d WHERE d.idDependencia = :idDependencia"),
+    @NamedQuery(name = "Dependencias.findByIdDirNacional", query = "SELECT d FROM Dependencias d WHERE d.idDirNac.idDirNac = :idDirNac"),
     @NamedQuery(name = "Dependencias.findByNombreDependencia", query = "SELECT d FROM Dependencias d WHERE d.nombreDependencia = :nombreDependencia"),
     @NamedQuery(name = "Dependencias.findByLatitud", query = "SELECT d FROM Dependencias d WHERE d.latitud = :latitud"),
     @NamedQuery(name = "Dependencias.findByLongitud", query = "SELECT d FROM Dependencias d WHERE d.longitud = :longitud"),

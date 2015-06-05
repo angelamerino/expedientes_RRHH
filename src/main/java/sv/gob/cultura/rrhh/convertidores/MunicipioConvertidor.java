@@ -5,11 +5,16 @@
  */
 package sv.gob.cultura.rrhh.convertidores;
 
+import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.faces.convert.ConverterException;
+import sv.gob.cultura.rrhh.entidades.Municipios;
+import sv.gob.cultura.rrhh.facades.MunicipiosFacade;
 
 /**
  *
@@ -18,21 +23,38 @@ import javax.faces.convert.Converter;
 @Named(value = "municipioConvertidor")
 @Dependent
 public class MunicipioConvertidor implements Converter {
+    
+    @EJB
+    private MunicipiosFacade municipiosFacade;
 
-    /**
-     * Creates a new instance of MunicipioConvertidor
-     */
+    public MunicipiosFacade getMunicipiosFacade() {
+        return municipiosFacade;
+    }
+
     public MunicipioConvertidor() {
     }
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         if (value.trim().equals("") || value.trim().equals("Seleccione uno...")) {
+            return null;
+        } else {
+            try {
+                int id = Integer.parseInt(value);
+                Municipios municipios = getMunicipiosFacade().find(id);
+                return municipios;
+            } catch (Exception e) {
+                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de conversión", "No es un municipio válido"));
+            }
+        }
     }
 
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (!(value instanceof Municipios)) {
+            return null;
+        }
+        return String.valueOf(((Municipios) value).getIdMunicipio());
     }
     
 }

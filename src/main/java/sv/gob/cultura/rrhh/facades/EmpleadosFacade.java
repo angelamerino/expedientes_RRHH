@@ -5,6 +5,7 @@
  */
 package sv.gob.cultura.rrhh.facades;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,6 +27,10 @@ public class EmpleadosFacade extends AbstractFacade<Empleados> {
 
     public EmpleadosFacade() {
         super(Empleados.class);
+    }
+    
+    public List<Empleados> buscarEmp(int idDependencia){
+        return getEntityManager().createNamedQuery("Empleados.findByDependencia").setParameter("dependencia", idDependencia).getResultList();
     }
     
 }
