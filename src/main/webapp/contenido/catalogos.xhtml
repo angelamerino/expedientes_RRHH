@@ -33,6 +33,7 @@
 
 
         <h:form id="form" class="form-horizontal" role="form" prependId="false">
+<p:growl id="msgs" showDetail="true" />
             <div class="page-header">
                 <h1>Gestionar registros de catálogos</h1>
             </div>
@@ -99,7 +100,7 @@
                                     <button type="button" class="btn btn-primary btn-xs"  data-toggle="modal" data-target="#myModal" >
                                         <span class="glyphicon glyphicon-pencil"></span>
                                     </button>
-       <p:commandButton update=":form:pensionDetalle" oncomplete="PF('pensionDialog').show()" icon="ui-icon-search" title="View">
+       <p:commandButton update=":form:pensionDetalle" oncomplete="PF('pensionDialog').show()" icon="ui-icon-pencil" title="Ver">
            <f:setPropertyActionListener value="#{admin_pensiones}" target="#{manejadorCat.pensionSeleccionada}"/>
         </p:commandButton>
                                     <!--                                   <h:commandLink class="btn btn-link" pt:data-toggle="modal" pt:data-target="#myModal" >
@@ -844,18 +845,20 @@
             </div>
 
 
- <p:dialog header="Información" widgetVar="pensionDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-        <p:outputPanel id="pensionDetalle" style="text-align:center;">
+<p:dialog header="Mantenimiento Administradora de Pensiones" widgetVar="pensionDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" >
+        
+    <p:outputPanel id="pensionDetalle" style="text-align:center;">
             <p:panelGrid  columns="2" rendered="#{not empty manejadorCat.pensionSeleccionada }" columnClasses="label,value">
                 <f:facet name="header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Edición de Administradora de Pensiones</h4>
+                    <h4 class="modal-title">Administradora de Pensiones</h4>
                 </f:facet>
- 
                 <h:outputText value="Id:" />
-                <h:inputText  value="#{manejadorCat.pensionSeleccionada.idAdminPension}" ></h:inputText>        
-                <h:outputText value="Year"/>
-                <h:inputText value="#{manejadorCat.pensionSeleccionada.nombreAdminPension}" ></h:inputText>  
+                <h:outputText value="#{manejadorCat.pensionSeleccionada.idAdminPension}" />
+                
+                <h:outputText value="Nombre:" />
+                <h:outputText value="#{manejadorCat.pensionSeleccionada.nombreAdminPension}" />
+                
+                
   </p:panelGrid>
         </p:outputPanel>
     </p:dialog>           

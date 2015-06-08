@@ -44,6 +44,10 @@ import sv.gob.cultura.rrhh.facades.TipoMejoraSalarialFacade;
 import sv.gob.cultura.rrhh.facades.TipoMovFacade;
 import sv.gob.cultura.rrhh.facades.TipoPrestacionFacade;
 import sv.gob.cultura.rrhh.facades.TipoSangreFacade;
+/*agregados por mi*/
+import javax.faces.context.FacesContext;
+import org.primefaces.event.SelectEvent;
+import javax.faces.application.FacesMessage;
 
 /**
  *
@@ -209,7 +213,8 @@ public class manejadorCat implements Serializable {
        
     }
     
-       
+    
+   
     public List<CaracteristicasIdioma> getCaracteristicasIdioma() {
         return getCaracteristicasIdiomaFacade().findAll();
     }
@@ -354,5 +359,10 @@ public class manejadorCat implements Serializable {
         }
     }
 
+    public void onRowSelect(SelectEvent event) {
+        FacesMessage msg = new FacesMessage("Registro Seleccionado", ((AdministradoraPensiones) event.getObject()).getNombreAdminPension());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+ 
     
 }
