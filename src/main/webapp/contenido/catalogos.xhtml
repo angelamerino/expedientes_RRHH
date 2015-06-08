@@ -5,11 +5,34 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrouth">
 
     <ui:define name="content">
 
-        <h:form class="form-horizontal" role="form" prependId="false">
+        <!-- ************************ Comienza Modal Básico ************************  -->                    
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Título</h4>
+                    </div>
+                    <div class="modal-body">
+                        Contenido del Modal
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ************************ Termina Modal Básico ************************  -->
+
+
+
+        <h:form id="form" class="form-horizontal" role="form" prependId="false">
             <div class="page-header">
                 <h1>Gestionar registros de catálogos</h1>
             </div>
@@ -43,12 +66,16 @@
                 </div>
             </div>
 
+
             <div class="col-md-6">
                 <div class="panel panel-info">
                     <div class="panel-heading"><strong>Items</strong></div>
                     <div class="panel-body">
                         <div class="table-responsive">                            
                             <p:dataTable id="cat-pensiones" value="#{manejadorCat.administradoraPensiones}" var="admin_pensiones" rendered="#{manejadorCat.opcion eq 1}" paginator="true" rows="5">
+                                <!-- rowKey="{admin_pensiones.idAdminPension}" selectionMode="single" selection="{manejadorCat.pensionSeleccionada}">-->
+                                <!--<p:ajax event="rowSelect" oncomplete="PF('editwidgetVar').show();" update=":form:growl,:form:displayEdit" />-->
+
                                 <p:column width="10%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Id"/>
@@ -67,8 +94,20 @@
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Editar"/>
                                     </f:facet>
-                                    <p:button icon="ui-icon-pencil" title="Icon Only" onclick="PF('DialogoEditarPensiones').show();" >
-                                    </p:button>
+
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-primary btn-xs"  data-toggle="modal" data-target="#myModal" >
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </button>
+       <p:commandButton update=":form:pensionDetalle" oncomplete="PF('pensionDialog').show()" icon="ui-icon-search" title="View">
+           <f:setPropertyActionListener value="#{admin_pensiones}" target="#{manejadorCat.pensionSeleccionada}"/>
+        </p:commandButton>
+                                    <!--                                   <h:commandLink class="btn btn-link" pt:data-toggle="modal" pt:data-target="#myModal" >
+                                                                            <span class="glyphicon glyphicon-pencil"></span> 
+                                                                            <f:setPropertyActionListener value="{admin_pensiones}" target="{manejadorCat.pensionSeleccionada}" />
+                                                                            <p:ajax process="@this" update=":form1:modiPension:mostrarPension"/>
+                                                                        </h:commandLink>-->
+
                                 </p:column>
 
                                 <p:column width="15%">
@@ -77,26 +116,6 @@
                                     </f:facet>
                                     <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
                                 </p:column>
-
-                                <!-- <p:column width="15%">
-                                    <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Editar"/>
-                                    </f:facet>
-
-                                    <button type="button" class="btn btn-primary">
-                                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                                    </button>
-                                </p:column>
-
-                                <p:column width="15%">
-                                    <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
-                                    </f:facet>
-
-                                    <button type="button" class="btn btn-primary">
-                                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                                    </button>
-                                </p:column> -->
 
                                 <f:facet name="footer">
                                     <h3>
@@ -109,6 +128,43 @@
                                     </h:commandButton>
                                 </f:facet>
                             </p:dataTable>
+
+                            <!-- Inicia el dialogo para editar -->
+                            <!--<p:dialog id="editDialog"  header="{app['dialog.edit']}"  widgetVar="editwidgetVar">
+                            
+                                <h:panelGrid id="displayEdit" columns="2" title="{application['dialog.edit']}">
+                                             <f:view>
+                                                    <h:panelGrid columns="2">
+                                                         <h:outputLabel value="IdAdminPension:" for="idAdminPension" />
+                                                         <h:inputText id="idAdminPension" value="{manejadorCat.pensionSeleccionada.idAdminPension}" title="IdAdminPension" required="true" requiredMessage="The IdAdminPension field is required."/>
+                                                         <h:outputLabel value="NombreAdminPension:" for="nombreAdminPension" />
+                                                         <h:inputText id="nombreAdminPension" value="{manejadorCat.pensionSeleccionada.nombreAdminPension}" title="NombreAdminPension" required="true" requiredMessage="The NombreAdminPension field is required."/>
+                                                     
+                                                <f:facet name="footer">
+                                                                    <p:commandButton id="editButton" value="{app['boton.update']}"
+                                                                                     update=":form:growl,:form:cat-pensiones,:form:displayEdit"
+                                                                                     actionListener="{estatusDataController.edit()}"
+                                                                                     oncomplete="PF('editwidgetVar').hide()"/>
+                                                                    <p:commandButton id="deleteButton" value="{app['boton.delete']}" title="{app['boton.delete']}"  onclick="PF('confirmationwidgetVar').show();" type="button" icon="ui-icon-trash" />
+                                                                    <p:commandButton id="declineButton" value="{app['boton.cerrar']}" onclick="PF('editwidgetVar').hide();" type="button" /> 
+                                                                </f:facet>
+                                                    </h:panelGrid>
+                                             </f:view>
+                                         </h:panelGrid>
+                                                 </p:dialog>
+                                                    <p:dialog id="confirmDialog" modal="false"  header="{app['boton.delete']}"
+                                                              widgetVar="confirmationwidgetVar">
+                                                        <p:commandButton id="removeButton" value="{app['boton.yes']}"
+                                                                         update=":form:displayEdit, :form:growl, :form:pensiones"
+                                                                         oncomplete="PF('confirmationwidgetVar').hide();,
+                                                                         PF('editwidgetVar').hide();"
+                                                                         actionListener="{estatusDataController.delete()}" />
+                                                        <p:commandButton id="cancelButton" value="{app['boton.no']}"
+                                                                         onclick="PF('confirmationwidgetVar').hide()" type="button" />
+                                                    </p:dialog>
+                                                    <p:growl id="growl"/>
+                                                    <p:messages autoUpdate="true"/>-->
+                            <!-- Finaliza el dialogo para editar -->
 
                             <p:dataTable id="cat-caractidiomas" value="#{manejadorCat.caracteristicasIdioma}" var="carac_idioma" rendered="#{manejadorCat.opcion eq 2}" class="table" paginator="true" rows="5">
                                 <p:column width="10%">
@@ -128,7 +184,7 @@
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Editar"/>
                                     </f:facet>
-                                    <p:button icon="ui-icon-pencil" onclick="confirm(alert(Seguro que desea editar))" title="Icon Only"></p:button>
+                                    <p:button icon="ui-icon-pencil"  title="Icon Only"></p:button>
                                 </p:column>
 
                                 <p:column width="15%">
@@ -745,30 +801,81 @@
                                         <p:ajax process="cat-tipo-sangre" update="cat-tipo-sangre"/>
                                     </h:commandButton>
                                 </f:facet>
+
+
                             </p:dataTable>
 
 
                         </div>
                     </div>
+
+
+
+                    <!-- ************************ Comienza Modal ************************  -->
+                    <!--<div class="modal" id="myModal" >
+                        <div class="modal-dialog">
+                            <h:form id="modiPension" >
+                                <div class="modal-content" >
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="myModalLabel">Edición de Administradora de Pensiones</h4>
+                                    </div>
+                                <div class="modal-body" id="moficarPension">
+                                    <h:panelGroup id="mostrarPension">
+                                        <div class="form-group" >
+                                            <label for="nombrePensiones" class="col-lg-2 control-label">Nombre:</label>
+                                                <div class="col-lg-10">
+                                                    <input type="text" class="form-control" id="nombrePensiones" value="{manejadorCat.pensionSeleccionada.nombreAdminPension}" ></input>  
+                                                </div>
+                                        </div>
+                                    </h:panelGroup>
+                                </div>
+                                </div>
+                            </h:form>
+                        </div> 
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                    </div>-->
+                    <!-- ************************ Termina Modal *************** -->
+
                 </div>
             </div>
 
+
+ <p:dialog header="Información" widgetVar="pensionDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+        <p:outputPanel id="pensionDetalle" style="text-align:center;">
+            <p:panelGrid  columns="2" rendered="#{not empty manejadorCat.pensionSeleccionada }" columnClasses="label,value">
+                <f:facet name="header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Edición de Administradora de Pensiones</h4>
+                </f:facet>
+ 
+                <h:outputText value="Id:" />
+                <h:inputText  value="#{manejadorCat.pensionSeleccionada.idAdminPension}" ></h:inputText>        
+                <h:outputText value="Year"/>
+                <h:inputText value="#{manejadorCat.pensionSeleccionada.nombreAdminPension}" ></h:inputText>  
+  </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>           
+            
         </h:form>
 
-        <h:form id="frmEditar">
-            <p:dialog header="Información Guardada" modal="true" widgetVar="DialogoEditarPensiones">
-                <h:panelGrid id="panelEditar" columns="2" >
-                    <h:outputLabel value="Nombre:" for="txtNombre" >   </h:outputLabel>
-                    <h:inputText id="txtNombre" label="Nombre:" size="10" value="">   
-                        
-                    </h:inputText>
-                    <p:message for="txtNombre" />
-
-                </h:panelGrid>                   
-
-            </p:dialog>
-
-        </h:form>
+        <!--        <h:form id="frmEditar">
+                    <p:dialog header="Información Guardada" modal="true" widgetVar="DialogoEditarPensiones">
+                        <h:panelGrid id="panelEditar" columns="2" >
+                            <h:outputLabel value="Nombre:" for="txtNombre" >   </h:outputLabel>
+                            <h:inputText id="txtNombre" label="Nombre:" size="10" value="{admin_pensiones.nombreAdminPension}">   
+                                 <p:ajax process="" />  
+                            </h:inputText>
+                             <p:message for="txtNombre" id="errores"/>
+        
+                        </h:panelGrid>                   
+        
+                    </p:dialog>
+        
+                </h:form>-->
     </ui:define>
 
 </ui:composition>

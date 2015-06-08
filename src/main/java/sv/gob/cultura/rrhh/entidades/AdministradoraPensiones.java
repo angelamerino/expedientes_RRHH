@@ -6,6 +6,7 @@
 package sv.gob.cultura.rrhh.entidades;
 
 import java.io.Serializable;
+
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -47,6 +48,7 @@ public class AdministradoraPensiones implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idAdminPension")
     private List<Empleados> empleadosList;
 
+    
     public AdministradoraPensiones() {
     }
 
@@ -59,9 +61,16 @@ public class AdministradoraPensiones implements Serializable {
         this.nombreAdminPension = nombreAdminPension;
     }
 
-    public AdministradoraPensiones(String nuevo_item) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public AdministradoraPensiones(String nombreAdminPension) {
+        this.nombreAdminPension = nombreAdminPension;
     }
+
+    
+    
+
+//    public AdministradoraPensiones(String nuevo_item) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
 
     public Integer getIdAdminPension() {
         return idAdminPension;
@@ -79,13 +88,14 @@ public class AdministradoraPensiones implements Serializable {
         this.nombreAdminPension = nombreAdminPension;
     }
 
-    public List<Empleados> getEmpleadosList() {
-        return empleadosList;
+    public void getEmpleadosList(List<Empleados> EmpleadosList) {
+        this.empleadosList = empleadosList;
     }
 
     public void setEmpleadosList(List<Empleados> empleadosList) {
         this.empleadosList = empleadosList;
     }
+   
     
     /*public List<AdministradoraPensiones> getAdminPensionesList(){
         return AdminPensionesList;

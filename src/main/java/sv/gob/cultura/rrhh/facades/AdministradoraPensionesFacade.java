@@ -29,6 +29,10 @@ public class AdministradoraPensionesFacade extends AbstractFacade<Administradora
     public AdministradoraPensionesFacade() {
         super(AdministradoraPensiones.class);
     }
+
+    public List<AdministradoraPensiones> getAdministradoraPensiones() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     
     

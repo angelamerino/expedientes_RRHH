@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8' ?> 
+<!--<?xml version='1.0' encoding='UTF-8' ?>--> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -404,12 +404,13 @@
                 <p class="text-muted" align="center"><strong>Ministerio de Cultura | Departamento de Informática y Sistemas | 2015 <span class="glyphicon glyphicon-copyright-mark" aria-hidden="true"></span></strong></p> 
             </div>
         </footer>
-
+</h:body>
         <!-- Bootstrap core JavaScript
     ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
         <!-- Librería jQuery requerida por los plugins de JavaScript -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <h:outputScript name="jquery/jquery.js" library="primefaces"/>
+        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>-->
 
         <!-- Todos los plugins JavaScript de Bootstrap (también puedes
              incluir archivos JavaScript individuales de los únicos
@@ -425,6 +426,6 @@
         <script src="#{request.contextPath}/resources/smartmenus-0.9.7/addons/bootstrap/jquery.smartmenus.bootstrap.min.js" type="text/javascript"></script>
 
 
-    </h:body>
+    
 
 </html>

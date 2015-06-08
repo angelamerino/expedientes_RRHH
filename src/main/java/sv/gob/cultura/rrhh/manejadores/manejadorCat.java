@@ -10,7 +10,6 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
-import org.primefaces.context.RequestContext;
 import sv.gob.cultura.rrhh.entidades.AdministradoraPensiones;
 import sv.gob.cultura.rrhh.entidades.CaracteristicasIdioma;
 import sv.gob.cultura.rrhh.entidades.EstadoCivil;
@@ -27,7 +26,6 @@ import sv.gob.cultura.rrhh.entidades.TipoDescuento;
 import sv.gob.cultura.rrhh.entidades.TipoMejoraSalarial;
 import sv.gob.cultura.rrhh.entidades.TipoMov;
 import sv.gob.cultura.rrhh.entidades.TipoPrestacion;
-import sv.gob.cultura.rrhh.entidades.TipoSancion;
 import sv.gob.cultura.rrhh.entidades.TipoSangre;
 import sv.gob.cultura.rrhh.facades.AdministradoraPensionesFacade;
 import sv.gob.cultura.rrhh.facades.CaracteristicasIdiomaFacade;
@@ -54,6 +52,7 @@ import sv.gob.cultura.rrhh.facades.TipoSangreFacade;
 @Named(value = "manejadorCat")
 @ViewScoped
 public class manejadorCat implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     /* 1. INSERTO CODIGO PARA CADA FACADE CON "Call Enterprice Beans"  */
     @EJB
@@ -94,12 +93,22 @@ public class manejadorCat implements Serializable {
     /* 3. Declaro la variable opcion y nuevo item para seleccionar del listado y agregar nuevo registro a los catálogos*/
     private int opcion;
     private String nuevo_item;
-
-    /*Declaro variable para capturar id del catálogo seleccionado*/
-    private idPensionSeleccionada idPensionSeleccionada;
     
+    private AdministradoraPensiones pensionSeleccionada = new AdministradoraPensiones();
 
-    /**
+/* Getter y Setter */
+
+    public AdministradoraPensiones getPensionSeleccionada() {
+        return pensionSeleccionada;
+    }
+
+    public void setPensionSeleccionada(AdministradoraPensiones pensionSeleccionada) {
+        this.pensionSeleccionada = pensionSeleccionada;
+    }
+
+    
+    
+       /**
      * Creates a new instance of manejadorCat-- 2. Inserto "getter" de los
      * facades. NOTA: los facades no llevan setter
      */
@@ -190,12 +199,17 @@ public class manejadorCat implements Serializable {
     public void setNuevo_item(String nuevo_item) {
         this.nuevo_item = nuevo_item;
     }
+    
+    
 
     /* 5. Se crean métodos para visualizar en tablas todos los catálogos*/
+    
     public List<AdministradoraPensiones> getAdministradoraPensiones() {
         return getAdministradoraPensionesFacade().findAll();
+       
     }
-
+    
+       
     public List<CaracteristicasIdioma> getCaracteristicasIdioma() {
         return getCaracteristicasIdiomaFacade().findAll();
     }
@@ -266,6 +280,7 @@ public class manejadorCat implements Serializable {
         switch (opcion) {
             case 1:
                 System.out.println("probando primera opcion guardar");
+                
                 getAdministradoraPensionesFacade().create(new AdministradoraPensiones(nuevo_item));
                 nuevo_item = "";
                 break;
@@ -339,13 +354,5 @@ public class manejadorCat implements Serializable {
         }
     }
 
-    public void cargarEditarCat(String nombrePension) {
     
-    }
-
-    private static class idPensionSeleccionada {
-
-        public idPensionSeleccionada() {
-        }
-    }
 }
