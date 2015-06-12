@@ -1,7 +1,6 @@
 package sv.gob.cultura.rrhh.manejadores;
 
 import java.io.Serializable;
-//import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -10,6 +9,8 @@ import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import sv.gob.cultura.rrhh.entidades.*;
 import sv.gob.cultura.rrhh.facades.AdministradoraPensionesFacade;
+import sv.gob.cultura.rrhh.facades.AnioFacade;
+import sv.gob.cultura.rrhh.facades.CaracteristicasIdiomaFacade;
 import sv.gob.cultura.rrhh.facades.ContactoEmergenciaEmpFacade;
 import sv.gob.cultura.rrhh.facades.DependenciasFacade;
 import sv.gob.cultura.rrhh.facades.DeptosFacade;
@@ -20,10 +21,14 @@ import sv.gob.cultura.rrhh.facades.EstadosFacade;
 import sv.gob.cultura.rrhh.facades.EstudiosEmpFacade;
 import sv.gob.cultura.rrhh.facades.ExperienciaLaboralFacade;
 import sv.gob.cultura.rrhh.facades.FamiliaDependientesEmpFacade;
+import sv.gob.cultura.rrhh.facades.IdiomasCaracteristicasFacade;
+import sv.gob.cultura.rrhh.facades.IdiomasFacade;
 import sv.gob.cultura.rrhh.facades.InstBancariaFacade;
 import sv.gob.cultura.rrhh.facades.MunicipiosFacade;
+import sv.gob.cultura.rrhh.facades.NivelFacade;
 import sv.gob.cultura.rrhh.facades.PaisesFacade;
 import sv.gob.cultura.rrhh.facades.ParentescoFacade;
+import sv.gob.cultura.rrhh.facades.ProfOficiosFacade;
 import sv.gob.cultura.rrhh.facades.TipoSangreFacade;
 
 //1. implements Serializable
@@ -34,8 +39,11 @@ import sv.gob.cultura.rrhh.facades.TipoSangreFacade;
 @Named(value = "manejadorGestionEmpleado")
 @ViewScoped
 public class manejadorGestionEmpleado implements Serializable {
+    
 
-    //*** LLAMADA A LOS ENTERPRICE JAVA BEANS *****
+//******************************************************************************
+// ************** LLAMADA A LOS ENTERPRICE JAVA BEANS **************************
+//******************************************************************************
     @EJB
     private ExperienciaLaboralFacade experienciaLaboralFacade;
     @EJB
@@ -68,13 +76,22 @@ public class manejadorGestionEmpleado implements Serializable {
     private DependenciasFacade dependenciasFacade;
     @EJB
     private DirNacionalFacade dirNacionalFacade;
+    @EJB
+    private ProfOficiosFacade profOficiosFacade;
+    @EJB
+    private IdiomasFacade idiomasFacade;
+    @EJB
+    private CaracteristicasIdiomaFacade caracteristicasIdiomaFacade;
+    @EJB
+    private NivelFacade nivelFacade;
+    @EJB
+    private IdiomasCaracteristicasFacade idiomasCaracteristicasFacade;
+    @EJB
+    private AnioFacade anioFacade;
 
-    //***** OBJETOS DE LOS ENTIDADES ******
-    private int dirDepto;
-    private int dirMuni;
-    private int parentescoId;
-    private String nr = "NR 0111-111111-111-0";
-    private int empleadoId = 3; // Agregado por Angela el 01/Junio/2015
+//******************************************************************************
+//*********************** OBJETOS DE LOS ENTIDADES *****************************
+//******************************************************************************
     private ExperienciaLaboral experienciaLaboral = new ExperienciaLaboral();
     private EstudiosEmp estudiosEmp = new EstudiosEmp();
     private FamiliaDependientesEmp familiaDependientesEmp = new FamiliaDependientesEmp();
@@ -91,23 +108,35 @@ public class manejadorGestionEmpleado implements Serializable {
     private Parentesco parentesco = new Parentesco();
     private Dependencias dependencias = new Dependencias();
     private DirNacional dirNacional = new DirNacional();
-    private int depto, deptonac;
-    private int muni;
-    private String fechaNacFamiliaDependiente;
-    private int edadFamiliaDependiente;
-    private String fechaNacEmpleado;
-    private int edadEmpleado;
-    private int dirNacionalFiltrarJefe, dependeciasFiltrarJefe;
+    private ProfOficios profOficos = new ProfOficios();
+    private Idiomas idiomas = new Idiomas();
+    private CaracteristicasIdioma caracteristicasIdioma = new CaracteristicasIdioma();
+    private Nivel nivel = new Nivel();
+    private IdiomasCaracteristicas idiomasCaracteristicas = new IdiomasCaracteristicas();
+    private IdiomasCaracteristicasPK idiomasCaracteristicasPK = new IdiomasCaracteristicasPK();
 
-    public int getDeptonac() {
-        return deptonac;
-    }
-
-    //****** GET DE ENTERPRICE JAVA BEAN *********
-    public void setDeptonac(int deptonac) {
-        this.deptonac = deptonac;
-    }
-
+//******************************************************************************
+//****** VARIABLES QUE CONTRENDRAN ID´S O STRING DE FORMULARIOS ****************
+//******************************************************************************
+    private String nr = "NR 0111-111111-111-2";     // nr para pruebas de guardar
+    private String fechaNacFamiliaDependiente;      // fecha naciemeinto familiares
+    private String fechaNacEmpleado;                // fehca nacimiento empleado
+    private int dirDepto;                           // id departamento residencia
+    private int dirMuni;                            // id municipio residencia
+    private int parentescoId;                       // id Parentesco    
+    private int empleadoId = 3;                     // id empleado Ahora prueba empleado id=3
+    private int depto, deptonac;                    // id´s departamento municipio Nacimiento
+    private int muni;                               // id municipio Nacimiento    
+    private int edadFamiliaDependiente;             // edad familiares calculada a partir de fecha    
+    private int edadEmpleado;                       // edad de empleado calculada a partir de fecha
+    private int dirNacionalFiltrarJefe;             // id´s direccion nacional
+    private int dependeciasFiltrarJefe;             // id´s dependencias
+    private int anio;                               // Año de Estudios
+    private int idIdioma;                           // Id Idioma
+    private int idCaracteristicaIdioma;             // Id Caracteristica de idioma
+// *****************************************************************************
+//********************** GET DE ENTERPRICE JAVA BEAN ***************************
+//******************************************************************************
     public ExperienciaLaboralFacade getExperienciaLaboralFacade() {
         return experienciaLaboralFacade;
     }
@@ -172,7 +201,33 @@ public class manejadorGestionEmpleado implements Serializable {
         return dirNacionalFacade;
     }
 
-    //********** GET y SET DE OBJETOS DE ENTIDADES ****
+    public ProfOficiosFacade getProfOficiosFacade() {
+        return profOficiosFacade;
+    }
+
+    public IdiomasFacade getIdiomasFacade() {
+        return idiomasFacade;
+    }
+
+    public CaracteristicasIdiomaFacade getCaracteristicasIdiomaFacade() {
+        return caracteristicasIdiomaFacade;
+    }
+
+    public NivelFacade getNivelFacade() {
+        return nivelFacade;
+    }
+
+    public IdiomasCaracteristicasFacade getIdiomasCaracteristicasFacade() {
+        return idiomasCaracteristicasFacade;
+    }
+
+    public AnioFacade getAnioFacade() {
+        return anioFacade;
+    }
+
+// *****************************************************************************
+//******************* GET y SET DE OBJETOS DE ENTIDADES ************************
+//******************************************************************************
     public ExperienciaLaboral getExperienciaLaboral() {
         return experienciaLaboral;
     }
@@ -277,6 +332,14 @@ public class manejadorGestionEmpleado implements Serializable {
         this.administradoraPensiones = administradoraPensiones;
     }
 
+    public ProfOficios getProfOficos() {
+        return profOficos;
+    }
+
+    public void setProfOficos(ProfOficios profOficos) {
+        this.profOficos = profOficos;
+    }
+
     public int getDirDepto() {
         return dirDepto;
     }
@@ -333,15 +396,21 @@ public class manejadorGestionEmpleado implements Serializable {
         this.nr = nr;
     }
 
-    /////agregado por Angela el 01/Junio/2015/////////////
-    public int getempleadoId() {
+    public void setDeptonac(int deptonac) {
+        this.deptonac = deptonac;
+    }
+
+    public int getDeptonac() {
+        return deptonac;
+    }
+
+    public int getEmpleadoId() {
         return empleadoId;
     }
 
-    public void setempleadoId(int empleadoId) {
+    public void setEmpleadoId(int empleadoId) {
         this.empleadoId = empleadoId;
     }
-////////////////////////////////////////////////////////
 
     public int getDepto() {
         return depto;
@@ -363,8 +432,8 @@ public class manejadorGestionEmpleado implements Serializable {
         return fechaNacFamiliaDependiente;
     }
 
-    public void setFechaNacFamiliaDependiente(String fechaNacFamiliaDependiente) {       
-        this.fechaNacFamiliaDependiente = fechaNacFamiliaDependiente;        
+    public void setFechaNacFamiliaDependiente(String fechaNacFamiliaDependiente) {
+        this.fechaNacFamiliaDependiente = fechaNacFamiliaDependiente;
         this.setEdadFamiliaDependiente(edad(fechaNacFamiliaDependiente));
     }
 
@@ -408,10 +477,76 @@ public class manejadorGestionEmpleado implements Serializable {
     public void setDependeciasFiltrarJefe(int dependeciasFiltrarJefe) {
         this.dependeciasFiltrarJefe = dependeciasFiltrarJefe;
     }
+
+    public Idiomas getIdiomas() {
+        return idiomas;
+    }
+
+    public void setIdiomas(Idiomas idiomas) {
+        this.idiomas = idiomas;
+    }
+
+    public CaracteristicasIdioma getCaracteristicasIdioma() {
+        return caracteristicasIdioma;
+    }
+
+    public void setCaracteristicasIdioma(CaracteristicasIdioma caracteristicasIdioma) {
+        this.caracteristicasIdioma = caracteristicasIdioma;
+    }
+
+    public Nivel getNivel() {
+        return nivel;
+    }
+
+    public void setNivel(Nivel nivel) {
+        this.nivel = nivel;
+    }
+
+    public IdiomasCaracteristicas getIdiomasCaracteristicas() {
+        return idiomasCaracteristicas;
+    }
+
+    public void setIdiomasCaracteristicas(IdiomasCaracteristicas idiomasCaracteristicas) {
+        this.idiomasCaracteristicas = idiomasCaracteristicas;
+    }
+
+    public IdiomasCaracteristicasPK getIdiomasCaracteristicasPK() {
+        return idiomasCaracteristicasPK;
+    }
+
+    public void setIdiomasCaracteristicasPK(IdiomasCaracteristicasPK idiomasCaracteristicasPK) {
+        this.idiomasCaracteristicasPK = idiomasCaracteristicasPK;
+    }
+
+    public int getAnio() {
+        return anio;
+    }
+
+    public void setAnio(int anio) {
+        this.anio = anio;
+    }
+
+    public int getIdIdioma() {
+        return idIdioma;
+    }
+
+    public void setIdIdioma(int idIdioma) {
+        this.idIdioma = idIdioma;
+    }
+
+    public int getIdCaracteristicaIdioma() {
+        return idCaracteristicaIdioma;
+    }
+
+    public void setIdCaracteristicaIdioma(int idCaracteristicaIdioma) {
+        this.idCaracteristicaIdioma = idCaracteristicaIdioma;
+    }
     
     
 
-    // ********* LLENADO DE SELECIONABLES *****
+//******************************************************************************
+// **************** LISTA DE ELEMENTOS EN TABLAS *******************************
+//******************************************************************************
     public List<Estados> todosEstados() {
         return getEstadosFacade().findAll();
     }
@@ -452,8 +587,6 @@ public class manejadorGestionEmpleado implements Serializable {
         return getDirNacionalFacade().findAll();
     }
 
-    
-
     public List<ContactoEmergenciaEmp> todosContactoEmergenciaEmp() {
         return getContactoEmergenciaEmpFacade().findAll();
     }
@@ -469,57 +602,162 @@ public class manejadorGestionEmpleado implements Serializable {
     public List<Municipios> municipiosFiltradosNac() {
         return getMunicipiosFacade().buscarDep(dirDepto);
     }
-    
+
     public List<Dependencias> dependenciasFiltradas() {
-        System.out.println(dirNacionalFiltrarJefe);
         return getDependenciasFacade().buscarDependencias(dirNacionalFiltrarJefe);
     }
-    
+
     public List<Empleados> empleadoJefeDependencia() {
-        System.out.println(dependeciasFiltrarJefe);
         return getEmpleadosFacade().buscarEmp(dependeciasFiltrarJefe);
     }
-   
 
-    //********* FUNCIONES DE GUARDAR ****** 
-    public int edad(String fecha_nac) {     //fecha_nac debe tener el formato dd/MM/yyyy
-
-    Date fechaNac = new Date(fecha_nac);
-    Date fechaActual = new Date();
-    SimpleDateFormat formato = new SimpleDateFormat("MM/dd/yyyy");
-    String hoy = formato.format(fechaActual);
-    String nacimiento = formato.format(fechaNac);
-    //String fechaNac = formato.format(fecha_nac);
-    String[] dat1 = nacimiento.split("/");
-    String[] dat2 = hoy.split("/");
-    int anios = Integer.parseInt(dat2[2]) - Integer.parseInt(dat1[2]);
-    int mes = Integer.parseInt(dat2[1]) - Integer.parseInt(dat1[1]);
-    if (mes < 0) {
-      anios = anios - 1;
-    } else if (mes == 0) {
-      int dia = Integer.parseInt(dat2[0]) - Integer.parseInt(dat1[0]);
-      if (dia > 0) {
-        anios = anios - 1;
-      }
+    public List<Empleados> empleadoId() {
+        return getEmpleadosFacade().buscarEmpId(empleadoId);
     }
-    return anios;
-  }
 
+    public List<EstudiosEmp> estudiosEmpId(int idEstudio) {
+        return getEstudiosEmpFacade().buscarEstudioEmpId(idEstudio);
+    }
+
+    public List<ExperienciaLaboral> experienciaLaboralPublico() {
+        return getExperienciaLaboralFacade().experienciaLaboralSector("Público");
+    }
+
+    public List<ExperienciaLaboral> experienciaLaboralPrivado() {
+        return getExperienciaLaboralFacade().experienciaLaboralSector("Privado");
+    }
+
+    public List<ProfOficios> todasProfOficios() {
+        return getProfOficiosFacade().findAll();
+    }
+    
+    public List<Idiomas> todosIdiomas(){
+        return getIdiomasFacade().findAll();
+    }
+    
+    public List<Nivel> todosNiveles(){
+        return getNivelFacade().findAll();
+    }
+    
+    public List<CaracteristicasIdioma> todasCaracIdiomas(){
+        return getCaracteristicasIdiomaFacade().findAll();
+    }
+
+    public List<Anio> todosAnios() {
+        return getAnioFacade().findAll();
+    }
+
+//******************************************************************************
+//*************************** FUNCIONES DE GUARDAR *****************************
+//******************************************************************************
+    
     public void guardarContactosEmergencia() {
-
         contactoEmergenciaEmp.setIdEmpleado(new Empleados(empleadoId));
         getContactoEmergenciaEmpFacade().create(contactoEmergenciaEmp);
         contactoEmergenciaEmp = new ContactoEmergenciaEmp();
-
     }
 
-    public void guardarFamiliaDependiente() {        
+    public void guardarFamiliaDependiente() {
         familiaDependientesEmp.setIdEmpleado(new Empleados(empleadoId));
         familiaDependientesEmp.setEdadFamilia(this.getEdadFamiliaDependiente());
         familiaDependientesEmp.setFechaNacFamilia(new Date(this.getFechaNacFamiliaDependiente()));
-        
         getFamiliaDependientesEmpFacade().create(familiaDependientesEmp);
         familiaDependientesEmp = new FamiliaDependientesEmp();
     }
 
+    public void guardarExpLaboralPublico() {
+        experienciaLaboral.setIdEmpleado(new Empleados(empleadoId));
+        experienciaLaboral.setSectorExpLab("Público");
+        getExperienciaLaboralFacade().create(experienciaLaboral);
+        experienciaLaboral = new ExperienciaLaboral();
+    }
+
+    public void guardarExpLaboralPrivado() {
+        experienciaLaboral.setIdEmpleado(new Empleados(empleadoId));
+        experienciaLaboral.setSectorExpLab("Privado");
+        getExperienciaLaboralFacade().create(experienciaLaboral);
+        experienciaLaboral = new ExperienciaLaboral();
+    }
+
+    public void guardarEstudioFormal() {
+
+        // Persiste el nuevo estudio ingresado
+        estudiosEmp.setTipoEstudio("Formal");
+        estudiosEmp.setAnioEstudio(fechaAnio(anio));
+        getEstudiosEmpFacade().create(estudiosEmp);
+
+        // Obtiene Empleado al cual se agregara un nuevo estudio (empleadoId) contendra el id de Empleado
+        Empleados empEst = getEmpleadosFacade().find(empleadoId);
+
+        // Obtine Listado de Estudios ya ingresados y agrega el que se acaba de persistir
+        List<EstudiosEmp> estudiosIngresados = empEst.getEstudiosEmpList();
+        estudiosIngresados.add(estudiosEmp);
+
+        // Setea el nuevo listado de Estudios y edita la informacion
+        empEst.setEstudiosEmpList(estudiosIngresados);
+        getEmpleadosFacade().edit(empEst);
+
+        estudiosEmp = new EstudiosEmp();
+    }
+
+    public void guardarEstudioNoFormal() {
+        // Igual a Estudio Formal
+        estudiosEmp.setTipoEstudio("No Formal");
+        estudiosEmp.setAnioEstudio(fechaAnio(anio));
+        getEstudiosEmpFacade().create(estudiosEmp);
+        Empleados empEst = getEmpleadosFacade().find(empleadoId);
+        List<EstudiosEmp> estudiosIngresados = empEst.getEstudiosEmpList();
+        estudiosIngresados.add(estudiosEmp);
+        empEst.setEstudiosEmpList(estudiosIngresados);
+        getEmpleadosFacade().edit(empEst);
+        estudiosEmp = new EstudiosEmp();
+    }
+    
+    public void guardarIdioma(){
+        
+        System.out.println("HOLA MUNDO");
+        //idiomasCaracteristicas.setIdiomas(new Idiomas(idIdioma));
+        //idiomasCaracteristicas.setCaracteristicasIdioma(new CaracteristicasIdioma(idCaracteristicaIdioma));
+        System.out.println(idiomasCaracteristicas.getIdiomas());
+        //System.out.println(idiomasCaracteristicas.getCaracteristicasIdioma());
+        System.out.println(idiomasCaracteristicas.getIdNivel());
+        //idiomasCaracteristicas = new IdiomasCaracteristicas();
+    }
+
+// *****************************************************************************
+// ************ FUNCIONES EXTRA QUE SE UTLIZAN LOS FORMULARIOS *****************
+//******************************************************************************
+    
+    //Devuelve edad apartir de fecha de nacimeinto
+    public int edad(String fecha_nac) {
+
+        Date fechaNac = new Date(fecha_nac);
+        Date fechaActual = new Date();
+        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+        String hoy = formato.format(fechaActual);
+        String nacimiento = formato.format(fechaNac);
+        //String fechaNac = formato.format(fecha_nac);
+        String[] dat1 = nacimiento.split("/");
+        String[] dat2 = hoy.split("/");
+        int anios = Integer.parseInt(dat2[2]) - Integer.parseInt(dat1[2]);
+        int mes = Integer.parseInt(dat2[1]) - Integer.parseInt(dat1[1]);
+        if (mes < 0) {
+            anios = anios - 1;
+        } else if (mes == 0) {
+            int dia = Integer.parseInt(dat2[0]) - Integer.parseInt(dat1[0]);
+            if (dia > 0) {
+                anios = anios - 1;
+            }
+        }
+        return anios;
+    }
+
+    // Devuelve una fecha a partir de un año dado (Estudios Empleados)    
+    public Date fechaAnio(int anio) {
+        anio = anio - 1900;
+        Date fecha = new Date(anio, 11, 31);
+        return fecha;
+    }
+//******************************************************************************
+// *****************************************************************************    
 }

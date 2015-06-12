@@ -5,6 +5,7 @@
  */
 package sv.gob.cultura.rrhh.facades;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,4 +29,7 @@ public class EstudiosEmpFacade extends AbstractFacade<EstudiosEmp> {
         super(EstudiosEmp.class);
     }
     
+     public List<EstudiosEmp> buscarEstudioEmpId(int idEstudioEmp){
+        return getEntityManager().createNamedQuery("EstudiosEmp.findByIdEstudio").setParameter("idEstudio", idEstudioEmp).getResultList();
+    }
 }

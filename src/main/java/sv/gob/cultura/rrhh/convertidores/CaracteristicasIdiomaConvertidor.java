@@ -13,25 +13,25 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
-import sv.gob.cultura.rrhh.entidades.Paises;
-import sv.gob.cultura.rrhh.facades.PaisesFacade;
+import sv.gob.cultura.rrhh.entidades.CaracteristicasIdioma;
+import sv.gob.cultura.rrhh.facades.CaracteristicasIdiomaFacade;
 
 /**
  *
  * @author SOPORTE CULTURA
  */
-@Named(value = "paisConvertidor")
+@Named(value = "caracteristicasIdiomaConvertidor")
 @Dependent
-public class PaisConvertidor implements Converter {
+public class CaracteristicasIdiomaConvertidor implements Converter{
     
     @EJB
-    private PaisesFacade paisesFacade;
+    private CaracteristicasIdiomaFacade caracteristicasIdiomaFacade;
 
-    public PaisesFacade getPaisesFacade() {
-        return paisesFacade;
-    }   
+    public CaracteristicasIdiomaFacade getCaracteristicasIdiomaFacade() {
+        return caracteristicasIdiomaFacade;
+    }
     
-    public PaisConvertidor() {
+    public CaracteristicasIdiomaConvertidor() {
     }
 
     @Override
@@ -41,20 +41,20 @@ public class PaisConvertidor implements Converter {
         } else {
             try {
                 int id = Integer.parseInt(value);
-                Paises paises = getPaisesFacade().find(id);
-                return paises;
+                CaracteristicasIdioma caracteristicasIdioma = getCaracteristicasIdiomaFacade().find(id);
+                return caracteristicasIdioma;
             } catch (Exception e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de conversión", "No es un País válido"));
+                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de conversión", "No es un Característica de Idioma válido"));
             }
         }
     }
 
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
-        if (!(value instanceof Paises)) {
+        if (!(value instanceof CaracteristicasIdioma)) {
             return null;
         }
-        return String.valueOf(((Paises) value).getIdPais());
+        return String.valueOf(((CaracteristicasIdioma) value).getIdCaractIdioma());
     }
     
 }

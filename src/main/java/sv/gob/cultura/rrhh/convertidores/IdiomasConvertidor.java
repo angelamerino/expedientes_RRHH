@@ -13,25 +13,25 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
-import sv.gob.cultura.rrhh.entidades.Paises;
-import sv.gob.cultura.rrhh.facades.PaisesFacade;
+import sv.gob.cultura.rrhh.entidades.Idiomas;
+import sv.gob.cultura.rrhh.facades.IdiomasFacade;
 
 /**
  *
  * @author SOPORTE CULTURA
  */
-@Named(value = "paisConvertidor")
+@Named(value = "idiomasConvertidor")
 @Dependent
-public class PaisConvertidor implements Converter {
+public class IdiomasConvertidor implements Converter{
     
     @EJB
-    private PaisesFacade paisesFacade;
+    private IdiomasFacade idiomasFacade;
 
-    public PaisesFacade getPaisesFacade() {
-        return paisesFacade;
-    }   
+    public IdiomasFacade getIdiomasFacade() {
+        return idiomasFacade;
+    }
     
-    public PaisConvertidor() {
+    public IdiomasConvertidor() {
     }
 
     @Override
@@ -41,20 +41,20 @@ public class PaisConvertidor implements Converter {
         } else {
             try {
                 int id = Integer.parseInt(value);
-                Paises paises = getPaisesFacade().find(id);
-                return paises;
+                Idiomas idioma = getIdiomasFacade().find(id);
+                return idioma;
             } catch (Exception e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de conversión", "No es un País válido"));
+                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de conversión", "No es un Idioma válido"));
             }
         }
     }
 
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
-        if (!(value instanceof Paises)) {
+        if (!(value instanceof Idiomas)) {
             return null;
         }
-        return String.valueOf(((Paises) value).getIdPais());
+        return String.valueOf(((Idiomas) value).getIdIdioma());
     }
     
 }

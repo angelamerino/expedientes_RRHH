@@ -90,10 +90,9 @@
                                     <p:row>
                                         <p:column><h:outputLabel value="Fecha de Nacimiento:" for="fechaNac" /></p:column>
                                         <p:column>
-                                            <h:inputText id="fechaNac" value="#{manejadorGestionEmpleado.fechaNacEmpleado}" title="FechaNac" >
-                                                <f:convertDateTime pattern="MM/dd/yyyy" />
-                                                <p:ajax update="edadEmp"/>
-                                            </h:inputText>
+                                            <p:calendar id="fechaNac" value="#{manejadorGestionEmpleado.fechaNacEmpleado}" title="FechaNac" showOn="button" locale="es" navigator="true" pattern="dd/MM/yyyy" yearRange="c-100:c+10">
+                                                <p:ajax event="dateSelect" update="edadEmp"/>
+                                            </p:calendar>
                                         </p:column>
                                         <p:column><h:outputLabel value="Edad:" for="edadEmp" /></p:column>
                                         <p:column>
@@ -405,10 +404,11 @@
                                     </p:row>
                                     <p:row>
                                         <p:column><h:outputLabel value="Fecha de Nacimiento:" for="fechaNacFamilia" /></p:column>
-                                        <p:column><h:inputText id="fechaNacFamilia" value="#{manejadorGestionEmpleado.fechaNacFamiliaDependiente}" title="FechaNacFamilia" >
-                                                <f:convertDateTime pattern="MM/dd/yyyy" />
-                                                <p:ajax update="edadnacimiento"/>
-                                            </h:inputText></p:column>
+                                        <p:column>
+                                            <p:calendar id="fechaNacFamilia" value="#{manejadorGestionEmpleado.fechaNacFamiliaDependiente}" title="FechaNacFamilia" showOn="button" locale="es" navigator="true" pattern="dd/MM/yyyy" yearRange="c-100:c+10">
+                                                <p:ajax event="dateSelect" update="edadnacimiento"/>
+                                            </p:calendar>
+                                        </p:column>
                                         <p:column><h:outputLabel value="Edad:" for="edadnacimiento" /></p:column>
                                         <p:column><h:outputText id="edadnacimiento" value="#{manejadorGestionEmpleado.edadFamiliaDependiente}" title="edadnacimiento" /></p:column>
                                     </p:row>
@@ -479,6 +479,175 @@
                         <div class="panel-body">
                             <!-- Contenido del panel -->
 
+                            <p:panelGrid style="width: 100%;">
+                                <p:row>
+                                    <p:column>
+                                        <h:outputText value="Formación Académica Formal"/>
+                                        <p:commandButton value="Agregar" type="button" onclick="PF('formal').show();" />
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+                            
+                            
+                            
+
+                            <p:panelGrid style="width: 100%;">
+                                <p:row>
+                                    <p:column>
+                                        <h:outputText value="Formación No Formal"/>
+                                        <p:commandButton value="Agregar" type="button" onclick="PF('noformal').show();" />
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid> 
+
+                            <p:panelGrid style="width: 100%;">
+                                <p:row>
+                                    <p:column>
+                                        <h:outputText value="Conocimiento de Idiomas"/>
+                                        <p:commandButton value="Agregar" type="button" onclick="PF('idiomas').show();" />
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid> 
+
+
+                            <!-- MODALES -->
+                            <p:dialog  header="Ingreso de Educación Formal" widgetVar="formal" modal="true" height="auto" width="auto">
+
+                                <h:form>
+                                    <h:messages showSummary="true"/>
+                                    <p:panelGrid style="width: 100%;">
+                                        <p:row>
+                                            <p:column><h:outputLabel value="Institución:" for="institucionEstudio" /></p:column>
+                                            <p:column><h:inputText id="institucionEstudio" value="#{manejadorGestionEmpleado.estudiosEmp.institucionEstudio}" title="InstitucionEstudio" required="true" requiredMessage="The InstitucionEstudio field is required."/></p:column>
+
+                                        </p:row>                                    
+                                        <p:row>
+                                            <p:column><h:outputLabel value="Profeción u Oficio:" for="idProfOficio" /></p:column>
+                                            <p:column>
+                                                <h:selectOneMenu id="idProfOficio" value="#{manejadorGestionEmpleado.estudiosEmp.idProfOficio}" title="IdProfOficio" required="true" converter="#{profOficioConvertidor}" requiredMessage="The IdProfOficio field is required.">
+                                                    <!-- TODO: update below reference to list of available items-->
+
+                                                    <f:selectItems value="#{manejadorGestionEmpleado.todasProfOficios()}" var="prof" itemLabel="#{prof.nombreProfOficio}" itemValue="#{prof}"/>                                                    
+                                                </h:selectOneMenu>
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column><h:outputLabel value="Año:" for="anioEstudio" /></p:column>
+                                            <p:column>
+
+                                                <h:selectOneMenu id="anioEstudio" value="#{manejadorGestionEmpleado.anio}" title="AnioEstudio" required="true" requiredMessage="The AnioEstudio field is required.">
+                                                    <!-- TODO: update below reference to list of available items-->
+
+                                                    <f:selectItems value="#{manejadorGestionEmpleado.todosAnios()}" var="anio" itemLabel="#{anio.anio}" itemValue="#{anio.anio}"/>                                                    
+                                                </h:selectOneMenu>
+
+
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column><h:outputLabel value="Documento que lo respalda:" for="docRespaldo" /></p:column>
+                                            <p:column><h:inputText id="docRespaldo" value="#{fixme}" title="docRespaldo"/></p:column>
+                                        </p:row>
+                                    </p:panelGrid>
+                                    <h:commandButton value="Guardar" action="#{manejadorGestionEmpleado.guardarEstudioFormal()}"/>
+                                </h:form>
+
+                            </p:dialog>
+
+                            <p:dialog  header="Ingreso de Educación No Formal" widgetVar="noformal" modal="true" height="auto" width="auto">
+
+                                <h:form>
+                                    <h:messages showSummary="true"/>
+                                    <p:panelGrid style="width: 100%;">
+                                        
+                                            <p:column><h:outputLabel value="Institución:" for="institucionEstudio" /></p:column>
+                                            <p:column><h:inputText id="institucionEstudio" value="#{manejadorGestionEmpleado.estudiosEmp.institucionEstudio}" title="InstitucionEstudio" required="true" requiredMessage="The InstitucionEstudio field is required."/></p:column>
+
+                                                                            
+                                        <p:row>
+                                            <p:column><h:outputLabel value="Profeción u Oficio:" for="idProfOficio" /></p:column>
+                                            <p:column>
+                                                <h:selectOneMenu id="idProfOficio" value="#{manejadorGestionEmpleado.estudiosEmp.idProfOficio}" title="IdProfOficio" required="true" converter="#{profOficioConvertidor}" requiredMessage="The IdProfOficio field is required.">
+                                                    <!-- TODO: update below reference to list of available items-->
+
+                                                    <f:selectItems value="#{manejadorGestionEmpleado.todasProfOficios()}" var="prof" itemLabel="#{prof.nombreProfOficio}" itemValue="#{prof}"/>                                                    
+                                                </h:selectOneMenu>
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column><h:outputLabel value="Año:" for="anioEstudio" /></p:column>
+                                            <p:column>
+
+                                                <h:selectOneMenu id="anioEstudio" value="#{manejadorGestionEmpleado.anio}" title="AnioEstudio" required="true" requiredMessage="The AnioEstudio field is required.">
+                                                    <!-- TODO: update below reference to list of available items-->
+
+                                                    <f:selectItems value="#{manejadorGestionEmpleado.todosAnios()}" var="anio" itemLabel="#{anio.anio}" itemValue="#{anio.anio}"/>                                                    
+                                                </h:selectOneMenu>
+
+
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column><h:outputLabel value="Documento que lo respalda:" for="docRespaldo" /></p:column>
+                                            <p:column><h:inputText id="docRespaldo" value="#{fixme}" title="docRespaldo"/></p:column>
+                                        </p:row>
+                                    </p:panelGrid>
+                                    <h:commandButton value="Guardar" action="#{manejadorGestionEmpleado.guardarEstudioNoFormal()}"/>
+                                </h:form>
+
+                            </p:dialog>
+
+                            <p:dialog  header="Ingreso de Conocimiento de Idiomas" widgetVar="idiomas" modal="true" height="auto" width="auto">
+
+
+
+
+
+                                <h:form>
+                                    <h:messages  showDetail="true"/>
+                                    <p:panelGrid style="width: 100%;">
+                                        <p:row>
+                                            <p:column><h:outputLabel value="Institución:" for="institucionIdioma" /></p:column>
+                                            <p:column><h:inputText id="institucionIdioma" value="#{manejadorGestionEmpleado.idiomasCaracteristicas.institucionIdioma}" title="InstitucionIdioma" /></p:column>
+                                        </p:row>
+                                        
+                                        <p:row>
+                                            <p:column><h:outputLabel value="Idioma:" for="idiomas" /></p:column>
+                                            <p:column>
+                                                <h:selectOneMenu id="idiomas" value="#{manejadorGestionEmpleado.idiomasCaracteristicas.idiomas}" title="Idiomas" required="true" converter="#{idiomasConvertidor}" requiredMessage="The Idiomas field is required.">
+                                                    <f:selectItems value="#{manejadorGestionEmpleado.todosIdiomas()}" var="idioma" itemLabel="#{idioma.nombreIdioma}" itemValue="#{idioma}"/>
+                                        </h:selectOneMenu>
+                                            </p:column>
+                                        </p:row> 
+                                        <p:row>
+                                            <p:column><h:outputLabel value="Características:" for="caracteristicasIdioma" /></p:column>
+                                            <p:column>
+                                                <h:selectOneMenu id="caracteristicasIdioma" value="#{manejadorGestionEmpleado.idiomasCaracteristicas.caracteristicasIdioma}" title="CaracteristicasIdioma" required="true" converter="#{caracteristicasIdiomaConvertidor}" requiredMessage="The CaracteristicasIdioma field is required.">
+                                            <f:selectItems value="#{manejadorGestionEmpleado.todasCaracIdiomas()}" var="caracteristica" itemLabel="#{caracteristica.caracteristicaIdioma}" itemValue="#{caracteristica}"/>
+                                        </h:selectOneMenu>
+                                            </p:column>
+                                        </p:row> 
+                                        <p:row>
+                                            <p:column><h:outputLabel value="Nivel:" for="idNivel" /></p:column>
+                                            <p:column>
+                                                <h:selectOneMenu id="idNivel" value="#{manejadorGestionEmpleado.idiomasCaracteristicas.idNivel}" converter="#{nivelIdiomaConvertidor}" title="IdNivel" >
+                                            <!-- TODO: update below reference to list of available items-->
+                                            <f:selectItems value="#{manejadorGestionEmpleado.todosNiveles()}" var="nivel" itemLabel="#{nivel.nombreNivel}" itemValue="#{nivel}"/>
+                                        </h:selectOneMenu>
+                                            </p:column>
+                                        </p:row>
+                                    </p:panelGrid>
+                                    <h:commandButton value="Guardar" action="#{manejadorGestionEmpleado.guardarIdioma()}"/>
+                                </h:form>
+
+                                
+
+
+
+                            </p:dialog>
+
+                            
+
                         </div>
                     </div>
                 </div>
@@ -495,21 +664,169 @@
                     <div id="collapseSeven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSeven">
                         <div class="panel-body">
                             <!-- Contenido del panel -->
-                
-                            <p:commandButton value="Sector público" type="button" onclick="d1.show();" /> 
-                            <p:commandButton value="Sector privado" type="button" onclick="d2.show();" />
-               
+
+                            <p:panelGrid style="width: 100%;">
+                                <p:row>
+                                    <p:column>
+                                        <h:outputText value="Experiencia Laboral en el sector Público"/>
+                                        <p:commandButton value="Agregar" type="button" onclick="PF('publico').show();" />
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>             
+
+
+                            <f:view>
+                                <h:form>
+
+                                    <p:dataTable value="#{manejadorGestionEmpleado.experienciaLaboralPublico()}" var="item" style="width: 60%; text-align: center">
+
+                                        <p:column>
+                                            <f:facet name="header">
+                                                <h:outputText value="Institució"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.institucionEmpresa}"/>
+                                        </p:column>
+                                        <p:column>
+                                            <f:facet name="header">
+                                                <h:outputText value="Cargo"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.cargoExpLab}"/>
+                                        </p:column>
+                                        <p:column>
+                                            <f:facet name="header">
+                                                <h:outputText value="Fecha Desde"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.fechaDesdeExpLab}">
+                                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column>
+                                            <f:facet name="header">
+                                                <h:outputText value="Fecha Hasta"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.fechaHastaExpLab}">
+                                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column>
+                                            <f:facet name="header">
+                                                <h:outputText value="Sector"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.sectorExpLab}"/>
+                                        </p:column>
+
+                                    </p:dataTable>
+                                </h:form>
+                            </f:view>
+
+                            <p:panelGrid style="width: 100%;">
+                                <p:row>
+                                    <p:column>
+                                        <h:outputText value="Experiencia Laboral en el sector Privado"/>
+                                        <p:commandButton value="Agregar" type="button" onclick="PF('privado').show();" />
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>  
+
+                            <f:view>
+                                <h:form>
+
+                                    <p:dataTable value="#{manejadorGestionEmpleado.experienciaLaboralPrivado()}" var="item" style="width: 60%; text-align: center">
+
+                                        <p:column>
+                                            <f:facet name="header">
+                                                <h:outputText value="Institució"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.institucionEmpresa}"/>
+                                        </p:column>
+                                        <p:column>
+                                            <f:facet name="header">
+                                                <h:outputText value="Cargo"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.cargoExpLab}"/>
+                                        </p:column>
+                                        <p:column>
+                                            <f:facet name="header">
+                                                <h:outputText value="Fecha Desde"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.fechaDesdeExpLab}">
+                                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column>
+                                            <f:facet name="header">
+                                                <h:outputText value="Fecha Hasta"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.fechaHastaExpLab}">
+                                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column>
+                                            <f:facet name="header">
+                                                <h:outputText value="Sector"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.sectorExpLab}"/>
+                                        </p:column>
+
+                                    </p:dataTable>
+                                </h:form>
+                            </f:view>
+
+
                             <!-- MODALES -->
 
-                            <p:dialog  header="Experiencia Laboral en el Sector Público" widgetVar="d1" modal="true" height="100">
+                            <p:dialog  header="Experiencia Laboral en el Sector Público" widgetVar="publico" modal="true" height="auto" width="auto">
                                 <!-- Contenido Modal -->
-                            </p:dialog> 
-                            
-                            <p:dialog header="Experiencia Laboral en el Sector Privado" widgetVar="d2" modal="true" height="100">
-                                
+
+                                <h:form>
+                                    <p:panelGrid style="width: 100%;">
+                                        <p:row>
+                                            <p:column><h:outputLabel value="Institució:" for="institucionEmpresa" /></p:column>
+                                            <p:column colspan="3"><p:inputText id="institucionEmpresa" value="#{manejadorGestionEmpleado.experienciaLaboral.institucionEmpresa}" style="width: 100%" title="InstitucionEmpresa" required="true" requiredMessage="The InstitucionEmpresa field is required."/></p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column><h:outputLabel value="Cargo:" for="cargoExpLab" /></p:column>
+                                            <p:column colspan="3"><p:inputText id="cargoExpLab" value="#{manejadorGestionEmpleado.experienciaLaboral.cargoExpLab}" style="width: 100%" title="CargoExpLab" required="true" requiredMessage="The CargoExpLab field is required."/></p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column><h:outputLabel value="Fecha Desde:" for="fechaDesdeExpLab" /></p:column>
+                                            <p:column><p:calendar id="fechaDesdeExpLab" value="#{manejadorGestionEmpleado.experienciaLaboral.fechaDesdeExpLab}"   showOn="button" title="FechaDesdeExpLab" required="true" requiredMessage="The FechaDesdeExpLab field is required." locale="es" navigator="true" pattern="dd/MM/yyyy" yearRange="c-100:c+10"/></p:column>
+                                            <p:column><h:outputLabel value="Fecha Hasta:" for="fechaHastaExpLab" /></p:column>
+                                            <p:column><p:calendar id="fechaHastaExpLab" value="#{manejadorGestionEmpleado.experienciaLaboral.fechaHastaExpLab}"  showOn="button" title="FechaHastaExpLab" required="true" requiredMessage="The FechaHastaExpLab field is required." locale="es" navigator="true" pattern="dd/MM/yyyy" yearRange="c-100:c+10"/></p:column>
+                                        </p:row>
+                                    </p:panelGrid>
+                                    <h:commandButton value="Guardar" action="#{manejadorGestionEmpleado.guardarExpLaboralPublico()}"/>
+                                </h:form>
+
                             </p:dialog> 
 
-    
+                            <p:dialog header="Experiencia Laboral en el Sector Privado" widgetVar="privado" modal="true" height="auto" width="auto">
+                                <!-- Contenido Modal -->
+                                <h:form>
+                                    <p:panelGrid style="width: 100%;">
+                                        <p:row>
+                                            <p:column><h:outputLabel value="Empresa:" for="institucionEmpresa" /></p:column>
+                                            <p:column colspan="3"><p:inputText id="institucionEmpresa" value="#{manejadorGestionEmpleado.experienciaLaboral.institucionEmpresa}" style="width: 100%" title="InstitucionEmpresa" required="true" requiredMessage="The InstitucionEmpresa field is required."/></p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column><h:outputLabel value="Cargo:" for="cargoExpLab" /></p:column>
+                                            <p:column colspan="3"><p:inputText id="cargoExpLab" value="#{manejadorGestionEmpleado.experienciaLaboral.cargoExpLab}" style="width: 100%" title="CargoExpLab" required="true" requiredMessage="The CargoExpLab field is required."/></p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column><h:outputLabel value="Fecha Desde:" for="fechaDesdeExpLab" /></p:column>
+                                            <p:column><p:calendar id="fechaDesdeExpLab" value="#{manejadorGestionEmpleado.experienciaLaboral.fechaDesdeExpLab}" showOn="button" title="FechaDesdeExpLab" required="true" requiredMessage="The FechaDesdeExpLab field is required." locale="es" navigator="true" pattern="dd/MM/yyyy" yearRange="c-100:c+10"/></p:column>
+                                            <p:column><h:outputLabel value="Fecha Hasta:" for="fechaHastaExpLab" /></p:column>
+                                            <p:column><p:calendar id="fechaHastaExpLab" value="#{manejadorGestionEmpleado.experienciaLaboral.fechaHastaExpLab}" showOn="button" title="FechaHastaExpLab" required="true" requiredMessage="The FechaHastaExpLab field is required." locale="es" navigator="true" pattern="dd/MM/yyyy" yearRange="c-100:c+10"/></p:column>
+                                        </p:row>
+                                    </p:panelGrid>
+                                    <h:commandButton value="Guardar" action="#{manejadorGestionEmpleado.guardarExpLaboralPrivado()}"/>
+
+
+                                </h:form>
+
+                            </p:dialog> 
+
+
                         </div>
                     </div>
                 </div>
