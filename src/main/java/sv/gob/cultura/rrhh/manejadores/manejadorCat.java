@@ -45,9 +45,10 @@ import sv.gob.cultura.rrhh.facades.TipoMovFacade;
 import sv.gob.cultura.rrhh.facades.TipoPrestacionFacade;
 import sv.gob.cultura.rrhh.facades.TipoSangreFacade;
 /*agregados por mi*/
-import javax.faces.context.FacesContext;
-import org.primefaces.event.SelectEvent;
-import javax.faces.application.FacesMessage;
+//import javax.faces.context.FacesContext;
+//import org.primefaces.event.SelectEvent;
+//import javax.faces.application.FacesMessage;
+//import org.primefaces.event.RowEditEvent;
 
 /**
  *
@@ -98,9 +99,10 @@ public class manejadorCat implements Serializable {
     private int opcion;
     private String nuevo_item;
     
+    /* Declaro la variable pensionSeleccionada para seleccionar el id del registro seleccionado*/
     private AdministradoraPensiones pensionSeleccionada = new AdministradoraPensiones();
 
-/* Getter y Setter */
+/* Getter y Setter la variable pensionSeleccionada*/
 
     public AdministradoraPensiones getPensionSeleccionada() {
         return pensionSeleccionada;
@@ -110,7 +112,29 @@ public class manejadorCat implements Serializable {
         this.pensionSeleccionada = pensionSeleccionada;
     }
 
-    
+    /* Declaro la variable txtnombre y administradoraPensionesmod con sus setter y getter para actualizar registros y variable idseleccionado el 09/jun/2015*/
+    private String txtnombre;
+
+    public String getTxtnombre() {
+        return txtnombre;
+    }
+
+    public void setTxtnombre(String txtnombre) {
+        this.txtnombre = txtnombre;
+    }
+
+    private AdministradoraPensiones administradoraPensionesmod;
+
+    public AdministradoraPensiones getAdministradoraPensionesmod() {
+        return administradoraPensionesmod;
+    }
+
+    public void setAdministradoraPensionesmod(AdministradoraPensiones administradoraPensionesmod) {
+        this.administradoraPensionesmod = administradoraPensionesmod;
+    }
+
+    private int idseleccionado;
+    /****************************************/
     
        /**
      * Creates a new instance of manejadorCat-- 2. Inserto "getter" de los
@@ -244,9 +268,9 @@ public class manejadorCat implements Serializable {
     }
 
     public List<Parentesco> getParentesco() {
+
         return getParentescoFacade().findAll();
     }
-
     public List<ProfOficios> getProfOficioses() {
         return getProfOficiosFacade().findAll();
     }
@@ -359,10 +383,32 @@ public class manejadorCat implements Serializable {
         }
     }
 
-    public void onRowSelect(SelectEvent event) {
-        FacesMessage msg = new FacesMessage("Registro Seleccionado", ((AdministradoraPensiones) event.getObject()).getNombreAdminPension());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
+//    public void onRowSelect(SelectEvent event) {
+//        FacesMessage msg = new FacesMessage("Registro Seleccionado", ((AdministradoraPensiones) event.getObject()).getNombreAdminPension());
+//        FacesContext.getCurrentInstance().addMessage(null, msg);
+//    }
+//    
+//    public void onRowEdit(RowEditEvent event) {
+//        FacesMessage msg = new FacesMessage("Registro Editado", ((AdministradoraPensiones) event.getObject()).getNombreAdminPension());
+//        FacesContext.getCurrentInstance().addMessage(null, msg);
+//    }
  
+    /*PARA ELIMINAR REGISTROS*/
     
+public void eliminarAdminPensiones(){
+    this.administradoraPensionesFacade.remove(pensionSeleccionada);
+   }
+
+
+/*PARA ACTUALIZAR REGISTROS ----- no funciona*/
+public void modificarAdminPensiones(){
+   administradoraPensionesmod.setNombreAdminPension(this.txtnombre);
+ try{
+     this.getAdministradoraPensiones().set(idseleccionado, administradoraPensionesmod);
+ }catch(Exception e){
+      System.out.println(e);
+    }
+}
+
+
 }

@@ -33,7 +33,7 @@
 
 
         <h:form id="form" class="form-horizontal" role="form" prependId="false">
-<p:growl id="msgs" showDetail="true" />
+            <p:growl id="msgs" showDetail="true" />
             <div class="page-header">
                 <h1>Gestionar registros de catálogos</h1>
             </div>
@@ -74,10 +74,7 @@
                     <div class="panel-body">
                         <div class="table-responsive">                            
                             <p:dataTable id="cat-pensiones" value="#{manejadorCat.administradoraPensiones}" var="admin_pensiones" rendered="#{manejadorCat.opcion eq 1}" paginator="true" rows="5">
-                                <!-- rowKey="{admin_pensiones.idAdminPension}" selectionMode="single" selection="{manejadorCat.pensionSeleccionada}">-->
-                                <!--<p:ajax event="rowSelect" oncomplete="PF('editwidgetVar').show();" update=":form:growl,:form:displayEdit" />-->
-
-                                <p:column width="10%">
+                              <p:column width="10%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Id"/>
                                     </f:facet>
@@ -88,7 +85,9 @@
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Nombre Administradora de Pensiones"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{admin_pensiones.nombreAdminPension}"/>
+                                   <h:outputText style="font-size: 12px;" value="#{admin_pensiones.nombreAdminPension}"/>
+                                               
+
                                 </p:column>
 
                                 <p:column width="15%">
@@ -96,26 +95,28 @@
                                         <h:outputText style="font-size: 12px;" value="Editar"/>
                                     </f:facet>
 
-                                    <!-- Button trigger modal -->
-                                    <button type="button" class="btn btn-primary btn-xs"  data-toggle="modal" data-target="#myModal" >
-                                        <span class="glyphicon glyphicon-pencil"></span>
-                                    </button>
-       <p:commandButton update=":form:pensionDetalle" oncomplete="PF('pensionDialog').show()" icon="ui-icon-pencil" title="Ver">
-           <f:setPropertyActionListener value="#{admin_pensiones}" target="#{manejadorCat.pensionSeleccionada}"/>
-        </p:commandButton>
-                                    <!--                                   <h:commandLink class="btn btn-link" pt:data-toggle="modal" pt:data-target="#myModal" >
-                                                                            <span class="glyphicon glyphicon-pencil"></span> 
-                                                                            <f:setPropertyActionListener value="{admin_pensiones}" target="{manejadorCat.pensionSeleccionada}" />
-                                                                            <p:ajax process="@this" update=":form1:modiPension:mostrarPension"/>
-                                                                        </h:commandLink>-->
-
+                                    <!-- Button trigger modal para mostrar el modal de prueba que está al inicio-->
+                                    <!--<button type="button" class="btn btn-primary btn-xs"  data-toggle="modal" data-target="#myModal" >
+                                         <span class="glyphicon glyphicon-pencil"></span>
+                                        </button>-->
+                                    <p:commandButton process="@this" update=":form:pensionDetalle" oncomplete="PF('pensionDialog').show()" icon="ui-icon-pencil" title="Ver">
+                                        <f:setPropertyActionListener value="#{admin_pensiones}" target="#{manejadorCat.pensionSeleccionada}"/>
+                                    </p:commandButton>
+                                    
+    
                                 </p:column>
 
                                 <p:column width="15%">
                                     <f:facet name="header">
                                         <h:outputText style="font-size: 12px;" value="Eliminar"/>
                                     </f:facet>
-                                    <p:button icon="ui-icon-closethick " title="Icon Only"></p:button>
+<!--    ASÍ CON P:COMMANDBUTTON NO ELIMINA
+<p:commandButton process="cat-pensiones" update="cat-pensiones" action="{manejadorCat.eliminarAdminPensiones()}" icon="ui-icon-closethick" title="Eliminar" >
+</p:commandButton> -->
+                                   <h:commandButton action="#{manejadorCat.eliminarAdminPensiones()}" value="X" title="Eliminar">
+                                        <p:ajax process="cat-pensiones" update="cat-pensiones"/>
+                                    </h:commandButton>
+                                    
                                 </p:column>
 
                                 <f:facet name="footer">
@@ -130,42 +131,6 @@
                                 </f:facet>
                             </p:dataTable>
 
-                            <!-- Inicia el dialogo para editar -->
-                            <!--<p:dialog id="editDialog"  header="{app['dialog.edit']}"  widgetVar="editwidgetVar">
-                            
-                                <h:panelGrid id="displayEdit" columns="2" title="{application['dialog.edit']}">
-                                             <f:view>
-                                                    <h:panelGrid columns="2">
-                                                         <h:outputLabel value="IdAdminPension:" for="idAdminPension" />
-                                                         <h:inputText id="idAdminPension" value="{manejadorCat.pensionSeleccionada.idAdminPension}" title="IdAdminPension" required="true" requiredMessage="The IdAdminPension field is required."/>
-                                                         <h:outputLabel value="NombreAdminPension:" for="nombreAdminPension" />
-                                                         <h:inputText id="nombreAdminPension" value="{manejadorCat.pensionSeleccionada.nombreAdminPension}" title="NombreAdminPension" required="true" requiredMessage="The NombreAdminPension field is required."/>
-                                                     
-                                                <f:facet name="footer">
-                                                                    <p:commandButton id="editButton" value="{app['boton.update']}"
-                                                                                     update=":form:growl,:form:cat-pensiones,:form:displayEdit"
-                                                                                     actionListener="{estatusDataController.edit()}"
-                                                                                     oncomplete="PF('editwidgetVar').hide()"/>
-                                                                    <p:commandButton id="deleteButton" value="{app['boton.delete']}" title="{app['boton.delete']}"  onclick="PF('confirmationwidgetVar').show();" type="button" icon="ui-icon-trash" />
-                                                                    <p:commandButton id="declineButton" value="{app['boton.cerrar']}" onclick="PF('editwidgetVar').hide();" type="button" /> 
-                                                                </f:facet>
-                                                    </h:panelGrid>
-                                             </f:view>
-                                         </h:panelGrid>
-                                                 </p:dialog>
-                                                    <p:dialog id="confirmDialog" modal="false"  header="{app['boton.delete']}"
-                                                              widgetVar="confirmationwidgetVar">
-                                                        <p:commandButton id="removeButton" value="{app['boton.yes']}"
-                                                                         update=":form:displayEdit, :form:growl, :form:pensiones"
-                                                                         oncomplete="PF('confirmationwidgetVar').hide();,
-                                                                         PF('editwidgetVar').hide();"
-                                                                         actionListener="{estatusDataController.delete()}" />
-                                                        <p:commandButton id="cancelButton" value="{app['boton.no']}"
-                                                                         onclick="PF('confirmationwidgetVar').hide()" type="button" />
-                                                    </p:dialog>
-                                                    <p:growl id="growl"/>
-                                                    <p:messages autoUpdate="true"/>-->
-                            <!-- Finaliza el dialogo para editar -->
 
                             <p:dataTable id="cat-caractidiomas" value="#{manejadorCat.caracteristicasIdioma}" var="carac_idioma" rendered="#{manejadorCat.opcion eq 2}" class="table" paginator="true" rows="5">
                                 <p:column width="10%">
@@ -809,10 +774,7 @@
 
                         </div>
                     </div>
-
-
-
-                    <!-- ************************ Comienza Modal ************************  -->
+                 <!-- ************************ Comienza Modal ************************  -->
                     <!--<div class="modal" id="myModal" >
                         <div class="modal-dialog">
                             <h:form id="modiPension" >
@@ -844,41 +806,36 @@
                 </div>
             </div>
 
+<!-- ************************ COMIENZAN LOS VENTANAS DE DIALOGO *************** -->
 
-<p:dialog header="Mantenimiento Administradora de Pensiones" widgetVar="pensionDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" >
-        
-    <p:outputPanel id="pensionDetalle" style="text-align:center;">
-            <p:panelGrid  columns="2" rendered="#{not empty manejadorCat.pensionSeleccionada }" columnClasses="label,value">
-                <f:facet name="header">
-                    <h4 class="modal-title">Administradora de Pensiones</h4>
-                </f:facet>
-                <h:outputText value="Id:" />
-                <h:outputText value="#{manejadorCat.pensionSeleccionada.idAdminPension}" />
-                
-                <h:outputText value="Nombre:" />
-                <h:outputText value="#{manejadorCat.pensionSeleccionada.nombreAdminPension}" />
-                
-                
-  </p:panelGrid>
-        </p:outputPanel>
-    </p:dialog>           
-            
+<!-- **** DIALOGO ADMINISTRADORA DE PENSIONES **** -->
+            <p:dialog header="Edición de Administradora de Pensiones" widgetVar="pensionDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" class="modal-open" >
+                <p:panelGrid id="pensionDetalle" columns="2" rendered="#{not empty manejadorCat.pensionSeleccionada }" class="table info">
+                    <f:facet name="header">
+                        <h4 class="modal-title">Administradora de Pensiones</h4>
+                    </f:facet>
+                    <h:outputLabel value="Id:"/>
+                    <h:outputText value="#{manejadorCat.pensionSeleccionada.idAdminPension}" id="codpension"/>
+
+                    <h:outputLabel value="Nombre:" />
+                    <p:inputText style="width: 100%" value="#{manejadorCat.pensionSeleccionada.nombreAdminPension}" id="txtnombre" class="form-control"></p:inputText>
+
+                    <f:facet class="modal-footer" name="footer">
+                        <div align="center">
+                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" action="#{manejadorCat.modificarAdminPensiones()}" value="Actualizar">
+                            <p:ajax process="pensionDetalle" update="pensionDetalle"/>
+                           </h:commandButton>
+                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('pensionDialog').hide()" />
+                            <!--<p:messages id="mensaje" />-->
+                        </div>
+                    </f:facet>
+                </p:panelGrid>
+
+            </p:dialog>           
+
         </h:form>
 
-        <!--        <h:form id="frmEditar">
-                    <p:dialog header="Información Guardada" modal="true" widgetVar="DialogoEditarPensiones">
-                        <h:panelGrid id="panelEditar" columns="2" >
-                            <h:outputLabel value="Nombre:" for="txtNombre" >   </h:outputLabel>
-                            <h:inputText id="txtNombre" label="Nombre:" size="10" value="{admin_pensiones.nombreAdminPension}">   
-                                 <p:ajax process="" />  
-                            </h:inputText>
-                             <p:message for="txtNombre" id="errores"/>
-        
-                        </h:panelGrid>                   
-        
-                    </p:dialog>
-        
-                </h:form>-->
+
     </ui:define>
 
 </ui:composition>
