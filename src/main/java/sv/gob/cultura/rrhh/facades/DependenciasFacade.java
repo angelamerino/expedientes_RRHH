@@ -33,4 +33,8 @@ public class DependenciasFacade extends AbstractFacade<Dependencias> {
         return getEntityManager().createNamedQuery("Dependencias.findByIdDirNacional").setParameter("idDirNac", dirNacional).getResultList();
     }
 
+    public void create(DependenciasFacade nueva_dep) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

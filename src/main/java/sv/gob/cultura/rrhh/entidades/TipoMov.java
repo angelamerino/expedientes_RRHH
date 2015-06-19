@@ -57,10 +57,14 @@ public class TipoMov implements Serializable {
         this.idTipoMov = idTipoMov;
         this.nombreMov = nombreMov;
     }
-
-    public TipoMov(String nuevo_item) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    public TipoMov(String nombreMov) {
+        this.nombreMov = nombreMov;
     }
+
+//    public TipoMov(String nuevo_item) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
 
     public Integer getIdTipoMov() {
         return idTipoMov;

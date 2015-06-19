@@ -59,10 +59,14 @@ public class Parentesco implements Serializable {
         this.idParentesco = idParentesco;
         this.nombreParentesco = nombreParentesco;
     }
-
-    public Parentesco(String nuevo_item) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    public Parentesco(String nombreParentesco) {
+        this.nombreParentesco = nombreParentesco;
     }
+
+//    public Parentesco(String nuevo_item) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
 
     public Integer getIdParentesco() {
         return idParentesco;

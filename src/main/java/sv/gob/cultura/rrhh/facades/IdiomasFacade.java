@@ -9,7 +9,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import sv.gob.cultura.rrhh.entidades.Idiomas;
-
+import sv.gob.cultura.rrhh.manejadores.manejadorCat;
 /**
  *
  * @author Angela

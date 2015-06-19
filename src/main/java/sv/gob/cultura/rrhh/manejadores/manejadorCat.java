@@ -99,10 +99,27 @@ public class manejadorCat implements Serializable {
     private int opcion;
     private String nuevo_item;
     
-    /* Declaro la variable pensionSeleccionada para seleccionar el id del registro seleccionado*/
+    /* Declaro la variables para seleccionar el id del registro seleccionado*/
     private AdministradoraPensiones pensionSeleccionada = new AdministradoraPensiones();
+    private CaracteristicasIdioma caractSeleccionada = new CaracteristicasIdioma();
+    private EstadoCivil estcivilSeleccionado = new EstadoCivil();
+    private Estados estadoSeleccionado = new Estados();
+    private GradoSancion gradosancionSeleccionado = new GradoSancion();
+    private Idiomas idiomaSeleccionado = new Idiomas();
+    private InstBancaria bancoSeleccionado = new InstBancaria();
+    private Nivel nivelSeleccionado = new Nivel();
+    private Paises paisSeleccionado = new Paises();
+    private Parentesco parentescoSeleccionado =  new Parentesco();
+    private ProfOficios profSeleccionado = new ProfOficios();
+    private Proveedor proveedorSeleccionado = new Proveedor();
+    private TipoDescuento tipodesSeleccionado = new TipoDescuento();
+    private TipoMejoraSalarial tipomejoraSeleccionado = new TipoMejoraSalarial();
+    private TipoMov tipomovSeleccionado = new TipoMov();
+    private TipoPrestacion tipoprestacionSeleccionada = new TipoPrestacion();
+    private TipoSangre tiposangreSeleccionado = new TipoSangre();
+    
 
-/* Getter y Setter la variable pensionSeleccionada*/
+/* Getter y Setter las variables anteriores: pensionSeleccionada, etc.*/
 
     public AdministradoraPensiones getPensionSeleccionada() {
         return pensionSeleccionada;
@@ -112,6 +129,147 @@ public class manejadorCat implements Serializable {
         this.pensionSeleccionada = pensionSeleccionada;
     }
 
+    public CaracteristicasIdioma getCaractSeleccionada() {
+        return caractSeleccionada;
+    }
+
+    public void setCaractSeleccionada(CaracteristicasIdioma caractSeleccionada) {
+        this.caractSeleccionada = caractSeleccionada;
+    }
+
+    public EstadoCivil getEstcivilSeleccionado() {
+        return estcivilSeleccionado;
+    }
+
+    public void setEstcivilSeleccionado(EstadoCivil estcivilSeleccionado) {
+        this.estcivilSeleccionado = estcivilSeleccionado;
+    }
+
+    public Estados getEstadoSeleccionado() {
+        return estadoSeleccionado;
+    }
+
+    public void setEstadoSeleccionado(Estados estadoSeleccionado) {
+        this.estadoSeleccionado = estadoSeleccionado;
+    }
+
+    public GradoSancion getGradosancionSeleccionado() {
+        return gradosancionSeleccionado;
+    }
+
+    public void setGradosancionSeleccionado(GradoSancion gradosancionSeleccionado) {
+        this.gradosancionSeleccionado = gradosancionSeleccionado;
+    }
+
+    public Idiomas getIdiomaSeleccionado() {
+        return idiomaSeleccionado;
+    }
+
+    public void setIdiomaSeleccionado(Idiomas idiomaSeleccionado) {
+        this.idiomaSeleccionado = idiomaSeleccionado;
+    }
+
+    public InstBancaria getBancoSeleccionado() {
+        return bancoSeleccionado;
+    }
+
+    public void setBancoSeleccionado(InstBancaria bancoSeleccionado) {
+        this.bancoSeleccionado = bancoSeleccionado;
+    }
+
+    public Nivel getNivelSeleccionado() {
+        return nivelSeleccionado;
+    }
+
+    public void setNivelSeleccionado(Nivel nivelSeleccionado) {
+        this.nivelSeleccionado = nivelSeleccionado;
+    }
+
+    public Paises getPaisSeleccionado() {
+        return paisSeleccionado;
+    }
+
+    public void setPaisSeleccionado(Paises paisSeleccionado) {
+        this.paisSeleccionado = paisSeleccionado;
+    }
+
+    public Parentesco getParentescoSeleccionado() {
+        return parentescoSeleccionado;
+    }
+
+    public void setParentescoSeleccionado(Parentesco parentescoSeleccionado) {
+        this.parentescoSeleccionado = parentescoSeleccionado;
+    }
+
+    public ProfOficios getProfSeleccionado() {
+        return profSeleccionado;
+    }
+
+    public void setProfSeleccionado(ProfOficios profSeleccionado) {
+        this.profSeleccionado = profSeleccionado;
+    }
+
+    public Proveedor getProveedorSeleccionado() {
+        return proveedorSeleccionado;
+    }
+
+    public void setProveedorSeleccionado(Proveedor proveedorSeleccionado) {
+        this.proveedorSeleccionado = proveedorSeleccionado;
+    }
+
+    public TipoDescuento getTipodesSeleccionado() {
+        return tipodesSeleccionado;
+    }
+
+    public void setTipodesSeleccionado(TipoDescuento tipodesSeleccionado) {
+        this.tipodesSeleccionado = tipodesSeleccionado;
+    }
+
+    public TipoMejoraSalarial getTipomejoraSeleccionado() {
+        return tipomejoraSeleccionado;
+    }
+
+    public void setTipomejoraSeleccionado(TipoMejoraSalarial tipomejoraSeleccionado) {
+        this.tipomejoraSeleccionado = tipomejoraSeleccionado;
+    }
+
+    public TipoMov getTipomovSeleccionado() {
+        return tipomovSeleccionado;
+    }
+
+    public void setTipomovSeleccionado(TipoMov tipomovSeleccionado) {
+        this.tipomovSeleccionado = tipomovSeleccionado;
+    }
+
+    public TipoPrestacion getTipoprestacionSeleccionada() {
+        return tipoprestacionSeleccionada;
+    }
+
+    public void setTipoprestacionSeleccionada(TipoPrestacion tipoprestacionSeleccionada) {
+        this.tipoprestacionSeleccionada = tipoprestacionSeleccionada;
+    }
+
+    public TipoSangre getTiposangreSeleccionado() {
+        return tiposangreSeleccionado;
+    }
+
+    public void setTiposangreSeleccionado(TipoSangre tiposangreSeleccionado) {
+        this.tiposangreSeleccionado = tiposangreSeleccionado;
+    }
+
+    
+    
+    private AdministradoraPensiones actualizarPensiones = new AdministradoraPensiones();
+
+    public AdministradoraPensiones getActualizarPensiones() {
+        return actualizarPensiones;
+    }
+
+    public void setActualizarPensiones(AdministradoraPensiones actualizarPensiones) {
+        this.actualizarPensiones = actualizarPensiones;
+    }
+            
+    
     /* Declaro la variable txtnombre y administradoraPensionesmod con sus setter y getter para actualizar registros y variable idseleccionado el 09/jun/2015*/
     private String txtnombre;
 
@@ -123,17 +281,10 @@ public class manejadorCat implements Serializable {
         this.txtnombre = txtnombre;
     }
 
-    private AdministradoraPensiones administradoraPensionesmod;
+  
 
-    public AdministradoraPensiones getAdministradoraPensionesmod() {
-        return administradoraPensionesmod;
-    }
-
-    public void setAdministradoraPensionesmod(AdministradoraPensiones administradoraPensionesmod) {
-        this.administradoraPensionesmod = administradoraPensionesmod;
-    }
-
-    private int idseleccionado;
+       
+        //private int idseleccionado;
     /****************************************/
     
        /**
@@ -383,6 +534,128 @@ public class manejadorCat implements Serializable {
         }
     }
 
+    public void actualizar(){
+        switch (opcion) {
+            case 1:
+                getAdministradoraPensionesFacade().edit(pensionSeleccionada);
+                break;
+            case 2:
+                getCaracteristicasIdiomaFacade().edit(caractSeleccionada);
+                break;
+            case 3:
+                getEstadoCivilFacade().edit(estcivilSeleccionado);
+                 break;
+            case 4:
+                getEstadosFacade().edit(estadoSeleccionado);
+                 break;
+            case 5:
+                getGradoSancionFacade().edit(gradosancionSeleccionado);
+                break;
+            case 6:
+                getIdiomasFacade().edit(idiomaSeleccionado);
+                 break;
+            case 7:
+                getInstBancariaFacade().edit(bancoSeleccionado);
+                 break;
+            case 8:
+                getNivelFacade().edit(nivelSeleccionado);
+                 break;
+            case 9:
+                getPaisesFacade().edit(paisSeleccionado);
+                 break;
+            case 10:
+                getParentescoFacade().edit(parentescoSeleccionado);
+                 break;
+            case 11:
+                getProfOficiosFacade().edit(profSeleccionado);
+                 break;
+            case 12:
+                getProveedorFacade().edit(proveedorSeleccionado);
+                 break;
+            case 13:
+                getTipoDescuentoFacade().edit(tipodesSeleccionado);
+                 break;
+            case 14:
+                getTipoMejoraSalarialFacade().edit(tipomejoraSeleccionado);
+                 break;
+            case 15:
+                getTipoMovFacade().edit(tipomovSeleccionado);
+                 break;
+            case 16:
+                getTipoPrestacionFacade().edit(tipoprestacionSeleccionada);
+                break;
+            case 17:
+                getTipoSangreFacade().edit(tiposangreSeleccionado);
+                 break;
+
+            default:
+                throw new AssertionError();
+        }
+    }
+    
+    public void eliminar(){
+        System.out.println("entrando eliminar");
+        switch (opcion) {
+            case 1:
+                System.out.println(opcion);
+                getAdministradoraPensionesFacade().remove(pensionSeleccionada);
+                break;
+            case 2:
+                System.out.println(opcion);
+                System.out.println(caractSeleccionada);
+                getCaracteristicasIdiomaFacade().remove(caractSeleccionada);
+                break;
+            case 3:
+                getEstadoCivilFacade().remove(estcivilSeleccionado);
+                 break;
+            case 4:
+                getEstadosFacade().remove(estadoSeleccionado);
+                 break;
+            case 5:
+                getGradoSancionFacade().remove(gradosancionSeleccionado);
+                break;
+            case 6:
+                getIdiomasFacade().remove(idiomaSeleccionado);
+                 break;
+            case 7:
+                getInstBancariaFacade().remove(bancoSeleccionado);
+                 break;
+            case 8:
+                getNivelFacade().remove(nivelSeleccionado);
+                 break;
+            case 9:
+                getPaisesFacade().remove(paisSeleccionado);
+                 break;
+            case 10:
+                getParentescoFacade().remove(parentescoSeleccionado);
+                 break;
+            case 11:
+                getProfOficiosFacade().remove(profSeleccionado);
+                 break;
+            case 12:
+                getProveedorFacade().remove(proveedorSeleccionado);
+                 break;
+            case 13:
+                getTipoDescuentoFacade().remove(tipodesSeleccionado);
+                 break;
+            case 14:
+                getTipoMejoraSalarialFacade().remove(tipomejoraSeleccionado);
+                 break;
+            case 15:
+                getTipoMovFacade().remove(tipomovSeleccionado);
+                 break;
+            case 16:
+                getTipoPrestacionFacade().remove(tipoprestacionSeleccionada);
+                break;
+            case 17:
+                getTipoSangreFacade().remove(tiposangreSeleccionado);
+                 break;
+
+            default:
+                throw new AssertionError();
+        }
+    }
+    
 //    public void onRowSelect(SelectEvent event) {
 //        FacesMessage msg = new FacesMessage("Registro Seleccionado", ((AdministradoraPensiones) event.getObject()).getNombreAdminPension());
 //        FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -393,22 +666,19 @@ public class manejadorCat implements Serializable {
 //        FacesContext.getCurrentInstance().addMessage(null, msg);
 //    }
  
-    /*PARA ELIMINAR REGISTROS*/
     
+    
+    /*PARA ELIMINAR REGISTROS*/    
 public void eliminarAdminPensiones(){
     this.administradoraPensionesFacade.remove(pensionSeleccionada);
    }
 
 
-/*PARA ACTUALIZAR REGISTROS ----- no funciona*/
-public void modificarAdminPensiones(){
-   administradoraPensionesmod.setNombreAdminPension(this.txtnombre);
- try{
-     this.getAdministradoraPensiones().set(idseleccionado, administradoraPensionesmod);
- }catch(Exception e){
-      System.out.println(e);
-    }
+/* ------------------  PARA ACTUALIZAR REGISTROS ----- */
+public void actualizarPension(){
+    getAdministradoraPensionesFacade().edit(pensionSeleccionada);
+}
+
 }
 
 
-}

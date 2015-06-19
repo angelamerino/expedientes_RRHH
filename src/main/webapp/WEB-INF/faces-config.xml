@@ -42,12 +42,18 @@
         </navigation-case>
         
         <navigation-case>
+            <from-outcome>reg_usuario</from-outcome>
+            <to-view-id>/contenido/reg_usuarios.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        
+        <navigation-case>
             <from-outcome>ayuda</from-outcome>
             <to-view-id>/contenido/ayuda.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
       
-        <navigation-case>
+        <navigation-case>  
             <from-outcome>salir</from-outcome>
             <to-view-id>/index.xhtml</to-view-id>
             <redirect/>

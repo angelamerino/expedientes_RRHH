@@ -57,10 +57,14 @@ public class TipoPrestacion implements Serializable {
         this.idTipoPrestacion = idTipoPrestacion;
         this.nombreTipoPrestacion = nombreTipoPrestacion;
     }
-
-    public TipoPrestacion(String nuevo_item) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    public TipoPrestacion(String nombreTipoPrestacion) {
+        this.nombreTipoPrestacion = nombreTipoPrestacion;
     }
+
+//    public TipoPrestacion(String nuevo_item) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
 
     public Integer getIdTipoPrestacion() {
         return idTipoPrestacion;

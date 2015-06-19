@@ -22,6 +22,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import sv.gob.cultura.rrhh.facades.UsuariosSistemaFacade;
 
 /**
  *
@@ -93,6 +94,10 @@ public class UsuariosSistema implements Serializable {
         this.nombreCompleto = nombreCompleto;
         this.usuario = usuario;
         this.clave = clave;
+    }
+
+    public UsuariosSistema(UsuariosSistemaFacade nuevo_user) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public Integer getIdUsuario() {

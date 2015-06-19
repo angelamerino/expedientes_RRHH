@@ -57,10 +57,14 @@ public class CaracteristicasIdioma implements Serializable {
         this.idCaractIdioma = idCaractIdioma;
         this.caracteristicaIdioma = caracteristicaIdioma;
     }
-
-    public CaracteristicasIdioma(String nuevo_item) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    public CaracteristicasIdioma(String caracteristicaIdioma){
+        this.caracteristicaIdioma = caracteristicaIdioma; 
     }
+
+//    public CaracteristicasIdioma(String nuevo_item) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
 
     public Integer getIdCaractIdioma() {
         return idCaractIdioma;

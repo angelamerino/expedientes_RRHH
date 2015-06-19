@@ -57,10 +57,14 @@ public class TipoMejoraSalarial implements Serializable {
         this.idMejoraSal = idMejoraSal;
         this.nombreMejoraSal = nombreMejoraSal;
     }
-
-    public TipoMejoraSalarial(String nuevo_item) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    public TipoMejoraSalarial(String nombreMejoraSal) {
+        this.nombreMejoraSal = nombreMejoraSal;
     }
+
+//    public TipoMejoraSalarial(String nuevo_item) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
 
     public Integer getIdMejoraSal() {
         return idMejoraSal;

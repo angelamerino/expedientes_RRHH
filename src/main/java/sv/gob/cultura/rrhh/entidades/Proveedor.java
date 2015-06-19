@@ -56,10 +56,14 @@ public class Proveedor implements Serializable {
         this.idProveedor = idProveedor;
         this.nombreProv = nombreProv;
     }
-
-    public Proveedor(String nuevo_item) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    public Proveedor(String nombreProv) {
+        this.nombreProv = nombreProv;
     }
+
+//    public Proveedor(String nuevo_item) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
 
     public Integer getIdProveedor() {
         return idProveedor;
