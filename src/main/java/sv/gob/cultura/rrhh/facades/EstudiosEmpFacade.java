@@ -32,4 +32,8 @@ public class EstudiosEmpFacade extends AbstractFacade<EstudiosEmp> {
      public List<EstudiosEmp> buscarEstudioEmpId(int idEstudioEmp){
         return getEntityManager().createNamedQuery("EstudiosEmp.findByIdEstudio").setParameter("idEstudio", idEstudioEmp).getResultList();
     }
+    
+    public List<EstudiosEmp> buscarEstudioTipo(String tipo) {
+        return getEntityManager().createNamedQuery("EstudiosEmp.findByTipoEstudio").setParameter("tipoEstudio", tipo).getResultList();
+    }
 }

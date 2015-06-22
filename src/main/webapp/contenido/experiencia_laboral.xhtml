@@ -1,0 +1,215 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../resources/plantilla/plantilla.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <ui:define name="content">
+
+        <!-- Código para acordeón todo -->
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
+            <!-- EXPERIENCIA LABORAL  -->
+            <div class="panel panel-info">
+                <div class="panel-heading" role="tab" id="headingSeven">
+                    <h4 class="panel-title">
+                        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                            <strong>Experiencia laboral</strong><!-- Nombre del Panel -->
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseSeven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSeven">
+                    <div class="panel-body">
+                        <!-- Contenido del panel -->
+                        <div class="row">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-8">  
+                                <h2 class="text-info text-center">Experiencia Laboral en el sector PÃºblico</h2>
+                                <p:commandButton value="Agregar" type="button" styleClass="pull-right" onclick="PF('publico').show();" />
+                                <div class="clearfix"></div>
+                                <br />
+                            </div>
+                            <div class="col-md-2"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-8">  
+                                <f:view>
+                                    <h:form>
+                                        <p:dataTable value="#{manejadorExperienciaLaboral.experienciaLaboralPublico()}" var="item" style="width: 100%;">
+
+                                            <p:column>
+                                                <f:facet name="header">
+                                                    <h:outputText value="InstituciÃ³n"/>
+                                                </f:facet>
+                                                <h:outputText value="#{item.institucionEmpresa}"/>
+                                            </p:column>
+                                            <p:column>
+                                                <f:facet name="header">
+                                                    <h:outputText value="Cargo"/>
+                                                </f:facet>
+                                                <h:outputText value="#{item.cargoExpLab}"/>
+                                            </p:column>
+                                            <p:column>
+                                                <f:facet name="header">
+                                                    <h:outputText value="Fecha Desde"/>
+                                                </f:facet>
+                                                <h:outputText value="#{item.fechaDesdeExpLab}">
+                                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                                </h:outputText>
+                                            </p:column>
+                                            <p:column>
+                                                <f:facet name="header">
+                                                    <h:outputText value="Fecha Hasta"/>
+                                                </f:facet>
+                                                <h:outputText value="#{item.fechaHastaExpLab}">
+                                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                                </h:outputText>
+                                            </p:column>
+                                            <p:column>
+                                                <f:facet name="header">
+                                                    <h:outputText value="Sector"/>
+                                                </f:facet>
+                                                <h:outputText value="#{item.sectorExpLab}"/>
+                                            </p:column>
+
+                                        </p:dataTable>
+                                    </h:form>
+                                </f:view>
+                            </div>
+                            <div class="col-md-2"></div>
+                        </div>
+
+                        <br />
+                        <div class="row">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-8">  
+                                <hr />
+                                <h2 class="text-info text-center">Experiencia Laboral en el sector Privado</h2>
+                                <p:commandButton value="Agregar" type="button" styleClass="pull-right" onclick="PF('privado').show();" />
+                                <div class="clearfix"></div>
+                                <br />
+                            </div>
+                            <div class="col-md-2"></div>
+                        </div> 
+                        <div class="row">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-8">                                    
+                                <f:view>
+                                    <h:form>
+                                        <p:dataTable  id="tablaPrivada" value="#{manejadorExperienciaLaboral.experienciaLaboralPrivado()}" var="item" style="width: 100%; text-align: center; font-size:80%;">
+
+                                            <p:column>
+                                                <f:facet name="header">
+                                                    <h:outputText value="InstituciÃ³n"/>
+                                                </f:facet>
+                                                <h:outputText value="#{item.institucionEmpresa}"/>
+                                            </p:column>
+                                            <p:column>
+                                                <f:facet name="header">
+                                                    <h:outputText value="Cargo"/>
+                                                </f:facet>
+                                                <h:outputText value="#{item.cargoExpLab}"/>
+                                            </p:column>
+                                            <p:column>
+                                                <f:facet name="header">
+                                                    <h:outputText value="Fecha Desde"/>
+                                                </f:facet>
+                                                <h:outputText value="#{item.fechaDesdeExpLab}">
+                                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                                </h:outputText>
+                                            </p:column>
+                                            <p:column>
+                                                <f:facet name="header">
+                                                    <h:outputText value="Fecha Hasta"/>
+                                                </f:facet>
+                                                <h:outputText value="#{item.fechaHastaExpLab}">
+                                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                                </h:outputText>
+                                            </p:column>
+                                            <p:column>
+                                                <f:facet name="header">
+                                                    <h:outputText value="Sector"/>
+                                                </f:facet>
+                                                <h:outputText value="#{item.sectorExpLab}"/>
+                                            </p:column>
+
+                                        </p:dataTable>
+                                    </h:form>
+                                </f:view>                                    
+                            </div>
+                            <div class="col-md-2"></div>
+                        </div>
+
+                        <!-- MODALES -->
+
+                        <p:dialog header="Experiencia Laboral en el Sector PÃºblico" widgetVar="publico" modal="true" height="auto" width="auto">
+                            <!-- Contenido Modal -->
+
+                            <h:form enctype="multipart/form-data">
+                                <p:panelGrid  id="panelPublico" style="width: 100%;" styleClass="noBordes">
+                                    <p:row>
+                                        <p:column><h:outputLabel value="InstituciÃ³:"/></p:column>
+                                        <p:column colspan="3"><p:inputText id="institucionEmpresa" value="#{manejadorExperienciaLaboral.experienciaLaboral.institucionEmpresa}" style="width: 100%" required="true" requiredMessage="The InstitucionEmpresa field is required."/></p:column>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column><h:outputLabel value="Cargo:"/></p:column>
+                                        <p:column colspan="3"><p:inputText id="cargoExpLab" value="#{manejadorExperienciaLaboral.experienciaLaboral.cargoExpLab}" style="width: 100%" required="true" requiredMessage="The CargoExpLab field is required."/></p:column>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column><h:outputLabel value="Fecha Desde:"/></p:column>
+                                        <p:column><p:calendar id="fechaDesdeExpLab" value="#{manejadorExperienciaLaboral.experienciaLaboral.fechaDesdeExpLab}"   showOn="button" required="true" requiredMessage="The FechaDesdeExpLab field is required." locale="es" navigator="true" pattern="dd/MM/yyyy" yearRange="c-100:c+10"/></p:column>
+                                        <p:column><h:outputLabel value="Fecha Hasta:"/></p:column>
+                                        <p:column><p:calendar id="fechaHastaExpLab" value="#{manejadorExperienciaLaboral.experienciaLaboral.fechaHastaExpLab}"  showOn="button" required="true" requiredMessage="The FechaHastaExpLab field is required." locale="es" navigator="true" pattern="dd/MM/yyyy" yearRange="c-100:c+10"/></p:column>
+                                    </p:row>
+                                </p:panelGrid>
+                                <br />
+                                <h:commandButton value="Guardar" action="#{manejadorExperienciaLaboral.guardarExpLaboralPublico()}"/>
+                                <p:commandButton update="panelPublico" process="@this" value="Cancelar" onclick="PF('publico').hide()">
+                                    <p:resetInput target="panelPublico" />
+                                </p:commandButton>
+
+                            </h:form>
+
+                        </p:dialog> 
+
+                        <p:dialog header="Experiencia Laboral en el Sector Privado" widgetVar="privado" modal="true" height="auto" width="auto">
+                            <!-- Contenido Modal -->
+                            <h:form enctype="multipart/form-data">
+                                <p:panelGrid id="panelPrivado" style="width: 100%;" styleClass="noBordes">
+                                    <p:row>
+                                        <p:column><h:outputLabel value="Empresa:"/></p:column>
+                                        <p:column colspan="3"><p:inputText id="institucionEmpresa" value="#{manejadorExperienciaLaboral.experienciaLaboral.institucionEmpresa}" style="width: 100%" required="true" requiredMessage="The InstitucionEmpresa field is required."/></p:column>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column><h:outputLabel value="Cargo:"/></p:column>
+                                        <p:column colspan="3"><p:inputText id="cargoExpLab" value="#{manejadorExperienciaLaboral.experienciaLaboral.cargoExpLab}" style="width: 100%" required="true" requiredMessage="The CargoExpLab field is required."/></p:column>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column><h:outputLabel value="Fecha Desde:"/></p:column>
+                                        <p:column><p:calendar id="fechaDesdeExpLab" value="#{manejadorExperienciaLaboral.experienciaLaboral.fechaDesdeExpLab}" showOn="button" required="true" requiredMessage="The FechaDesdeExpLab field is required." locale="es" navigator="true" pattern="dd/MM/yyyy" yearRange="c-100:c+10"/></p:column>
+                                        <p:column><h:outputLabel value="Fecha Hasta:"/></p:column>
+                                        <p:column><p:calendar id="fechaHastaExpLab" value="#{manejadorExperienciaLaboral.experienciaLaboral.fechaHastaExpLab}" showOn="button" required="true" requiredMessage="The FechaHastaExpLab field is required." locale="es" navigator="true" pattern="dd/MM/yyyy" yearRange="c-100:c+10"/></p:column>
+                                    </p:row>
+                                </p:panelGrid>
+                                <br />
+                                <h:commandButton value="Guardar" action="#{manejadorExperienciaLaboral.guardarExpLaboralPrivado()}"/>                                
+                                <p:commandButton update="panelPrivado" process="@this" value="Cancelar" onclick="PF('privado').hide()">
+                                    <p:resetInput target="panelPrivado" />
+                                </p:commandButton>
+                            </h:form>
+
+                        </p:dialog> 
+
+
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+    </ui:define>
+
+</ui:composition>
