@@ -8,33 +8,30 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.Application;
+import javax.faces.application.ViewHandler;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletResponse;
 import sv.gob.cultura.rrhh.entidades.*;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.event.FlowEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import sv.gob.cultura.rrhh.facades.AdministradoraPensionesFacade;
-import sv.gob.cultura.rrhh.facades.AnioFacade;
-import sv.gob.cultura.rrhh.facades.CaracteristicasIdiomaFacade;
 import sv.gob.cultura.rrhh.facades.DependenciasFacade;
 import sv.gob.cultura.rrhh.facades.DeptosFacade;
 import sv.gob.cultura.rrhh.facades.DirNacionalFacade;
 import sv.gob.cultura.rrhh.facades.EmpleadosFacade;
 import sv.gob.cultura.rrhh.facades.EstadoCivilFacade;
 import sv.gob.cultura.rrhh.facades.EstadosFacade;
-import sv.gob.cultura.rrhh.facades.EstudiosEmpFacade;
-import sv.gob.cultura.rrhh.facades.IdiomasCaracteristicasFacade;
-import sv.gob.cultura.rrhh.facades.IdiomasFacade;
 import sv.gob.cultura.rrhh.facades.ImgDocFacade;
 import sv.gob.cultura.rrhh.facades.InstBancariaFacade;
 import sv.gob.cultura.rrhh.facades.MunicipiosFacade;
-import sv.gob.cultura.rrhh.facades.NivelFacade;
 import sv.gob.cultura.rrhh.facades.PaisesFacade;
 import sv.gob.cultura.rrhh.facades.ParentescoFacade;
-import sv.gob.cultura.rrhh.facades.ProfOficiosFacade;
 import sv.gob.cultura.rrhh.facades.TipoSangreFacade;
 
 //1. implements Serializable
@@ -44,17 +41,15 @@ import sv.gob.cultura.rrhh.facades.TipoSangreFacade;
 //5. Get y Set del objeto (all+insert)
 @Named(value = "manejadorGestionEmpleado")
 @SessionScoped
-
 public class manejadorGestionEmpleado implements Serializable {
-    manejadorGestionEmpleado(){    
+
+    manejadorGestionEmpleado() {
     }
 //******************************************************************************
 // ************** LLAMADA A LOS ENTERPRICE JAVA BEANS **************************
 //******************************************************************************
-    
+
     @EJB
-    private EstudiosEmpFacade estudiosEmpFacade;    
-    @EJB    
     private EmpleadosFacade empleadosFacade;
     @EJB
     private EstadosFacade estadosFacade;
@@ -79,24 +74,11 @@ public class manejadorGestionEmpleado implements Serializable {
     @EJB
     private DirNacionalFacade dirNacionalFacade;
     @EJB
-    private ProfOficiosFacade profOficiosFacade;
-    @EJB
-    private IdiomasFacade idiomasFacade;
-    @EJB
-    private CaracteristicasIdiomaFacade caracteristicasIdiomaFacade;
-    @EJB
-    private NivelFacade nivelFacade;
-    @EJB
-    private IdiomasCaracteristicasFacade idiomasCaracteristicasFacade;
-    @EJB
-    private AnioFacade anioFacade;
-    @EJB
     private ImgDocFacade imgDocFacade;
 //******************************************************************************
 //*********************** OBJETOS DE LOS ENTIDADES *****************************
 //******************************************************************************
-    
-    private EstudiosEmp estudiosEmp = new EstudiosEmp();    
+
     private Empleados empleado = new Empleados();
     private Estados estados = new Estados();
     private Paises paises = new Paises();
@@ -109,12 +91,6 @@ public class manejadorGestionEmpleado implements Serializable {
     private Parentesco parentesco = new Parentesco();
     private Dependencias dependencias = new Dependencias();
     private DirNacional dirNacional = new DirNacional();
-    private ProfOficios profOficos = new ProfOficios();
-    private Idiomas idiomas = new Idiomas();
-    private CaracteristicasIdioma caracteristicasIdioma = new CaracteristicasIdioma();
-    private Nivel nivel = new Nivel();
-    private IdiomasCaracteristicas idiomasCaracteristicas = new IdiomasCaracteristicas();
-    private IdiomasCaracteristicasPK idiomasCaracteristicasPK = new IdiomasCaracteristicasPK();
     private ImgDoc imagenDocumento = new ImgDoc();
 
 //******************************************************************************
@@ -124,8 +100,9 @@ public class manejadorGestionEmpleado implements Serializable {
     private final String[] path = new String[10];                                     // contiene url de documentos
     private final String[] nombreImgDoc = new String[10];
     private final String[] tipoImgDoc = new String[10];
-    private final int[] sizeImgDoc = new int[10];    
-    private String pathFoto = "C:\\Users\\SOPORTE CULTURA\\AppData\\Roaming\\NetBeans\\8.0.1\\config\\GF_4.1\\domain1\\var\\webapp\\upload\\userx.png";
+    private final int[] sizeImgDoc = new int[10];
+    private String userx = "userx.png";
+    private String pathServer;
     private String nombreImagen;
     private Date fechaNacEmpleado = new Date();                // fehca nacimiento empleado
     private int dirDepto;                           // id departamento residencia
@@ -142,17 +119,10 @@ public class manejadorGestionEmpleado implements Serializable {
     private int dependenciaNominal;
     private int dirNacionalFuncional;
     private int dependenciaFuncional;
-    private int anio;                               // Año de Estudios
-    private int idIdioma;                           // Id Idioma
-    private int idCaracteristicaIdioma;             // Id Caracteristica de idioma
+
 // *****************************************************************************
 //********************** GET DE ENTERPRICE JAVA BEAN ***************************
 //******************************************************************************
-
-    public EstudiosEmpFacade getEstudiosEmpFacade() {
-        return estudiosEmpFacade;
-    }
-
     public EmpleadosFacade getEmpleadosFacade() {
         return empleadosFacade;
     }
@@ -201,30 +171,6 @@ public class manejadorGestionEmpleado implements Serializable {
         return dirNacionalFacade;
     }
 
-    public ProfOficiosFacade getProfOficiosFacade() {
-        return profOficiosFacade;
-    }
-
-    public IdiomasFacade getIdiomasFacade() {
-        return idiomasFacade;
-    }
-
-    public CaracteristicasIdiomaFacade getCaracteristicasIdiomaFacade() {
-        return caracteristicasIdiomaFacade;
-    }
-
-    public NivelFacade getNivelFacade() {
-        return nivelFacade;
-    }
-
-    public IdiomasCaracteristicasFacade getIdiomasCaracteristicasFacade() {
-        return idiomasCaracteristicasFacade;
-    }
-
-    public AnioFacade getAnioFacade() {
-        return anioFacade;
-    }
-
     public ImgDocFacade getImgDocFacade() {
         return imgDocFacade;
     }
@@ -232,16 +178,6 @@ public class manejadorGestionEmpleado implements Serializable {
 // *****************************************************************************
 //******************* GET y SET DE OBJETOS DE ENTIDADES ************************
 //******************************************************************************
-    
-
-    public EstudiosEmp getEstudiosEmp() {
-        return estudiosEmp;
-    }
-
-    public void setEstudiosEmp(EstudiosEmp estudiosEmp) {
-        this.estudiosEmp = estudiosEmp;
-    }
-
     public Empleados getEmpleado() {
         return empleado;
     }
@@ -312,14 +248,6 @@ public class manejadorGestionEmpleado implements Serializable {
 
     public void setAdministradoraPensiones(AdministradoraPensiones administradoraPensiones) {
         this.administradoraPensiones = administradoraPensiones;
-    }
-
-    public ProfOficios getProfOficos() {
-        return profOficos;
-    }
-
-    public void setProfOficos(ProfOficios profOficos) {
-        this.profOficos = profOficos;
     }
 
     public int getDirDepto() {
@@ -433,6 +361,7 @@ public class manejadorGestionEmpleado implements Serializable {
 
     public void setDirNacionalFiltrarJefe(int dirNacionalFiltrarJefe) {
         this.dirNacionalFiltrarJefe = dirNacionalFiltrarJefe;
+        System.out.println(this.getDirNacionalFiltrarJefe());
     }
 
     public int getDependeciasFiltrarJefe() {
@@ -441,70 +370,6 @@ public class manejadorGestionEmpleado implements Serializable {
 
     public void setDependeciasFiltrarJefe(int dependeciasFiltrarJefe) {
         this.dependeciasFiltrarJefe = dependeciasFiltrarJefe;
-    }
-
-    public Idiomas getIdiomas() {
-        return idiomas;
-    }
-
-    public void setIdiomas(Idiomas idiomas) {
-        this.idiomas = idiomas;
-    }
-
-    public CaracteristicasIdioma getCaracteristicasIdioma() {
-        return caracteristicasIdioma;
-    }
-
-    public void setCaracteristicasIdioma(CaracteristicasIdioma caracteristicasIdioma) {
-        this.caracteristicasIdioma = caracteristicasIdioma;
-    }
-
-    public Nivel getNivel() {
-        return nivel;
-    }
-
-    public void setNivel(Nivel nivel) {
-        this.nivel = nivel;
-    }
-
-    public IdiomasCaracteristicas getIdiomasCaracteristicas() {
-        return idiomasCaracteristicas;
-    }
-
-    public void setIdiomasCaracteristicas(IdiomasCaracteristicas idiomasCaracteristicas) {
-        this.idiomasCaracteristicas = idiomasCaracteristicas;
-    }
-
-    public IdiomasCaracteristicasPK getIdiomasCaracteristicasPK() {
-        return idiomasCaracteristicasPK;
-    }
-
-    public void setIdiomasCaracteristicasPK(IdiomasCaracteristicasPK idiomasCaracteristicasPK) {
-        this.idiomasCaracteristicasPK = idiomasCaracteristicasPK;
-    }
-
-    public int getAnio() {
-        return anio;
-    }
-
-    public void setAnio(int anio) {
-        this.anio = anio;
-    }
-
-    public int getIdIdioma() {
-        return idIdioma;
-    }
-
-    public void setIdIdioma(int idIdioma) {
-        this.idIdioma = idIdioma;
-    }
-
-    public int getIdCaracteristicaIdioma() {
-        return idCaracteristicaIdioma;
-    }
-
-    public void setIdCaracteristicaIdioma(int idCaracteristicaIdioma) {
-        this.idCaracteristicaIdioma = idCaracteristicaIdioma;
     }
 
     public ImgDoc getImagenDocumento() {
@@ -555,14 +420,6 @@ public class manejadorGestionEmpleado implements Serializable {
         this.dependenciaFuncional = dependenciaFuncional;
     }
 
-    public String getPathFoto() {
-        return pathFoto;
-    }
-
-    public void setPathFoto(String pathFoto) {
-        this.pathFoto = pathFoto;
-    }
-
     public String getNombreImagen() {
         return nombreImagen;
     }
@@ -570,7 +427,23 @@ public class manejadorGestionEmpleado implements Serializable {
     public void setNombreImagen(String nombreImagen) {
         this.nombreImagen = nombreImagen;
     }
-    
+
+    public String getUserx() {
+        return userx;
+    }
+
+    public void setUserx(String userx) {
+        this.userx = userx;
+    }
+
+    public String getPathServer() {
+        return pathServer;
+    }
+
+    public void setPathServer(String pathServer) {
+        this.pathServer = pathServer;
+    }
+
 //******************************************************************************
 // **************** LISTA DE ELEMENTOS EN TABLAS *******************************
 //******************************************************************************
@@ -640,163 +513,38 @@ public class manejadorGestionEmpleado implements Serializable {
         return getEmpleadosFacade().buscarEmpId(empleadoId);
     }
 
-    public List<EstudiosEmp> estudiosEmpId(int idEstudio) {
-        return getEstudiosEmpFacade().buscarEstudioEmpId(idEstudio);
-    }
-
-    public List<ProfOficios> todasProfOficios() {
-        return getProfOficiosFacade().findAll();
-    }
-
-    public List<Idiomas> todosIdiomas() {
-        return getIdiomasFacade().findAll();
-    }
-
-    public List<Nivel> todosNiveles() {
-        return getNivelFacade().findAll();
-    }
-
-    public List<CaracteristicasIdioma> todasCaracIdiomas() {
-        return getCaracteristicasIdiomaFacade().findAll();
-    }
-
-    public List<Anio> todosAnios() {
-        return getAnioFacade().findAll();
-    }
-
-    public List<EstudiosEmp> todosEstudiosFomales() {
-        return getEstudiosEmpFacade().buscarEstudioTipo("Formal");
-    }
-
-    public List<EstudiosEmp> todosEstudiosNoFomales() {
-        return getEstudiosEmpFacade().buscarEstudioTipo("No Formal");
-    }
-
-    public List<IdiomasCaracteristicas> todosIdiomasCarac() {
-        return getIdiomasCaracteristicasFacade().findAll();
-    }
-
 //******************************************************************************
 //*************************** FUNCIONES DE GUARDAR *****************************
 //******************************************************************************
     public void guardarEmpleado() {
-
+        
+        //Seteo de datos de selecionables
         empleado.setDeptoNac(this.getDepto());
         empleado.setMunicipioNac(this.getMuni());
         empleado.setFechaNac(this.getFechaNacEmpleado());
         empleado.setEdadEmp(this.getEdadEmpleado());
         empleado.setDeptoResidencia(this.getDirDepto());
-        empleado.setMunicipioResidencia(this.getDirMuni());
-        empleado.setUrlFotoEmp(this.path[0]);
+        empleado.setMunicipioResidencia(this.getDirMuni());  
         empleado.setIdEmpleadoJefe(new Empleados(this.getEmpJefe()));
         empleado.setIdDependenciaN(new Dependencias(this.getDependenciaNominal()));
         empleado.setIdDependenciaF(new Dependencias(this.getDependenciaFuncional()));
 
+        //Seteo de las url de foto, curriculum y doc descriptor de puesto
+        empleado.setUrlFotoEmp(this.path[0]);
+        empleado.setCurriculum(this.path[1]);
+        empleado.setDocDescPuesto(this.path[2]);        
+        
+        //Seteo de Dependencias nominal y funcional
         Dependencias depenNominal = getDependenciasFacade().find(this.getDependenciaNominal());
         Dependencias depenFuncional = getDependenciasFacade().find(this.getDependenciaFuncional());
-
         empleado.setIdMunicipioN(depenNominal.getIdMunicipio());
         empleado.setIdMunicipioF(depenFuncional.getIdMunicipio());
         empleado.setEdadEmp(this.getEdadEmpleado());
-
+        
         getEmpleadosFacade().create(empleado);
-
         this.setEmpleadoId(empleado.getIdEmpleado());
 
         empleado = new Empleados();
-    }
-
-    public void guardarEstudioFormal() {
-
-        // Persiste el nuevo estudio ingresado
-        estudiosEmp.setTipoEstudio("Formal");
-        estudiosEmp.setAnioEstudio(fechaAnio(anio));
-        getEstudiosEmpFacade().create(estudiosEmp);
-
-        // Obtiene Empleado al cual se agregara un nuevo estudio (empleadoId) contendra el id de Empleado
-        Empleados empEst = getEmpleadosFacade().find(empleadoId);
-
-        // Obtine Listado de Estudios ya ingresados y agrega el que se acaba de persistir
-        List<EstudiosEmp> estudiosIngresados = empEst.getEstudiosEmpList();
-        estudiosIngresados.add(estudiosEmp);
-
-        // Ingreso de documento que lo respalda
-        imagenDocumento.setIdEstudio(estudiosEmp);
-        imagenDocumento.setIdEmpleado(empEst);
-        imagenDocumento.setRefImgDoc(empEst.getNrEmpleado());
-        imagenDocumento.setNombreArchivo(this.nombreImgDoc[3]);
-        imagenDocumento.setSizeArchivo(this.sizeImgDoc[3]);
-        imagenDocumento.setDescripcion("Documento de Estudio Formal");
-        imagenDocumento.setRutaArchivo(this.path[3]);
-        imagenDocumento.setTipoArchivo(this.tipoImgDoc[3]);
-        getImgDocFacade().create(imagenDocumento);
-
-        // Setea el nuevo listado de Estudios y edita la informacion
-        empEst.setEstudiosEmpList(estudiosIngresados);
-        getEmpleadosFacade().edit(empEst);
-
-        estudiosEmp = new EstudiosEmp();
-        imagenDocumento = new ImgDoc();
-    }
-
-    public void guardarEstudioNoFormal() {
-        // Igual a Estudio Formal
-        estudiosEmp.setTipoEstudio("No Formal");
-        estudiosEmp.setAnioEstudio(fechaAnio(anio));
-        getEstudiosEmpFacade().create(estudiosEmp);
-        Empleados empEst = getEmpleadosFacade().find(empleadoId);
-        List<EstudiosEmp> estudiosIngresados = empEst.getEstudiosEmpList();
-        estudiosIngresados.add(estudiosEmp);
-        imagenDocumento.setIdEstudio(estudiosEmp);
-        imagenDocumento.setIdEmpleado(empEst);
-        imagenDocumento.setRefImgDoc(empEst.getNrEmpleado());
-        imagenDocumento.setNombreArchivo(this.nombreImgDoc[4]);
-        imagenDocumento.setSizeArchivo(this.sizeImgDoc[4]);
-        imagenDocumento.setDescripcion("Documento de Estudio No Formal");
-        imagenDocumento.setRutaArchivo(this.path[4]);
-        imagenDocumento.setTipoArchivo(this.tipoImgDoc[4]);
-        getImgDocFacade().create(imagenDocumento);
-        empEst.setEstudiosEmpList(estudiosIngresados);
-        getEmpleadosFacade().edit(empEst);
-        estudiosEmp = new EstudiosEmp();
-        imagenDocumento = new ImgDoc();
-    }
-
-    public void guardarIdioma() {
-
-        //Setea Id idioma y caracteristicas a IdiomasCaracteristicasPK
-        idiomasCaracteristicasPK.setIdCaractIdioma(getIdCaracteristicaIdioma());
-        idiomasCaracteristicasPK.setIdIdioma(getIdIdioma());
-
-        //Setea IdIdiomasCaracteristicasPK y Id Idiomas a IdiomasCaracteristicas
-        idiomasCaracteristicas.setIdiomasCaracteristicasPK(idiomasCaracteristicasPK);
-        idiomasCaracteristicas.setIdiomas(new Idiomas(getIdIdioma()));
-        idiomasCaracteristicas.setCaracteristicasIdioma(new CaracteristicasIdioma(getIdCaracteristicaIdioma()));
-
-        /*  Guardamos(Persite)IdiomasCaracteristicas
-         Crea un objeto del tipo empleados para obtener list de Idiomas
-         agrega el nuevo idioma y actualiza el listado con edit  */
-        getIdiomasCaracteristicasFacade().create(idiomasCaracteristicas);
-        Empleados empIdioma = getEmpleadosFacade().find(empleadoId);
-
-        imagenDocumento.setIdiomasCaracteristicas(idiomasCaracteristicas);
-        imagenDocumento.setIdEmpleado(empIdioma);
-        imagenDocumento.setRefImgDoc(empIdioma.getNrEmpleado());
-        imagenDocumento.setNombreArchivo(this.nombreImgDoc[5]);
-        imagenDocumento.setSizeArchivo(this.sizeImgDoc[5]);
-        imagenDocumento.setDescripcion("Documento de Idiomas");
-        imagenDocumento.setRutaArchivo(this.path[5]);
-        imagenDocumento.setTipoArchivo(this.tipoImgDoc[5]);
-        getImgDocFacade().create(imagenDocumento);
-
-        List<Idiomas> IdiomasIngresados = empIdioma.getIdiomasList();
-        IdiomasIngresados.add(idiomasCaracteristicas.getIdiomas());
-        empIdioma.setIdiomasList(IdiomasIngresados);
-        getEmpleadosFacade().edit(empIdioma);
-
-        idiomasCaracteristicasPK = new IdiomasCaracteristicasPK();
-        idiomasCaracteristicas = new IdiomasCaracteristicas();
-        imagenDocumento = new ImgDoc();
     }
 
 // *****************************************************************************
@@ -829,13 +577,6 @@ public class manejadorGestionEmpleado implements Serializable {
         return anios;
     }
 
-    // Devuelve una fecha a partir de un año dado (Estudios Empleados)    
-    public Date fechaAnio(int anio) {
-        anio = anio - 1900;
-        Date fecha = new Date(anio, 11, 31);
-        return fecha;
-    }
-
     public void handleFileUpload(FileUploadEvent event) {
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -843,12 +584,12 @@ public class manejadorGestionEmpleado implements Serializable {
         HttpServletResponse response = (HttpServletResponse) externalContext.getResponse();
         File result = new File(externalContext.getRealPath("/upload/") + File.separator + event.getFile().getFileName());
 
-         int tipoDoc = Integer.parseInt((String) event.getComponent().getAttributes().get("tipoDoc"));
-        int var=0;
+        int tipoDoc = Integer.parseInt((String) event.getComponent().getAttributes().get("tipoDoc"));
+        int var = 0;
         switch (tipoDoc) {
             case 1: //Fotografia de empleado                
-                var = 0;                
-                System.out.println("Foto");                
+                var = 0;
+                System.out.println("Foto");
                 break;
             case 2: //Curriculum Vitae
                 var = 1;
@@ -872,11 +613,12 @@ public class manejadorGestionEmpleado implements Serializable {
                 break;
         }
         this.setNombreImagen(event.getFile().getFileName());
+
         this.nombreImgDoc[var] = event.getFile().getFileName();
         this.sizeImgDoc[var] = Integer.parseInt(new DecimalFormat("#.##").format(event.getFile().getSize()));
         this.path[var] = externalContext.getRealPath("/upload/") + "\\" + event.getFile().getFileName();
         this.tipoImgDoc[var] = event.getFile().getContentType();
-        
+
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(result);
             byte[] buffer = new byte[51200];
@@ -902,36 +644,54 @@ public class manejadorGestionEmpleado implements Serializable {
             //FacesContext.getCurrentInstance().addMessage(null, error);
         }
     }
-    
+
     private StreamedContent graphicImage;
 
-    public void prepararImagen(){
+    public void prepararImagen() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = facesContext.getExternalContext();
+        this.setPathServer(externalContext.getRealPath("/upload/") + "\\");
 
-        //String pathImagen = "C:\\Users\\SOPORTE CULTURA\\AppData\\Roaming\\NetBeans\\8.0.1\\config\\GF_4.1\\domain1\\var\\webapp\\upload\\"+nombreImgDoc[0]; 
-        
-        String pathImagen = pathFoto;
-        
-//        if(path[0]!=null){
-//            pathImagen = path[0];
-//        }
-       System.out.println(pathImagen);
+        String pathImagen = this.getPathServer() + this.getUserx();
+
+        if (path[0] != null) {
+            pathImagen = path[0];
+        }
+
         try {
             graphicImage = new DefaultStreamedContent(new FileInputStream(pathImagen), "image/png");
         } catch (FileNotFoundException ex) {
             Logger.getLogger(manejadorGestionEmpleado.class.getName()).log(Level.SEVERE, null, ex);
         }
-  }
+    }
 
-  public StreamedContent getGraphicImage() {  
-        
-        prepararImagen();        
-        System.out.println(graphicImage);
+    public StreamedContent getGraphicImage() {
+        prepararImagen();
         return graphicImage;
-        
     }
 
     public void setGraphicImage(StreamedContent graphicImage) {
         this.graphicImage = graphicImage;
+    }
+
+    public void refresh() {
+//        FacesContext context = FacesContext.getCurrentInstance();
+//        Application application = context.getApplication();
+//        ViewHandler viewHandler = application.getViewHandler();
+//        UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
+//        context.setViewRoot(viewRoot);
+//        context.renderResponse();
+        path[0] = null;
+    }
+    
+    public String onFlowProcess(FlowEvent event) {
+//        if(skip) {
+//            skip = false;   //reset in case user goes back
+//            return "confirm";
+//        }
+//        else {
+            return event.getNewStep();
+      //  }
     }
 //******************************************************************************
 // *****************************************************************************    

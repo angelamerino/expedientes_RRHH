@@ -5,6 +5,7 @@
  */
 package sv.gob.cultura.rrhh.facades;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,5 +28,9 @@ public class IdiomasCaracteristicasFacade extends AbstractFacade<IdiomasCaracter
     public IdiomasCaracteristicasFacade() {
         super(IdiomasCaracteristicas.class);
     }
+    //IdiomasCaracteristicas.findByIdIdioma
     
+    public List<IdiomasCaracteristicas> buscarIdiomasId(int idIdioma){
+        return getEntityManager().createNamedQuery("IdiomasCaracteristicas.findByIdIdioma").setParameter("idIdioma", idIdioma).getResultList();
+    }
 }

@@ -38,6 +38,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "FamiliaDependientesEmp.findByUserCreaFam", query = "SELECT f FROM FamiliaDependientesEmp f WHERE f.userCreaFam = :userCreaFam"),
     @NamedQuery(name = "FamiliaDependientesEmp.findByFechaCreaFam", query = "SELECT f FROM FamiliaDependientesEmp f WHERE f.fechaCreaFam = :fechaCreaFam"),
     @NamedQuery(name = "FamiliaDependientesEmp.findByUserModFam", query = "SELECT f FROM FamiliaDependientesEmp f WHERE f.userModFam = :userModFam"),
+    @NamedQuery(name = "FamiliaDependientesEmp.findByIdEmpleado", query = "SELECT f FROM FamiliaDependientesEmp f WHERE f.idEmpleado.idEmpleado = :idEmpleado"),
     @NamedQuery(name = "FamiliaDependientesEmp.findByFechaModFam", query = "SELECT f FROM FamiliaDependientesEmp f WHERE f.fechaModFam = :fechaModFam")})
 public class FamiliaDependientesEmp implements Serializable {
     private static final long serialVersionUID = 1L;

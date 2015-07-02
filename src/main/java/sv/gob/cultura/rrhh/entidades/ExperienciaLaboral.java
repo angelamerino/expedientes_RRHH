@@ -36,7 +36,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "ExperienciaLaboral.findByCargoExpLab", query = "SELECT e FROM ExperienciaLaboral e WHERE e.cargoExpLab = :cargoExpLab"),
     @NamedQuery(name = "ExperienciaLaboral.findByFechaDesdeExpLab", query = "SELECT e FROM ExperienciaLaboral e WHERE e.fechaDesdeExpLab = :fechaDesdeExpLab"),
     @NamedQuery(name = "ExperienciaLaboral.findByFechaHastaExpLab", query = "SELECT e FROM ExperienciaLaboral e WHERE e.fechaHastaExpLab = :fechaHastaExpLab"),
-    @NamedQuery(name = "ExperienciaLaboral.findBySectorExpLab", query = "SELECT e FROM ExperienciaLaboral e WHERE e.sectorExpLab = :sectorExpLab"),
+    @NamedQuery(name = "ExperienciaLaboral.findBySectorExpLab", query = "SELECT e FROM ExperienciaLaboral e WHERE e.sectorExpLab = :sectorExpLab AND e.idEmpleado.idEmpleado = :idEmpleado"),
     @NamedQuery(name = "ExperienciaLaboral.findByUserCreaExp", query = "SELECT e FROM ExperienciaLaboral e WHERE e.userCreaExp = :userCreaExp"),
     @NamedQuery(name = "ExperienciaLaboral.findByFechaCreaExp", query = "SELECT e FROM ExperienciaLaboral e WHERE e.fechaCreaExp = :fechaCreaExp"),
     @NamedQuery(name = "ExperienciaLaboral.findByUserModExp", query = "SELECT e FROM ExperienciaLaboral e WHERE e.userModExp = :userModExp"),

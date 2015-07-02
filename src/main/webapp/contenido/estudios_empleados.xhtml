@@ -1,10 +1,466 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./../resources/plantilla/plantilla.xhtml">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../resources/plantilla/plantilla.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
 
     <ui:define name="content">
-        content
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">  
+                <h2 class="text-info text-center">Buscar Empleado</h2>
+                <div class="clearfix"></div>
+                <br />
+            </div>                            
+            <div class="col-md-2"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6"> 
+
+                <h:form>
+                    <p:row>
+                        <p:column><h:outputLabel value="Dirección Nacional:"/></p:column>
+                        <p:column>
+                            <p:selectOneMenu id="dirNacionalFiltrarJefe" style="width: 100%" value="#{manejadorEstudiosEmpleados.direccionNacional}">
+                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                <f:selectItems value="#{manejadorEstudiosEmpleados.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
+                                <p:ajax update="filtrarDependencia"/>
+                                <p:ajax update="filtrarEmpleado"/>
+                                <p:ajax update="listFormales" />
+                                <p:ajax update="listNoFormales" />
+                                <p:ajax update="idiomasList" />
+                                <p:ajax update="nombre1" />
+                                <p:ajax update="nombre2" />
+                                <p:ajax update="nombre3" />
+                                <p:ajax update="nombre4" />
+                            </p:selectOneMenu>
+                        </p:column>
+                        <p:column><h:outputLabel value="Dependencia / Unidad organizativa:"/></p:column> 
+                        <p:column>
+                            <p:selectOneMenu id="filtrarDependencia"  style="width: 100%" value="#{manejadorEstudiosEmpleados.dependecia}">
+                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                <f:selectItems value="#{manejadorEstudiosEmpleados.dependenciasFiltradas()}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
+                                <p:ajax update="filtrarEmpleado"/>
+                                <p:ajax update="listFormales" />
+                                <p:ajax update="listNoFormales" />
+                                <p:ajax update="idiomasList" />
+                                <p:ajax update="nombre1" />
+                                <p:ajax update="nombre2" />
+                                <p:ajax update="nombre3" />
+                                <p:ajax update="nombre4" />
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column><h:outputLabel value="Empleado:"/></p:column>
+                        <p:column>
+                            <p:selectOneMenu id="filtrarEmpleado" style="width: 100%" value="#{manejadorEstudiosEmpleados.empleadoSelecionado}" >
+                                <f:selectItem itemLabel="Seleccione uno..."  itemValue="#{null}" noSelectionOption="true"/>
+                                <f:selectItems value="#{manejadorEstudiosEmpleados.empleadoFiltrado()}" var="emple" itemLabel="#{emple.nombreEmpleado}" itemValue="#{emple.idEmpleado}"/>
+                                <p:ajax update="listFormales" />
+                                <p:ajax update="listNoFormales" />
+                                <p:ajax update="idiomasList" />
+                                <p:ajax update="nombre1" />
+                                <p:ajax update="nombre2" />
+                                <p:ajax update="nombre3" />
+                                <p:ajax update="nombre4" />
+                            </p:selectOneMenu>
+                        </p:column>
+                        <p:column></p:column>
+                        <p:column></p:column>
+                    </p:row>
+
+                </h:form>
+
+            </div>                            
+            <div class="col-md-3"></div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8"> 
+                <h2 class="text-info text-center">Formación Formal</h2>
+                <p:commandButton value="Agregar" type="button" styleClass="pull-right" onclick="PF('formal').show();" />
+                <p:outputLabel id="nombre1"  style="font-size: 1.2em" value="Empleado: #{manejadorEstudiosEmpleados.nombreEmp}" />
+                <div class="clearfix"></div>
+                <br />
+            </div>
+            <div class="col-md-2"></div>
+        </div> 
+
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8"> 
+                <f:view>
+                    <h:form prependId="false">
+                        <p:dataTable id="listFormales" value="#{manejadorEstudiosEmpleados.todosEstudiosFomales()}" var="item">
+                            <p:column style="font-size: 12px; text-align: center;">
+                                <f:facet name="header">
+                                    <h:outputText value="Descripciónn"/>
+                                </f:facet>
+                                <h:outputText value="#{item.idProfOficio.nombreProfOficio}"/>
+                            </p:column>
+                            <p:column style="font-size: 12px; text-align: center;">
+                                <f:facet name="header">
+                                    <h:outputText value="Instituciónn"/>
+                                </f:facet>
+                                <h:outputText value="#{item.institucionEstudio}"/>
+                            </p:column>
+                            <p:column style="font-size: 12px; text-align: center;">
+                                <f:facet name="header">
+                                    <h:outputText value="Año"/>
+                                </f:facet>
+                                <h:outputText value="#{item.anioEstudio}">
+                                    <f:convertDateTime pattern="yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column style="font-size: 12px; text-align: center;">
+                                <f:facet name="header">
+                                    <h:outputText value="Tipo"/>
+                                </f:facet>
+                                <h:outputText value="#{item.tipoEstudio}"/>
+                            </p:column>
+                            <p:column style="font-size: 12px; text-align: center;" width="15%">
+                                <f:facet name="header">
+                                    <h:outputText value="Eliminar"/>
+                                </f:facet>
+                                <p:commandButton process="listFormales" update="listFormales"  action="#{manejadorEstudiosEmpleados.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
+                                    <f:setPropertyActionListener value="#{item}" target="#{manejadorEstudiosEmpleados.estudiosEmp}"/>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </f:view>
+
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">  
+                <hr />
+                <h2 class="text-info text-center">Formación No Formal</h2>
+                <p:commandButton value="Agregar" type="button" styleClass="pull-right" onclick="PF('noformal').show();" />
+                <p:outputLabel id="nombre2"  style="font-size: 1.2em" value="Empleado: #{manejadorEstudiosEmpleados.nombreEmp}" />
+                <div class="clearfix"></div>
+                <br />
+            </div>
+            <div class="col-md-2"></div>
+        </div> 
+
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">  
+                <f:view>
+                    <h:form prependId="false">
+                        <p:dataTable id="listNoFormales" value="#{manejadorEstudiosEmpleados.todosEstudiosNoFomales()}" var="item">
+                            <p:column style="font-size: 12px; text-align: center;">
+                                <f:facet name="header">
+                                    <h:outputText value="Descripción"/>
+                                </f:facet>
+                                <h:outputText value="#{item.idProfOficio.nombreProfOficio}"/>
+                            </p:column>
+                            <p:column style="font-size: 12px; text-align: center;">
+                                <f:facet name="header">
+                                    <h:outputText value="Institución"/>
+                                </f:facet>
+                                <h:outputText value="#{item.institucionEstudio}"/>
+                            </p:column>
+                            <p:column style="font-size: 12px; text-align: center;">
+                                <f:facet name="header">
+                                    <h:outputText value="Año"/>
+                                </f:facet>
+                                <h:outputText value="#{item.anioEstudio}">
+                                    <f:convertDateTime pattern="yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column style="font-size: 12px; text-align: center;">
+                                <f:facet name="header">
+                                    <h:outputText value="Tipo"/>
+                                </f:facet>
+                                <h:outputText value="#{item.tipoEstudio}"/>
+                            </p:column>
+                            <p:column style="font-size: 12px; text-align: center;" width="15%">
+                                <f:facet name="header">
+                                    <h:outputText value="Eliminar"/>
+                                </f:facet>
+                                <p:commandButton process="listNoFormales" update="listNoFormales"  action="#{manejadorEstudiosEmpleados.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
+                                    <f:setPropertyActionListener value="#{item}" target="#{manejadorEstudiosEmpleados.estudiosEmp}"/>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </f:view>
+
+            </div>
+            <div class="col-md-2"></div>
+        </div> 
+
+
+
+
+        <p:dialog  header="Ingreso de Educación Formal" widgetVar="formal" modal="true" height="auto" width="auto" resizable="false">
+            <h:form enctype="multipart/form-data">
+                <h:messages showSummary="true"/>
+                <p:panelGrid id="panelFormal" style="width: 100%;" styleClass="noBOrdes">
+                    <p:row>
+                        <p:column><h:outputLabel value="Institución:"/></p:column>
+                        <p:column><p:inputText id="institucionEstudio" value="#{manejadorEstudiosEmpleados.estudiosEmp.institucionEstudio}" style="width: 100%" required="true" requiredMessage="The InstitucionEstudio field is required."/></p:column>
+                        <p:column><h:outputLabel value="Año:"/></p:column>
+                        <p:column>
+                            <p:selectOneMenu id="anioEstudio" value="#{manejadorEstudiosEmpleados.anio}" style="width: 100%" required="true" requiredMessage="The AnioEstudio field is required.">
+                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                <f:selectItems value="#{manejadorEstudiosEmpleados.todosAnios()}" var="anio" itemLabel="#{anio.anio}" itemValue="#{anio.anio}"/>                                                    
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:row>                                    
+                    <p:row>
+                        <p:column><h:outputLabel value="Profeción u Oficio:"/></p:column>
+                        <p:column colspan="3">
+                            <p:selectOneMenu id="idProfOficio" value="#{manejadorEstudiosEmpleados.estudiosEmp.idProfOficio}" style="width: 100%" required="true" converter="#{profOficioConvertidor}" requiredMessage="The IdProfOficio field is required.">
+                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                <f:selectItems value="#{manejadorEstudiosEmpleados.todasProfOficios()}" var="prof" itemLabel="#{prof.nombreProfOficio}" itemValue="#{prof}"/>                                                    
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column><h:outputLabel value="Documento que lo respalda:"/></p:column>                                        
+                        <p:column>
+                            <p:fileUpload mode="advanced" fileUploadListener="#{manejadorGestionEmpleado.handleFileUpload}" label="Examinar..." update="nombredoc" allowTypes="/(\.|\/)(gif|jpg|jpeg|gif|png|doc|pdf|docx|PNG|GIF|JPG|JPEG|DOC|PDF|DOCX)$/" auto="true">
+                                <f:attribute name="tipoDoc" value="4" />
+                            </p:fileUpload>
+                        </p:column>
+                        <p:column colspan="2"><p:outputLabel id="nombredoc" value="#{fixme}" style="width: 100%"/></p:column>
+                    </p:row>
+                </p:panelGrid>
+                <br />
+                <h:commandButton value="Guardar" action="#{manejadorEstudiosEmpleados.guardarEstudioFormal()}"/>
+                <p:commandButton update="panelFormal" process="@this" value="Cancelar" onclick="PF('formal').hide()">
+                    <p:resetInput target="panelFormal" />
+                </p:commandButton>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog  header="Ingreso de Educación No Formal" widgetVar="noformal" modal="true" height="auto" width="auto" resizable="false">
+            <h:form enctype="multipart/form-data">
+                <h:messages showSummary="true"/>
+                <p:panelGrid id="panelNoFormal" style="width: 100%;" styleClass="noBordes">
+                    <p:row>
+                        <p:column><h:outputLabel value="Institución:"/></p:column>
+                        <p:column><p:inputText id="institucionEstudio" value="#{manejadorEstudiosEmpleados.estudiosEmp.institucionEstudio}" style="width: 100%" required="true" requiredMessage="The InstitucionEstudio field is required."/></p:column>
+                        <p:column><h:outputLabel value="Año:"/></p:column>
+                        <p:column>
+                            <p:selectOneMenu id="anioEstudio" value="#{manejadorEstudiosEmpleados.anio}" style="width: 100%" required="true" requiredMessage="The AnioEstudio field is required.">
+                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                <f:selectItems value="#{manejadorEstudiosEmpleados.todosAnios()}" var="anio" itemLabel="#{anio.anio}" itemValue="#{anio.anio}"/>                                                    
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:row>                                        
+                    <p:row>
+                        <p:column><h:outputLabel value="Profeción u Oficio:"/></p:column>
+                        <p:column colspan="3">
+                            <p:selectOneMenu id="idProfOficio" value="#{manejadorEstudiosEmpleados.estudiosEmp.idProfOficio}" style="width: 100%" required="true" converter="#{profOficioConvertidor}" requiredMessage="The IdProfOficio field is required.">
+                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                <f:selectItems value="#{manejadorEstudiosEmpleados.todasProfOficios()}" var="prof" itemLabel="#{prof.nombreProfOficio}" itemValue="#{prof}"/>                                                    
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column><h:outputLabel value="Documento que lo respalda:"/></p:column>                                        
+                        <p:column>
+                            <p:fileUpload mode="advanced" fileUploadListener="#{manejadorGestionEmpleado.handleFileUpload}"  label="Examinar..." update="nombredoc" allowTypes="/(\.|\/)(gif|jpg|jpeg|gif|png|doc|pdf|docx|PNG|GIF|JPG|JPEG|DOC|PDF|DOCX)$/" auto="true">
+                                <f:attribute name="tipoDoc" value="5" />
+                            </p:fileUpload>
+                        </p:column>
+                        <p:column colspan="2"><p:outputLabel id="nombredoc" value="#{fixme}" style="width: 100%"/></p:column>
+                    </p:row>
+                </p:panelGrid>
+                <br />
+                <h:commandButton value="Guardar" action="#{manejadorEstudiosEmpleados.guardarEstudioNoFormal()}"/>
+                <p:commandButton update="panelNoFormal" process="@this" value="Cancelar" onclick="PF('noformal').hide()">
+                    <p:resetInput target="panelNoFormal" />
+                </p:commandButton>
+            </h:form>
+        </p:dialog>
+
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">  
+                <hr />
+                <h2 class="text-info text-center">Conocimiento de Idiomas</h2>
+                <p:commandButton value="Agregar Idioma" type="button" styleClass="pull-right" onclick="PF('idiomas').show();" />
+                <p:outputLabel id="nombre3"  style="font-size: 1.2em" value="Empleado: #{manejadorEstudiosEmpleados.nombreEmp}" />
+                <div class="clearfix"></div>
+                <br />
+            </div>
+            <div class="col-md-2"></div>
+        </div> 
+
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">  
+                <f:view>
+                    <h:form prependId="false">
+                        <p:dataTable id="idiomasList" value="#{manejadorEstudiosEmpleados.idiomasEmpleado()}" var="item">
+                            <p:column style="font-size: 12px; text-align: center;">
+                                <f:facet name="header">
+                                    <h:outputText value="Idioma"/>
+                                </f:facet>
+                                <h:outputText value="#{item.nombreIdioma}"/>
+                            </p:column>
+                            <p:column style="font-size: 12px;text-align: center" width="30%">
+                                <f:facet name="header">
+                                    <h:outputText value="Características"/>
+                                </f:facet>
+                                <p:commandButton  update=":carac:listCarac" oncomplete="PF('viewIdiomas').show()" icon="ui-icon-search" title="Ver">
+                                    <f:setPropertyActionListener value="#{item}" target="#{manejadorEstudiosEmpleados.idiomas}" />
+                                </p:commandButton>
+                            </p:column>
+                            <p:column style="font-size: 12px; text-align: center;" width="20%">
+                            <f:facet name="header">
+                                <h:outputText value="Eliminar"/>
+                            </f:facet>
+                                <p:commandButton process="idiomasList" update="idiomasList"  action="#{manejadorEstudiosEmpleados.eliminarIdioma()}" icon="ui-icon-closethick" title="Eliminar">
+                                <f:setPropertyActionListener value="#{item}" target="#{manejadorEstudiosEmpleados.idiomas}"/>
+                            </p:commandButton>
+                        </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </f:view>
+            </div>
+            <div class="col-md-3"></div>
+        </div> 
+        
+        <!-- MODALES -->
+        <p:dialog  header="Ingreso de Idiomas" widgetVar="viewIdiomas" modal="true" height="auto" width="700px" resizable="false">
+            <h2 class="text-info text-center">Caracteristicas de Idioma</h2>
+            <p:commandButton value="Agregar Caracteristicas a Idioma" type="button" styleClass="pull-right" onclick="PF('carac').show();" />
+            <div class="clearfix"></div>
+            <br />
+            <f:view>
+                <h:form id="carac">
+                    <p:dataTable rendered="#{not empty manejadorEstudiosEmpleados.idiomas}" id="listCarac" value="#{manejadorEstudiosEmpleados.todosIdiomasId()}" var="item" style="width: 100%">
+                        <p:column style="font-size: 12px; text-align: center;">
+                            <f:facet name="header">
+                                <h:outputText value="Idioma"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idiomas.nombreIdioma}"/>
+                        </p:column>
+                        <p:column style="font-size: 12px; text-align: center;">
+                            <f:facet name="header">
+                                <h:outputText value="Institución"/>
+                            </f:facet>
+                            <h:outputText value="#{item.institucionIdioma}"/>
+                        </p:column>
+                        <p:column style="font-size: 12px; text-align: center;">
+                            <f:facet name="header">
+                                <h:outputText value="Nivel"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idNivel.nombreNivel}"/>
+                        </p:column>                        
+                        <p:column style="font-size: 12px; text-align: center;">
+                            <f:facet name="header">
+                                <h:outputText value="Caracteristicas"/>
+                            </f:facet>
+                            <h:outputText value="#{item.caracteristicasIdioma.caracteristicaIdioma}"/>
+                        </p:column>
+                        <p:column style="font-size: 12px; text-align: center;" width="15%">
+                            <f:facet name="header">
+                                <h:outputText value="Eliminar"/>
+                            </f:facet>
+                            <p:commandButton process="listCarac" update="listCarac"  action="#{manejadorEstudiosEmpleados.eliminarCaracteristica()}" icon="ui-icon-closethick" title="Eliminar">
+                                <f:setPropertyActionListener value="#{item}" target="#{manejadorEstudiosEmpleados.idiomasCaracteristicas}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+
+                </h:form>
+            </f:view>
+        </p:dialog>
+
+        <p:dialog  header="Ingreso de Idiomas" widgetVar="idiomas" modal="true" height="auto" width="auto" resizable="false">
+            <h:form enctype="multipart/form-data" prependId="false">
+
+                <p:panelGrid id="panelIdiomas" style="width: 100%;" styleClass="noBordes">
+                    <p:row>
+                        <p:column><h:outputLabel value="Empleado:"/></p:column>
+                        <p:column><h:outputLabel id="nombre4" value="#{manejadorEstudiosEmpleados.nombreEmp}" style="width: 100%"/></p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column><h:outputLabel value="Idioma:"/></p:column>
+                        <p:column>
+                            <p:selectOneMenu id="idiomas" value="#{manejadorEstudiosEmpleados.idiomaSelecionado}" style="width: 100%" required="true"  requiredMessage="The Idiomas field is required.">
+                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                <f:selectItems value="#{manejadorEstudiosEmpleados.todosIdiomas()}" var="idioma" itemLabel="#{idioma.nombreIdioma}" itemValue="#{idioma.idIdioma}"/>
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:row> 
+
+                </p:panelGrid>
+                <br />
+
+                <h:commandButton value="Guardar" action="#{manejadorEstudiosEmpleados.guardarIdioma()}"/>
+                <p:commandButton update="panelIdiomas" process="@this" value="Cancelar" onclick="PF('idiomas').hide()">
+                    <p:resetInput target="panelIdiomas" />
+                </p:commandButton>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog  header="Ingreso de Caracteristicas" widgetVar="carac" modal="true" height="auto" width="auto" position="center,center" resizable="false">
+            <h:form enctype="multipart/form-data" prependId="false">
+
+                <p:panelGrid id="panelCarac" style="width: 100%;" styleClass="noBordes">
+
+                    <p:row>
+                        <p:column><h:outputLabel value="Institución:"/></p:column>
+                        <p:column><h:inputText value="#{manejadorEstudiosEmpleados.instIdioma}" required="true" requiredMessage="Debe ingresar una Instituoción" style="width: 100%" /></p:column>
+                    </p:row>                     
+                    <p:row>
+                        <p:column><h:outputLabel value="Características:"/></p:column>
+                        <p:column>
+                            <p:selectOneMenu id="caracteristicasIdioma" value="#{manejadorEstudiosEmpleados.idCaracteristicaIdioma}" style="width: 100%"  required="true"  requiredMessage="The CaracteristicasIdioma field is required.">
+                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                <f:selectItems value="#{manejadorEstudiosEmpleados.todasCaracIdiomas()}" var="caracteristica" itemLabel="#{caracteristica.caracteristicaIdioma}" itemValue="#{caracteristica.idCaractIdioma}"/>
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:row> 
+                    <p:row>
+                        <p:column><h:outputLabel value="Nivel:"/></p:column>
+                        <p:column>
+                            <p:selectOneMenu id="idNivel" value="#{manejadorEstudiosEmpleados.idiomasCaracteristicas.idNivel}" style="width: 100%" converter="#{nivelIdiomaConvertidor}" >
+                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                <f:selectItems value="#{manejadorEstudiosEmpleados.todosNiveles()}" var="nivel" itemLabel="#{nivel.nombreNivel}" itemValue="#{nivel}"/>
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column><h:outputLabel value="Documento que lo respalda:"/></p:column>                                        
+                        <p:column>
+                            <p:fileUpload mode="advanced" fileUploadListener="#{manejadorGestionEmpleado.handleFileUpload}"  label="Examinar..." update="nombredoc" allowTypes="/(\.|\/)(gif|jpg|jpeg|gif|png|doc|pdf|docx|PNG|GIF|JPG|JPEG|DOC|PDF|DOCX)$/" auto="true">
+                                <f:attribute name="tipoDoc" value="6" />
+                            </p:fileUpload>
+                        </p:column>
+                        <p:column colspan="2"><p:outputLabel id="nombredoc" value="#{fixme}" style="width: 100%"/></p:column>
+                    </p:row>
+
+                </p:panelGrid>
+                <br />
+                <h:commandButton value="Guardar" action="#{manejadorEstudiosEmpleados.AgregadnoCaracteristicasIdiomas()}"/>
+                <p:commandButton update="panelCarac" process="@this" value="Cancelar" onclick="PF('carac').hide()">
+                    <p:resetInput target="panelCarac" />
+                </p:commandButton>
+            </h:form>
+        </p:dialog>
+
+        <br />
+        <br />
     </ui:define>
 
 </ui:composition>

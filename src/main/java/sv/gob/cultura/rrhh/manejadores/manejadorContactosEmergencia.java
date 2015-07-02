@@ -11,23 +11,23 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import sv.gob.cultura.rrhh.entidades.ContactoEmergenciaEmp;
+import sv.gob.cultura.rrhh.entidades.Dependencias;
+import sv.gob.cultura.rrhh.entidades.DirNacional;
 import sv.gob.cultura.rrhh.entidades.Empleados;
 import sv.gob.cultura.rrhh.entidades.Parentesco;
 import sv.gob.cultura.rrhh.facades.ContactoEmergenciaEmpFacade;
+import sv.gob.cultura.rrhh.facades.DependenciasFacade;
+import sv.gob.cultura.rrhh.facades.DirNacionalFacade;
 import sv.gob.cultura.rrhh.facades.EmpleadosFacade;
 import sv.gob.cultura.rrhh.facades.ParentescoFacade;
-
 /**
  *
  * @author Edwin
  */
 @Named(value = "manejadorContactosEmergencia")
 @ViewScoped
-public class manejadorContactosEmergencia implements Serializable{
+public class manejadorContactosEmergencia implements Serializable {
 
-    public manejadorContactosEmergencia() {
-    }
-    
 //******************************************************************************
 // ************** LLAMADA A LOS ENTERPRICE JAVA BEANS **************************
 //******************************************************************************
@@ -37,7 +37,13 @@ public class manejadorContactosEmergencia implements Serializable{
     private ContactoEmergenciaEmpFacade contactoEmergenciaEmpFacade;
     @EJB
     private EmpleadosFacade empleadosFacade;
-    
+    @EJB
+    private DirNacionalFacade dirNacionalFacade;
+    @EJB
+    private DependenciasFacade dependenciasFacade;
+
+    public manejadorContactosEmergencia() {
+    }
 //******************************************************************************
 //*********************** OBJETOS DE LOS ENTIDADES *****************************
 //******************************************************************************    
@@ -45,11 +51,14 @@ public class manejadorContactosEmergencia implements Serializable{
     Empleados empleado = new Empleados();
     Parentesco parentesco = new Parentesco();
     
+
 //******************************************************************************
 //****** VARIABLES QUE CONTRENDRAN ID´S O STRING DE FORMULARIOS ****************
-//******************************************************************************
-    
-    private int empleadoId = 3;  // id empleado Ahora prueba empleado id=3
+//******************************************************************************    
+    private int direccionNacional;
+    private int dependecia;
+    private int empleadoSelecionado;
+    private String nombreEmp;
 
 // *****************************************************************************
 //********************** GET DE ENTERPRICE JAVA BEAN ***************************
@@ -69,7 +78,15 @@ public class manejadorContactosEmergencia implements Serializable{
     public ParentescoFacade getParentescoFacade() {
         return parentescoFacade;
     }
-    
+
+    public DependenciasFacade getDependenciasFacade() {
+        return dependenciasFacade;
+    }
+
+    public DirNacionalFacade getDirNacionalFacade() {
+        return dirNacionalFacade;
+    }
+
 // *****************************************************************************
 //******************* GET y SET DE OBJETOS DE ENTIDADES ************************
 //******************************************************************************
@@ -83,15 +100,7 @@ public class manejadorContactosEmergencia implements Serializable{
 
     public void setEmpleado(Empleados empleado) {
         this.empleado = empleado;
-    }
-
-    public int getEmpleadoId() {
-        return empleadoId;
-    }
-
-    public void setEmpleadoId(int empleadoId) {
-        this.empleadoId = empleadoId;
-    }
+    }   
 
     public Parentesco getParentesco() {
         return parentesco;
@@ -100,25 +109,84 @@ public class manejadorContactosEmergencia implements Serializable{
     public void setParentesco(Parentesco parentesco) {
         this.parentesco = parentesco;
     }
+
+    public int getDireccionNacional() {
+        return direccionNacional;
+    }
+
+    public void setDireccionNacional(int direccionNacional) {
+        this.direccionNacional = direccionNacional;
+        this.setNombreEmp("");
+        this.setDependecia(0);
+        this.setEmpleadoSelecionado(0);
+        
+    }
+
+    public int getDependecia() {
+        return dependecia;
+    }
+
+    public void setDependecia(int dependecia) {
+        this.dependecia = dependecia;
+        this.setNombreEmp("");
+        this.setEmpleadoSelecionado(0);
+    }
+
+    public int getEmpleadoSelecionado() {
+        return empleadoSelecionado;
+    }
+
+    public void setEmpleadoSelecionado(int empleadoSelecionado) {
+        this.empleadoSelecionado = empleadoSelecionado;
+        Empleados emp = getEmpleadosFacade().find(getEmpleadoSelecionado());
+                
+        if (emp == null) {
+            this.setNombreEmp("");
+        } else {
+            this.setNombreEmp(emp.getNombreEmpleado());
+        }
+    }
+
+    public String getNombreEmp() {
+        return nombreEmp;
+    }
+
+    public void setNombreEmp(String nombreEmp) {
+        this.nombreEmp = nombreEmp;
+    }
+
 //******************************************************************************
 // **************** LISTA DE ELEMENTOS EN TABLAS *******************************
 //******************************************************************************
-    
     public List<Parentesco> todosParentesco() {
         return getParentescoFacade().findAll();
     }
-    
-    public List<ContactoEmergenciaEmp> todosContactoEmergenciaEmp() {
-        return getContactoEmergenciaEmpFacade().findAll();
+
+    public List<ContactoEmergenciaEmp> contactoEmergenciaEmpleado() {
+        return getContactoEmergenciaEmpFacade().buscarContactos(this.getEmpleadoSelecionado());
     }
-    
+
+    public List<DirNacional> todosDirNacional() {
+        return getDirNacionalFacade().findAll();
+    }
+
+    public List<Dependencias> dependenciasFiltradas() {
+        return getDependenciasFacade().buscarDependencias(this.getDireccionNacional());
+    }
+    public List<Empleados> empleadoFiltrado() {
+        return getEmpleadosFacade().buscarEmp(this.getDependecia());
+    }
+
 //******************************************************************************
 //*************************** FUNCIONES DE GUARDAR *****************************
 //******************************************************************************
-    
     public void guardarContactosEmergencia() {
-        contactoEmergenciaEmp.setIdEmpleado(new Empleados(empleadoId));
+        contactoEmergenciaEmp.setIdEmpleado(new Empleados(this.getEmpleadoSelecionado()));
         getContactoEmergenciaEmpFacade().create(contactoEmergenciaEmp);
         contactoEmergenciaEmp = new ContactoEmergenciaEmp();
     }
-}
+
+    public void eliminar() {
+        getContactoEmergenciaEmpFacade().remove(contactoEmergenciaEmp);
+    }   
+ }

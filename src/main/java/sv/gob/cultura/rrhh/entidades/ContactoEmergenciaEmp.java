@@ -38,6 +38,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "ContactoEmergenciaEmp.findByUserCreaContac", query = "SELECT c FROM ContactoEmergenciaEmp c WHERE c.userCreaContac = :userCreaContac"),
     @NamedQuery(name = "ContactoEmergenciaEmp.findByFechaCreaContac", query = "SELECT c FROM ContactoEmergenciaEmp c WHERE c.fechaCreaContac = :fechaCreaContac"),
     @NamedQuery(name = "ContactoEmergenciaEmp.findByUserModContac", query = "SELECT c FROM ContactoEmergenciaEmp c WHERE c.userModContac = :userModContac"),
+    @NamedQuery(name = "ContactoEmergenciaEmp.findByIdEmpleado", query = "SELECT c FROM ContactoEmergenciaEmp c WHERE c.idEmpleado.idEmpleado = :idEmpleado"),
     @NamedQuery(name = "ContactoEmergenciaEmp.findByFechaModContac", query = "SELECT c FROM ContactoEmergenciaEmp c WHERE c.fechaModContac = :fechaModContac")})
 public class ContactoEmergenciaEmp implements Serializable {
     private static final long serialVersionUID = 1L;

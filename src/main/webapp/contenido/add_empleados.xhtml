@@ -7,389 +7,392 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 template="./../resources/plantilla/plantilla.xhtml">
 
-    <ui:define name="content">
+    <ui:define name="content">        #{manejadorGestionEmpleado.refresh()} 
+        <h:form>
+            <!--INICIO DE WINZARD-->
+            <p:growl id="growl" sticky="true" showDetail="true"/>
+            <p:wizard backLabel="Regresar" nextLabel="Continuar" >
 
-        <!-- Código para acordeón todo -->
-        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                <!--INFORMACION PERSONAL-->
+                <p:tab id="personal" title="Información Personal">
+                    <p:panel header="Ingreso de Información Personal">
+                        <p:messages showDetail="true" />
 
-            <h:form enctype="multipart/form-data">
+                        <p:panelGrid style="width:100%;" styleClass="noBordes">
 
-                <!-- INFORMACION PERSONAL  -->
-                <div class="panel panel-info">
-                    <div class="panel-heading" role="tab" id="headingOne">
-                        <h4 class="panel-title">
-                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                <strong>Información Personal</strong><!-- Nombre del Panel -->
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-                        <div class="panel-body">
-                            <!-- Contenido del panel -->
+                            <p:row>
+                                <p:column><h:outputLabel value="Fotografía del Empleado"/></p:column>
+                                <p:column>
+                                    <p:fileUpload mode="advanced" uploadLabel="name" fileUploadListener="#{manejadorGestionEmpleado.handleFileUpload}" label="Examinar..." update="foto" allowTypes="/(\.|\/)(gif|jpg|jpeg|gif|png|doc|pdf|docx|PNG|GIF|JPG|JPEG|DOC|PDF|DOCX)$/" auto="true">
+                                        <f:attribute name="tipoDoc" value="1" />                                             
+                                    </p:fileUpload>
+                                    <p:graphicImage cache="false" id="foto" value="#{manejadorGestionEmpleado.graphicImage}" width="150"/>
+                                </p:column>                                    
+                                <p:column><h:outputLabel value="Estado"/></p:column>
+                                <p:column>
+                                    <p:selectOneMenu id="idEstado" value="#{manejadorGestionEmpleado.empleado.idEstado}" converter="#{estadoConvertidor}" style="width: 100%" required="true" requiredMessage="Seleccione un Estado">
+                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                        <f:selectItems value="#{manejadorGestionEmpleado.todosEstados()}" var="estados" itemLabel="#{estados.nombreEstado}" itemValue="#{estados}"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row>
 
-                            <p:panelGrid style="width:100%;" styleClass="noBordes">
-                                <p:messages showDetail="true" />
-                                <p:row>
-                                    <p:column><h:outputLabel value="Fotografía del Empleado"/></p:column>
-                                    <p:column>
-                                        <p:fileUpload mode="advanced" uploadLabel="name" fileUploadListener="#{manejadorGestionEmpleado.handleFileUpload}" label="Examinar..." update="foto" allowTypes="/(\.|\/)(gif|jpg|jpeg|gif|png|doc|pdf|docx|PNG|GIF|JPG|JPEG|DOC|PDF|DOCX)$/" auto="true">
-                                            <f:attribute name="tipoDoc" value="1" />
-                                             
-                                        </p:fileUpload>
-                                        <h:outputLabel id="name" value="#{manejadorGestionEmpleado.nombreImagen}" />
-                                        <p:graphicImage id="foto" value="#{manejadorGestionEmpleado.graphicImage}" width="150"/>
-                                    </p:column>                                    
-                                    <p:column><h:outputLabel value="Estado"/></p:column>
-                                    <p:column>
-                                        <p:selectOneMenu id="idEstado" value="#{manejadorGestionEmpleado.empleado.idEstado}" converter="#{estadoConvertidor}" style="width: 100%" required="true" requiredMessage="Debe seleccionar un Estado">
-                                            <f:selectItems value="#{manejadorGestionEmpleado.todosEstados()}" var="estados" itemLabel="#{estados.nombreEstado}" itemValue="#{estados}"/>
-                                        </p:selectOneMenu>
-                                    </p:column>
-                                </p:row>
+                            <p:row>
+                                <p:column><h:outputLabel value="NR del Empleado:"/></p:column>
+                                <p:column><p:inputMask id="nrEmpleado" value="#{manejadorGestionEmpleado.empleado.nrEmpleado}" style="width: 100%" mask="NR 9999-999999-9999-9" required="true" requiredMessage="Ingrese un NR de Empleado"/></p:column>
+                                <p:column><h:outputLabel value="Nombre Completo:"/></p:column>
+                                <p:column><p:inputText id="nombreEmpleado" value="#{manejadorGestionEmpleado.empleado.nombreEmpleado}"  style="width: 100%" required="true" requiredMessage="Ingrese Nombre del Empleado"/></p:column>
+                            </p:row>
 
-                                <p:row>
-                                    <p:column><h:outputLabel value="NR del Empleado:"/></p:column>
-                                    <p:column><p:inputMask id="nrEmpleado" value="#{manejadorGestionEmpleado.empleado.nrEmpleado}" style="width: 100%" mask="NR 9999-999999-9999-9" required="true" requiredMessage="Debe Ingresar un NR"/></p:column>
-                                    <p:column><h:outputLabel value="Nombre Completo:"/></p:column>
-                                    <p:column><p:inputText id="nombreEmpleado" value="#{manejadorGestionEmpleado.empleado.nombreEmpleado}"  style="width: 100%" required="true" requiredMessage="Debe Ingresar Nombre del Empleado"/></p:column>
-                                </p:row>
+                            <p:row>
+                                <p:column><h:outputLabel value="Nombre según ISSS:"/></p:column>
+                                <p:column><p:inputText id="nombreIsss" value="#{manejadorGestionEmpleado.empleado.nombreIsss}" style="width: 100%" /></p:column>
+                                <p:column><h:outputLabel value="Nombre según NIT:"/></p:column>
+                                <p:column><p:inputText id="nombreNit" value="#{manejadorGestionEmpleado.empleado.nombreNit}" style="width: 100%" /></p:column>
+                            </p:row>
 
-                                <p:row>
-                                    <p:column><h:outputLabel value="Nombre según ISSS:"/></p:column>
-                                    <p:column><p:inputText id="nombreIsss" value="#{manejadorGestionEmpleado.empleado.nombreIsss}" style="width: 100%" /></p:column>
-                                    <p:column><h:outputLabel value="Nombre según NIT:"/></p:column>
-                                    <p:column><p:inputText id="nombreNit" value="#{manejadorGestionEmpleado.empleado.nombreNit}" style="width: 100%" /></p:column>
-                                </p:row>
+                            <p:row>
+                                <p:column><h:outputLabel value="País de Nacimiento:"/></p:column>
+                                <p:column>
+                                    <p:selectOneMenu id="idPais" value="#{manejadorGestionEmpleado.empleado.idPais}" converter="#{paisConvertidor}" style="width: 100%" required="true" requiredMessage="Selecione un País">
+                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                        <f:selectItems value="#{manejadorGestionEmpleado.todosPaises()}" var="pais" itemLabel="#{pais.nombrePais}" itemValue="#{pais}"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row>
 
-                                <p:row>
-                                    <p:column><h:outputLabel value="País de Nacimiento:"/></p:column>
-                                    <p:column>
-                                        <p:selectOneMenu id="idPais" value="#{manejadorGestionEmpleado.empleado.idPais}" converter="#{paisConvertidor}" style="width: 100%" required="true" requiredMessage="The IdPais field is required.">
-                                            <f:selectItems value="#{manejadorGestionEmpleado.todosPaises()}" var="pais" itemLabel="#{pais.nombrePais}" itemValue="#{pais}"/>
-                                        </p:selectOneMenu>
-                                    </p:column>
-                                </p:row>
+                            <p:row>
+                                <p:column><h:outputLabel value="Lugar de Nacimiento"/></p:column>
+                                <p:column>
+                                    <p:selectOneMenu id="munIdMunicipio" value="#{manejadorGestionEmpleado.depto}" style="width: 100%" required="true" requiredMessage="Seleccione un Departamento">
+                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                        <f:selectItems value="#{manejadorGestionEmpleado.todosDeptos()}" var="depto" itemLabel="#{depto.nombreDepartamento}" itemValue="#{depto.idDepartamento}"/>
+                                        <p:ajax update="idMunicipio"/>
+                                    </p:selectOneMenu>
+                                </p:column>
 
-                                <p:row>
-                                    <p:column><h:outputLabel value="Lugar de Nacimiento"/></p:column>
-                                    <p:column>
-                                        <p:selectOneMenu id="munIdMunicipio" value="#{manejadorGestionEmpleado.depto}" style="width: 100%" required="true" requiredMessage="The MunIdMunicipio field is required.">
-                                            <f:selectItems value="#{manejadorGestionEmpleado.todosDeptos()}" var="depto" itemLabel="#{depto.nombreDepartamento}" itemValue="#{depto.idDepartamento}"/>
-                                            <p:ajax update="idMunicipio"/>
-                                        </p:selectOneMenu>
-                                    </p:column>
+                                <p:column>
+                                    <p:selectOneMenu id="idMunicipio" value="#{manejadorGestionEmpleado.muni}" style="width: 100%" required="true" requiredMessage="Seleccione un Municipio">
+                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                        <f:selectItems value="#{manejadorGestionEmpleado.municipiosFiltrados()}" var="muni" itemLabel="#{muni.nombreMunicipio}" itemValue="#{muni.idMunicipio}"/>
+                                    </p:selectOneMenu>
+                                </p:column>
 
-                                    <p:column>
-                                        <p:selectOneMenu id="idMunicipio" value="#{manejadorGestionEmpleado.muni}" style="width: 100%" required="true" requiredMessage="The IdMunicipio field is required.">
-                                            <f:selectItems value="#{manejadorGestionEmpleado.municipiosFiltrados()}" var="muni" itemLabel="#{muni.nombreMunicipio}" itemValue="#{muni.idMunicipio}"/>
-                                        </p:selectOneMenu>
-                                    </p:column>
+                            </p:row>
 
-                                </p:row>
+                            <p:row>
+                                <p:column><h:outputLabel value="Fecha de Nacimiento:"/></p:column>
+                                <p:column>
+                                    <p:calendar id="fechaNac" value="#{manejadorGestionEmpleado.fechaNacEmpleado}" showOn="button" locale="es" navigator="true" pattern="dd/MM/yyyy" yearRange="c-100:c+10">
+                                        <p:ajax event="dateSelect" update="edadEmp"/>
+                                    </p:calendar>
+                                </p:column>
+                                <p:column><h:outputLabel value="Edad:"/></p:column>
+                                <p:column>
+                                    <h:outputText id="edadEmp" value="#{manejadorGestionEmpleado.edadEmpleado}" />
+                                </p:column>
+                            </p:row>
 
-                                <p:row>
-                                    <p:column><h:outputLabel value="Fecha de Nacimiento:"/></p:column>
-                                    <p:column>
-                                        <p:calendar id="fechaNac" value="#{manejadorGestionEmpleado.fechaNacEmpleado}" showOn="button" locale="es" navigator="true" pattern="dd/MM/yyyy" yearRange="c-100:c+10">
-                                            <p:ajax event="dateSelect" update="edadEmp"/>
-                                        </p:calendar>
-                                    </p:column>
-                                    <p:column><h:outputLabel value="Edad:"/></p:column>
-                                    <p:column>
-                                        <h:outputText id="edadEmp" value="#{manejadorGestionEmpleado.edadEmpleado}" />
-                                    </p:column>
-                                </p:row>
+                            <p:row>
+                                <p:column><h:outputLabel value="¿Naturalizado?"/></p:column>
+                                <p:column><p:inputText id="naturalizado" value="#{manejadorGestionEmpleado.empleado.naturalizado}" style="width: 100%" /></p:column>
+                                <p:column><h:outputLabel value="Género:"/></p:column>
+                                <p:column>
+                                    <p:selectOneMenu id="genero" value="#{manejadorGestionEmpleado.empleado.genero}" style="width: 100%" required="true" requiredMessage="Seleccione un Género">  
+                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                        <f:selectItem itemLabel="MASCULINO" itemValue="MASCULINO" />  
+                                        <f:selectItem itemLabel="FEMENINO" itemValue="FEMENINO" />  
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row>
 
-                                <p:row>
-                                    <p:column><h:outputLabel value="¿Naturalizado?"/></p:column>
-                                    <p:column><p:inputText id="naturalizado" value="#{manejadorGestionEmpleado.empleado.naturalizado}" style="width: 100%" /></p:column>
-                                    <p:column><h:outputLabel value="Género:"/></p:column>
-                                    <p:column>
-                                        <p:selectOneMenu id="genero" value="#{manejadorGestionEmpleado.empleado.genero}" style="width: 100%" required="true" requiredMessage="The Genero field is required.">  
-                                            <f:selectItem itemLabel="MASCULINO" itemValue="MASCULINO" />  
-                                            <f:selectItem itemLabel="FEMENINO" itemValue="FEMENINO" />  
-                                        </p:selectOneMenu>
-                                    </p:column>
-                                </p:row>
+                            <p:row>
+                                <p:column><h:outputLabel value="Estado Civil:"/></p:column>
+                                <p:column>
+                                    <p:selectOneMenu id="idEstadoCivil" value="#{manejadorGestionEmpleado.empleado.idEstadoCivil}" converter="#{estadoCivilConvertidor}" style="width: 100%" required="true" requiredMessage="Seleccione un Estado Civil">
+                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                        <f:selectItems value="#{manejadorGestionEmpleado.todosEstadoCivil()}" var="estadoC" itemLabel="#{estadoC.nombreEstadoCivil}" itemValue="#{estadoC}"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+                                <p:column><h:outputLabel value="Tipo Sangre:"/></p:column>
+                                <p:column>
+                                    <p:selectOneMenu id="idTipoSangre" value="#{manejadorGestionEmpleado.empleado.idTipoSangre}" converter="#{tipoSangreConvertidor}" style="width: 100%" required="true" requiredMessage="Selecione un Tipo de Sangre">
+                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                        <f:selectItems value="#{manejadorGestionEmpleado.todosTipoSangre()}" var="tipoSangre" itemLabel="#{tipoSangre.nombreTipoSangre}" itemValue="#{tipoSangre}"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row>
 
-                                <p:row>
-                                    <p:column><h:outputLabel value="Estado Civil:"/></p:column>
-                                    <p:column>
-                                        <p:selectOneMenu id="idEstadoCivil" value="#{manejadorGestionEmpleado.empleado.idEstadoCivil}" converter="#{estadoCivilConvertidor}" style="width: 100%" required="true" requiredMessage="The IdEstadoCivil field is required.">
-                                            <f:selectItems value="#{manejadorGestionEmpleado.todosEstadoCivil()}" var="estadoC" itemLabel="#{estadoC.nombreEstadoCivil}" itemValue="#{estadoC}"/>
-                                        </p:selectOneMenu>
-                                    </p:column>
-                                    <p:column><h:outputLabel value="Tipo Sangre:"/></p:column>
-                                    <p:column>
-                                        <p:selectOneMenu id="idTipoSangre" value="#{manejadorGestionEmpleado.empleado.idTipoSangre}" converter="#{tipoSangreConvertidor}" style="width: 100%" required="true" requiredMessage="The IdTipoSangre field is required.">
-                                            <f:selectItems value="#{manejadorGestionEmpleado.todosTipoSangre()}" var="tipoSangre" itemLabel="#{tipoSangre.nombreTipoSangre}" itemValue="#{tipoSangre}"/>
-                                        </p:selectOneMenu>
-                                    </p:column>
-                                </p:row>
+                            <p:row>
+                                <p:column><h:outputLabel value="Documento Único de Identidad:"/></p:column>
+                                <p:column><p:inputMask id="numDui" value="#{manejadorGestionEmpleado.empleado.numDui}" style="width: 100%" mask="DUI99999999-9" required="true" requiredMessage="Proporcione Número de DUI"/></p:column>
+                                <p:column><h:outputLabel value="Número de Seguro Social:"/></p:column>
+                                <p:column><p:inputMask id="numIsss" value="#{manejadorGestionEmpleado.empleado.numIsss}" mask="ISSS999999999" style="width: 100%"  /></p:column>
+                            </p:row>
 
-                                <p:row>
-                                    <p:column><h:outputLabel value="Documento Único de Identidad:"/></p:column>
-                                    <p:column><p:inputMask id="numDui" value="#{manejadorGestionEmpleado.empleado.numDui}" style="width: 100%" mask="DUI99999999-9" required="true" requiredMessage="The NumDui field is required."/></p:column>
-                                    <p:column><h:outputLabel value="Número de Seguro Social:"/></p:column>
-                                    <p:column><p:inputMask id="numIsss" value="#{manejadorGestionEmpleado.empleado.numIsss}" mask="ISSS999999999" style="width: 100%"  /></p:column>
-                                </p:row>
+                            <p:row>
+                                <p:column><h:outputLabel value="Número de Identificacion Tributaria:" style="width: 70%"/></p:column>
+                                <p:column><p:inputMask id="numNit" value="#{manejadorGestionEmpleado.empleado.numNit}" mask="NIT9999-999999-999-9" style="width: 100%" /></p:column>
+                                <p:column><h:outputLabel value="Númeor Único de Previsión:"/></p:column>
+                                <p:column><p:inputMask id="numNup" value="#{manejadorGestionEmpleado.empleado.numNup}" mask="NUP 99999999999" style="width: 100%" /></p:column>
+                            </p:row>
 
-                                <p:row>
-                                    <p:column><h:outputLabel value="Número de Identificacion Tributaria:" style="width: 70%"/></p:column>
-                                    <p:column><p:inputMask id="numNit" value="#{manejadorGestionEmpleado.empleado.numNit}" mask="NIT9999-999999-999-9" style="width: 100%" /></p:column>
-                                    <p:column><h:outputLabel value="Númeor Único de Previsión:"/></p:column>
-                                    <p:column><p:inputMask id="numNup" value="#{manejadorGestionEmpleado.empleado.numNup}" mask="NUP 99999999999" style="width: 100%" /></p:column>
-                                </p:row>
+                            <p:row>
+                                <p:column><h:outputLabel value="NIP:"/></p:column>
+                                <p:column><p:inputText id="numNip" value="#{manejadorGestionEmpleado.empleado.numNip}" style="width: 100%" /></p:column>
+                                <p:column><h:outputLabel value="Administradora de Pensiones:"/></p:column>
+                                <p:column>
+                                    <p:selectOneMenu id="idAdminPension" value="#{manejadorGestionEmpleado.empleado.idAdminPension}" converter="#{administradorPensionesConvertidor}" style="width: 100%" required="true" requiredMessage="Seleccione una Administradora de Pensiones">
+                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                        <f:selectItems value="#{manejadorGestionEmpleado.todosAdministradoraPensiones()}" var="adminPension" itemLabel="#{adminPension.nombreAdminPension}" itemValue="#{adminPension}"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row>
 
-                                <p:row>
-                                    <p:column><h:outputLabel value="NIP:"/></p:column>
-                                    <p:column><p:inputText id="numNip" value="#{manejadorGestionEmpleado.empleado.numNip}" style="width: 100%" /></p:column>
-                                    <p:column><h:outputLabel value="Administradora de Pensiones:"/></p:column>
-                                    <p:column>
-                                        <p:selectOneMenu id="idAdminPension" value="#{manejadorGestionEmpleado.empleado.idAdminPension}" converter="#{administradorPensionesConvertidor}" style="width: 100%" required="true" requiredMessage="The IdAdminPension field is required.">
-                                            <f:selectItems value="#{manejadorGestionEmpleado.todosAdministradoraPensiones()}" var="adminPension" itemLabel="#{adminPension.nombreAdminPension}" itemValue="#{adminPension}"/>
-                                        </p:selectOneMenu>
-                                    </p:column>
-                                </p:row>
+                            <p:row>
+                                <p:column><h:outputLabel value="Nombre de Institución Bancaria:"/></p:column>
+                                <p:column colspan="3">
+                                    <p:selectOneMenu id="idBanco" value="#{manejadorGestionEmpleado.empleado.idBanco}" converter="#{institucionBancariaConvertidor}" style="width: 100%" required="true" requiredMessage="Seleccione una Institución Bancaria">
+                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                        <f:selectItems value="#{manejadorGestionEmpleado.todosInstBancaria()}" var="instBancaria" itemLabel="#{instBancaria.nombreBanco}" itemValue="#{instBancaria}"/>
+                                    </p:selectOneMenu>
+                                </p:column>                                    
+                            </p:row>
 
-                                <p:row>
-                                    <p:column><h:outputLabel value="Nombre de Institución Bancaria:"/></p:column>
-                                    <p:column colspan="3">
-                                        <p:selectOneMenu id="idBanco" value="#{manejadorGestionEmpleado.empleado.idBanco}" converter="#{institucionBancariaConvertidor}" style="width: 100%" required="true" requiredMessage="The IdBanco field is required.">
-                                            <f:selectItems value="#{manejadorGestionEmpleado.todosInstBancaria()}" var="instBancaria" itemLabel="#{instBancaria.nombreBanco}" itemValue="#{instBancaria}"/>
-                                        </p:selectOneMenu>
-                                    </p:column>                                    
-                                </p:row>
+                            <p:row>
+                                <p:column><h:outputLabel value="Número de Cuenta Bancaria:"/></p:column>
+                                <p:column><p:inputText id="numCuenta" value="#{manejadorGestionEmpleado.empleado.numCuenta}" style="width: 100%" /></p:column>
+                                <p:column><h:outputLabel value="Subir Curriculum Viate:"/></p:column>
+                                <p:column>
+                                    <p:fileUpload mode="advanced" fileUploadListener="#{manejadorGestionEmpleado.handleFileUpload}" label="Examinar..." update="curriculum" allowTypes="/(\.|\/)(gif|jpg|jpeg|gif|png|doc|pdf|docx|PNG|GIF|JPG|JPEG|DOC|PDF|DOCX)$/" auto="true">
+                                        <f:attribute name="tipoDoc" value="2" />
+                                    </p:fileUpload>
+                                    <p:outputLabel id="curriculum" value="#{fixme}" style="width: 100%"/>
+                                </p:column>  
+                               <!-- <p:column><p:inputText id="curriculum" value="#{manejadorGestionEmpleado.empleado.curriculum}" style="width: 100%" /></p:column> -->
+                            </p:row>
 
-                                <p:row>
-                                    <p:column><h:outputLabel value="Número de Cuenta Bancaria:"/></p:column>
-                                    <p:column><p:inputText id="numCuenta" value="#{manejadorGestionEmpleado.empleado.numCuenta}" style="width: 100%" /></p:column>
-                                    <p:column><h:outputLabel value="Subir Curriculum Viate:"/></p:column>
-                                    <p:column>
-                                        <p:fileUpload mode="advanced" fileUploadListener="#{manejadorGestionEmpleado.handleFileUpload}" label="Examinar..." update="curriculum" allowTypes="/(\.|\/)(gif|jpg|jpeg|gif|png|doc|pdf|docx|PNG|GIF|JPG|JPEG|DOC|PDF|DOCX)$/" auto="true">
-                                            <f:attribute name="tipoDoc" value="2" />
-                                        </p:fileUpload>
-                                        <p:outputLabel id="curriculum" value="#{fixme}" style="width: 100%"/>
-                                    </p:column>  
-                                   <!-- <p:column><p:inputText id="curriculum" value="#{manejadorGestionEmpleado.empleado.curriculum}" style="width: 100%" /></p:column> -->
-                                </p:row>
+                            <p:row>                                    
+                                <p:column><h:outputLabel value="Comentarios:"/></p:column>
+                                <p:column colspan="3"><p:inputTextarea rows="5" style="width: 100%" id="comentarios" value="#{manejadorGestionEmpleado.empleado.comentarios}" queryDelay="750" minQueryLength="4" /></p:column>
+                            </p:row>
 
-                                <p:row>                                    
-                                    <p:column><h:outputLabel value="Comentarios:"/></p:column>
-                                    <p:column colspan="3"><p:inputTextarea rows="5" style="width: 100%" id="comentarios" value="#{manejadorGestionEmpleado.empleado.comentarios}" queryDelay="750" minQueryLength="4" /></p:column>
-                                </p:row>
 
-                            </p:panelGrid>
+                        </p:panelGrid>
 
-                        </div>
-                    </div>
-                </div>
+                    </p:panel>
+                </p:tab>
 
-                <!-- INFORMACION DE CONTACTO  -->
-                <div class="panel panel-info">
-                    <div class="panel-heading" role="tab" id="headingTwo">
-                        <h4 class="panel-title">
-                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                <strong>Inmación de contacto</strong><!-- Nombre del Panel -->
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                        <div class="panel-body">
-                            <!-- Contenido del panel -->
+                <!--INFROMACION DE CONTACTO-->
+                <p:tab id="contacto" title="Informacón de Contacto">
+                    <p:panel header="Ingreso de Informacón de Contacto">
+                        <p:messages />
+                        <p:panelGrid style="width: 100%;" styleClass="noBordes">
 
-                            <p:panelGrid style="width: 100%;" styleClass="noBordes">
+                            <p:row>
+                                <p:column><h:outputLabel value="Dirección:"/></p:column>
+                                <p:column><p:inputText id="direccion" value="#{manejadorGestionEmpleado.empleado.direccion}" style="width: 100%" /></p:column>
+                                <p:column></p:column>
+                                <p:column></p:column>
+                            </p:row>
 
-                                <p:row>
-                                    <p:column><h:outputLabel value="Dirección:"/></p:column>
-                                    <p:column><p:inputText id="direccion" value="#{manejadorGestionEmpleado.empleado.direccion}" style="width: 100%" /></p:column>
-                                    <p:column></p:column>
-                                    <p:column></p:column>
-                                </p:row>
+                            <p:row>
+                                <p:column><p:column><h:outputLabel value="Departamento/Municipio:"/></p:column></p:column>
+                                <p:column>
+                                    <p:selectOneMenu id="depmun" value="#{manejadorGestionEmpleado.dirDepto}" style="width: 100%">
+                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                        <f:selectItems value="#{manejadorGestionEmpleado.todosDeptos()}" var="depto" itemLabel="#{depto.nombreDepartamento}" itemValue="#{depto.idDepartamento}"/>
+                                        <p:ajax update="depmun1"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+                                <p:column colspan="2">
+                                    <p:selectOneMenu id="depmun1" value="#{manejadorGestionEmpleado.dirMuni}" style="width: 100%">
+                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                        <f:selectItems value="#{manejadorGestionEmpleado.municipiosFiltradosNac()}" var="muni" itemLabel="#{muni.nombreMunicipio}" itemValue="#{muni.idMunicipio}"/>
+                                    </p:selectOneMenu>
+                                </p:column>                                    
+                            </p:row>
 
-                                <p:row>
-                                    <p:column><p:column><h:outputLabel value="Departamento/Municipio:"/></p:column></p:column>
-                                    <p:column>
-                                        <p:selectOneMenu id="depmun" value="#{manejadorGestionEmpleado.dirDepto}" style="width: 100%" required="true" requiredMessage="The MunIdMunicipio field is required.">
-                                            <f:selectItems value="#{manejadorGestionEmpleado.todosDeptos()}" var="depto" itemLabel="#{depto.nombreDepartamento}" itemValue="#{depto.idDepartamento}"/>
-                                            <p:ajax update="depmun1"/>
-                                        </p:selectOneMenu>
-                                    </p:column>
-                                    <p:column colspan="2">
-                                        <p:selectOneMenu id="depmun1" value="#{manejadorGestionEmpleado.dirMuni}" style="width: 100%" required="true" requiredMessage="The IdMunicipio field is required.">
-                                            <f:selectItems value="#{manejadorGestionEmpleado.municipiosFiltradosNac()}" var="muni" itemLabel="#{muni.nombreMunicipio}" itemValue="#{muni.idMunicipio}"/>
-                                        </p:selectOneMenu>
-                                    </p:column>                                    
-                                </p:row>
+                            <p:row>
+                                <p:column><h:outputLabel value="Teléfono Fijo:"/></p:column>
+                                <p:column><p:inputMask mask="9999-9999" id="telefonoFijo" value="#{manejadorGestionEmpleado.empleado.telefonoFijo}" style="width: 100%" /></p:column>
+                                <p:column><h:outputLabel value="Teléfono Movil:"/></p:column>
+                                <p:column><p:inputMask mask="9999-9999" id="telefonoMovil" value="#{manejadorGestionEmpleado.empleado.telefonoMovil}" style="width: 100%" /></p:column>
+                            </p:row>
 
-                                <p:row>
-                                    <p:column><h:outputLabel value="Teléfono Fijo:"/></p:column>
-                                    <p:column><p:inputText id="telefonoFijo" value="#{manejadorGestionEmpleado.empleado.telefonoFijo}" style="width: 100%" /></p:column>
-                                    <p:column><h:outputLabel value="Teléfono Movil:"/></p:column>
-                                    <p:column><p:inputText id="telefonoMovil" value="#{manejadorGestionEmpleado.empleado.telefonoMovil}" style="width: 100%" /></p:column>
-                                </p:row>
+                            <p:row>
+                                <p:column><h:outputLabel value="Correo Personal:"/></p:column>
+                                <p:column><p:inputText id="correoPersonal" value="#{manejadorGestionEmpleado.empleado.correoPersonal}" style="width: 100%" /></p:column>
+                                <p:column></p:column>
+                                <p:column></p:column>
+                            </p:row>
 
-                                <p:row>
-                                    <p:column><h:outputLabel value="CorreoPersonal:"/></p:column>
-                                    <p:column><p:inputText id="correoPersonal" value="#{manejadorGestionEmpleado.empleado.correoPersonal}" style="width: 100%" /></p:column>
-                                    <p:column></p:column>
-                                    <p:column></p:column>
-                                </p:row>
+                        </p:panelGrid>
+                    </p:panel>
+                </p:tab>
 
-                            </p:panelGrid>
-                        </div>
-                    </div>
-                </div>
+                <!--EXPERIENCIA LABORAL-->
+                <p:tab id="experiencia" title="Experiencia Laboral en la Institución">
+                    <p:panel header="Ingreso de Experiencia Laboral en la Institución">
+                        <p:messages />
+                        <p:panelGrid style="width: 100%;" styleClass="noBordes">
+                            <p:row>
+                                <p:column><h:outputLabel value="Cargo Nominal:"/></p:column>
+                                <p:column><p:inputText id="cargoNominal" value="#{manejadorGestionEmpleado.empleado.cargoNominal}" style="width: 100%" required="true" requiredMessage="Proporcione el Cargo Nominal"/></p:column>
+                                <p:column></p:column>
+                                <p:column></p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column><h:outputLabel value="Dirección Nacional:"/></p:column>
+                                <p:column>
+                                    <p:selectOneMenu id="dirNacionalNominal" style="width: 100%" value="#{manejadorGestionEmpleado.dirNacionalNominal}" required="true" requiredMessage="Seleccione una Dirección Nacional">
+                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                        <f:selectItems value="#{manejadorGestionEmpleado.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
+                                        <p:ajax update="dependeciaNominal"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+                                <p:column><h:outputLabel value="Dependencia / Unidad organizativa:"/></p:column> 
+                                <p:column>
+                                    <p:selectOneMenu id="dependeciaNominal"  style="width: 100%" value="#{manejadorGestionEmpleado.dependenciaNominal}" required="true" requiredMessage="Seleccione una Dependencia">
+                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                        <f:selectItems value="#{manejadorGestionEmpleado.dependenciasFiltradas(2)}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
+                                        <p:ajax update="idEmpleadoJefe"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column><h:outputLabel value="Cargo Funcional:"/></p:column>
+                                <p:column><p:inputText id="cargoFuncional" value="#{manejadorGestionEmpleado.empleado.cargoFuncional}" style="width: 100%" required="true" requiredMessage="Proporcione el Cargo Funcional"/></p:column>
+                                <p:column></p:column>
+                                <p:column></p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column><h:outputLabel value="Dirección Nacional:"/></p:column>
+                                <p:column>
+                                    <p:selectOneMenu id="dirNacionalFuncional" style="width: 100%" value="#{manejadorGestionEmpleado.dirNacionalFuncional}" required="true" requiredMessage="Seleccione una Dirección Nacional">
+                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                        <f:selectItems value="#{manejadorGestionEmpleado.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
+                                        <p:ajax update="dependeciaFuncional"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+                                <p:column><h:outputLabel value="Dependencia / Unidad organizativa:"/></p:column> 
+                                <p:column>
+                                    <p:selectOneMenu id="dependeciaFuncional"  style="width: 100%" value="#{manejadorGestionEmpleado.dependenciaFuncional}" required="true" requiredMessage="Seleccione una Dependencia">
+                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                        <f:selectItems value="#{manejadorGestionEmpleado.dependenciasFiltradas(3)}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
+                                        <p:ajax update="idEmpleadoJefe"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column><h:outputLabel value="Salario:"/></p:column>
+                                <p:column><p:inputText id="salarioEmp" style="width: 100%" value="#{manejadorGestionEmpleado.empleado.salarioEmp}"/></p:column>
+                                <p:column><h:outputLabel value="CorreoInstitucional:"/></p:column>
+                                <p:column><p:inputText id="correoInstitucional" style="width: 100%" value="#{manejadorGestionEmpleado.empleado.correoInstitucional}"/></p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column><h:outputLabel value="Fecha Ingreso al Sector Público:"/></p:column>
+                                <p:column><p:calendar id="fechaIngresopublico" value="#{manejadorGestionEmpleado.empleado.fechaIngresoPublico}" showOn="button" locale="es" navigator="true" pattern="dd/MM/yyyy" yearRange="c-100:c+10" /></p:column>
+                                <p:column><h:outputLabel value="Fecha Ingreso a la Institución:"/></p:column>
+                                <p:column><p:calendar id="fechaIngresoinstitu" value="#{manejadorGestionEmpleado.empleado.fechaIngresoInsti}" showOn="button" locale="es" navigator="true" pattern="dd/MM/yyyy" yearRange="c-100:c+10" /></p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column><h:outputLabel value="Documeneto Descriptor de Puesto:"/></p:column>
+                                <p:column>
+                                    <p:fileUpload mode="advanced" fileUploadListener="#{manejadorGestionEmpleado.handleFileUpload}" label="Examinar..." update="docDescPuesto" allowTypes="/(\.|\/)(gif|jpg|jpeg|gif|png|doc|pdf|doxc|PNG|GIF|JPG|JPEG|DOC|PDF|DOXC)$/" auto="true">
+                                        <f:attribute name="tipoDoc" value="3" />
+                                    </p:fileUpload>
+                                    <p:outputLabel id="docDescPuesto" value="#{fixme}" style="width: 100%"/>
+                                </p:column> 
+                                <!-- <p:column><p:inputText id="docDescPuesto" value="#{manejadorGestionEmpleado.empleado.docDescPuesto}"/></p:column> -->
+                                <p:column></p:column>
+                                <p:column></p:column>
+                            </p:row>
+                        </p:panelGrid>
+                    </p:panel>
+                </p:tab>
 
-                <!-- EXPERIENCIA LABORAL EN LA INSTITUCION  -->
-                <div class="panel panel-info">
-                    <div class="panel-heading" role="tab" id="headingNine">
-                        <h4 class="panel-title">
-                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
-                                <strong>Experiencia Laboral en la Institución</strong><!-- Nombre del Panel -->
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="collapseNine" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingNine">
-                        <div class="panel-body">
-                            <!-- Contenido del panel -->
-                            <p:panelGrid style="width: 100%;" styleClass="noBordes">
-                                <p:row>
-                                    <p:column><h:outputLabel value="Cargo Nominal:"/></p:column>
-                                    <p:column><p:inputText id="cargoNominal" value="#{manejadorGestionEmpleado.empleado.cargoNominal}" style="width: 100%" required="true" requiredMessage="The CargoNominal field is required."/></p:column>
-                                    <p:column></p:column>
-                                    <p:column></p:column>
-                                </p:row>
-                                <p:row>
-                                    <p:column><h:outputLabel value="Dirección Nacional:"/></p:column>
-                                    <p:column>
-                                        <p:selectOneMenu id="dirNacionalNominal" style="width: 100%" value="#{manejadorGestionEmpleado.dirNacionalNominal}">
-                                            <f:selectItems value="#{manejadorGestionEmpleado.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
-                                            <p:ajax update="dependeciaNominal"/>
-                                        </p:selectOneMenu>
-                                    </p:column>
-                                    <p:column><h:outputLabel value="Dependencia / Unidad organizativa:"/></p:column> 
-                                    <p:column>
-                                        <p:selectOneMenu id="dependeciaNominal"  style="width: 100%" value="#{manejadorGestionEmpleado.dependenciaNominal}" required="true" requiredMessage="The dependencia Nominal field is required.">
-                                            <f:selectItems value="#{manejadorGestionEmpleado.dependenciasFiltradas(2)}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
-                                            <p:ajax update="idEmpleadoJefe"/>
-                                        </p:selectOneMenu>
-                                    </p:column>
-                                </p:row>
-                                <p:row>
-                                    <p:column><h:outputLabel value="Cargo Funcional:"/></p:column>
-                                    <p:column><p:inputText id="cargoFuncional" value="#{manejadorGestionEmpleado.empleado.cargoFuncional}" style="width: 100%" required="true" requiredMessage="The CargoFuncional field is required."/></p:column>
-                                    <p:column></p:column>
-                                    <p:column></p:column>
-                                </p:row>
-                                <p:row>
-                                    <p:column><h:outputLabel value="Dirección Nacional:"/></p:column>
-                                    <p:column>
-                                        <p:selectOneMenu id="dirNacionalFuncional" style="width: 100%" value="#{manejadorGestionEmpleado.dirNacionalFuncional}">
-                                            <f:selectItems value="#{manejadorGestionEmpleado.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
-                                            <p:ajax update="dependeciaFuncional"/>
-                                        </p:selectOneMenu>
-                                    </p:column>
-                                    <p:column><h:outputLabel value="Dependencia / Unidad organizativa:"/></p:column> 
-                                    <p:column>
-                                        <p:selectOneMenu id="dependeciaFuncional"  style="width: 100%" value="#{manejadorGestionEmpleado.dependenciaFuncional}" required="true" requiredMessage="The dependeciaFiltrarJefe field is required.">
-                                            <f:selectItems value="#{manejadorGestionEmpleado.dependenciasFiltradas(3)}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
-                                            <p:ajax update="idEmpleadoJefe"/>
-                                        </p:selectOneMenu>
-                                    </p:column>
-                                </p:row>
-                                <p:row>
-                                    <p:column><h:outputLabel value="Salario:"/></p:column>
-                                    <p:column><p:inputText id="salarioEmp" style="width: 100%" value="#{manejadorGestionEmpleado.empleado.salarioEmp}"/></p:column>
-                                    <p:column><h:outputLabel value="CorreoInstitucional:"/></p:column>
-                                    <p:column><p:inputText id="correoInstitucional" style="width: 100%" value="#{manejadorGestionEmpleado.empleado.correoInstitucional}"/></p:column>
-                                </p:row>
-                                <p:row>
-                                    <p:column><h:outputLabel value="Fecha Ingreso al Sector Público:"/></p:column>
-                                    <p:column><p:calendar id="fechaIngresopublico" value="#{manejadorGestionEmpleado.empleado.fechaIngresoPublico}" showOn="button" locale="es" navigator="true" pattern="dd/MM/yyyy" yearRange="c-100:c+10" /></p:column>
-                                    <p:column><h:outputLabel value="Fecha Ingreso a la Institución:"/></p:column>
-                                    <p:column><p:calendar id="fechaIngresoinstitu" value="#{manejadorGestionEmpleado.empleado.fechaIngresoInsti}" showOn="button" locale="es" navigator="true" pattern="dd/MM/yyyy" yearRange="c-100:c+10" /></p:column>
-                                </p:row>
-                                <p:row>
-                                    <p:column><h:outputLabel value="Documeneto Descriptor de Puesto:"/></p:column>
-                                    <p:column>
-                                        <p:fileUpload mode="advanced" fileUploadListener="#{manejadorGestionEmpleado.handleFileUpload}" label="Examinar..." update="docDescPuesto" allowTypes="/(\.|\/)(gif|jpg|jpeg|gif|png|doc|pdf|doxc|PNG|GIF|JPG|JPEG|DOC|PDF|DOXC)$/" auto="true">
-                                            <f:attribute name="tipoDoc" value="3" />
-                                        </p:fileUpload>
-                                        <p:outputLabel id="docDescPuesto" value="#{fixme}" style="width: 100%"/>
-                                    </p:column> 
-                                    <!-- <p:column><p:inputText id="docDescPuesto" value="#{manejadorGestionEmpleado.empleado.docDescPuesto}"/></p:column> -->
-                                    <p:column></p:column>
-                                    <p:column></p:column>
-                                </p:row>
-                            </p:panelGrid>
-                        </div>
-                    </div>
-                </div>
+                <!--JEFE-->
+                <p:tab id="reportaJefe" title="Reporta a Jefe">
+                    <p:panel header="Ingreso de Jefe">
+                        <p:messages />
 
-                <!-- REPORTA A JEFES  -->
-                <div class="panel panel-info">
-                    <div class="panel-heading" role="tab" id="headingFive">
-                        <h4 class="panel-title">
-                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                                <strong>Reporta a (Jefes o Subordinados)</strong><!-- Nombre del Panel -->
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
-                        <div class="panel-body">
-                            <!-- Contenido del panel -->
-                            <p:panelGrid style="width: 100%;" styleClass="noBordes">
-                                <p:row>
-                                    <p:column><h:outputLabel value="Jefe:"/></p:column>
-                                    <p:column><!--<p:inputText id="jefe" value="#{manejadorGestionEmpleado.empleado.jefe}" style="width: 100%" /> -->
-                                        <p:selectOneMenu id="jefe" style="width: 100%" value="#{manejadorGestionEmpleado.empleado.jefe}" required="true" requiredMessage="The jefe field is required.">
-                                            <f:selectItem itemLabel="NO" itemValue="NO" />
-                                            <f:selectItem itemLabel="SI" itemValue="SI" />
-                                        </p:selectOneMenu>
-                                    </p:column>
-                                    <p:column>
+                        <p:panelGrid style="width: 100%;" styleClass="noBordes">
 
-                                    </p:column>
-                                    <p:column></p:column>
-                                </p:row>
+                            <p:row>
+                                <p:column><h:outputLabel value="Jefe:"/></p:column>
 
-                                <p:row>
-                                    <p:column><h:outputLabel value="Dirección Nacional:"/></p:column>
-                                    <p:column>
-                                        <p:selectOneMenu id="dirNacionalFiltrarJefe" style="width: 100%" value="#{manejadorGestionEmpleado.dirNacionalFiltrarJefe}">
-                                            <f:selectItems value="#{manejadorGestionEmpleado.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
-                                            <p:ajax update="dependeciaFiltrarJefe"/>
-                                        </p:selectOneMenu>
-                                    </p:column>
-                                    <p:column><h:outputLabel value="Dependencia / Unidad organizativa:"/></p:column> 
-                                    <p:column>
-                                        <p:selectOneMenu id="dependeciaFiltrarJefe"  style="width: 100%" value="#{manejadorGestionEmpleado.dependeciasFiltrarJefe}">
-                                            <f:selectItems value="#{manejadorGestionEmpleado.dependenciasFiltradas(1)}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
-                                            <p:ajax update="idEmpleadoJefe"/>
-                                        </p:selectOneMenu>
-                                    </p:column>
-                                </p:row>
-                                <p:row>
-                                    <p:column><h:outputLabel value="Empleado:"/></p:column>
-                                    <p:column><p:selectOneMenu id="idEmpleadoJefe" style="width: 100%" value="#{manejadorGestionEmpleado.empJefe}" >
-                                            <f:selectItems value="#{manejadorGestionEmpleado.empleadoJefeDependencia()}" var="emple" itemLabel="#{emple.nombreEmpleado}" itemValue="#{emple.idEmpleado}"/>
-                                        </p:selectOneMenu></p:column>
-                                    <p:column></p:column>
-                                    <p:column></p:column>
-                                </p:row>
-                            </p:panelGrid>
-                        </div>
-                    </div>
-                </div>
+                                <p:column>
 
-                <h:commandButton value="Guardar" action="#{manejadorGestionEmpleado.guardarEmpleado()}"/>
+                                </p:column>
+                                <p:column></p:column>
+                            </p:row>
 
-            </h:form> 
-            
-            
+                            <p:row>
+                                <p:column><h:outputLabel value="Dirección Nacional:"/></p:column>
+                                <p:column>
+                                    <p:selectOneMenu id="dirNacionalFiltrarJefe" style="width: 100%" value="#{manejadorGestionEmpleado.dirNacionalFiltrarJefe}">
+                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                        <f:selectItems value="#{manejadorGestionEmpleado.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
+                                        <p:ajax update="dependeciaFiltrarJefe"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+                                <p:column><h:outputLabel value="Dependencia / Unidad organizativa:"/></p:column> 
+                                <p:column>
+                                    <p:selectOneMenu id="dependeciaFiltrarJefe"  style="width: 100%" value="#{manejadorGestionEmpleado.dependeciasFiltrarJefe}">
+                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                        <f:selectItems value="#{manejadorGestionEmpleado.dependenciasFiltradas(1)}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
+                                        <p:ajax update="idEmpleadoJefe"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column><h:outputLabel value="Empleado:"/></p:column>
+                                <p:column><p:selectOneMenu id="idEmpleadoJefe" style="width: 100%" value="#{manejadorGestionEmpleado.empJefe}" >
+                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                        <f:selectItems value="#{manejadorGestionEmpleado.empleadoJefeDependencia()}" var="emple" itemLabel="#{emple.nombreEmpleado}" itemValue="#{emple.idEmpleado}"/>
+                                    </p:selectOneMenu></p:column>
+                                <p:column></p:column>
+                                <p:column></p:column>
+                            </p:row>
 
-        </div>
+                        </p:panelGrid>
+                    </p:panel>
+                </p:tab>
+
+                <!--CONFIRMACION DE DATOS-->
+                <p:tab id="confirmar" title="Confirmar">
+                    <p:panel header="Confirmación de Datos">
+                        <h:commandButton value="Guardar" action="#{manejadorGestionEmpleado.guardarEmpleado()}"/>
+                        <p:commandButton value="Guardar" actionListener="#{fixme}" update="growl" process="@this"/>
+                    </p:panel>
+                </p:tab>
+
+
+            </p:wizard>
+
+        </h:form>
+        <p:row>
+            <p:column>
+                <input type="button" id="mostrarocultar" value="NO"/>
+                <div id="divmostoc" style="display:none;">Hola</div>
+            </p:column> 
+
+        </p:row>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $(document).ready(function () {
+                    $('#mostrarocultar').click(function () {
+                        $('#divmostoc').slideToggle();
+                        if ($("#mostrarocultar").prop('value') === 'SI') {
+                            $("#mostrarocultar").prop('value', 'NO');
+                        } else {
+                            $("#mostrarocultar").prop('value', 'SI');
+                        }
+                    });
+                });
+            });
+        </script>
 
     </ui:define>
 </ui:composition>

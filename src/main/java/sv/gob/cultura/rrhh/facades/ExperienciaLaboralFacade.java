@@ -29,7 +29,8 @@ public class ExperienciaLaboralFacade extends AbstractFacade<ExperienciaLaboral>
         super(ExperienciaLaboral.class);
     }
     
-    public List<ExperienciaLaboral> experienciaLaboralSector(String sector) {
-        return getEntityManager().createNamedQuery("ExperienciaLaboral.findBySectorExpLab").setParameter("sectorExpLab", sector).getResultList();
+    public List<ExperienciaLaboral> experienciaLaboralSector(String sector, int idEmpleado) {
+        return getEntityManager().createNamedQuery("ExperienciaLaboral.findBySectorExpLab").setParameter("sectorExpLab", sector).setParameter("idEmpleado", idEmpleado).getResultList();
     }
+
 }

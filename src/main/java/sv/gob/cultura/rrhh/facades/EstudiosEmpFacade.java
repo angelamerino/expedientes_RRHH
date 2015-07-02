@@ -29,11 +29,15 @@ public class EstudiosEmpFacade extends AbstractFacade<EstudiosEmp> {
         super(EstudiosEmp.class);
     }
     
-     public List<EstudiosEmp> buscarEstudioEmpId(int idEstudioEmp){
+    public List<EstudiosEmp> buscarEstudioEmpId(int idEstudioEmp){
         return getEntityManager().createNamedQuery("EstudiosEmp.findByIdEstudio").setParameter("idEstudio", idEstudioEmp).getResultList();
     }
     
     public List<EstudiosEmp> buscarEstudioTipo(String tipo) {
         return getEntityManager().createNamedQuery("EstudiosEmp.findByTipoEstudio").setParameter("tipoEstudio", tipo).getResultList();
     }
+    
+//    public List<EstudiosEmp> buscarEstudioTipoEmp(String tipo, int idEmpleado) {
+//        return getEntityManager().createNamedQuery("EstudiosEmp.findByTipoEmp").setParameter("tipoEstudio", tipo).setParameter("idEmpleado", idEmpleado).getResultList();
+//    }
 }
