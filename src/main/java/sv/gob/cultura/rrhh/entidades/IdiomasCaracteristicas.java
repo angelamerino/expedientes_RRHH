@@ -47,8 +47,18 @@ public class IdiomasCaracteristicas implements Serializable {
     @JoinColumn(name = "id_caract_idioma", referencedColumnName = "id_caract_idioma", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private CaracteristicasIdioma caracteristicasIdioma;
+    @Column(name = "id_empleado")
+    private Integer idEmpleado;
 
     public IdiomasCaracteristicas() {
+    }
+
+    public Integer getIdEmpleado() {
+        return idEmpleado;
+    }
+
+    public void setIdEmpleado(Integer idEmpleado) {
+        this.idEmpleado = idEmpleado;
     }
 
     public IdiomasCaracteristicas(IdiomasCaracteristicasPK idiomasCaracteristicasPK) {
