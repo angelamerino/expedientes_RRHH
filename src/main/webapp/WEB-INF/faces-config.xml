@@ -48,6 +48,12 @@
         </navigation-case>
         
         <navigation-case>
+            <from-outcome>gestion_usuario</from-outcome>
+            <to-view-id>/contenido/gestion_usuarios.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        
+        <navigation-case>
             <from-outcome>ayuda</from-outcome>
             <to-view-id>/contenido/ayuda.xhtml</to-view-id>
             <redirect/>
