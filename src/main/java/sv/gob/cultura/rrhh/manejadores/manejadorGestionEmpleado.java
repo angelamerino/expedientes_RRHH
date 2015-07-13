@@ -8,9 +8,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.application.Application;
-import javax.faces.application.ViewHandler;
-import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
@@ -48,7 +45,6 @@ public class manejadorGestionEmpleado implements Serializable {
 //******************************************************************************
 // ************** LLAMADA A LOS ENTERPRICE JAVA BEANS **************************
 //******************************************************************************
-
     @EJB
     private EmpleadosFacade empleadosFacade;
     @EJB
@@ -94,10 +90,9 @@ public class manejadorGestionEmpleado implements Serializable {
     private ImgDoc imagenDocumento = new ImgDoc();
 
 //******************************************************************************
-//****** VARIABLES QUE CONTRENDRAN ID´S O STRING DE FORMULARIOS ****************
+//****** VARIABLES QUE CONTRENDRAN IDÂ´S O STRING DE FORMULARIOS ****************
 //******************************************************************************
-    private String nr = "NR 0111-111111-111-2";     // nr para pruebas de guardar
-    private final String[] path = new String[10];                                     // contiene url de documentos
+    private final String[] path = new String[10];              // contiene url de documentos
     private final String[] nombreImgDoc = new String[10];
     private final String[] tipoImgDoc = new String[10];
     private final int[] sizeImgDoc = new int[10];
@@ -105,11 +100,10 @@ public class manejadorGestionEmpleado implements Serializable {
     private String pathServer;
     private String nombreImagen;
     private Date fechaNacEmpleado = new Date();                // fehca nacimiento empleado
-    private int dirDepto;                           // id departamento residencia
-    private int dirMuni;                            // id municipio residencia
-    private int parentescoId;                       // id Parentesco    
-    private int empleadoId = 3;                     // id empleado Ahora prueba empleado id=3
-    private int empJefe;
+    private int dirDepto;                                   // id departamento residencia
+    private int dirMuni;                                    // id municipio residencia
+    private int parentescoId;                               // id Parentesco    
+    private int empJefe;                                    // id de Jefe de empleado
     private int depto, deptonac;                    // id´s departamento municipio Nacimiento
     private int muni;                               // id municipio Nacimiento           
     private int edadEmpleado;                       // edad de empleado calculada a partir de fecha
@@ -119,7 +113,9 @@ public class manejadorGestionEmpleado implements Serializable {
     private int dependenciaNominal;
     private int dirNacionalFuncional;
     private int dependenciaFuncional;
-
+    private int estadoEditar;
+    private int empleadoEditar;
+    private String nombreEmpleadoEditar;
 // *****************************************************************************
 //********************** GET DE ENTERPRICE JAVA BEAN ***************************
 //******************************************************************************
@@ -298,28 +294,12 @@ public class manejadorGestionEmpleado implements Serializable {
         this.parentescoId = parentescoId;
     }
 
-    public String getNr() {
-        return nr;
-    }
-
-    public void setNr(String nr) {
-        this.nr = nr;
-    }
-
     public void setDeptonac(int deptonac) {
         this.deptonac = deptonac;
     }
 
     public int getDeptonac() {
         return deptonac;
-    }
-
-    public int getEmpleadoId() {
-        return empleadoId;
-    }
-
-    public void setEmpleadoId(int empleadoId) {
-        this.empleadoId = empleadoId;
     }
 
     public int getDepto() {
@@ -361,7 +341,6 @@ public class manejadorGestionEmpleado implements Serializable {
 
     public void setDirNacionalFiltrarJefe(int dirNacionalFiltrarJefe) {
         this.dirNacionalFiltrarJefe = dirNacionalFiltrarJefe;
-        System.out.println(this.getDirNacionalFiltrarJefe());
     }
 
     public int getDependeciasFiltrarJefe() {
@@ -444,6 +423,32 @@ public class manejadorGestionEmpleado implements Serializable {
         this.pathServer = pathServer;
     }
 
+    public int getEstadoEditar() {
+        return estadoEditar;
+    }
+
+    public void setEstadoEditar(int estadoEditar) {
+        this.estadoEditar = estadoEditar;
+    }
+
+    public int getEmpleadoEditar() {
+        return empleadoEditar;
+    }
+
+    public void setEmpleadoEditar(int empleadoEditar) {
+        this.empleadoEditar = empleadoEditar;
+        Empleados emp = getEmpleadosFacade().find(this.empleadoEditar);
+        this.setNombreEmpleadoEditar(emp.getNombreEmpleado());
+    }
+
+    public String getNombreEmpleadoEditar() {
+        return nombreEmpleadoEditar;
+    }
+
+    public void setNombreEmpleadoEditar(String nombreEmpleadoEditar) {
+        this.nombreEmpleadoEditar = nombreEmpleadoEditar;
+    }
+    
 //******************************************************************************
 // **************** LISTA DE ELEMENTOS EN TABLAS *******************************
 //******************************************************************************
@@ -508,45 +513,94 @@ public class manejadorGestionEmpleado implements Serializable {
     public List<Empleados> empleadoJefeDependencia() {
         return getEmpleadosFacade().buscarEmp(dependeciasFiltrarJefe);
     }
-
-    public List<Empleados> empleadoId() {
-        return getEmpleadosFacade().buscarEmpId(empleadoId);
+    
+    public List<Empleados> todosEmpleados() {
+        return getEmpleadosFacade().findAll();
     }
 
 //******************************************************************************
 //*************************** FUNCIONES DE GUARDAR *****************************
 //******************************************************************************
-    public void guardarEmpleado() {
+    public String guardarEmpleado() {
         
         //Seteo de datos de selecionables
-        empleado.setDeptoNac(this.getDepto());
-        empleado.setMunicipioNac(this.getMuni());
-        empleado.setFechaNac(this.getFechaNacEmpleado());
-        empleado.setEdadEmp(this.getEdadEmpleado());
-        empleado.setDeptoResidencia(this.getDirDepto());
-        empleado.setMunicipioResidencia(this.getDirMuni());  
-        empleado.setIdEmpleadoJefe(new Empleados(this.getEmpJefe()));
-        empleado.setIdDependenciaN(new Dependencias(this.getDependenciaNominal()));
-        empleado.setIdDependenciaF(new Dependencias(this.getDependenciaFuncional()));
+        if(this.getDepto()!=0){empleado.setDeptoNac(this.getDepto());}
+        if(this.getMuni()!=0){empleado.setMunicipioNac(this.getMuni());}
+        if(this.getDirDepto()!=0){empleado.setDeptoResidencia(this.getDirDepto());}
+        if(this.getDirMuni()!=0){empleado.setMunicipioResidencia(this.getDirMuni());}
+        if(this.getFechaNacEmpleado()!= new Date()){empleado.setFechaNac(this.getFechaNacEmpleado());} 
+        if(this.getEdadEmpleado()!=0){empleado.setEdadEmp(this.getEdadEmpleado());}
+        if(this.getEmpJefe()!=0){
+            empleado.setIdEmpleadoJefe(new Empleados(this.getEmpJefe()));
+            empleado.setJefe("SI");
+        }else{empleado.setJefe("NO");}
+        if(this.getDependenciaNominal()!=0){empleado.setIdDependenciaN(new Dependencias(this.getDependenciaNominal()));}
+        if(this.getDependenciaFuncional()!=0){empleado.setIdDependenciaF(new Dependencias(this.getDependenciaFuncional()));}
 
         //Seteo de las url de foto, curriculum y doc descriptor de puesto
-        empleado.setUrlFotoEmp(this.path[0]);
-        empleado.setCurriculum(this.path[1]);
-        empleado.setDocDescPuesto(this.path[2]);        
+        if(this.path[0]!=null){empleado.setUrlFotoEmp(this.path[0]);}
+        if(this.path[1]!=null){empleado.setCurriculum(this.path[1]);}
+        if(this.path[2]!=null){empleado.setDocDescPuesto(this.path[2]);}        
         
         //Seteo de Dependencias nominal y funcional
         Dependencias depenNominal = getDependenciasFacade().find(this.getDependenciaNominal());
         Dependencias depenFuncional = getDependenciasFacade().find(this.getDependenciaFuncional());
         empleado.setIdMunicipioN(depenNominal.getIdMunicipio());
         empleado.setIdMunicipioF(depenFuncional.getIdMunicipio());
-        empleado.setEdadEmp(this.getEdadEmpleado());
         
-        getEmpleadosFacade().create(empleado);
-        this.setEmpleadoId(empleado.getIdEmpleado());
+        //Fecha de creacion y usuario id =1
+        empleado.setFechaCreaEmp(new Date());
+        empleado.setUserCreaEmp(1);
+        
+        getEmpleadosFacade().create(empleado);        
 
         empleado = new Empleados();
+        restaurarSelecionables();
+        return "gestion_empleados";
+    }
+    
+    public String editEmpleado(){
+        //Seteo de datos de selecionables
+        if(this.getDepto()!=0){empleado.setDeptoNac(this.getDepto());}
+        if(this.getMuni()!=0){empleado.setMunicipioNac(this.getMuni());}
+        if(this.getDirDepto()!=0){empleado.setDeptoResidencia(this.getDirDepto());}
+        if(this.getDirMuni()!=0){empleado.setMunicipioResidencia(this.getDirMuni());}
+        if(this.getFechaNacEmpleado()!= new Date()){empleado.setFechaNac(this.getFechaNacEmpleado());} 
+        if(this.getEdadEmpleado()!=0){empleado.setEdadEmp(this.getEdadEmpleado());}
+        if(this.getEmpJefe()!=0){
+            empleado.setIdEmpleadoJefe(new Empleados(this.getEmpJefe()));
+            empleado.setJefe("SI");
+        }else{empleado.setJefe("NO");}
+        if(this.getDependenciaNominal()!=0){empleado.setIdDependenciaN(new Dependencias(this.getDependenciaNominal()));}
+        if(this.getDependenciaFuncional()!=0){empleado.setIdDependenciaF(new Dependencias(this.getDependenciaFuncional()));}
+
+        //Seteo de las url de foto, curriculum y doc descriptor de puesto
+        if(this.path[0]!=null){empleado.setUrlFotoEmp(this.path[0]);}
+        if(this.path[1]!=null){empleado.setCurriculum(this.path[1]);}
+        if(this.path[2]!=null){empleado.setDocDescPuesto(this.path[2]);}               
+        
+        //Seteo de Dependencias nominal y funcional
+        Dependencias depenNominal = getDependenciasFacade().find(this.getDependenciaNominal());
+        Dependencias depenFuncional = getDependenciasFacade().find(this.getDependenciaFuncional());
+        empleado.setIdMunicipioN(depenNominal.getIdMunicipio());
+        empleado.setIdMunicipioF(depenFuncional.getIdMunicipio());        
+        
+        empleado.setFechaModEmp(new Date());
+        //empleado.setUserModEmp(1); ESTA COMO DATE
+        getEmpleadosFacade().edit(empleado);        
+
+        empleado = new Empleados();
+        restaurarSelecionables();
+        return "gestion_empleados";
     }
 
+    public void cambiarEstado(){
+        Empleados emp = getEmpleadosFacade().find(this.getEmpleadoEditar());
+        emp.setIdEstado(new Estados(this.getEstadoEditar()));
+        emp.setFechaModEmp(new Date());
+        //emp.setUserModEmp(1);  ESTA COMO FECHA
+        getEmpleadosFacade().edit(emp);
+    }
 // *****************************************************************************
 // ************ FUNCIONES EXTRA QUE SE UTLIZAN LOS FORMULARIOS *****************
 //******************************************************************************
@@ -674,24 +728,50 @@ public class manejadorGestionEmpleado implements Serializable {
         this.graphicImage = graphicImage;
     }
 
-    public void refresh() {
-//        FacesContext context = FacesContext.getCurrentInstance();
-//        Application application = context.getApplication();
-//        ViewHandler viewHandler = application.getViewHandler();
-//        UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
-//        context.setViewRoot(viewRoot);
-//        context.renderResponse();
-        path[0] = null;
+    public void restaurarSelecionables() {
+        this.setDepto(0);
+        this.setMuni(0);
+        this.setDirDepto(0);
+        this.setDirMuni(0);
+        this.setFechaNacEmpleado(new Date()); 
+        this.setEdadEmpleado(0);
+        this.setEmpJefe(0);      
+        this.setDependenciaNominal(0);
+        this.setDependenciaFuncional(0);
+        this.setDirNacionalFiltrarJefe(0);
+        this.setDependeciasFiltrarJefe(0);
+        this.path[0]=null;
+        this.path[1]=null;
+        this.path[2]=null;
+    }
+
+    public String editarEmpleado() {
+        DirNacional dirNominal = empleado.getIdDependenciaN().getIdDirNac();
+        DirNacional dirFuncional = empleado.getIdDependenciaF().getIdDirNac();
+        Dependencias dependenciaN = empleado.getIdDependenciaN();
+        Dependencias dependenciaF = empleado.getIdDependenciaF();
+        this.setDirNacionalNominal(dirNominal.getIdDirNac());
+        this.setDirNacionalFuncional(dirFuncional.getIdDirNac());
+        this.setDependenciaNominal(dependenciaN.getIdDependencia());
+        this.setDependenciaFuncional(dependenciaF.getIdDependencia());
+       
+        if(empleado.getDeptoNac()!=null){this.setDepto(empleado.getDeptoNac());}
+        if(empleado.getMunicipioNac()!=null){this.setMuni(empleado.getMunicipioNac());}
+        if(empleado.getDeptoResidencia()!=null){this.setDirDepto(empleado.getDeptoResidencia());}
+        if(empleado.getMunicipioResidencia()!=null){this.setDirMuni(empleado.getMunicipioResidencia());}
+        
+        return "editar_empleados";
     }
     
-    public String onFlowProcess(FlowEvent event) {
-//        if(skip) {
-//            skip = false;   //reset in case user goes back
-//            return "confirm";
-//        }
-//        else {
-            return event.getNewStep();
-      //  }
+    public void refresh(){
+        empleado = new Empleados();
+        restaurarSelecionables();
+    }
+    
+    public String nuevoEmpleado() {
+        empleado = new Empleados();
+        restaurarSelecionables();
+        return "reg_empleados";
     }
 //******************************************************************************
 // *****************************************************************************    

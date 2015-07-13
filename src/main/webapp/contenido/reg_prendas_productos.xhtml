@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../resources/plantilla/plantilla.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+
+        <div class="page-header">
+            <h1><strong>REGISTRO DE PRENDAS Y PRODUCTOS</strong></h1>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading"><strong>Ingreso de Prendas y Productos</strong></div>
+            <div class="panel-body">
+
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-3">
+                        </div>
+                        <div class="col-md-6">
+
+                            <h:form class="form-horizontal">
+                                <div class="form-group">
+                                    <h:outputLabel value="Nombre del Producto:" styleClass="col-lg-4 control-label"/>
+                                    <div class="col-lg-8">
+                                        <h:inputText id="nombreProd" styleClass="form-control" value="#{manejadorPrendasProductos.producto.nombreProd}" required="true" requiredMessage="Ingrese Nombre del Producto"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <h:outputLabel value="Descripción:" styleClass="col-lg-4 control-label"/>
+                                    <div class="col-lg-8">
+                                        <h:inputText id="descripcionProd" styleClass="form-control" value="#{manejadorPrendasProductos.producto.descripcionProd}" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <h:outputLabel value="Proveedor:" styleClass="col-lg-4 control-label"/>
+                                    <div class="col-lg-8">
+                                        <h:selectOneMenu class="form-control" value="#{manejadorPrendasProductos.proveedorProd}" style="width: 100%" required="true" requiredMessage="Seleccione un Proveedor">
+                                            <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                            <f:selectItems value="#{manejadorPrendasProductos.todosProveedores()}" var="proveedores" itemLabel="#{proveedores.nombreProv}" itemValue="#{proveedores.idProveedor}"/>                                                    
+                                        </h:selectOneMenu>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <h:outputLabel value="Costo Unitario:" styleClass="col-lg-4 control-label"/>
+                                    <div class="col-lg-8">
+                                        <h:inputText id="costoUnit" styleClass="form-control" value="#{manejadorPrendasProductos.producto.costoUnit}" required="true" requiredMessage="Ingrese Costo Unitario"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-lg-4"></div>
+                                    <div class="col-lg-8">
+                                        <h:commandLink style="margin: 2px" styleClass="btn btn-info" value="Guardar" action="#{manejadorPrendasProductos.guardarProducto()}"/>
+                                        <h:commandLink style="margin: 2px" styleClass="btn btn-info" value="Cancelar" action="#{manejadorPrendasProductos.cancelar()}"/>
+                                    </div>
+
+                                </div>
+                            </h:form>
+
+                        </div>
+                        <div class="col-md-3">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

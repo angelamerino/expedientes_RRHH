@@ -30,7 +30,7 @@ public class IdiomasCaracteristicasFacade extends AbstractFacade<IdiomasCaracter
     }
     //IdiomasCaracteristicas.findByIdIdioma
     
-    public List<IdiomasCaracteristicas> buscarIdiomasId(int idIdioma){
-        return getEntityManager().createNamedQuery("IdiomasCaracteristicas.findByIdIdioma").setParameter("idIdioma", idIdioma).getResultList();
+    public List<IdiomasCaracteristicas> buscarIdiomasId(int idIdioma, int idEmpleado){
+        return getEntityManager().createNamedQuery("IdiomasCaracteristicas.findByIdIdiomaIdEmpleado").setParameter("idIdioma", idIdioma).setParameter("idEmpleado", idEmpleado).getResultList();
     }
 }

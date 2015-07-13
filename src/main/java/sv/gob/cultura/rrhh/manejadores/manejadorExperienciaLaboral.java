@@ -6,10 +6,15 @@
 package sv.gob.cultura.rrhh.manejadores;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import org.primefaces.context.RequestContext;
 import sv.gob.cultura.rrhh.entidades.Dependencias;
 import sv.gob.cultura.rrhh.entidades.DirNacional;
 import sv.gob.cultura.rrhh.entidades.Empleados;
@@ -26,8 +31,6 @@ import sv.gob.cultura.rrhh.facades.ExperienciaLaboralFacade;
 @Named(value = "manejadorExperienciaLaboral")
 @ViewScoped
 public class manejadorExperienciaLaboral implements Serializable{
-   
-    
 
     public manejadorExperienciaLaboral() {
     }
@@ -117,7 +120,6 @@ public class manejadorExperienciaLaboral implements Serializable{
             this.setNombreEmp(emp.getNombreEmpleado());
         }
     }
-    
 
     public String getNombreEmp() {
         return nombreEmp;
@@ -155,6 +157,11 @@ public class manejadorExperienciaLaboral implements Serializable{
     public void guardarExpLaboralPublico() {
         experienciaLaboral.setIdEmpleado(new Empleados(this.getEmpleadoSelecionado()));
         experienciaLaboral.setSectorExpLab("Público");
+        
+        //Fehca de creacion y usuario=1
+        experienciaLaboral.setFechaCreaExp(new Date());
+        experienciaLaboral.setUserCreaExp(1);
+        
         getExperienciaLaboralFacade().create(experienciaLaboral);
         experienciaLaboral = new ExperienciaLaboral();
     }
@@ -162,12 +169,42 @@ public class manejadorExperienciaLaboral implements Serializable{
     public void guardarExpLaboralPrivado() {
         experienciaLaboral.setIdEmpleado(new Empleados(this.getEmpleadoSelecionado()));
         experienciaLaboral.setSectorExpLab("Privado");
+        
+        //Fehca de creacion y usuario=1
+        experienciaLaboral.setFechaCreaExp(new Date());
+        experienciaLaboral.setUserCreaExp(1);
+        
         getExperienciaLaboralFacade().create(experienciaLaboral);
         experienciaLaboral = new ExperienciaLaboral();
     }
-    
-    public void eliminar() {
-        getExperienciaLaboralFacade().remove(experienciaLaboral);
+    public void editarExpLaboral(){
+        //Fehca de creacion y usuario=1
+        experienciaLaboral.setFechaModExp(new Date());
+        experienciaLaboral.setUserModExp(1);
+        
+        getExperienciaLaboralFacade().edit(experienciaLaboral);
+        experienciaLaboral = new ExperienciaLaboral();
+    }
+    public String eliminar(ExperienciaLaboral experiencia) {
+        getExperienciaLaboralFacade().remove(experiencia);
+        return null;
     }   
+    
+    public void empleadoSelecionadoValidoP(ActionEvent event) {
+        if (this.getEmpleadoSelecionado() == 0) {
+            experienciaLaboral = new ExperienciaLaboral();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Seleccione un Empleado"));
+        } else {
+            RequestContext.getCurrentInstance().execute("PF('publico').show()");
+        }
+    }
+    public void empleadoSelecionadoValidoPP(ActionEvent event) {
+        if (this.getEmpleadoSelecionado() == 0) {
+            experienciaLaboral = new ExperienciaLaboral();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Seleccione un Empleado"));
+        } else {
+            RequestContext.getCurrentInstance().execute("PF('privado').show()");
+        }
+    }
 
 }

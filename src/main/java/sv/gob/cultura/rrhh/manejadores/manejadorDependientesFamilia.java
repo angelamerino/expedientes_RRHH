@@ -10,8 +10,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import org.primefaces.context.RequestContext;
 import sv.gob.cultura.rrhh.entidades.Dependencias;
 import sv.gob.cultura.rrhh.entidades.DirNacional;
 import sv.gob.cultura.rrhh.entidades.Empleados;
@@ -29,15 +33,11 @@ import sv.gob.cultura.rrhh.facades.ParentescoFacade;
  */
 @Named(value = "manejadorDependientesFamilia")
 @ViewScoped
-public class manejadorDependientesFamilia implements Serializable{
-    
-    
-    
+public class manejadorDependientesFamilia implements Serializable {
 
-    
     public manejadorDependientesFamilia() {
     }
-    
+
 // ************** LLAMADA A LOS ENTERPRICE JAVA BEANS **************************
     @EJB
     private FamiliaDependientesEmpFacade familiaDependientesEmpFacade;
@@ -49,18 +49,19 @@ public class manejadorDependientesFamilia implements Serializable{
     private DependenciasFacade dependenciasFacade;
     @EJB
     private DirNacionalFacade dirNacionalFacade;
-    
+
 //*********************** OBJETOS DE LOS ENTIDADES ***************************** 
     FamiliaDependientesEmp familiaDependientesEmp = new FamiliaDependientesEmp();
     Parentesco parentesco = new Parentesco();
 //****** VARIABLES QUE CONTRENDRAN ID´S O STRING DE FORMULARIOS ****************
-    private Date fechaNacFamiliaDependiente = new Date();      // fecha naciemeinto familiares
-    private int edadFamiliaDependiente;             // edad familiares calculada a partir de fecha
+    private Date fechaNacFamiliaDependiente = new Date();       // fecha naciemeinto familiares
+    private int edadFamiliaDependiente;                         // edad familiares calculada a partir de fecha
     private int direccionNacional;
     private int dependecia;
     private int empleadoSelecionado;
     private String nombreEmp;
 //********************** GET DE ENTERPRICE JAVA BEAN ***************************
+
     public FamiliaDependientesEmpFacade getFamiliaDependientesEmpFacade() {
         return familiaDependientesEmpFacade;
     }
@@ -80,7 +81,7 @@ public class manejadorDependientesFamilia implements Serializable{
     public DirNacionalFacade getDirNacionalFacade() {
         return dirNacionalFacade;
     }
-    
+
 //******************* GET y SET DE OBJETOS DE ENTIDADES ************************
     public FamiliaDependientesEmp getFamiliaDependientesEmp() {
         return familiaDependientesEmp;
@@ -103,7 +104,7 @@ public class manejadorDependientesFamilia implements Serializable{
     }
 
     public void setFechaNacFamiliaDependiente(Date fechaNacFamiliaDependiente) {
-        this.fechaNacFamiliaDependiente = fechaNacFamiliaDependiente;        
+        this.fechaNacFamiliaDependiente = fechaNacFamiliaDependiente;
         this.setEdadFamiliaDependiente(edad(fechaNacFamiliaDependiente));
     }
 
@@ -157,16 +158,16 @@ public class manejadorDependientesFamilia implements Serializable{
     public void setNombreEmp(String nombreEmp) {
         this.nombreEmp = nombreEmp;
     }
-  
+
 // **************** LISTA DE ELEMENTOS EN TABLAS *******************************  
     public List<Parentesco> todosParentesco() {
         return getParentescoFacade().findAll();
     }
-    
+
     public List<FamiliaDependientesEmp> todosFamiliaDependientesEmp() {
         return getFamiliaDependientesEmpFacade().buscarDependientes(this.getEmpleadoSelecionado());
     }
-    
+
     public List<DirNacional> todosDirNacional() {
         return getDirNacionalFacade().findAll();
     }
@@ -174,24 +175,47 @@ public class manejadorDependientesFamilia implements Serializable{
     public List<Dependencias> dependenciasFiltradas() {
         return getDependenciasFacade().buscarDependencias(this.getDireccionNacional());
     }
+
     public List<Empleados> empleadoFiltrado() {
         return getEmpleadosFacade().buscarEmp(this.getDependecia());
     }
-    
-//*************************** FUNCIONES DE GUARDAR *****************************
 
+//*************************** FUNCIONES DE GUARDAR *****************************
     public void guardarFamiliaDependiente() {
         familiaDependientesEmp.setIdEmpleado(new Empleados(this.getEmpleadoSelecionado()));
         familiaDependientesEmp.setEdadFamilia(getEdadFamiliaDependiente());
         familiaDependientesEmp.setFechaNacFamilia(getFechaNacFamiliaDependiente());
+        
+        //Fecha de Creación y usuario Id =1
+        familiaDependientesEmp.setFechaCreaFam(new Date());
+        familiaDependientesEmp.setUserCreaFam(1);
+        
         getFamiliaDependientesEmpFacade().create(familiaDependientesEmp);
         familiaDependientesEmp = new FamiliaDependientesEmp();
+        this.setEdadFamiliaDependiente(0);
+        this.setFechaNacFamiliaDependiente(new Date());
     }
-    
-    public void eliminar() {
-        getFamiliaDependientesEmpFacade().remove(familiaDependientesEmp);
-    } 
-    
+
+    public void editarFamiliaDependiente() {
+        familiaDependientesEmp.setEdadFamilia(getEdadFamiliaDependiente());
+        familiaDependientesEmp.setFechaNacFamilia(getFechaNacFamiliaDependiente());
+        
+        //Fecha de Modificación y usuario Id =1
+        familiaDependientesEmp.setFechaModFam(new Date());
+        familiaDependientesEmp.setUserModFam(1);
+        
+        getFamiliaDependientesEmpFacade().edit(familiaDependientesEmp);
+        familiaDependientesEmp = new FamiliaDependientesEmp();
+        familiaDependientesEmp = new FamiliaDependientesEmp();
+        this.setEdadFamiliaDependiente(0);
+        this.setFechaNacFamiliaDependiente(new Date());
+    }
+
+    public String eliminar(FamiliaDependientesEmp familiar) {
+        getFamiliaDependientesEmpFacade().remove(familiar);
+        return null;
+    }
+
     //Devuelve edad apartir de fecha de nacimeinto
     public int edad(Date fecha_nac) {
 
@@ -217,5 +241,14 @@ public class manejadorDependientesFamilia implements Serializable{
             anios = 0;
         }
         return anios;
+    }
+
+    public void empleadoSelecionadoValido(ActionEvent event) {
+        if (this.getEmpleadoSelecionado() == 0) {
+            familiaDependientesEmp = new FamiliaDependientesEmp();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Seleccione un Empleado"));
+        } else {
+            RequestContext.getCurrentInstance().execute("PF('familia').show()");
+        }
     }
 }

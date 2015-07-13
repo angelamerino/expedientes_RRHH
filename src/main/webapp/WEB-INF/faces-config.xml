@@ -13,7 +13,47 @@
         
         <navigation-case>
             <from-outcome>empleado</from-outcome>
-            <to-view-id>/contenido/add_empleados.xhtml</to-view-id>
+            <to-view-id>/contenido/reg_empleados.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>estudios</from-outcome>
+            <to-view-id>/contenido/estudios_empleados.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>contactos</from-outcome>
+            <to-view-id>/contenido/contactos_emergencia.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>dependientes</from-outcome>
+            <to-view-id>/contenido/dependientes_familia.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>experiencia</from-outcome>
+            <to-view-id>/contenido/experiencia_laboral.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>gestion_empleados</from-outcome>
+            <to-view-id>/contenido/gestion_empleados.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>editar_empleados</from-outcome>
+            <to-view-id>/contenido/editar_empleados.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>prendas_productos</from-outcome>
+            <to-view-id>/contenido/reg_prendas_productos.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>gestion_prendas_productos</from-outcome>
+            <to-view-id>/contenido/gestion_prendas_productos.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
   <!--      

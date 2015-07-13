@@ -6,10 +6,15 @@
 package sv.gob.cultura.rrhh.manejadores;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import org.primefaces.context.RequestContext;
 import sv.gob.cultura.rrhh.entidades.ContactoEmergenciaEmp;
 import sv.gob.cultura.rrhh.entidades.Dependencias;
 import sv.gob.cultura.rrhh.entidades.DirNacional;
@@ -20,6 +25,7 @@ import sv.gob.cultura.rrhh.facades.DependenciasFacade;
 import sv.gob.cultura.rrhh.facades.DirNacionalFacade;
 import sv.gob.cultura.rrhh.facades.EmpleadosFacade;
 import sv.gob.cultura.rrhh.facades.ParentescoFacade;
+
 /**
  *
  * @author Edwin
@@ -50,7 +56,6 @@ public class manejadorContactosEmergencia implements Serializable {
     ContactoEmergenciaEmp contactoEmergenciaEmp = new ContactoEmergenciaEmp();
     Empleados empleado = new Empleados();
     Parentesco parentesco = new Parentesco();
-    
 
 //******************************************************************************
 //****** VARIABLES QUE CONTRENDRAN ID´S O STRING DE FORMULARIOS ****************
@@ -59,6 +64,7 @@ public class manejadorContactosEmergencia implements Serializable {
     private int dependecia;
     private int empleadoSelecionado;
     private String nombreEmp;
+    private String NR;
 
 // *****************************************************************************
 //********************** GET DE ENTERPRICE JAVA BEAN ***************************
@@ -100,7 +106,7 @@ public class manejadorContactosEmergencia implements Serializable {
 
     public void setEmpleado(Empleados empleado) {
         this.empleado = empleado;
-    }   
+    }
 
     public Parentesco getParentesco() {
         return parentesco;
@@ -119,7 +125,6 @@ public class manejadorContactosEmergencia implements Serializable {
         this.setNombreEmp("");
         this.setDependecia(0);
         this.setEmpleadoSelecionado(0);
-        
     }
 
     public int getDependecia() {
@@ -139,7 +144,7 @@ public class manejadorContactosEmergencia implements Serializable {
     public void setEmpleadoSelecionado(int empleadoSelecionado) {
         this.empleadoSelecionado = empleadoSelecionado;
         Empleados emp = getEmpleadosFacade().find(getEmpleadoSelecionado());
-                
+
         if (emp == null) {
             this.setNombreEmp("");
         } else {
@@ -155,6 +160,13 @@ public class manejadorContactosEmergencia implements Serializable {
         this.nombreEmp = nombreEmp;
     }
 
+    public String getNR() {
+        return NR;
+    }
+
+    public void setNR(String NR) {
+        this.NR = NR;
+    }
 //******************************************************************************
 // **************** LISTA DE ELEMENTOS EN TABLAS *******************************
 //******************************************************************************
@@ -173,20 +185,50 @@ public class manejadorContactosEmergencia implements Serializable {
     public List<Dependencias> dependenciasFiltradas() {
         return getDependenciasFacade().buscarDependencias(this.getDireccionNacional());
     }
+
     public List<Empleados> empleadoFiltrado() {
         return getEmpleadosFacade().buscarEmp(this.getDependecia());
     }
-
 //******************************************************************************
 //*************************** FUNCIONES DE GUARDAR *****************************
 //******************************************************************************
     public void guardarContactosEmergencia() {
+        //Setea Id empleado, fecha de creacion y el usuario que lo ingreso de momento idUsuer 1
         contactoEmergenciaEmp.setIdEmpleado(new Empleados(this.getEmpleadoSelecionado()));
+        contactoEmergenciaEmp.setFechaCreaContac(new Date());
+        contactoEmergenciaEmp.setUserCreaContac(1);     
         getContactoEmergenciaEmpFacade().create(contactoEmergenciaEmp);
         contactoEmergenciaEmp = new ContactoEmergenciaEmp();
     }
+    
+    public void editarEmergencia(){
+        contactoEmergenciaEmp.setFechaModContac(new Date());
+        contactoEmergenciaEmp.setUserModContac(1); 
+        getContactoEmergenciaEmpFacade().edit(contactoEmergenciaEmp);
+        contactoEmergenciaEmp = new ContactoEmergenciaEmp();
+    }
 
-    public void eliminar() {
-        getContactoEmergenciaEmpFacade().remove(contactoEmergenciaEmp);
-    }   
- }
+    public String eliminar(ContactoEmergenciaEmp contacto) {
+        getContactoEmergenciaEmpFacade().remove(contacto);
+        return null;
+    }
+
+    public void buscarNR(ActionEvent event){
+        Empleados emp = getEmpleadosFacade().buscarEmpNR(this.getNR());
+        if (emp == null) {
+            this.setNombreEmp("");
+        } else {
+            this.setEmpleadoSelecionado(emp.getIdEmpleado());
+            this.setNombreEmp(emp.getNombreEmpleado());
+        }
+    }
+    
+    public void empleadoSelecionadoValido(ActionEvent event) {
+        if (this.getEmpleadoSelecionado() == 0) {
+            contactoEmergenciaEmp = new ContactoEmergenciaEmp();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Seleccione un Empleado"));
+        } else {
+            RequestContext.getCurrentInstance().execute("PF('emergencia').show()");
+        }
+    }
+}
