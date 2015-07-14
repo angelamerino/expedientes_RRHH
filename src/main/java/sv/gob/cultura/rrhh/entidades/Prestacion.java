@@ -45,8 +45,6 @@ public class Prestacion implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_prestacion")
     private Integer idPrestacion;
-    @Column(name = "cantidad")
-    private Integer cantidad;
     @Column(name = "user_crea_prestacion")
     private Integer userCreaPrestacion;
     @Column(name = "fecha_crea_prestacion")
@@ -84,14 +82,6 @@ public class Prestacion implements Serializable {
 
     public void setIdPrestacion(Integer idPrestacion) {
         this.idPrestacion = idPrestacion;
-    }
-
-    public Integer getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(Integer cantidad) {
-        this.cantidad = cantidad;
     }
 
     public Integer getUserCreaPrestacion() {

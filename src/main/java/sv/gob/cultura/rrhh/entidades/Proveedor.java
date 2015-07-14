@@ -8,6 +8,7 @@ package sv.gob.cultura.rrhh.entidades;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,9 +17,11 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -31,7 +34,6 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Proveedor.findByIdProveedor", query = "SELECT p FROM Proveedor p WHERE p.idProveedor = :idProveedor"),
     @NamedQuery(name = "Proveedor.findByNombreProv", query = "SELECT p FROM Proveedor p WHERE p.nombreProv = :nombreProv")})
 public class Proveedor implements Serializable {
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -42,7 +44,7 @@ public class Proveedor implements Serializable {
     @Size(min = 1, max = 1024)
     @Column(name = "nombre_prov")
     private String nombreProv;
-    @ManyToMany(mappedBy = "proveedorList")
+    @OneToMany(mappedBy = "idProveedor")
     private List<Producto> productoList;
 
     public Proveedor() {
@@ -56,11 +58,10 @@ public class Proveedor implements Serializable {
         this.idProveedor = idProveedor;
         this.nombreProv = nombreProv;
     }
-    
+
     public Proveedor(String nombreProv) {
         this.nombreProv = nombreProv;
     }
-
 //    public Proveedor(String nuevo_item) {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 //    }
@@ -81,6 +82,7 @@ public class Proveedor implements Serializable {
         this.nombreProv = nombreProv;
     }
 
+    @XmlTransient
     public List<Producto> getProductoList() {
         return productoList;
     }

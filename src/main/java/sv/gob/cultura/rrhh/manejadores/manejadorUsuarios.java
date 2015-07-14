@@ -46,6 +46,8 @@ public class manejadorUsuarios implements Serializable{
     
     private UsuariosSistema nuevoUsuario = new UsuariosSistema(), usuarioSeleccionado = new UsuariosSistema();
     
+    private List<UsuariosSistema> usuariosFiltrados;
+    
     private int estado, tipoUsuario, dependencia;
     private int dirNacionalFuncional;
     
@@ -79,6 +81,14 @@ public class manejadorUsuarios implements Serializable{
 
     public void setUsuarioSeleccionado(UsuariosSistema usuarioSeleccionado) {
         this.usuarioSeleccionado = usuarioSeleccionado;
+    }
+
+    public List<UsuariosSistema> getUsuariosFiltrados() {
+        return usuariosFiltrados;
+    }
+
+    public void setUsuariosFiltrados(List<UsuariosSistema> usuariosFiltrados) {
+        this.usuariosFiltrados = usuariosFiltrados;
     }
 
     
@@ -201,6 +211,17 @@ nuevoUsuario.setUserCreaUsistema(1); //guardará el id del usuario logeado
     }
      
      
+         /*PARA ELIMINAR REGISTROS*/    
+public void eliminarUsuario(){
+    this.usuariosSistemaFacade.remove(usuarioSeleccionado);
+   }
+
+
+/* ------------------  PARA ACTUALIZAR REGISTROS ----- */
+//public void actualizarPension(){
+//    getAdministradoraPensionesFacade().edit(pensionSeleccionada);
+//}
+
  /********************************************************************************************/    
 //Se crea el siguiente clase para fechad del sistema
 public class FechaActual {

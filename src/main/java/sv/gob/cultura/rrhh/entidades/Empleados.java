@@ -119,16 +119,16 @@ public class Empleados implements Serializable {
     private String telefonoMovil;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 13)
+    @Size(min = 1, max = 14)
     @Column(name = "num_dui")
     private String numDui;
-    @Size(max = 13)
+    @Size(max = 14)
     @Column(name = "num_isss")
     private String numIsss;
-    @Size(max = 20)
+    @Size(max = 21)
     @Column(name = "num_nit")
     private String numNit;
-    @Size(max = 16)
+    @Size(max = 17)
     @Column(name = "num_nup")
     private String numNup;
     @Size(max = 20)
@@ -174,8 +174,7 @@ public class Empleados implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreaEmp;
     @Column(name = "user_mod_emp")
-    @Temporal(TemporalType.DATE)
-    private Date userModEmp;
+    private Integer userModEmp;
     @Column(name = "fecha_mod_emp")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaModEmp;
@@ -517,13 +516,15 @@ public class Empleados implements Serializable {
         this.fechaCreaEmp = fechaCreaEmp;
     }
 
-    public Date getUserModEmp() {
+    public Integer getUserModEmp() {
         return userModEmp;
     }
 
-    public void setUserModEmp(Date userModEmp) {
+    public void setUserModEmp(Integer userModEmp) {
         this.userModEmp = userModEmp;
     }
+
+   
 
     public Date getFechaModEmp() {
         return fechaModEmp;

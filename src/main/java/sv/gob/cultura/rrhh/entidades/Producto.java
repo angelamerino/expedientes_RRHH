@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,8 +18,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -42,7 +45,6 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Producto.findByUserModProd", query = "SELECT p FROM Producto p WHERE p.userModProd = :userModProd"),
     @NamedQuery(name = "Producto.findByFechaModProd", query = "SELECT p FROM Producto p WHERE p.fechaModProd = :fechaModProd")})
 public class Producto implements Serializable {
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -70,13 +72,9 @@ public class Producto implements Serializable {
     @Column(name = "fecha_mod_prod")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaModProd;
-    @ManyToMany(mappedBy = "productoList")
-    private List<Prestacion> prestacionList;
-    @JoinTable(name = "prod_prov", joinColumns = {
-        @JoinColumn(name = "id_producto", referencedColumnName = "id_producto")}, inverseJoinColumns = {
-        @JoinColumn(name = "id_proveedor", referencedColumnName = "id_proveedor")})
-    @ManyToMany
-    private List<Proveedor> proveedorList;
+    @JoinColumn(name = "id_proveedor", referencedColumnName = "id_proveedor")
+    @ManyToOne
+    private Proveedor idProveedor;
 
     public Producto() {
     }
@@ -155,20 +153,12 @@ public class Producto implements Serializable {
         this.fechaModProd = fechaModProd;
     }
 
-    public List<Prestacion> getPrestacionList() {
-        return prestacionList;
+    public Proveedor getIdProveedor() {
+        return idProveedor;
     }
 
-    public void setPrestacionList(List<Prestacion> prestacionList) {
-        this.prestacionList = prestacionList;
-    }
-
-    public List<Proveedor> getProveedorList() {
-        return proveedorList;
-    }
-
-    public void setProveedorList(List<Proveedor> proveedorList) {
-        this.proveedorList = proveedorList;
+    public void setIdProveedor(Proveedor idProveedor) {
+        this.idProveedor = idProveedor;
     }
 
     @Override
