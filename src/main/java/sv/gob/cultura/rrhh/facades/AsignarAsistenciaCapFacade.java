@@ -5,6 +5,7 @@
  */
 package sv.gob.cultura.rrhh.facades;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,5 +28,15 @@ public class AsignarAsistenciaCapFacade extends AbstractFacade<AsignarAsistencia
     public AsignarAsistenciaCapFacade() {
         super(AsignarAsistenciaCap.class);
     }
+    
+    public List<AsignarAsistenciaCap> todasAsignaidCap(int idCapacitacion){
+        return getEntityManager().createNamedQuery("AsignarAsistenciaCap.findByidCap").setParameter("idCap", idCapacitacion).getResultList();
+    }
+    
+    public AsignarAsistenciaCap asignaidCapEmpleado(int emp){
+        return (AsignarAsistenciaCap) getEntityManager().createNamedQuery("AsignarAsistenciaCap.findByidEmpleado").setParameter("idEmpleado", emp).getSingleResult();
+    }
+    
+    
     
 }

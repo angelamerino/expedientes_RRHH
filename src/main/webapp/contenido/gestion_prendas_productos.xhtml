@@ -54,7 +54,7 @@
                                         <f:facet name="header">
                                             <h:outputText value="Proveedor"/>
                                         </f:facet>
-                                        <h:outputText value="#{item.proveedorList}"/>
+                                        <h:outputText value="#{item.idProveedor.nombreProv}"/>
                                     </h:column>
                                     <h:column>
                                         <f:facet name="header">
@@ -100,9 +100,9 @@
                     <div class="form-group">
                         <h:outputLabel value="Proveedor:" styleClass="col-lg-4 control-label"/>
                         <div class="col-lg-8">
-                            <h:selectOneMenu class="form-control" value="#{manejadorPrendasProductos.proveedorProd}" style="width: 100%" required="true" requiredMessage="Seleccione un Proveedor">
+                            <h:selectOneMenu class="form-control" value="#{manejadorPrendasProductos.producto.idProveedor}" style="width: 100%" converter="#{proveedorConvertidor}" required="true" requiredMessage="Seleccione un Proveedor">
                                 <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
-                                <f:selectItems value="#{manejadorPrendasProductos.todosProveedores()}" var="proveedores" itemLabel="#{proveedores.nombreProv}" itemValue="#{proveedores.idProveedor}"/>                                                    
+                                <f:selectItems value="#{manejadorPrendasProductos.todosProveedores()}" var="proveedores" itemLabel="#{proveedores.nombreProv}" itemValue="#{proveedores}"/>                                                    
                             </h:selectOneMenu>
                         </div>
                     </div>

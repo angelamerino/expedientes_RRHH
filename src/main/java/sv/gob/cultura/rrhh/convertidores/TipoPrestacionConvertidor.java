@@ -13,25 +13,25 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
-import sv.gob.cultura.rrhh.entidades.TipoSangre;
-import sv.gob.cultura.rrhh.facades.TipoSangreFacade;
+import sv.gob.cultura.rrhh.entidades.TipoPrestacion;
+import sv.gob.cultura.rrhh.facades.TipoPrestacionFacade;
 
 /**
  *
  * @author SOPORTE CULTURA
  */
-@Named(value = "tipoSangreConvertidor")
+@Named(value = "tipoPrestacionConvertidor")
 @Dependent
-public class TipoSangreConvertidor implements Converter {
+public class TipoPrestacionConvertidor implements Converter{
     
     @EJB
-    private TipoSangreFacade tipoSangreFacade;
+    private TipoPrestacionFacade tipoPrestacionFacade;
 
-    public TipoSangreFacade getTipoSangreFacade() {
-        return tipoSangreFacade;
+    public TipoPrestacionFacade getTipoPrestacionFacade() {
+        return tipoPrestacionFacade;
     }
     
-    public TipoSangreConvertidor() {
+    public TipoPrestacionConvertidor() {
     }
 
     @Override
@@ -41,20 +41,20 @@ public class TipoSangreConvertidor implements Converter {
         } else {
             try {
                 int id = Integer.parseInt(value);
-                TipoSangre tipoSangre = getTipoSangreFacade().find(id);
-                return tipoSangre;
+                TipoPrestacion tipoPrestacion = getTipoPrestacionFacade().find(id);
+                return tipoPrestacion;
             } catch (Exception e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de conversión", "No es un Tipo de Sangre válido"));
+                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de conversión", "No es un Tipo de Prestación válido"));
             }
         }
     }
 
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
-        if (!(value instanceof TipoSangre)) {
+        if (!(value instanceof TipoPrestacion)) {
             return null;
         }
-        return String.valueOf(((TipoSangre) value).getIdTipoSangre());
+        return String.valueOf(((TipoPrestacion) value).getIdTipoPrestacion());
     }
     
 }

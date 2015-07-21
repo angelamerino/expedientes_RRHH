@@ -13,25 +13,25 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
-import sv.gob.cultura.rrhh.entidades.TipoSangre;
-import sv.gob.cultura.rrhh.facades.TipoSangreFacade;
+import sv.gob.cultura.rrhh.entidades.Proveedor;
+import sv.gob.cultura.rrhh.facades.ProveedorFacade;
 
 /**
  *
  * @author SOPORTE CULTURA
  */
-@Named(value = "tipoSangreConvertidor")
+@Named(value = "proveedorConvertidor")
 @Dependent
-public class TipoSangreConvertidor implements Converter {
+public class ProveedorConvertidor implements Converter{
     
     @EJB
-    private TipoSangreFacade tipoSangreFacade;
+    private ProveedorFacade proveedorFacade;
 
-    public TipoSangreFacade getTipoSangreFacade() {
-        return tipoSangreFacade;
+    public ProveedorFacade getProveedorFacade() {
+        return proveedorFacade;
     }
-    
-    public TipoSangreConvertidor() {
+
+    public ProveedorConvertidor() {
     }
 
     @Override
@@ -41,20 +41,20 @@ public class TipoSangreConvertidor implements Converter {
         } else {
             try {
                 int id = Integer.parseInt(value);
-                TipoSangre tipoSangre = getTipoSangreFacade().find(id);
-                return tipoSangre;
+                Proveedor proveedor = getProveedorFacade().find(id);
+                return proveedor;
             } catch (Exception e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de conversión", "No es un Tipo de Sangre válido"));
+                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de conversión", "No es un Proveedor válido"));
             }
         }
     }
 
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
-        if (!(value instanceof TipoSangre)) {
+        if (!(value instanceof Proveedor)) {
             return null;
         }
-        return String.valueOf(((TipoSangre) value).getIdTipoSangre());
+        return String.valueOf(((Proveedor) value).getIdProveedor());
     }
     
 }

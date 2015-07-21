@@ -1,0 +1,137 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="./../resources/plantilla/plantilla.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <link href="#{request.contextPath}/resources/datatables/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
+        <div class="page-header">
+            <h1><strong>GESTIÓN DE ASIGNACIÓN DE CAPACITACIONES</strong></h1>
+            <h:form>
+                <h:commandLink value="Nuevo Registro" styleClass="btn btn-info pull-right"  style="text-decoration:none;" action="#{manejadorCapacitaciones.nuevaAsigCapacitacion()}" immediate="true" />
+            </h:form>
+            <div class="clearfix" ></div>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading"><strong>Editar/Eliminar Asignación de Capacitaciones</strong></div>
+            <div class="panel-body">
+                <div class="table table-responsive">
+                    <f:view>
+                        <h:form prependId="false">
+                            <h:panelGroup id ="tabla">
+                                <h:dataTable id="listAsigaCap" value="#{manejadorCapacitaciones.todasAsignacionesCap()}" var="item" style="font-size: 14px" styleClass="table table-striped table-hover">
+                                    <h:column>
+
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Empleado"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.idEmpleado.nombreEmpleado}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Capacitación"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.idCap.temaCap}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Año"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.idCap.anioCap}" >
+                                             <f:convertDateTime pattern="yyyy" />
+                                        </h:outputText>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Unidad Organizativa"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.idEmpleado.idDependenciaN.nombreDependencia}"/>
+                                    </h:column>
+                                   <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Correo"/>
+                                        </f:facet>
+                                       <h:outputText value="#{item.idEmpleado.correoInstitucional}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <center>
+                                                <h:outputText value="Editar/Eliminar"/>
+                                            </center>
+                                        </f:facet>
+                                        <center>
+                                            <h:commandLink styleClass="btn-sm glyphicon glyphicon-pencil" style="text-decoration:none;" title="Editar">
+                                                <f:setPropertyActionListener value="#{item}" target="#{manejadorCapacitaciones.asignarAsistenciaCap}"/>
+                                                <p:ajax update="" />
+                                                <p:ajax update="tabla"  onsuccess="PF('').show()"/>
+                                            </h:commandLink>
+                                            <h:commandLink action="#{manejadorCapacitaciones.eliminarAsignacion(item)}" styleClass="btn-sm glyphicon glyphicon-remove" style="text-decoration:none;" title="Eliminar">
+                                                <f:ajax execute="@this" render="tabla" />
+                                            </h:commandLink>                                                        
+                                        </center>
+                                    </h:column>
+                                </h:dataTable>
+                            </h:panelGroup>
+                        </h:form>
+                    </f:view>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                var t = $('#listAsigaCap').DataTable({
+                    "columnDefs": [{
+                            "searchable": false,
+                            "orderable": false,
+                            "targets": 0
+                        }, {
+                            "searchable": false,
+                            "orderable": false,
+                            "targets": 5
+                        }],
+                    "order": [[1, 'asc']],
+                    "oLanguage": {
+                        "sProcessing": "Procesando...",
+                        "sLengthMenu": "Mostrar _MENU_ registros",
+                        "sZeroRecords": "No se encontraron resultados",
+                        "sEmptyTable": "Ningún dato disponible en esta tabla",
+                        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                        "sInfoPostFix": "",
+                        "sSearch": "Buscar:",
+                        "sUrl": "",
+                        "sInfoThousands": ",",
+                        "sLoadingRecords": "Cargando...",
+                        "oPaginate": {
+                            "sFirst": "Primero",
+                            "sLast": "Último",
+                            "sNext": "Siguiente",
+                            "sPrevious": "Anterior"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                        }
+                    }
+                });
+
+                t.on('order.dt search.dt', function () {
+                    t.column(0, {search: 'applied', order: 'applied'}).nodes().each(function (cell, i) {
+                        cell.innerHTML = i + 1;
+                    });
+                }).draw();
+            });
+        </script>
+        <script src="#{request.contextPath}/resources/datatables/jquery.dataTables.min.js" type="text/javascript"></script>
+    </ui:define>
+
+</ui:composition>

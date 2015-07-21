@@ -56,6 +56,56 @@
             <to-view-id>/contenido/gestion_prendas_productos.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>prestaciones</from-outcome>
+            <to-view-id>/contenido/reg_prestaciones.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>gestion_prestaciones</from-outcome>
+            <to-view-id>/contenido/gestion_prestaciones.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>asignacion_prestaciones</from-outcome>
+            <to-view-id>/contenido/reg_asignacion_prestaciones.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>gestion_asignacion_prestaciones</from-outcome>
+            <to-view-id>/contenido/gestion_asignacion_prestaciones.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>capacitaciones</from-outcome>
+            <to-view-id>/contenido/reg_capacitaciones.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>gestion_capacitaciones</from-outcome>
+            <to-view-id>/contenido/gestion_capacitaciones.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>asignacion_capacitaciones</from-outcome>
+            <to-view-id>/contenido/reg_asignacion_capacitaciones.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>gestion_asignacion_capacitaciones</from-outcome>
+            <to-view-id>/contenido/gestion_asignacion_capacitaciones.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>asistencia_capacitaciones</from-outcome>
+            <to-view-id>/contenido/reg_asistencia_capacitaciones.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>gestion_asistencia_capacitaciones</from-outcome>
+            <to-view-id>/contenido/gestion_asistencia_capacitaciones.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
   <!--      
         <navigation-case>
             <from-outcome>capacitacion</from-outcome>

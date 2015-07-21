@@ -99,23 +99,12 @@ public class manejadorPrendasProductos implements Serializable {
         producto.setFechaCreaProd(new Date());
         producto.setUserCreaProd(1);
         getProductoFacade().create(producto);
-
-//        //obtiene listado de proveedores al cual se agregara el producto
-//        List<Proveedor> provlist = producto.getProveedorList();
-//        provlist.add(new Proveedor(this.getProveedorProd()));
-//        producto.setProveedorList(provlist);
-//        getProductoFacade().edit(producto);
-
         producto = new Producto();
         return "gestion_prendas_productos";
     }
 
     public String eliminarProducto(Producto prod) {
-//        List<Proveedor> provlist = prod.getProveedorList();
-//        provlist.remove(new Proveedor(this.getProveedorProd()));
-//        prod.setProveedorList(provlist);
-//        getProductoFacade().edit(prod);
-//        getProductoFacade().remove(prod);        
+        getProductoFacade().remove(prod);        
         return "gestion_prendas_productos";
     }
 

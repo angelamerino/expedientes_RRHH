@@ -30,12 +30,15 @@ import javax.persistence.TemporalType;
 @NamedQueries({
     @NamedQuery(name = "AsignarAsistenciaCap.findAll", query = "SELECT a FROM AsignarAsistenciaCap a"),
     @NamedQuery(name = "AsignarAsistenciaCap.findByIdAsigAsis", query = "SELECT a FROM AsignarAsistenciaCap a WHERE a.idAsigAsis = :idAsigAsis"),
+    @NamedQuery(name = "AsignarAsistenciaCap.findByidCap", query = "SELECT a FROM AsignarAsistenciaCap a WHERE a.idCap.idCap = :idCap"),
+    @NamedQuery(name = "AsignarAsistenciaCap.findByidEmpleado", query = "SELECT a FROM AsignarAsistenciaCap a WHERE a.idEmpleado.idEmpleado = :idEmpleado"),
     @NamedQuery(name = "AsignarAsistenciaCap.findByCapAsignada", query = "SELECT a FROM AsignarAsistenciaCap a WHERE a.capAsignada = :capAsignada"),
     @NamedQuery(name = "AsignarAsistenciaCap.findByCapAsistida", query = "SELECT a FROM AsignarAsistenciaCap a WHERE a.capAsistida = :capAsistida"),
     @NamedQuery(name = "AsignarAsistenciaCap.findByUserCreaAsigAsis", query = "SELECT a FROM AsignarAsistenciaCap a WHERE a.userCreaAsigAsis = :userCreaAsigAsis"),
     @NamedQuery(name = "AsignarAsistenciaCap.findByFechaCreaAsigAsis", query = "SELECT a FROM AsignarAsistenciaCap a WHERE a.fechaCreaAsigAsis = :fechaCreaAsigAsis"),
-    @NamedQuery(name = "AsignarAsistenciaCap.findByUserModAsigAsis", query = "SELECT a FROM AsignarAsistenciaCap a WHERE a.userModAsigAsis = :userModAsigAsis"),
-    @NamedQuery(name = "AsignarAsistenciaCap.findByFechaModAsigAsis", query = "SELECT a FROM AsignarAsistenciaCap a WHERE a.fechaModAsigAsis = :fechaModAsigAsis")})
+    @NamedQuery(name = "AsignarAsistenciaCap.findByUserModAsigAsis", query = "SELECT a FROM AsignarAsistenciaCap a WHERE a.userModAsigAsis = :userModAsigAsis")
+    //@NamedQuery(name = "AsignarAsistenciaCap.findByFechaModAisgAsis", query = "SELECT a FROM AsignarAsistenciaCap a WHERE a.fechaModAisgAsis = :fechaModAisgAsis")
+})
 public class AsignarAsistenciaCap implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

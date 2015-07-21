@@ -31,6 +31,7 @@ import javax.validation.constraints.NotNull;
 @NamedQueries({
     @NamedQuery(name = "HorariosCap.findAll", query = "SELECT h FROM HorariosCap h"),
     @NamedQuery(name = "HorariosCap.findByIdHorarioCap", query = "SELECT h FROM HorariosCap h WHERE h.idHorarioCap = :idHorarioCap"),
+    @NamedQuery(name = "HorariosCap.findByIdCap", query = "SELECT h FROM HorariosCap h WHERE h.idCap.idCap = :idCap"),
     @NamedQuery(name = "HorariosCap.findByFechaCap", query = "SELECT h FROM HorariosCap h WHERE h.fechaCap = :fechaCap"),
     @NamedQuery(name = "HorariosCap.findByHoraInicioCap", query = "SELECT h FROM HorariosCap h WHERE h.horaInicioCap = :horaInicioCap"),
     @NamedQuery(name = "HorariosCap.findByHoraFinCap", query = "SELECT h FROM HorariosCap h WHERE h.horaFinCap = :horaFinCap")})

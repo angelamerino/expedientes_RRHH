@@ -13,25 +13,25 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
-import sv.gob.cultura.rrhh.entidades.TipoSangre;
-import sv.gob.cultura.rrhh.facades.TipoSangreFacade;
+import sv.gob.cultura.rrhh.entidades.Anio;
+import sv.gob.cultura.rrhh.facades.AnioFacade;
 
 /**
  *
  * @author SOPORTE CULTURA
  */
-@Named(value = "tipoSangreConvertidor")
+@Named(value = "anioConvertidor")
 @Dependent
-public class TipoSangreConvertidor implements Converter {
+public class AnioConvertidor implements Converter{
     
     @EJB
-    private TipoSangreFacade tipoSangreFacade;
+    private AnioFacade anioFacade;
 
-    public TipoSangreFacade getTipoSangreFacade() {
-        return tipoSangreFacade;
+    public AnioFacade getAnioFacade() {
+        return anioFacade;
     }
     
-    public TipoSangreConvertidor() {
+    public AnioConvertidor() {
     }
 
     @Override
@@ -41,20 +41,20 @@ public class TipoSangreConvertidor implements Converter {
         } else {
             try {
                 int id = Integer.parseInt(value);
-                TipoSangre tipoSangre = getTipoSangreFacade().find(id);
-                return tipoSangre;
+                Anio anio = getAnioFacade().find(id);
+                return anio;
             } catch (Exception e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de conversión", "No es un Tipo de Sangre válido"));
+                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de conversión", "No es un Año válido"));
             }
         }
     }
 
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
-        if (!(value instanceof TipoSangre)) {
+        if (!(value instanceof Anio)) {
             return null;
         }
-        return String.valueOf(((TipoSangre) value).getIdTipoSangre());
+        return String.valueOf(((Anio) value).getIdAnio());
     }
     
 }

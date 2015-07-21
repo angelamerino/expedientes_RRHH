@@ -5,6 +5,7 @@
  */
 package sv.gob.cultura.rrhh.facades;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,4 +29,7 @@ public class HorariosCapFacade extends AbstractFacade<HorariosCap> {
         super(HorariosCap.class);
     }
     
+    public List<HorariosCap> buscarHorasDiasCap(int cap){
+        return getEntityManager().createNamedQuery("HorariosCap.findByIdCap").setParameter("idCap", cap).getResultList();
+    }
 }
