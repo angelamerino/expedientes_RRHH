@@ -527,7 +527,7 @@ public class manejadorGestionEmpleado implements Serializable {
         if(this.getDepto()!=0){empleado.setDeptoNac(this.getDepto());}
         if(this.getMuni()!=0){empleado.setMunicipioNac(this.getMuni());}
         if(this.getDirDepto()!=0){empleado.setDeptoResidencia(this.getDirDepto());}
-        if(this.getDirMuni()!=0){empleado.setMunicipioResidencia(this.getDirMuni());}
+        if(this.getDirMuni()!=0){empleado.setMunicipioRes(this.getDirMuni());}
         if(this.getFechaNacEmpleado()!= new Date()){empleado.setFechaNac(this.getFechaNacEmpleado());} 
         if(this.getEdadEmpleado()!=0){empleado.setEdadEmp(this.getEdadEmpleado());}
         if(this.getEmpJefe()!=0){
@@ -564,7 +564,7 @@ public class manejadorGestionEmpleado implements Serializable {
         if(this.getDepto()!=0){empleado.setDeptoNac(this.getDepto());}
         if(this.getMuni()!=0){empleado.setMunicipioNac(this.getMuni());}
         if(this.getDirDepto()!=0){empleado.setDeptoResidencia(this.getDirDepto());}
-        if(this.getDirMuni()!=0){empleado.setMunicipioResidencia(this.getDirMuni());}
+        if(this.getDirMuni()!=0){empleado.setMunicipioRes(this.getDirMuni());}
         if(this.getFechaNacEmpleado()!= new Date()){empleado.setFechaNac(this.getFechaNacEmpleado());} 
         if(this.getEdadEmpleado()!=0){empleado.setEdadEmp(this.getEdadEmpleado());}
         if(this.getEmpJefe()!=0){
@@ -754,11 +754,11 @@ public class manejadorGestionEmpleado implements Serializable {
         this.setDirNacionalFuncional(dirFuncional.getIdDirNac());
         this.setDependenciaNominal(dependenciaN.getIdDependencia());
         this.setDependenciaFuncional(dependenciaF.getIdDependencia());
-       
+        
         if(empleado.getDeptoNac()!=null){this.setDepto(empleado.getDeptoNac());}
         if(empleado.getMunicipioNac()!=null){this.setMuni(empleado.getMunicipioNac());}
         if(empleado.getDeptoResidencia()!=null){this.setDirDepto(empleado.getDeptoResidencia());}
-        if(empleado.getMunicipioResidencia()!=null){this.setDirMuni((int) empleado.getMunicipioResidencia());}
+        if(empleado.getMunicipioRes()!=null){this.setDirMuni((int) empleado.getMunicipioRes());}
         
         return "editar_empleados";
     }

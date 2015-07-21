@@ -6,9 +6,7 @@
 package sv.gob.cultura.rrhh.manejadores;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -300,7 +298,7 @@ public class manejadorPrestaciones implements Serializable {
     public String guardarPrestacion() {
         prestacion.setFechaCreaPrestacion(new Date());
         prestacion.setUserCreaPrestacion(1);
-        //actualizar el costo de la prestacion
+        prestacion.setCostoPrestacion(0.00);        
         getPrestacionFacade().create(prestacion);
         prestacion = new Prestacion();
         return "gestion_prestaciones";

@@ -813,13 +813,5 @@ public class Empleados implements Serializable {
     public String toString() {
         return "sv.gob.cultura.rrhh.entidades.Empleados[ idEmpleado=" + idEmpleado + " ]";
     }
-
-    public void setMunicipioResidencia(int dirMuni) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object getMunicipioResidencia() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
 }
