@@ -57,14 +57,10 @@ public class GradoSancion implements Serializable {
         this.idGradoSancion = idGradoSancion;
         this.nombreGradoSancion = nombreGradoSancion;
     }
-    
-    public GradoSancion(String nombreGradoSancion){
-        this.nombreGradoSancion = nombreGradoSancion;
-    }
 
-//    public GradoSancion(String nuevo_item) {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//    }
+    public GradoSancion(String nuevo_item) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
     public Integer getIdGradoSancion() {
         return idGradoSancion;

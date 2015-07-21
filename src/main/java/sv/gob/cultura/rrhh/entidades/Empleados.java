@@ -5,10 +5,11 @@
  */
 package sv.gob.cultura.rrhh.entidades;
 
-import java.io.Serializable;//
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -70,7 +71,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Empleados.findByCurriculum", query = "SELECT e FROM Empleados e WHERE e.curriculum = :curriculum"),
     @NamedQuery(name = "Empleados.findByIdEmpleado", query = "SELECT e FROM Empleados e WHERE e.idEmpleado = :idEmpleado"),
     @NamedQuery(name = "Empleados.findByMunicipioNac", query = "SELECT e FROM Empleados e WHERE e.municipioNac = :municipioNac"),
-    @NamedQuery(name = "Empleados.findByMunicipioResidencia", query = "SELECT e FROM Empleados e WHERE e.municipioResidencia = :municipioResidencia"),
+    @NamedQuery(name = "Empleados.findByMunicipioRes", query = "SELECT e FROM Empleados e WHERE e.municipioRes = :municipioRes"),
     @NamedQuery(name = "Empleados.findByDeptoNac", query = "SELECT e FROM Empleados e WHERE e.deptoNac = :deptoNac"),
     @NamedQuery(name = "Empleados.findByDeptoResidencia", query = "SELECT e FROM Empleados e WHERE e.deptoResidencia = :deptoResidencia"),
     @NamedQuery(name = "Empleados.findByDependencia", query = "SELECT e FROM Empleados e WHERE e.idDependenciaN.idDependencia = :dependencia"),
@@ -78,6 +79,11 @@ import javax.validation.constraints.Size;
 })
 public class Empleados implements Serializable {
     private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id_empleado")
+    private Integer idEmpleado;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 25)
@@ -171,12 +177,12 @@ public class Empleados implements Serializable {
     @Column(name = "user_crea_emp")
     private Integer userCreaEmp;
     @Column(name = "fecha_crea_emp")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechaCreaEmp;
     @Column(name = "user_mod_emp")
     private Integer userModEmp;
     @Column(name = "fecha_mod_emp")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechaModEmp;
     @Size(max = 10)
     @Column(name = "genero")
@@ -184,19 +190,14 @@ public class Empleados implements Serializable {
     @Size(max = 1024)
     @Column(name = "curriculum")
     private String curriculum;
-     @Column(name = "municipio_nac")
+    @Column(name = "municipio_nac")
     private Integer municipioNac;
-     @Column(name = "municipio_residencia")
-    private Integer municipioResidencia;
-      @Column(name = "depto_nac")
+    @Column(name = "municipio_res")
+    private Integer municipioRes;
+    @Column(name = "depto_nac")
     private Integer deptoNac;
-     @Column(name = "depto_residencia")
+    @Column(name = "depto_residencia")
     private Integer deptoResidencia;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_empleado")
-    private Integer idEmpleado;
     @JoinTable(name = "emp_prestacion", joinColumns = {
         @JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")}, inverseJoinColumns = {
         @JoinColumn(name = "id_prestacion", referencedColumnName = "id_prestacion")})
@@ -212,23 +213,23 @@ public class Empleados implements Serializable {
         @JoinColumn(name = "id_estudio", referencedColumnName = "id_estudio")})
     @ManyToMany
     private List<EstudiosEmp> estudiosEmpList;
-    @OneToMany(mappedBy = "idEmpleado")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpleado")
     private List<HistorialSalarial> historialSalarialList;
-    @OneToMany(mappedBy = "idEmpleado")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpleado")
     private List<FamiliaDependientesEmp> familiaDependientesEmpList;
-    @OneToMany(mappedBy = "idEmpleado")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpleado")
     private List<ImgDoc> imgDocList;
-    @OneToMany(mappedBy = "idEmpleado")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpleado")
     private List<MovimientosEmp> movimientosEmpList;
-    @OneToMany(mappedBy = "idEmpleado")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpleado")
     private List<ExperienciaLaboral> experienciaLaboralList;
-    @OneToMany(mappedBy = "idEmpleado")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpleado")
     private List<ContactoEmergenciaEmp> contactoEmergenciaEmpList;
-    @OneToMany(mappedBy = "idEmpleado")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpleado")
     private List<AsignarAsistenciaCap> asignarAsistenciaCapList;
-    @OneToMany(mappedBy = "idEmpleado")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpleado")
     private List<DescuentosEmp> descuentosEmpList;
-    @OneToMany(mappedBy = "idEmpleado")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpleado")
     private List<Sanciones> sancionesList;
     @JoinColumn(name = "id_tipo_sangre", referencedColumnName = "id_tipo_sangre")
     @ManyToOne(optional = false)
@@ -236,12 +237,12 @@ public class Empleados implements Serializable {
     @JoinColumn(name = "id_pais", referencedColumnName = "id_pais")
     @ManyToOne(optional = false)
     private Paises idPais;
-    @JoinColumn(name = "id_municipio_f", referencedColumnName = "id_municipio")
-    @ManyToOne(optional = false)
-    private Municipios idMunicipioF;
     @JoinColumn(name = "id_municipio_n", referencedColumnName = "id_municipio")
     @ManyToOne(optional = false)
     private Municipios idMunicipioN;
+    @JoinColumn(name = "id_municipio_f", referencedColumnName = "id_municipio")
+    @ManyToOne(optional = false)
+    private Municipios idMunicipioF;
     @JoinColumn(name = "id_banco", referencedColumnName = "id_banco")
     @ManyToOne(optional = false)
     private InstBancaria idBanco;
@@ -282,6 +283,14 @@ public class Empleados implements Serializable {
         this.numDui = numDui;
         this.cargoNominal = cargoNominal;
         this.cargoFuncional = cargoFuncional;
+    }
+
+    public Integer getIdEmpleado() {
+        return idEmpleado;
+    }
+
+    public void setIdEmpleado(Integer idEmpleado) {
+        this.idEmpleado = idEmpleado;
     }
 
     public String getNrEmpleado() {
@@ -524,8 +533,6 @@ public class Empleados implements Serializable {
         this.userModEmp = userModEmp;
     }
 
-   
-
     public Date getFechaModEmp() {
         return fechaModEmp;
     }
@@ -550,14 +557,6 @@ public class Empleados implements Serializable {
         this.curriculum = curriculum;
     }
 
-    public Integer getIdEmpleado() {
-        return idEmpleado;
-    }
-
-    public void setIdEmpleado(Integer idEmpleado) {
-        this.idEmpleado = idEmpleado;
-    }
-
     public Integer getMunicipioNac() {
         return municipioNac;
     }
@@ -566,12 +565,12 @@ public class Empleados implements Serializable {
         this.municipioNac = municipioNac;
     }
 
-    public Integer getMunicipioResidencia() {
-        return municipioResidencia;
+    public Integer getMunicipioRes() {
+        return municipioRes;
     }
 
-    public void setMunicipioResidencia(Integer municipioResidencia) {
-        this.municipioResidencia = municipioResidencia;
+    public void setMunicipioRes(Integer municipioRes) {
+        this.municipioRes = municipioRes;
     }
 
     public Integer getDeptoNac() {
@@ -589,8 +588,6 @@ public class Empleados implements Serializable {
     public void setDeptoResidencia(Integer deptoResidencia) {
         this.deptoResidencia = deptoResidencia;
     }
-    
-    
 
     public List<Prestacion> getPrestacionList() {
         return prestacionList;
@@ -704,20 +701,20 @@ public class Empleados implements Serializable {
         this.idPais = idPais;
     }
 
-    public Municipios getIdMunicipioF() {
-        return idMunicipioF;
-    }
-
-    public void setIdMunicipioF(Municipios idMunicipioF) {
-        this.idMunicipioF = idMunicipioF;
-    }
-
     public Municipios getIdMunicipioN() {
         return idMunicipioN;
     }
 
     public void setIdMunicipioN(Municipios idMunicipioN) {
         this.idMunicipioN = idMunicipioN;
+    }
+
+    public Municipios getIdMunicipioF() {
+        return idMunicipioF;
+    }
+
+    public void setIdMunicipioF(Municipios idMunicipioF) {
+        this.idMunicipioF = idMunicipioF;
     }
 
     public InstBancaria getIdBanco() {
@@ -815,6 +812,14 @@ public class Empleados implements Serializable {
     @Override
     public String toString() {
         return "sv.gob.cultura.rrhh.entidades.Empleados[ idEmpleado=" + idEmpleado + " ]";
+    }
+
+    public void setMunicipioResidencia(int dirMuni) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Object getMunicipioResidencia() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

@@ -17,7 +17,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -37,9 +36,7 @@ public class Nivel implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_nivel")
     private Integer idNivel;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 200)
+    @Size(max = 200)
     @Column(name = "nombre_nivel")
     private String nombreNivel;
     @OneToMany(mappedBy = "idNivel")
@@ -52,18 +49,9 @@ public class Nivel implements Serializable {
         this.idNivel = idNivel;
     }
 
-    public Nivel(Integer idNivel, String nombreNivel) {
-        this.idNivel = idNivel;
-        this.nombreNivel = nombreNivel;
+    public Nivel(String nuevo_item) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-     
-    public Nivel(String nombreNivel) {
-        this.nombreNivel = nombreNivel;
-    }
-
-//    public Nivel(String nuevo_item) {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//    }
 
     public Integer getIdNivel() {
         return idNivel;

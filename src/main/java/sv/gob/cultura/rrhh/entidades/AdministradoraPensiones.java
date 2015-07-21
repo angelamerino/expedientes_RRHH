@@ -6,7 +6,6 @@
 package sv.gob.cultura.rrhh.entidades;
 
 import java.io.Serializable;
-
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -32,7 +31,6 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "AdministradoraPensiones.findAll", query = "SELECT a FROM AdministradoraPensiones a"),
     @NamedQuery(name = "AdministradoraPensiones.findByIdAdminPension", query = "SELECT a FROM AdministradoraPensiones a WHERE a.idAdminPension = :idAdminPension"),
     @NamedQuery(name = "AdministradoraPensiones.findByNombreAdminPension", query = "SELECT a FROM AdministradoraPensiones a WHERE a.nombreAdminPension = :nombreAdminPension")})
-
 public class AdministradoraPensiones implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -48,7 +46,6 @@ public class AdministradoraPensiones implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idAdminPension")
     private List<Empleados> empleadosList;
 
-    
     public AdministradoraPensiones() {
     }
 
@@ -61,16 +58,9 @@ public class AdministradoraPensiones implements Serializable {
         this.nombreAdminPension = nombreAdminPension;
     }
 
-    public AdministradoraPensiones(String nombreAdminPension) {
-        this.nombreAdminPension = nombreAdminPension;
+    public AdministradoraPensiones(String nuevo_item) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-    
-    
-
-//    public AdministradoraPensiones(String nuevo_item) {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//    }
 
     public Integer getIdAdminPension() {
         return idAdminPension;
@@ -88,18 +78,13 @@ public class AdministradoraPensiones implements Serializable {
         this.nombreAdminPension = nombreAdminPension;
     }
 
-    public void getEmpleadosList(List<Empleados> EmpleadosList) {
-        this.empleadosList = empleadosList;
+    public List<Empleados> getEmpleadosList() {
+        return empleadosList;
     }
 
     public void setEmpleadosList(List<Empleados> empleadosList) {
         this.empleadosList = empleadosList;
     }
-   
-    
-    /*public List<AdministradoraPensiones> getAdminPensionesList(){
-        return AdminPensionesList;
-    }*/
 
     @Override
     public int hashCode() {

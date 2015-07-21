@@ -31,7 +31,7 @@ import javax.validation.constraints.Size;
 @Table(name = "municipios")
 @NamedQueries({
     @NamedQuery(name = "Municipios.findAll", query = "SELECT m FROM Municipios m"),
-    @NamedQuery(name = "Municipios.findByIdMunicipio", query = "SELECT m FROM Municipios m WHERE m.idMunicipio = :idMunicipio"),
+        @NamedQuery(name = "Municipios.findByIdMunicipio", query = "SELECT m FROM Municipios m WHERE m.idMunicipio = :idMunicipio"),
     @NamedQuery(name = "Municipios.findByNombreMunicipio", query = "SELECT m FROM Municipios m WHERE m.nombreMunicipio = :nombreMunicipio"),
 @NamedQuery(name = "Municipios.buscarDep", query = "SELECT m FROM Municipios m WHERE m.idDepartamento.idDepartamento = :depto")
 })
@@ -52,9 +52,9 @@ public class Municipios implements Serializable {
     @JoinColumn(name = "id_departamento", referencedColumnName = "id_departamento")
     @ManyToOne(optional = false)
     private Deptos idDepartamento;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idMunicipioF")
-    private List<Empleados> empleadosList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idMunicipioN")
+    private List<Empleados> empleadosList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idMunicipioF")
     private List<Empleados> empleadosList1;
 
     public Municipios() {

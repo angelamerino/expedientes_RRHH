@@ -20,7 +20,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Size;
 
 /**
  *
@@ -36,7 +35,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "AsignarAsistenciaCap.findByUserCreaAsigAsis", query = "SELECT a FROM AsignarAsistenciaCap a WHERE a.userCreaAsigAsis = :userCreaAsigAsis"),
     @NamedQuery(name = "AsignarAsistenciaCap.findByFechaCreaAsigAsis", query = "SELECT a FROM AsignarAsistenciaCap a WHERE a.fechaCreaAsigAsis = :fechaCreaAsigAsis"),
     @NamedQuery(name = "AsignarAsistenciaCap.findByUserModAsigAsis", query = "SELECT a FROM AsignarAsistenciaCap a WHERE a.userModAsigAsis = :userModAsigAsis"),
-    @NamedQuery(name = "AsignarAsistenciaCap.findByFechaModAisgAsis", query = "SELECT a FROM AsignarAsistenciaCap a WHERE a.fechaModAisgAsis = :fechaModAisgAsis")})
+    @NamedQuery(name = "AsignarAsistenciaCap.findByFechaModAsigAsis", query = "SELECT a FROM AsignarAsistenciaCap a WHERE a.fechaModAsigAsis = :fechaModAsigAsis")})
 public class AsignarAsistenciaCap implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -44,24 +43,22 @@ public class AsignarAsistenciaCap implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_asig_asis")
     private Integer idAsigAsis;
-    @Size(max = 2)
     @Column(name = "cap_asignada")
-    private String capAsignada;
-    @Size(max = 2)
+    private Boolean capAsignada;
     @Column(name = "cap_asistida")
-    private String capAsistida;
+    private Boolean capAsistida;
     @Column(name = "user_crea_asig_asis")
     private Integer userCreaAsigAsis;
     @Column(name = "fecha_crea_asig_asis")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechaCreaAsigAsis;
     @Column(name = "user_mod_asig_asis")
     private Integer userModAsigAsis;
-    @Column(name = "fecha_mod_aisg_asis")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaModAisgAsis;
+    @Column(name = "fecha_mod_asig_asis")
+    @Temporal(TemporalType.DATE)
+    private Date fechaModAsigAsis;
     @JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Empleados idEmpleado;
     @JoinColumn(name = "id_cap", referencedColumnName = "id_cap")
     @ManyToOne(optional = false)
@@ -82,19 +79,19 @@ public class AsignarAsistenciaCap implements Serializable {
         this.idAsigAsis = idAsigAsis;
     }
 
-    public String getCapAsignada() {
+    public Boolean getCapAsignada() {
         return capAsignada;
     }
 
-    public void setCapAsignada(String capAsignada) {
+    public void setCapAsignada(Boolean capAsignada) {
         this.capAsignada = capAsignada;
     }
 
-    public String getCapAsistida() {
+    public Boolean getCapAsistida() {
         return capAsistida;
     }
 
-    public void setCapAsistida(String capAsistida) {
+    public void setCapAsistida(Boolean capAsistida) {
         this.capAsistida = capAsistida;
     }
 
@@ -122,12 +119,12 @@ public class AsignarAsistenciaCap implements Serializable {
         this.userModAsigAsis = userModAsigAsis;
     }
 
-    public Date getFechaModAisgAsis() {
-        return fechaModAisgAsis;
+    public Date getFechaModAsigAsis() {
+        return fechaModAsigAsis;
     }
 
-    public void setFechaModAisgAsis(Date fechaModAisgAsis) {
-        this.fechaModAisgAsis = fechaModAisgAsis;
+    public void setFechaModAsigAsis(Date fechaModAsigAsis) {
+        this.fechaModAsigAsis = fechaModAsigAsis;
     }
 
     public Empleados getIdEmpleado() {

@@ -5,7 +5,7 @@
  */
 package sv.gob.cultura.rrhh.entidades;
 
-import java.io.Serializable;//
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -63,12 +63,12 @@ public class Dependencias implements Serializable {
     @Column(name = "user_crea_dependencia")
     private Integer userCreaDependencia;
     @Column(name = "fecha_crea_dependencia")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechaCreaDependencia;
     @Column(name = "user_mod_dependencia")
     private Integer userModDependencia;
     @Column(name = "fecha_mod_dependencia")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechaModDependencia;
     @JoinColumn(name = "id_municipio", referencedColumnName = "id_municipio")
     @ManyToOne(optional = false)

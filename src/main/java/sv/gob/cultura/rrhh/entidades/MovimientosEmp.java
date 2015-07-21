@@ -80,12 +80,12 @@ public class MovimientosEmp implements Serializable {
     @Column(name = "user_crea_mov")
     private Integer userCreaMov;
     @Column(name = "fecha_crea_mov")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechaCreaMov;
     @Column(name = "user_mod_mov")
     private Integer userModMov;
     @Column(name = "fecha_mod_mov")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechaModMov;
     @OneToMany(mappedBy = "idMovEmp")
     private List<ImgDoc> imgDocList;
@@ -93,7 +93,7 @@ public class MovimientosEmp implements Serializable {
     @ManyToOne(optional = false)
     private TipoMov idTipoMov;
     @JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Empleados idEmpleado;
     @JoinColumn(name = "dep_id_dependencia", referencedColumnName = "id_dependencia")
     @ManyToOne(optional = false)

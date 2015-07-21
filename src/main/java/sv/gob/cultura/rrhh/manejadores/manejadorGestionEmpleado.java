@@ -758,7 +758,7 @@ public class manejadorGestionEmpleado implements Serializable {
         if(empleado.getDeptoNac()!=null){this.setDepto(empleado.getDeptoNac());}
         if(empleado.getMunicipioNac()!=null){this.setMuni(empleado.getMunicipioNac());}
         if(empleado.getDeptoResidencia()!=null){this.setDirDepto(empleado.getDeptoResidencia());}
-        if(empleado.getMunicipioResidencia()!=null){this.setDirMuni(empleado.getMunicipioResidencia());}
+        if(empleado.getMunicipioResidencia()!=null){this.setDirMuni((int) empleado.getMunicipioResidencia());}
         
         return "editar_empleados";
     }

@@ -44,7 +44,7 @@ public class manejadorUsuarios implements Serializable{
     @EJB
     private UsuariosSistemaFacade usuariosSistemaFacade;
     
-    private UsuariosSistema nuevoUsuario = new UsuariosSistema(), usuarioSeleccionado = new UsuariosSistema();
+    private UsuariosSistema nuevoUsuario = new UsuariosSistema(), usuarioSeleccionado = new UsuariosSistema(), usuariosistema = new UsuariosSistema();
     
     private List<UsuariosSistema> usuariosFiltrados;
     
@@ -54,7 +54,9 @@ public class manejadorUsuarios implements Serializable{
      private int dirNacionalFiltrar;             // id´s direccion nacional
     private int dependeciasFiltrar;             // id´s dependencias
     
-    
+    private int estadoEditar;
+    private int usuarioEditar;
+    private String nombreUsuarioEditar;
        
     public List<EstadosUsuarios> todosEstadosUsuarios() {
         return getEstadosUsuariosFacade().findAll();
@@ -75,6 +77,15 @@ public class manejadorUsuarios implements Serializable{
         return getUsuariosSistemaFacade().findAll();
     }
 
+    public UsuariosSistema getUsuariosistema() {
+        return usuariosistema;
+    }
+
+    public void setUsuariosistema(UsuariosSistema usuariosistema) {
+        this.usuariosistema = usuariosistema;
+    }
+
+    
     public UsuariosSistema getUsuarioSeleccionado() {
         return usuarioSeleccionado;
     }
@@ -168,6 +179,31 @@ public class manejadorUsuarios implements Serializable{
     public void setDependeciasFiltrar(int dependeciasFiltrar) {
         this.dependeciasFiltrar = dependeciasFiltrar;
     }
+
+    public int getEstadoEditar() {
+        return estadoEditar;
+    }
+
+    public void setEstadoEditar(int estadoEditar) {
+        this.estadoEditar = estadoEditar;
+    }
+
+    public int getUsuarioEditar() {
+        return usuarioEditar;
+    }
+
+    public void setUsuarioEditar(int usuarioEditar) {
+        this.usuarioEditar = usuarioEditar;
+    }
+
+    public String getNombreUsuarioEditar() {
+        return nombreUsuarioEditar;
+    }
+
+    public void setNombreUsuarioEditar(String nombreUsuarioEditar) {
+        this.nombreUsuarioEditar = nombreUsuarioEditar;
+    }
+    
     
     /**
      * Creates a new instance of manejadorUsuarios
@@ -210,11 +246,20 @@ nuevoUsuario.setUserCreaUsistema(1); //guardará el id del usuario logeado
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
      
+ public void cambiarEstado(){
+     UsuariosSistema usuarioEst = getUsuariosistema().find(this.usuarioEditar);
+     usuarioEst.setIdEstadoUsuario(new EstadosUsuarios(this.estadoEditar()));
+     getUsuariosSistemaFacade().edit(usuarioEst);
+ }
      
-         /*PARA ELIMINAR REGISTROS*/    
+/*PARA ELIMINAR REGISTROS*/    
 public void eliminarUsuario(){
     this.usuariosSistemaFacade.remove(usuarioSeleccionado);
    }
+
+    private Integer estadoEditar() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
 
 /* ------------------  PARA ACTUALIZAR REGISTROS ----- */

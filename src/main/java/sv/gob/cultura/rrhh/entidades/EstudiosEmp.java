@@ -68,12 +68,12 @@ public class EstudiosEmp implements Serializable {
     @Column(name = "user_crea_estudios")
     private Integer userCreaEstudios;
     @Column(name = "fecha_crea_estudios")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechaCreaEstudios;
     @Column(name = "user_mod_estudios")
     private Integer userModEstudios;
     @Column(name = "fecha_mod_estudios")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechaModEstudios;
     @ManyToMany(mappedBy = "estudiosEmpList")
     private List<Empleados> empleadosList;

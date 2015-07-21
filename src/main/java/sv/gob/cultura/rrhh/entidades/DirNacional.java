@@ -5,7 +5,7 @@
  */
 package sv.gob.cultura.rrhh.entidades;
 
-import java.io.Serializable;//
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -53,12 +53,12 @@ public class DirNacional implements Serializable {
     @Column(name = "user_crea_dir")
     private Integer userCreaDir;
     @Column(name = "fecha_crea_dir")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechaCreaDir;
     @Column(name = "user_mod_dir")
     private Integer userModDir;
     @Column(name = "fecha_mod_dir")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechaModDir;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idDirNac")
     private List<Dependencias> dependenciasList;

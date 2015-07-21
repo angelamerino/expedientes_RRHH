@@ -80,12 +80,12 @@ public class Capacitaciones implements Serializable {
     @Column(name = "user_crea_cap")
     private Integer userCreaCap;
     @Column(name = "fecha_crea_cap")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechaCreaCap;
     @Column(name = "user_mod_cap")
     private Integer userModCap;
     @Column(name = "fecha_mod_cap")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechaModCap;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCap")
     private List<HorariosCap> horariosCapList;

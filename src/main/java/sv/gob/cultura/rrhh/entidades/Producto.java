@@ -16,8 +16,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -35,16 +33,9 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "producto")
 @NamedQueries({
-    @NamedQuery(name = "Producto.findAll", query = "SELECT p FROM Producto p"),
-    @NamedQuery(name = "Producto.findByIdProducto", query = "SELECT p FROM Producto p WHERE p.idProducto = :idProducto"),
-    @NamedQuery(name = "Producto.findByNombreProd", query = "SELECT p FROM Producto p WHERE p.nombreProd = :nombreProd"),
-    @NamedQuery(name = "Producto.findByDescripcionProd", query = "SELECT p FROM Producto p WHERE p.descripcionProd = :descripcionProd"),
-    @NamedQuery(name = "Producto.findByCostoUnit", query = "SELECT p FROM Producto p WHERE p.costoUnit = :costoUnit"),
-    @NamedQuery(name = "Producto.findByUserCreaProd", query = "SELECT p FROM Producto p WHERE p.userCreaProd = :userCreaProd"),
-    @NamedQuery(name = "Producto.findByFechaCreaProd", query = "SELECT p FROM Producto p WHERE p.fechaCreaProd = :fechaCreaProd"),
-    @NamedQuery(name = "Producto.findByUserModProd", query = "SELECT p FROM Producto p WHERE p.userModProd = :userModProd"),
-    @NamedQuery(name = "Producto.findByFechaModProd", query = "SELECT p FROM Producto p WHERE p.fechaModProd = :fechaModProd")})
+    @NamedQuery(name = "Producto.findAll", query = "SELECT p FROM Producto p")})
 public class Producto implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -65,15 +56,17 @@ public class Producto implements Serializable {
     @Column(name = "user_crea_prod")
     private Integer userCreaProd;
     @Column(name = "fecha_crea_prod")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechaCreaProd;
     @Column(name = "user_mod_prod")
     private Integer userModProd;
     @Column(name = "fecha_mod_prod")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechaModProd;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "producto")
+    private List<ProductoPrestacion> productoPrestacionList;
     @JoinColumn(name = "id_proveedor", referencedColumnName = "id_proveedor")
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Proveedor idProveedor;
 
     public Producto() {
@@ -151,6 +144,14 @@ public class Producto implements Serializable {
 
     public void setFechaModProd(Date fechaModProd) {
         this.fechaModProd = fechaModProd;
+    }
+
+    public List<ProductoPrestacion> getProductoPrestacionList() {
+        return productoPrestacionList;
+    }
+
+    public void setProductoPrestacionList(List<ProductoPrestacion> productoPrestacionList) {
+        this.productoPrestacionList = productoPrestacionList;
     }
 
     public Proveedor getIdProveedor() {

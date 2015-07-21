@@ -9,17 +9,18 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -31,13 +32,7 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "prestacion")
 @NamedQueries({
-    @NamedQuery(name = "Prestacion.findAll", query = "SELECT p FROM Prestacion p"),
-    @NamedQuery(name = "Prestacion.findByIdPrestacion", query = "SELECT p FROM Prestacion p WHERE p.idPrestacion = :idPrestacion"),
-    @NamedQuery(name = "Prestacion.findByCantidad", query = "SELECT p FROM Prestacion p WHERE p.cantidad = :cantidad"),
-    @NamedQuery(name = "Prestacion.findByUserCreaPrestacion", query = "SELECT p FROM Prestacion p WHERE p.userCreaPrestacion = :userCreaPrestacion"),
-    @NamedQuery(name = "Prestacion.findByFechaCreaPrestacion", query = "SELECT p FROM Prestacion p WHERE p.fechaCreaPrestacion = :fechaCreaPrestacion"),
-    @NamedQuery(name = "Prestacion.findByUserModPrestacion", query = "SELECT p FROM Prestacion p WHERE p.userModPrestacion = :userModPrestacion"),
-    @NamedQuery(name = "Prestacion.findByFechaModPrestacion", query = "SELECT p FROM Prestacion p WHERE p.fechaModPrestacion = :fechaModPrestacion")})
+    @NamedQuery(name = "Prestacion.findAll", query = "SELECT p FROM Prestacion p")})
 public class Prestacion implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -45,23 +40,23 @@ public class Prestacion implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_prestacion")
     private Integer idPrestacion;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "costo_prestacion")
+    private Double costoPrestacion;
     @Column(name = "user_crea_prestacion")
     private Integer userCreaPrestacion;
     @Column(name = "fecha_crea_prestacion")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechaCreaPrestacion;
     @Column(name = "user_mod_prestacion")
     private Integer userModPrestacion;
     @Column(name = "fecha_mod_prestacion")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechaModPrestacion;
-    @JoinTable(name = "producto_prestacion", joinColumns = {
-        @JoinColumn(name = "id_prestacion", referencedColumnName = "id_prestacion")}, inverseJoinColumns = {
-        @JoinColumn(name = "id_producto", referencedColumnName = "id_producto")})
-    @ManyToMany
-    private List<Producto> productoList;
     @ManyToMany(mappedBy = "prestacionList")
     private List<Empleados> empleadosList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "prestacion")
+    private List<ProductoPrestacion> productoPrestacionList;
     @JoinColumn(name = "id_tipo_prestacion", referencedColumnName = "id_tipo_prestacion")
     @ManyToOne(optional = false)
     private TipoPrestacion idTipoPrestacion;
@@ -82,6 +77,14 @@ public class Prestacion implements Serializable {
 
     public void setIdPrestacion(Integer idPrestacion) {
         this.idPrestacion = idPrestacion;
+    }
+
+    public Double getCostoPrestacion() {
+        return costoPrestacion;
+    }
+
+    public void setCostoPrestacion(Double costoPrestacion) {
+        this.costoPrestacion = costoPrestacion;
     }
 
     public Integer getUserCreaPrestacion() {
@@ -116,20 +119,20 @@ public class Prestacion implements Serializable {
         this.fechaModPrestacion = fechaModPrestacion;
     }
 
-    public List<Producto> getProductoList() {
-        return productoList;
-    }
-
-    public void setProductoList(List<Producto> productoList) {
-        this.productoList = productoList;
-    }
-
     public List<Empleados> getEmpleadosList() {
         return empleadosList;
     }
 
     public void setEmpleadosList(List<Empleados> empleadosList) {
         this.empleadosList = empleadosList;
+    }
+
+    public List<ProductoPrestacion> getProductoPrestacionList() {
+        return productoPrestacionList;
+    }
+
+    public void setProductoPrestacionList(List<ProductoPrestacion> productoPrestacionList) {
+        this.productoPrestacionList = productoPrestacionList;
     }
 
     public TipoPrestacion getIdTipoPrestacion() {

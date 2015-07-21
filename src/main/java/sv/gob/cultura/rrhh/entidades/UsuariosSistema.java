@@ -22,7 +22,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import sv.gob.cultura.rrhh.facades.UsuariosSistemaFacade;
 
 /**
  *
@@ -65,12 +64,12 @@ public class UsuariosSistema implements Serializable {
     @Column(name = "user_crea_usistema")
     private Integer userCreaUsistema;
     @Column(name = "fecha_crea_usistema")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechaCreaUsistema;
     @Column(name = "user_mod_usistema")
     private Integer userModUsistema;
     @Column(name = "fecha_mod_usistema")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechaModUsistema;
     @JoinColumn(name = "id_rol_usuario", referencedColumnName = "id_rol_usuario")
     @ManyToOne(optional = false)
@@ -94,10 +93,6 @@ public class UsuariosSistema implements Serializable {
         this.nombreCompleto = nombreCompleto;
         this.usuario = usuario;
         this.clave = clave;
-    }
-
-    public UsuariosSistema(UsuariosSistemaFacade nuevo_user) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public Integer getIdUsuario() {
@@ -211,6 +206,10 @@ public class UsuariosSistema implements Serializable {
     @Override
     public String toString() {
         return "sv.gob.cultura.rrhh.entidades.UsuariosSistema[ idUsuario=" + idUsuario + " ]";
+    }
+
+    public UsuariosSistema find(int usuarioEditar) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

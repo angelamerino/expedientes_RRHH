@@ -86,12 +86,12 @@ public class DescuentosEmp implements Serializable {
     @Column(name = "user_crea_desc")
     private Integer userCreaDesc;
     @Column(name = "fecha_crea_desc")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechaCreaDesc;
     @Column(name = "user_mod_desc")
     private Integer userModDesc;
     @Column(name = "fecha_mod_desc")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechaModDesc;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idDescuentoEmp")
     private List<ImgDoc> imgDocList;
@@ -99,7 +99,7 @@ public class DescuentosEmp implements Serializable {
     @ManyToOne(optional = false)
     private TipoDescuento idDescuento;
     @JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Empleados idEmpleado;
 
     public DescuentosEmp() {

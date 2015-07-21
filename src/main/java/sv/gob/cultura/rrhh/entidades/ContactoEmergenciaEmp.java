@@ -61,18 +61,18 @@ public class ContactoEmergenciaEmp implements Serializable {
     @Column(name = "user_crea_contac")
     private Integer userCreaContac;
     @Column(name = "fecha_crea_contac")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechaCreaContac;
     @Column(name = "user_mod_contac")
     private Integer userModContac;
     @Column(name = "fecha_mod_contac")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechaModContac;
     @JoinColumn(name = "id_parentesco", referencedColumnName = "id_parentesco")
     @ManyToOne(optional = false)
     private Parentesco idParentesco;
     @JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Empleados idEmpleado;
 
     public ContactoEmergenciaEmp() {

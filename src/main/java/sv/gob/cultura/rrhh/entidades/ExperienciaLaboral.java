@@ -76,15 +76,15 @@ public class ExperienciaLaboral implements Serializable {
     @Column(name = "user_crea_exp")
     private Integer userCreaExp;
     @Column(name = "fecha_crea_exp")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechaCreaExp;
     @Column(name = "user_mod_exp")
     private Integer userModExp;
     @Column(name = "fecha_mod_exp")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechaModExp;
     @JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Empleados idEmpleado;
 
     public ExperienciaLaboral() {

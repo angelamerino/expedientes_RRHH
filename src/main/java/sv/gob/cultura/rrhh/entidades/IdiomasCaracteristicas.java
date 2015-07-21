@@ -6,7 +6,6 @@
 package sv.gob.cultura.rrhh.entidades;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -14,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -28,7 +26,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "IdiomasCaracteristicas.findAll", query = "SELECT i FROM IdiomasCaracteristicas i"),
     @NamedQuery(name = "IdiomasCaracteristicas.findByIdCaractIdioma", query = "SELECT i FROM IdiomasCaracteristicas i WHERE i.idiomasCaracteristicasPK.idCaractIdioma = :idCaractIdioma"),
     @NamedQuery(name = "IdiomasCaracteristicas.findByIdIdioma", query = "SELECT i FROM IdiomasCaracteristicas i WHERE i.idiomasCaracteristicasPK.idIdioma = :idIdioma"),
-    @NamedQuery(name = "IdiomasCaracteristicas.findByIdIdiomaIdEmpleado", query = "SELECT i FROM IdiomasCaracteristicas i WHERE i.idiomasCaracteristicasPK.idIdioma = :idIdioma AND i.idEmpleado = :idEmpleado"),
+    //REVISAR: @NamedQuery(name = "IdiomasCaracteristicas.findByIdIdiomaIdEmpleado", query = "SELECT i FROM IdiomasCaracteristicas i WHERE i.idiomasCaracteristicasPK.idIdioma = :idIdioma AND i.idEmpleado = :idEmpleado"),
     @NamedQuery(name = "IdiomasCaracteristicas.findByInstitucionIdioma", query = "SELECT i FROM IdiomasCaracteristicas i WHERE i.institucionIdioma = :institucionIdioma")})
 public class IdiomasCaracteristicas implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -37,8 +35,6 @@ public class IdiomasCaracteristicas implements Serializable {
     @Size(max = 1024)
     @Column(name = "institucion_idioma")
     private String institucionIdioma;
-    @OneToMany(mappedBy = "idiomasCaracteristicas")
-    private List<ImgDoc> imgDocList;
     @JoinColumn(name = "id_nivel", referencedColumnName = "id_nivel")
     @ManyToOne
     private Nivel idNivel;
@@ -48,18 +44,8 @@ public class IdiomasCaracteristicas implements Serializable {
     @JoinColumn(name = "id_caract_idioma", referencedColumnName = "id_caract_idioma", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private CaracteristicasIdioma caracteristicasIdioma;
-    @Column(name = "id_empleado")
-    private Integer idEmpleado;
 
     public IdiomasCaracteristicas() {
-    }
-
-    public Integer getIdEmpleado() {
-        return idEmpleado;
-    }
-
-    public void setIdEmpleado(Integer idEmpleado) {
-        this.idEmpleado = idEmpleado;
     }
 
     public IdiomasCaracteristicas(IdiomasCaracteristicasPK idiomasCaracteristicasPK) {
@@ -84,14 +70,6 @@ public class IdiomasCaracteristicas implements Serializable {
 
     public void setInstitucionIdioma(String institucionIdioma) {
         this.institucionIdioma = institucionIdioma;
-    }
-
-    public List<ImgDoc> getImgDocList() {
-        return imgDocList;
-    }
-
-    public void setImgDocList(List<ImgDoc> imgDocList) {
-        this.imgDocList = imgDocList;
     }
 
     public Nivel getIdNivel() {
@@ -141,6 +119,10 @@ public class IdiomasCaracteristicas implements Serializable {
     @Override
     public String toString() {
         return "sv.gob.cultura.rrhh.entidades.IdiomasCaracteristicas[ idiomasCaracteristicasPK=" + idiomasCaracteristicasPK + " ]";
+    }
+
+    public void setIdEmpleado(int empleadoSelecionado) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

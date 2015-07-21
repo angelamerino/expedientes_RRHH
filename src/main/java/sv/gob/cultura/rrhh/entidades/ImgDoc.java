@@ -13,7 +13,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -69,7 +68,7 @@ public class ImgDoc implements Serializable {
     @Column(name = "tipo_archivo")
     private String tipoArchivo;
     @JoinColumn(name = "id_sancion", referencedColumnName = "id_sancion")
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Sanciones idSancion;
     @JoinColumn(name = "id_reconocimiento", referencedColumnName = "id_reconocimiento")
     @ManyToOne
@@ -77,11 +76,6 @@ public class ImgDoc implements Serializable {
     @JoinColumn(name = "id_mov_emp", referencedColumnName = "id_mov_emp")
     @ManyToOne
     private MovimientosEmp idMovEmp;
-    @JoinColumns({
-        @JoinColumn(name = "id_caract_idioma", referencedColumnName = "id_caract_idioma"),
-        @JoinColumn(name = "id_idioma", referencedColumnName = "id_idioma")})
-    @ManyToOne
-    private IdiomasCaracteristicas idiomasCaracteristicas;
     @JoinColumn(name = "id_hsalarial", referencedColumnName = "id_hsalarial")
     @ManyToOne
     private HistorialSalarial idHsalarial;
@@ -89,10 +83,10 @@ public class ImgDoc implements Serializable {
     @ManyToOne
     private EstudiosEmp idEstudio;
     @JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Empleados idEmpleado;
     @JoinColumn(name = "id_descuento_emp", referencedColumnName = "id_descuento_emp")
-    @ManyToOne
+    @ManyToOne(optional = false)
     private DescuentosEmp idDescuentoEmp;
 
     public ImgDoc() {
@@ -190,14 +184,6 @@ public class ImgDoc implements Serializable {
         this.idMovEmp = idMovEmp;
     }
 
-    public IdiomasCaracteristicas getIdiomasCaracteristicas() {
-        return idiomasCaracteristicas;
-    }
-
-    public void setIdiomasCaracteristicas(IdiomasCaracteristicas idiomasCaracteristicas) {
-        this.idiomasCaracteristicas = idiomasCaracteristicas;
-    }
-
     public HistorialSalarial getIdHsalarial() {
         return idHsalarial;
     }
@@ -253,6 +239,10 @@ public class ImgDoc implements Serializable {
     @Override
     public String toString() {
         return "sv.gob.cultura.rrhh.entidades.ImgDoc[ idImgDoc=" + idImgDoc + " ]";
+    }
+
+    public void setIdiomasCaracteristicas(IdiomasCaracteristicas idiomasCaracteristicas) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
