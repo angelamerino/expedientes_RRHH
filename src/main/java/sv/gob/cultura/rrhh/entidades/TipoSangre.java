@@ -57,10 +57,14 @@ public class TipoSangre implements Serializable {
         this.idTipoSangre = idTipoSangre;
         this.nombreTipoSangre = nombreTipoSangre;
     }
-
-    public TipoSangre(String nuevo_item) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    public TipoSangre(String nombreTipoSangre) {
+        this.nombreTipoSangre = nombreTipoSangre;
     }
+
+//    public TipoSangre(String nuevo_item) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
 
     public Integer getIdTipoSangre() {
         return idTipoSangre;

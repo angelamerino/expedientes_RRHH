@@ -53,12 +53,12 @@ public class AsignarAsistenciaCap implements Serializable {
     @Column(name = "user_crea_asig_asis")
     private Integer userCreaAsigAsis;
     @Column(name = "fecha_crea_asig_asis")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreaAsigAsis;
     @Column(name = "user_mod_asig_asis")
     private Integer userModAsigAsis;
     @Column(name = "fecha_mod_asig_asis")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaModAsigAsis;
     @JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")
     @ManyToOne(optional = false)

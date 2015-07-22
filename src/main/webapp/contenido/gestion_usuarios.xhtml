@@ -14,7 +14,7 @@
         <div class="page-header">
             <h1 class="pull-left"><strong>GESTIÓN DE USUARIOS DEL SISTEMA</strong></h1>
             <h:form>
-                <h:commandLink value="Nuevo Registro" styleClass="btn btn-info pull-right"  style="text-decoration:none;" action="#{manejadorGestionEmpleado.nuevoEmpleado()}" immediate="true" />
+                <h:commandLink value="Nuevo Registro" styleClass="btn btn-info pull-right"  style="text-decoration:none;" action="reg_usuarios.xhtml" immediate="true" />
             </h:form>
             <div class="clearfix" ></div>
         </div>
@@ -26,7 +26,7 @@
                    <div class="table table-responsive table-bordered">
                     <f:view>
                         <h:form prependId="false">
-                            <h:dataTable style="font-size: 14px" id="lista-usuarios" value="#{manejadorUsuarios.todosUsuarios}" var="usuario" styleClass="table table-striped table-hover" style="font-size: 12px">
+                            <h:dataTable style="font-size: 14px" id="lista-usuarios" value="#{manejadorUsuarios.todosUsuarios}" var="usuario" styleClass="table table-striped table-hover">
                                 <h:column>
 
                                 </h:column>
@@ -63,8 +63,9 @@
                                         </center>
                                     </f:facet> 
                                     <center>
-                                        <h:outputText value="#{usuario.fechaCreaUsistema}"/>
+                                        <h:outputText value="#{usuario.fechaCreaUsistema}">
                                         <f:convertDateTime pattern="dd/MM/yyyy HH:mm a" />
+                                        </h:outputText>
                                     </center>                                   
                                 </h:column>
                                 <p:column style="font-size: 12px; text-align: center;" width="15%">
@@ -120,6 +121,26 @@
                 </h:commandButton>
             </h:form>
         </p:dialog>
+        
+        <p:dialog header="Actualizar usuario" modal="true" widgetVar="dlgModifUsuario" position="center top">
+                    <div class="table-responsive">
+                        <h:panelGrid id="modiUsuario" columns="2" class="table">
+                            <h:outputLabel value="N°:" for="idUsuario" />
+                            <h:outputLabel id="idUsuario" value="#{manejadorUsuarios.usuarioSeleccionado.idUsuario}" title="IdUsuario" class="form-control"/>
+                            <h:outputLabel value="Nombre Completo:" for="nombreUsuario" />
+                            <h:inputText id="nombreUsuario" value="#{manejadorUsuarios.usuarioSeleccionado.nombreCompleto}" title="Nombre Completo" required="true" class="form-control"/>
+                            <h:outputLabel value="Usuario:" for="usuario" />
+                            <h:inputText id="usuario" value="#{manejadorUsuarios.usuarioSeleccionado.usuario}" title="Nombre de Usuario" required="true" class="form-control"/>
+                            <h:outputLabel value="Estado:" for="estadoUsuario" />
+                            <h:inputText id="estadoUsuario" value="#{manejadorUsuarios.usuarioSeleccionado.idEstadoUsuario.nombreEstadoUsuario}" title="Estado del Usuario" class="form-control"/>
+                            <h:outputLabel value="Tipo de usuario:" for="tipoUsuario" />
+                            <h:inputText id="tipoUsuario" value="#{manejadorUsuarios.usuarioSeleccionado.idRolUsuario.nombreRolUsuario}" title="Tipo o Rol del Usuario" class="form-control"/>
+                            <h:outputLabel value="Fecha de Creación:" for="fechaCreaUsuario" />
+                            <h:inputText id="fechaCreaUsuario" value="#{manejadorUsuarios.usuarioSeleccionado.fechaCreaUsistema}" title="Fecha de Creación del Registro" class="form-control"/>
+                        </h:panelGrid>
+                        <p:commandButton icon="ui ui-icon-disk" value="Actualizar usuario" process="@this modiUsuario" action="{managerUsuarios.editUsuario()}" update="@this modiUsuario" oncomplete="PF('dlgModifUsuario').hide();"/>
+                    </div>
+                </p:dialog>
 
         <script type="text/javascript">
             $(document).ready(function () {
@@ -170,7 +191,7 @@
             });
         </script>
         <script src="#{request.contextPath}/resources/datatables/jquery.dataTables.min.js" type="text/javascript"></script>
-    </ui:define> 
+
                             
                             
     
@@ -244,37 +265,36 @@
                                                         </p:dataTable>
                                                     </div>-->
 
-                    </div>
-                </div>
-                <p:dialog header="Actualizar usuario" modal="true" widgetVar="dlgModifUsuario" position="center top">
+<!--                    </div>
+                </div>-->
+<!--                <p:dialog header="Actualizar usuario" modal="true" widgetVar="dlgModifUsuario" position="center top">
                     <div class="table-responsive">
                         <h:panelGrid id="modiUsuario" columns="2" class="table">
                             <h:outputLabel value="N°:" for="idUsuario" />
-                            <h:outputLabel id="idUsuario" value="#{manejadorUsuarios.usuarioSeleccionado.idUsuario}" title="IdUsuario" class="form-control"/>
+                            <h:outputLabel id="idUsuario" value="{manejadorUsuarios.usuarioSeleccionado.idUsuario}" title="IdUsuario" class="form-control"/>
                             <h:outputLabel value="Nombre Completo:" for="nombreUsuario" />
-                            <h:inputText id="nombreUsuario" value="#{manejadorUsuarios.usuarioSeleccionado.nombreCompleto}" title="Nombre Completo" required="true" class="form-control"/>
+                            <h:inputText id="nombreUsuario" value="{manejadorUsuarios.usuarioSeleccionado.nombreCompleto}" title="Nombre Completo" required="true" class="form-control"/>
                             <h:outputLabel value="Usuario:" for="usuario" />
-                            <h:inputText id="usuario" value="#{manejadorUsuarios.usuarioSeleccionado.usuario}" title="Nombre de Usuario" required="true" class="form-control"/>
+                            <h:inputText id="usuario" value="{manejadorUsuarios.usuarioSeleccionado.usuario}" title="Nombre de Usuario" required="true" class="form-control"/>
                             <h:outputLabel value="Estado:" for="estadoUsuario" />
-                            <h:inputText id="estadoUsuario" value="#{manejadorUsuarios.usuarioSeleccionado.idEstadoUsuario.nombreEstadoUsuario}" title="Estado del Usuario" class="form-control"/>
+                            <h:inputText id="estadoUsuario" value="{manejadorUsuarios.usuarioSeleccionado.idEstadoUsuario.nombreEstadoUsuario}" title="Estado del Usuario" class="form-control"/>
                             <h:outputLabel value="Tipo de usuario:" for="tipoUsuario" />
-                            <h:inputText id="tipoUsuario" value="#{manejadorUsuarios.usuarioSeleccionado.idRolUsuario.nombreRolUsuario}" title="Tipo o Rol del Usuario" class="form-control"/>
+                            <h:inputText id="tipoUsuario" value="{manejadorUsuarios.usuarioSeleccionado.idRolUsuario.nombreRolUsuario}" title="Tipo o Rol del Usuario" class="form-control"/>
                             <h:outputLabel value="Fecha de Creación:" for="fechaCreaUsuario" />
-                            <h:inputText id="fechaCreaUsuario" value="#{manejadorUsuarios.usuarioSeleccionado.fechaCreaUsistema}" title="Fecha de Creación del Registro" class="form-control"/>
+                            <h:inputText id="fechaCreaUsuario" value="{manejadorUsuarios.usuarioSeleccionado.fechaCreaUsistema}" title="Fecha de Creación del Registro" class="form-control"/>
                         </h:panelGrid>
                         <p:commandButton icon="ui ui-icon-disk" value="Actualizar usuario" process="@this modiUsuario" action="{managerUsuarios.editUsuario()}" update="modiUsuario :form-usuario:accordion-users:user-list" oncomplete="PF('dlgModifUsuario').hide();"/>
                     </div>
-                </p:dialog>
-        </h:form>
-    </ui:define>
+                </p:dialog>-->
+   
 
     <!-- PARA PAGINACION Y BUSQUEDA EN TABLA UTILIZANDO Bootstrap-->
-    <ui:define name="scripts">
+    
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) Yo agregué esto-->
         <!--        <h:outputScript library="primefaces" name="jquery/jquery.js"/>
-                <script src="#{request.contextPath}/resources/datatables/jquery.dataTables.js" type="text/javascript"></script>-->
+                <script src="{request.contextPath}/resources/datatables/jquery.dataTables.js" type="text/javascript"></script>-->
         <!-- fin que de lo que agregué-->
-        <script>
+<!--        <script>
             $(document).ready(function () {
                 $('.paginada').dataTable(
                         {
@@ -305,10 +325,8 @@
                         }
                 );
             });
-        </script>
+        </script>-->
 
     </ui:define>
-
-
 
 </ui:composition>

@@ -60,12 +60,12 @@ public class Reconocimientos implements Serializable {
     @Column(name = "user_crea_rec")
     private Integer userCreaRec;
     @Column(name = "fecha_crea_rec")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreaRec;
     @Column(name = "user_mod_rec")
     private Integer userModRec;
     @Column(name = "fecha_mod_rec")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaModRec;
     @OneToMany(mappedBy = "idReconocimiento")
     private List<ImgDoc> imgDocList;

@@ -177,12 +177,12 @@ public class Empleados implements Serializable {
     @Column(name = "user_crea_emp")
     private Integer userCreaEmp;
     @Column(name = "fecha_crea_emp")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreaEmp;
     @Column(name = "user_mod_emp")
     private Integer userModEmp;
     @Column(name = "fecha_mod_emp")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaModEmp;
     @Size(max = 10)
     @Column(name = "genero")

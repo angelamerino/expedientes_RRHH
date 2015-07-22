@@ -58,9 +58,12 @@ public class ProfOficios implements Serializable {
         this.nombreProfOficio = nombreProfOficio;
     }
 
-    public ProfOficios(String nuevo_item) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public ProfOficios(String nombreProfOficio) {
+        this.nombreProfOficio = nombreProfOficio;
     }
+//    public ProfOficios(String nuevo_item) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
 
     public Integer getIdProfOficio() {
         return idProfOficio;

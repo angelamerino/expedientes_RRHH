@@ -57,10 +57,14 @@ public class InstBancaria implements Serializable {
         this.idBanco = idBanco;
         this.nombreBanco = nombreBanco;
     }
-
-    public InstBancaria(String nuevo_item) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    public InstBancaria(String nombreBanco){
+        this.nombreBanco = nombreBanco;
     }
+
+//    public InstBancaria(String nuevo_item) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
 
     public Integer getIdBanco() {
         return idBanco;

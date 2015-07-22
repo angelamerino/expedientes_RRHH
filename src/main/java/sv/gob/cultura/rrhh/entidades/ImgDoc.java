@@ -68,7 +68,7 @@ public class ImgDoc implements Serializable {
     @Column(name = "tipo_archivo")
     private String tipoArchivo;
     @JoinColumn(name = "id_sancion", referencedColumnName = "id_sancion")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Sanciones idSancion;
     @JoinColumn(name = "id_reconocimiento", referencedColumnName = "id_reconocimiento")
     @ManyToOne
@@ -86,7 +86,7 @@ public class ImgDoc implements Serializable {
     @ManyToOne(optional = false)
     private Empleados idEmpleado;
     @JoinColumn(name = "id_descuento_emp", referencedColumnName = "id_descuento_emp")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private DescuentosEmp idDescuentoEmp;
 
     public ImgDoc() {

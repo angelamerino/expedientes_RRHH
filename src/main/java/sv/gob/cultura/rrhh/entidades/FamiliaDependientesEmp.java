@@ -60,12 +60,12 @@ public class FamiliaDependientesEmp implements Serializable {
     @Column(name = "user_crea_fam")
     private Integer userCreaFam;
     @Column(name = "fecha_crea_fam")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreaFam;
     @Column(name = "user_mod_fam")
     private Integer userModFam;
     @Column(name = "fecha_mod_fam")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaModFam;
     @JoinColumn(name = "id_parentesco", referencedColumnName = "id_parentesco")
     @ManyToOne(optional = false)

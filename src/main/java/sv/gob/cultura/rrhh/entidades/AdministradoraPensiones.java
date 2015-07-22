@@ -58,9 +58,13 @@ public class AdministradoraPensiones implements Serializable {
         this.nombreAdminPension = nombreAdminPension;
     }
 
-    public AdministradoraPensiones(String nuevo_item) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public AdministradoraPensiones(String nombreAdminPension) {
+        this.nombreAdminPension = nombreAdminPension;
     }
+    
+//    public AdministradoraPensiones(String nuevo_item) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
 
     public Integer getIdAdminPension() {
         return idAdminPension;

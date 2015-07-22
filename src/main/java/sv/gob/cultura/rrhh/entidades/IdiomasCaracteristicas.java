@@ -35,6 +35,8 @@ public class IdiomasCaracteristicas implements Serializable {
     @Size(max = 1024)
     @Column(name = "institucion_idioma")
     private String institucionIdioma;
+    @Column(name = "id_empleado")
+    private Integer idEmpleado;
     @JoinColumn(name = "id_nivel", referencedColumnName = "id_nivel")
     @ManyToOne
     private Nivel idNivel;

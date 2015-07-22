@@ -53,12 +53,12 @@ public class Prestacion implements Serializable {
     @Column(name = "user_crea_prestacion")
     private Integer userCreaPrestacion;
     @Column(name = "fecha_crea_prestacion")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreaPrestacion;
     @Column(name = "user_mod_prestacion")
     private Integer userModPrestacion;
     @Column(name = "fecha_mod_prestacion")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaModPrestacion;
     @ManyToMany(mappedBy = "prestacionList")
     private List<Empleados> empleadosList;

@@ -49,9 +49,12 @@ public class Nivel implements Serializable {
         this.idNivel = idNivel;
     }
 
-    public Nivel(String nuevo_item) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+  public Nivel(String nombreNivel) {
+        this.nombreNivel = nombreNivel;
+    }  
+//    public Nivel(String nuevo_item) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
 
     public Integer getIdNivel() {
         return idNivel;

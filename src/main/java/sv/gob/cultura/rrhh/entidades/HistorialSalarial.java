@@ -73,12 +73,12 @@ public class HistorialSalarial implements Serializable {
     @Column(name = "user_crea_hsal")
     private Integer userCreaHsal;
     @Column(name = "fecha_crea_hsal")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreaHsal;
     @Column(name = "user_mod_hsal")
     private Integer userModHsal;
     @Column(name = "fecha_mod_hsal")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaModHsal;
     @JoinColumn(name = "id_mejora_sal", referencedColumnName = "id_mejora_sal")
     @ManyToOne(optional = false)

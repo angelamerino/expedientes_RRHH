@@ -22,7 +22,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
+import sv.gob.cultura.rrhh.facades.UsuariosSistemaFacade;
 /**
  *
  * @author Angela
@@ -64,12 +64,12 @@ public class UsuariosSistema implements Serializable {
     @Column(name = "user_crea_usistema")
     private Integer userCreaUsistema;
     @Column(name = "fecha_crea_usistema")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreaUsistema;
     @Column(name = "user_mod_usistema")
     private Integer userModUsistema;
     @Column(name = "fecha_mod_usistema")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaModUsistema;
     @JoinColumn(name = "id_rol_usuario", referencedColumnName = "id_rol_usuario")
     @ManyToOne(optional = false)

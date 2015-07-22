@@ -57,10 +57,14 @@ public class Estados implements Serializable {
         this.idEstado = idEstado;
         this.nombreEstado = nombreEstado;
     }
-
-    public Estados(String nuevo_item) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    public Estados (String nombreEstado){
+        this.nombreEstado = nombreEstado;
     }
+
+//    public Estados(String nuevo_item) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
 
     public Integer getIdEstado() {
         return idEstado;

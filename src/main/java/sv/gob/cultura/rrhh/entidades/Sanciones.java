@@ -36,11 +36,11 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Sanciones.findAll", query = "SELECT s FROM Sanciones s"),
     @NamedQuery(name = "Sanciones.findByIdSancion", query = "SELECT s FROM Sanciones s WHERE s.idSancion = :idSancion"),
     @NamedQuery(name = "Sanciones.findByDescripcionSancion", query = "SELECT s FROM Sanciones s WHERE s.descripcionSancion = :descripcionSancion"),
-//    @NamedQuery(name = "Sanciones.findByFechaSancion", query = "SELECT s FROM Sanciones s WHERE s.fechaSancion = :fechaSancion"),
-//    @NamedQuery(name = "Sanciones.findByUserCreaSancion", query = "SELECT s FROM Sanciones s WHERE s.userCreaSancion = :userCreaSancion"),
-//    @NamedQuery(name = "Sanciones.findByFechaCreaSancion", query = "SELECT s FROM Sanciones s WHERE s.fechaCreaSancion = :fechaCreaSancion"),
-//    @NamedQuery(name = "Sanciones.findByUserModSancion", query = "SELECT s FROM Sanciones s WHERE s.userModSancion = :userModSancion"),
-//    @NamedQuery(name = "Sanciones.findByFechaModSancion", query = "SELECT s FROM Sanciones s WHERE s.fechaModSancion = :fechaModSancion")
+   @NamedQuery(name = "Sanciones.findByFechaSancion", query = "SELECT s FROM Sanciones s WHERE s.fechaSancion = :fechaSancion"),
+   @NamedQuery(name = "Sanciones.findByUserCreaSancion", query = "SELECT s FROM Sanciones s WHERE s.userCreaSancion = :userCreaSancion"),
+   @NamedQuery(name = "Sanciones.findByFechaCreaSancion", query = "SELECT s FROM Sanciones s WHERE s.fechaCreaSancion = :fechaCreaSancion"),
+    @NamedQuery(name = "Sanciones.findByUserModSancion", query = "SELECT s FROM Sanciones s WHERE s.userModSancion = :userModSancion"),
+    @NamedQuery(name = "Sanciones.findByFechaModSancion", query = "SELECT s FROM Sanciones s WHERE s.fechaModSancion = :fechaModSancion")
 })
 public class Sanciones implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -59,6 +59,16 @@ public class Sanciones implements Serializable {
     @Column(name = "fecha_sancion")
     @Temporal(TemporalType.DATE)
     private Date fechaSancion;
+    @Column(name = "user_crea_sancion")
+    private Integer userCreaSancion;
+    @Column(name = "fecha_crea_sancion")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCreaSancion;
+    @Column(name = "user_mod_sancion")
+    private Integer userModSancion;
+    @Column(name = "fecha_mod_sancion")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaModSancion;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idSancion")
     private List<ImgDoc> imgDocList;
     @JoinColumn(name = "id_tipo_sancion", referencedColumnName = "id_tipo_sancion")

@@ -63,12 +63,12 @@ public class Dependencias implements Serializable {
     @Column(name = "user_crea_dependencia")
     private Integer userCreaDependencia;
     @Column(name = "fecha_crea_dependencia")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreaDependencia;
     @Column(name = "user_mod_dependencia")
     private Integer userModDependencia;
     @Column(name = "fecha_mod_dependencia")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaModDependencia;
     @JoinColumn(name = "id_municipio", referencedColumnName = "id_municipio")
     @ManyToOne(optional = false)

@@ -56,12 +56,12 @@ public class Producto implements Serializable {
     @Column(name = "user_crea_prod")
     private Integer userCreaProd;
     @Column(name = "fecha_crea_prod")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreaProd;
     @Column(name = "user_mod_prod")
     private Integer userModProd;
     @Column(name = "fecha_mod_prod")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaModProd;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "producto")
     private List<ProductoPrestacion> productoPrestacionList;

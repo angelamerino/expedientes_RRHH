@@ -41,7 +41,7 @@
                             <div class="col-xs-3" id="clave1">
                                 <p:password value="#{manejadorUsuarios.nuevoUsuario.clave}" id="pass1" required="true" 
                                             requiredMessage="La contraseña es un dato requerido." class="form-control" match="pass2" title="Contraseña"
-                                            validatorMessage="No coincide"/>
+                                            validatorMessage="No coincide" placeholder="Digitar Contraseña"/>
 <!--                                <h:inputSecret value="{manejadorUsuarios.nuevoUsuario.clave}" id="pass1" 
                                                title="Clave" required="true" requiredMessage="La contraseña es un dato requerido." class="form-control">
                                 </h:inputSecret>-->
@@ -86,7 +86,7 @@
                         <div class="form-group">
                             <label class="control-label col-xs-3" style="font-size: 12px">Dirección Nacional:</label>
                             <div class="col-xs-9">
-                                <h:selectOneMenu id="dirNac" value="#{manejadorUsuarios.dirNacionalFuncional}" style="width:600px"  
+                                <h:selectOneMenu id="dirNac" value="#{manejadorUsuarios.dirNacionalFuncional}" style="width:600px" class="form-control" 
                                                  title="Dirección Nacional" required="true" requiredMessage="Es necesario que seleccione una Dirección Nacional.">
                                     
                                     <f:selectItem itemValue="0" itemLabel="-- Seleccionar --" />
@@ -145,52 +145,6 @@
             </div>
         </div>
 
-        <!--        <f:view>
-        
-        
-                    <h:form>
-                        <h1><h:outputText value="Create/Edit"/></h1>
-                        <h:panelGrid columns="2">
-                            <h:outputLabel value="IdUsuario:" for="idUsuario" />
-                            <h:inputText id="idUsuario" value="{manejadorUsuarios.nuevoUsuario.idUsuario}" title="IdUsuario" required="true" requiredMessage="The IdUsuario field is required."/>
-                            <h:outputLabel value="NombreCompleto:" for="nombreCompleto" />
-                            <h:inputText id="nombreCompleto" value="{manejadorUsuarios.nuevoUsuario.nombreCompleto}" title="NombreCompleto" required="true" requiredMessage="The NombreCompleto field is required."/>
-                            <h:outputLabel value="Usuario:" for="usuario" />
-                            <h:inputText id="usuario" value="{manejadorUsuarios.nuevoUsuario.usuario}" title="Usuario" required="true" requiredMessage="The Usuario field is required."/>
-                            <h:outputLabel value="Clave:" for="clave" />
-                            <h:inputText id="clave" value="{manejadorUsuarios.nuevoUsuario.clave}" title="Clave" required="true" requiredMessage="The Clave field is required."/>
-                            <h:outputLabel value="UserCreaUsistema:" for="userCreaUsistema" />
-                            <h:inputText id="userCreaUsistema" value="{manejadorUsuarios.nuevoUsuario.userCreaUsistema}" title="UserCreaUsistema" />
-                            <h:outputLabel value="FechaCreaUsistema:" for="fechaCreaUsistema" />
-                            <h:inputText id="fechaCreaUsistema" value="{manejadorUsuarios.nuevoUsuario.fechaCreaUsistema}" title="FechaCreaUsistema" >
-                                <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
-                            </h:inputText>
-                            <h:outputLabel value="UserModUsistema:" for="userModUsistema" />
-                            <h:inputText id="userModUsistema" value="{manejadorUsuarios.nuevoUsuario.userModUsistema}" title="UserModUsistema" />
-                            <h:outputLabel value="FechaModUsistema:" for="fechaModUsistema" />
-                            <h:inputText id="fechaModUsistema" value="{manejadorUsuarios.nuevoUsuario.fechaModUsistema}" title="FechaModUsistema" >
-                                <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
-                            </h:inputText>
-                            <h:outputLabel value="IdRolUsuario:" for="idRolUsuario" />
-                            <h:selectOneMenu id="idRolUsuario" value="{manejadorUsuarios.nuevoUsuario.idRolUsuario}" title="IdRolUsuario" required="true" requiredMessage="The IdRolUsuario field is required.">
-                                 TODO: update below reference to list of available items
-                                <f:selectItems value="{fixme}"/>
-                            </h:selectOneMenu>
-                            <h:outputLabel value="IdEstadoUsuario:" for="idEstadoUsuario" />
-                            <h:selectOneMenu id="idEstadoUsuario" value="{manejadorUsuarios.nuevoUsuario.idEstadoUsuario}" title="IdEstadoUsuario" required="true" requiredMessage="The IdEstadoUsuario field is required.">
-                                 TODO: update below reference to list of available items
-                                <f:selectItems value="{fixme}"/>
-                            </h:selectOneMenu>
-                            <h:outputLabel value="IdDependencia:" for="idDependencia" />
-                            <h:selectOneMenu id="idDependencia" value="{manejadorUsuarios.nuevoUsuario.idDependencia}" title="IdDependencia" required="true" requiredMessage="The IdDependencia field is required.">
-                                 TODO: update below reference to list of available items
-                                <f:selectItems value="{fixme}"/>
-                            </h:selectOneMenu>
-                        </h:panelGrid>
-                    </h:form>
-                </f:view>-->
-
-
-    </ui:define>
+        </ui:define>
 
 </ui:composition>

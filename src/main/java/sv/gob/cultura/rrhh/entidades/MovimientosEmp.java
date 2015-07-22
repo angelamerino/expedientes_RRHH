@@ -80,12 +80,12 @@ public class MovimientosEmp implements Serializable {
     @Column(name = "user_crea_mov")
     private Integer userCreaMov;
     @Column(name = "fecha_crea_mov")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreaMov;
     @Column(name = "user_mod_mov")
     private Integer userModMov;
     @Column(name = "fecha_mod_mov")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaModMov;
     @OneToMany(mappedBy = "idMovEmp")
     private List<ImgDoc> imgDocList;

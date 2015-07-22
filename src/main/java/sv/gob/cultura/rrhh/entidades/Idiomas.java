@@ -60,10 +60,14 @@ public class Idiomas implements Serializable {
         this.idIdioma = idIdioma;
         this.nombreIdioma = nombreIdioma;
     }
-
-    public Idiomas(String nuevo_item) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    public Idiomas(String nombreIdioma){
+        this.nombreIdioma = nombreIdioma;
     }
+
+//    public Idiomas(String nuevo_item) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
 
     public Integer getIdIdioma() {
         return idIdioma;

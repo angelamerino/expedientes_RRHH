@@ -58,9 +58,12 @@ public class EstadoCivil implements Serializable {
         this.nombreEstadoCivil = nombreEstadoCivil;
     }
 
-    public EstadoCivil(String nuevo_item) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public EstadoCivil(String nombreEstadoCivil){
+        this.nombreEstadoCivil = nombreEstadoCivil;
     }
+//    public EstadoCivil(String nuevo_item) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
 
     public Integer getIdEstadoCivil() {
         return idEstadoCivil;

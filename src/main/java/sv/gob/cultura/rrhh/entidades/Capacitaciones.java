@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -80,12 +81,12 @@ public class Capacitaciones implements Serializable {
     @Column(name = "user_crea_cap")
     private Integer userCreaCap;
     @Column(name = "fecha_crea_cap")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreaCap;
     @Column(name = "user_mod_cap")
     private Integer userModCap;
     @Column(name = "fecha_mod_cap")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaModCap;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCap")
     private List<HorariosCap> horariosCapList;
