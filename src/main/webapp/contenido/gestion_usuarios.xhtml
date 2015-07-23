@@ -14,7 +14,7 @@
         <div class="page-header">
             <h1 class="pull-left"><strong>GESTIÓN DE USUARIOS DEL SISTEMA</strong></h1>
             <h:form>
-                <h:commandLink value="Nuevo Registro" styleClass="btn btn-info pull-right"  style="text-decoration:none;" action="reg_usuarios.xhtml" immediate="true" />
+                <h:link value="Nuevo Registro" outcome="reg_usuarios.xhtml" styleClass="btn btn-info pull-right" />
             </h:form>
             <div class="clearfix" ></div>
         </div>
@@ -77,13 +77,14 @@
                                     <center>
                                         <h:commandLink styleClass="btn-sm glyphicon glyphicon-pencil"  style="text-decoration:none;" action="#{manejadorUsuarios.editarUsuario()}" immediate="true" title="Editar">
                                             <f:setPropertyActionListener value="#{usuario}" target="#{manejadorUsuarios.usuariosistema}"/>
+                                            <p:ajax update="lista-usuarios"  onsuccess="PF('dlgModifUsuario').show()"/>
                                         </h:commandLink>
                                         
                                         <h:commandLink styleClass="btn-sm glyphicon glyphicon-refresh" style="text-decoration:none;" action="#{manejadorUsuarios.setNombreUsuarioEditar(usuario.nombreCompleto)}" title="Cambiar Estado">
                                             <f:setPropertyActionListener value="#{usuario.idUsuario}" target="#{manejadorUsuarios.usuarioEditar}"/>
                                             <f:setPropertyActionListener value="#{usuario.nombreCompleto}" target="#{manejadorUsuarios.nombreUsuarioEditar}"/>
-                                            <p:ajax update="nombreuser" />
                                             <p:ajax update="lista-usuarios"  onsuccess="PF('dlgEstadoUsuario').show()"/>
+                                            
                                         </h:commandLink>
                                     </center>
                                 </p:column>
@@ -136,7 +137,7 @@
                             <h:outputLabel value="Tipo de usuario:" for="tipoUsuario" />
                             <h:inputText id="tipoUsuario" value="#{manejadorUsuarios.usuarioSeleccionado.idRolUsuario.nombreRolUsuario}" title="Tipo o Rol del Usuario" class="form-control"/>
                             <h:outputLabel value="Fecha de Creación:" for="fechaCreaUsuario" />
-                            <h:inputText id="fechaCreaUsuario" value="#{manejadorUsuarios.usuarioSeleccionado.fechaCreaUsistema}" title="Fecha de Creación del Registro" class="form-control"/>
+                            <h:outputLabel id="fechaCreaUsuario" value="#{manejadorUsuarios.usuarioSeleccionado.fechaCreaUsistema}" title="Fecha de Creación del Registro" class="form-control"/>
                         </h:panelGrid>
                         <p:commandButton icon="ui ui-icon-disk" value="Actualizar usuario" process="@this modiUsuario" action="{managerUsuarios.editUsuario()}" update="@this modiUsuario" oncomplete="PF('dlgModifUsuario').hide();"/>
                     </div>

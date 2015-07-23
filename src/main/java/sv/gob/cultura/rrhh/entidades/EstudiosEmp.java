@@ -65,6 +65,9 @@ public class EstudiosEmp implements Serializable {
     @Size(min = 1, max = 9)
     @Column(name = "tipo_estudio")
     private String tipoEstudio;
+    @Size(min = 1, max = 1024)
+    @Column(name = "descripcion_no_formal")
+    private String descripcionNoFormal;
     @Column(name = "user_crea_estudios")
     private Integer userCreaEstudios;
     @Column(name = "fecha_crea_estudios")
@@ -88,6 +91,14 @@ public class EstudiosEmp implements Serializable {
 
     public EstudiosEmp(Integer idEstudio) {
         this.idEstudio = idEstudio;
+    }
+
+    public String getDescripcionNoFormal() {
+        return descripcionNoFormal;
+    }
+
+    public void setDescripcionNoFormal(String descripcionNoFormal) {
+        this.descripcionNoFormal = descripcionNoFormal;
     }
 
     public EstudiosEmp(Integer idEstudio, String institucionEstudio, Date anioEstudio, String tipoEstudio) {

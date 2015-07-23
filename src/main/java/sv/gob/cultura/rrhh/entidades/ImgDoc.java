@@ -67,6 +67,8 @@ public class ImgDoc implements Serializable {
     @Size(min = 1, max = 200)
     @Column(name = "tipo_archivo")
     private String tipoArchivo;
+    @Column(name = "id_idioma")
+    private Integer idIdioma;
     @JoinColumn(name = "id_sancion", referencedColumnName = "id_sancion")
     @ManyToOne
     private Sanciones idSancion;
@@ -102,6 +104,14 @@ public class ImgDoc implements Serializable {
         this.nombreArchivo = nombreArchivo;
         this.rutaArchivo = rutaArchivo;
         this.tipoArchivo = tipoArchivo;
+    }
+
+    public Integer getIdIdioma() {
+        return idIdioma;
+    }
+
+    public void setIdIdioma(Integer idIdioma) {
+        this.idIdioma = idIdioma;
     }
 
     public Integer getIdImgDoc() {
