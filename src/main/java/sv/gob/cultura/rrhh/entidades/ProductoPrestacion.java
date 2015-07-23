@@ -22,8 +22,11 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "producto_prestacion")
 @NamedQueries({
-    @NamedQuery(name = "ProductoPrestacion.findAll", query = "SELECT p FROM ProductoPrestacion p")})
+    @NamedQuery(name = "ProductoPrestacion.findAll", query = "SELECT p FROM ProductoPrestacion p"),
+    @NamedQuery(name = "ProductoPrestacion.findByIdPrestacion", query = "SELECT p FROM ProductoPrestacion p WHERE p.prestacion.idPrestacion = :idPrestacion")
+})
 public class ProductoPrestacion implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected ProductoPrestacionPK productoPrestacionPK;
@@ -103,5 +106,5 @@ public class ProductoPrestacion implements Serializable {
     public String toString() {
         return "sv.gob.cultura.rrhh.entidades.ProductoPrestacion[ productoPrestacionPK=" + productoPrestacionPK + " ]";
     }
-    
+
 }

@@ -47,7 +47,10 @@
                                             </center>
                                         </f:facet> 
                                         <center>
-                                            <h:outputText value="#{item.costoUnit}"/>
+                                            <h:outputText value="$ " />
+                                            <h:outputText value="#{item.costoUnit}" >
+                                                <f:convertNumber pattern="#0.00" />
+                                            </h:outputText>
                                         </center>
                                     </h:column>
                                     <h:column>

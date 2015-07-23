@@ -10,6 +10,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import org.primefaces.context.RequestContext;
@@ -245,17 +246,30 @@ public class manejadorCapacitaciones implements Serializable {
         if (asigCapList != null) {
 
             Iterator<AsignarAsistenciaCap> itearadorAsig = asigCapList.iterator();
-            
+
             while (itearadorAsig.hasNext()) {
                 Empleados empleadoEnLista = itearadorAsig.next().getIdEmpleado();
-                    emp.add(empleadoEnLista);
+                emp.add(empleadoEnLista);
             }
         }
         return emp;
     }
-    
-    public List<AsignarAsistenciaCap> todasAsignacionesCap(){
+
+    public List<AsignarAsistenciaCap> todasAsignacionesCap() {
         return getAsignarAsistenciaCapFacade().findAll();
+    }
+
+    public List<AsignarAsistenciaCap> empleadoAsignacionesCap() {
+        List<AsignarAsistenciaCap> asigCapList = getAsignarAsistenciaCapFacade().todasAsignaidCap(getIdCapAsig());
+        ArrayList<AsignarAsistenciaCap> emp = new ArrayList<AsignarAsistenciaCap>();
+
+        if (asigCapList != null) {
+            Iterator<AsignarAsistenciaCap> itearadorAsig = asigCapList.iterator();
+            while (itearadorAsig.hasNext()) {
+                emp.add(itearadorAsig.next());
+            }
+        }
+        return emp;
     }
 //*************************** FUNCIONES DE GUARDAR *****************************
 //******************************************************************************
@@ -319,24 +333,37 @@ public class manejadorCapacitaciones implements Serializable {
     public void addEmpCapa() {
         asignarAsistenciaCap.setIdCap(new Capacitaciones(this.getIdCapAsig()));
         asignarAsistenciaCap.setIdEmpleado(new Empleados(this.getEmpleadoSelecionado()));
-        //asignarAsistenciaCap.setCapAsignada("SI");
-        //asignarAsistenciaCap.setCapAsistida("NO");
+        asignarAsistenciaCap.setCapAsignada(true);
+        asignarAsistenciaCap.setCapAsistida(false);
         asignarAsistenciaCap.setFechaCreaAsigAsis(new Date());
         asignarAsistenciaCap.setUserCreaAsigAsis(1);
         getAsignarAsistenciaCapFacade().create(asignarAsistenciaCap);
         asignarAsistenciaCap = new AsignarAsistenciaCap();
     }
-    
-    public String eliminarEmpleadoCapacitacion(Empleados emp){
+
+    public String eliminarEmpleadoCapacitacion(Empleados emp) {
         AsignarAsistenciaCap asistencia = getAsignarAsistenciaCapFacade().asignaidCapEmpleado(emp.getIdEmpleado());
-        getAsignarAsistenciaCapFacade().remove(asistencia);        
+        getAsignarAsistenciaCapFacade().remove(asistencia);
         return null;
     }
-    
-    public String eliminarAsignacion(AsignarAsistenciaCap asigCap){
+
+    public String eliminarAsignacion(AsignarAsistenciaCap asigCap) {
         getAsignarAsistenciaCapFacade().remove(asigCap);
         return "gestion_asignacion_capacitaciones";
     }
+    
+    public void cambioAistencia(AsignarAsistenciaCap asigCap){
+        boolean tipo = asigCap.getCapAsistida();
+        
+        if(tipo==true){
+            asigCap.setCapAsistida(false);
+            System.out.println("Asistió a Capacitación NO");
+        }else if(tipo==false){
+            asigCap.setCapAsistida(true);
+            System.out.println("Asistió a Capacitación SI");
+        }
+        getAsignarAsistenciaCapFacade().edit(asigCap);
+     }
 
     public void cancelar() {
     }

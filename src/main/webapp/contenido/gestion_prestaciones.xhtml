@@ -47,6 +47,19 @@
                                             <h:column>
                                                 <f:facet name="header">
                                                     <center>
+                                                        <h:outputText value="Costo"/>
+                                                    </center>
+                                                </f:facet>
+                                                <center>
+                                                    <h:outputText value="$ " />
+                                                    <h:outputText value="#{item.costoPrestacion}" >
+                                                        <f:convertNumber pattern="#0.00" />
+                                                    </h:outputText>
+                                                </center>
+                                            </h:column>
+                                            <h:column>
+                                                <f:facet name="header">
+                                                    <center>
                                                         <h:outputText value="Productos"/>
                                                     </center>
                                                 </f:facet>
@@ -87,42 +100,30 @@
         </div>
 
         <p:dialog header="Agregar Productos a Prestacion" widgetVar="addProductoPres" modal="true" height="auto" width="auto" resizable="false" position="center,top">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-3">
-                    </div>
-                    <div class="col-md-6">
-                        <h:form class="form-horizontal">
-                            <p:messages showDetail="true" />
-                            <div class="form-group">
-                                <h:outputLabel value="Producto:" styleClass="col-lg-4 control-label"/>
-                                <div class="col-lg-8">
-                                    <h:selectOneMenu class="form-control" id="prod" value="#{manejadorPrestaciones.producPrestacion}" required="true" requiredMessage="Seleccione un producto">
-                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
-                                        <f:selectItems value="#{manejadorPrestaciones.todosProductos()}" var="prod" itemLabel="#{prod.nombreProd}" itemValue="#{prod.idProducto}"/>
-                                    </h:selectOneMenu>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel value="Cantidad:" styleClass="col-lg-4 control-label"/>
-                                <div class="col-lg-8">
-                                    <h:inputText id="cantidad" styleClass="form-control" value="#{manejadorPrestaciones.cantidad}" required="true" requiredMessage="Ingrese cantidad"/>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-lg-4"></div>
-                                <div class="col-lg-8">
-                                    <h:commandLink style="margin: 2px" styleClass="btn btn-info" value="Guardar" action="#{manejadorPrestaciones.addProdPrestacion()}"/>
-                                    <h:commandLink style="margin: 2px" styleClass="btn btn-info" value="Cancelar" action="#{manejadorPrestaciones.cancelarPrestacion()}"/>
-                                </div>
-
-                            </div>
-                        </h:form>
-                    </div>
-                    <div class="col-md-3">
+            <h:form class="form-horizontal">
+                <div class="form-group">
+                    <h:outputLabel value="Producto:" styleClass="col-lg-4 control-label"/>
+                    <div class="col-lg-8">
+                        <h:selectOneMenu class="form-control" id="prod" value="#{manejadorPrestaciones.producPrestacion}" required="true" requiredMessage="Seleccione un producto">
+                            <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                            <f:selectItems value="#{manejadorPrestaciones.todosProductos()}" var="prod" itemLabel="#{prod.nombreProd}" itemValue="#{prod.idProducto}"/>
+                        </h:selectOneMenu>
                     </div>
                 </div>
-            </div>
+                <div class="form-group">
+                    <h:outputLabel value="Cantidad:" styleClass="col-lg-4 control-label"/>
+                    <div class="col-lg-8">
+                        <h:inputText id="cantidad" styleClass="form-control" value="#{manejadorPrestaciones.cantidad}" required="true" requiredMessage="Ingrese cantidad"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-4"></div>
+                    <div class="col-lg-8">
+                        <h:commandButton style="margin: 2px" styleClass="btn btn-info" value="Guardar" action="#{manejadorPrestaciones.addProdPrestacion()}"/>
+                        <h:commandButton style="margin: 2px" styleClass="btn btn-info" value="Cancelar" action="#{manejadorPrestaciones.cancelarPrestacion()}"/>
+                    </div>
+                </div>
+            </h:form>
         </p:dialog>
 
         <p:dialog header="Productos de la Prestacion" widgetVar="productoPres" modal="true" height="auto" width="auto" resizable="false" position="center,top">
@@ -139,13 +140,30 @@
                                     <f:facet name="header">
                                         <h:outputText value="Nombre"/>
                                     </f:facet>
-                                    <h:outputText value="#{item.nombreProd}"/>
+                                    <h:outputText value="#{item.producto.nombreProd}"/>
                                 </h:column>
                                 <h:column>
                                     <f:facet name="header">
-                                        <h:outputText value="Costo"/>
+                                        <center>
+                                            <h:outputText value="Costo"/>
+                                        </center>
                                     </f:facet>
-                                    <h:outputText value="#{item.costoUnit}"/>
+                                    <center>
+                                        <h:outputText value="$ " />
+                                        <h:outputText value="#{item.producto.costoUnit}" >
+                                            <f:convertNumber pattern="#0.00" />
+                                        </h:outputText>
+                                    </center>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        <center>
+                                            <h:outputText value="Cantidad"/>
+                                        </center>
+                                    </f:facet>
+                                    <center>
+                                        <h:outputText value="#{item.cantidad}"/>
+                                    </center>
                                 </h:column>
                                 <h:column>
                                     <f:facet name="header">

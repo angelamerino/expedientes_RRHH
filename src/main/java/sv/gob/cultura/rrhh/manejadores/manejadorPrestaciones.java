@@ -7,6 +7,7 @@ package sv.gob.cultura.rrhh.manejadores;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -21,6 +22,8 @@ import sv.gob.cultura.rrhh.entidades.DirNacional;
 import sv.gob.cultura.rrhh.entidades.Empleados;
 import sv.gob.cultura.rrhh.entidades.Prestacion;
 import sv.gob.cultura.rrhh.entidades.Producto;
+import sv.gob.cultura.rrhh.entidades.ProductoPrestacion;
+import sv.gob.cultura.rrhh.entidades.ProductoPrestacionPK;
 import sv.gob.cultura.rrhh.entidades.TipoPrestacion;
 import sv.gob.cultura.rrhh.facades.AnioFacade;
 import sv.gob.cultura.rrhh.facades.DependenciasFacade;
@@ -28,6 +31,7 @@ import sv.gob.cultura.rrhh.facades.DirNacionalFacade;
 import sv.gob.cultura.rrhh.facades.EmpleadosFacade;
 import sv.gob.cultura.rrhh.facades.PrestacionFacade;
 import sv.gob.cultura.rrhh.facades.ProductoFacade;
+import sv.gob.cultura.rrhh.facades.ProductoPrestacionFacade;
 import sv.gob.cultura.rrhh.facades.TipoPrestacionFacade;
 
 /**
@@ -37,9 +41,9 @@ import sv.gob.cultura.rrhh.facades.TipoPrestacionFacade;
 @Named(value = "manejadorPrestaciones")
 @ViewScoped
 public class manejadorPrestaciones implements Serializable {
-
 // ************** LLAMADA A LOS ENTERPRICE JAVA BEANS **************************
 //******************************************************************************
+
     @EJB
     private ProductoFacade productoFacade;
     @EJB
@@ -54,13 +58,19 @@ public class manejadorPrestaciones implements Serializable {
     private DirNacionalFacade dirNacionalFacade;
     @EJB
     private DependenciasFacade dependenciasFacade;
+    @EJB
+    private ProductoPrestacionFacade productoPrestacionFacade;
+
 //*********************** OBJETOS DE LOS ENTIDADES *****************************
 //******************************************************************************    
     private Producto producto = new Producto();
     private Anio anio = new Anio();
     private TipoPrestacion tipoPrestacion = new TipoPrestacion();
     private Prestacion prestacion = new Prestacion();
-    Empleados empleado = new Empleados();
+    private Empleados empleado = new Empleados();
+    private ProductoPrestacionPK productoPrestacionPK = new ProductoPrestacionPK();
+    private ProductoPrestacion productoPrestacion = new ProductoPrestacion();
+
 //****** VARIABLES QUE CONTRENDRAN ID´S O STRING DE FORMULARIOS ****************
 //****************************************************************************** 
     private int producPrestacion;
@@ -72,9 +82,9 @@ public class manejadorPrestaciones implements Serializable {
     private int idPrestacionAsirnar;
     private int idPresGestion;
     private String nombreEmp;
+
 //********************** GET DE ENTERPRICE JAVA BEAN ***************************
 //******************************************************************************
-
     public ProductoFacade getProductoFacade() {
         return productoFacade;
     }
@@ -101,6 +111,10 @@ public class manejadorPrestaciones implements Serializable {
 
     public DependenciasFacade getDependenciasFacade() {
         return dependenciasFacade;
+    }
+
+    public ProductoPrestacionFacade getProductoPrestacionFacade() {
+        return productoPrestacionFacade;
     }
 
 //******************* GET y SET DE OBJETOS DE ENTIDADES ************************
@@ -229,9 +243,24 @@ public class manejadorPrestaciones implements Serializable {
         this.idPresGestion = idPresGestion;
     }
 
-    
+    public ProductoPrestacionPK getProductoPrestacionPK() {
+        return productoPrestacionPK;
+    }
+
+    public void setProductoPrestacionPK(ProductoPrestacionPK productoPrestacionPK) {
+        this.productoPrestacionPK = productoPrestacionPK;
+    }
+
+    public ProductoPrestacion getProductoPrestacion() {
+        return productoPrestacion;
+    }
+
+    public void setProductoPrestacion(ProductoPrestacion productoPrestacion) {
+        this.productoPrestacion = productoPrestacion;
+    }
 // **************** LISTA DE ELEMENTOS EN TABLAS *******************************
 //******************************************************************************
+
     public List<TipoPrestacion> todosTipoPrestacion() {
         return getTipoPrestacionFacade().findAll();
     }
@@ -259,13 +288,8 @@ public class manejadorPrestaciones implements Serializable {
 
     }
 
-    public List<Producto> productosPrestacion() {
-        Prestacion pres = getPrestacionFacade().find(this.getIdPrestacionSelecionada());
-        if (pres == null) {
-            return null;
-        } else {
-            return null;//pres.getProductoList();
-        }
+    public List<ProductoPrestacion> productosPrestacion() {
+        return getProductoPrestacionFacade().buscarProdIdPrestacion(this.getIdPrestacionSelecionada());
     }
 
     public List<DirNacional> todosDirNacional() {
@@ -289,16 +313,13 @@ public class manejadorPrestaciones implements Serializable {
             return pres.getEmpleadosList();
         }
     }
+
 //*************************** FUNCIONES DE GUARDAR *****************************
 //******************************************************************************    
-
-    public manejadorPrestaciones() {
-    }
-
     public String guardarPrestacion() {
-        prestacion.setFechaCreaPrestacion(new Date());
-        prestacion.setUserCreaPrestacion(1);
-        prestacion.setCostoPrestacion(0.00);        
+        prestacion.setFechaCreaPrestacion(new Date());      //Fecha de creación
+        prestacion.setUserCreaPrestacion(1);                //Usuario que crea Prestación
+        prestacion.setCostoPrestacion(0.00);
         getPrestacionFacade().create(prestacion);
         prestacion = new Prestacion();
         return "gestion_prestaciones";
@@ -314,15 +335,23 @@ public class manejadorPrestaciones implements Serializable {
     }
 
     public String eliminarPrestacion(Prestacion pres) {
-        //Elimina productos de la prestacion
-        //Setear costo de la prestacion a cero
-        //Eliminar prestacion
+        //Elimina productos de la prestacion para eliminar en cascada
+        List<ProductoPrestacion> todosProducPres = productosPrestacion();
+        //Elimina cada uno de los productos
+        Iterator<ProductoPrestacion> nombreIterator = todosProducPres.iterator();
+        while (nombreIterator.hasNext()) {
+            ProductoPrestacion elemento = nombreIterator.next();
+            getProductoPrestacionFacade().remove(elemento);
+        }
 
         getPrestacionFacade().remove(pres);
         return "gestion_prestaciones";
     }
 
     public String cancelarPrestacion() {
+        //Formulario para un nuevo ingreso
+        this.setProducPrestacion(0);
+        this.setCantidad(0);
         return "gestion_prestaciones";
     }
 
@@ -335,82 +364,138 @@ public class manejadorPrestaciones implements Serializable {
     }
 
     public String addProdPrestacion() {
-//        Prestacion pres = getPrestacionFacade().find(this.getIdPrestacionSelecionada());
-//        List<Producto> prodPres = pres.getProductoList();
-//        prodPres.add(new Producto(this.getProducPrestacion()));
-//        pres.setProductoList(prodPres);
-//        //Actualizar el costo de la prestacion sumando el costo del producto eliminado
-//        getPrestacionFacade().edit(pres);
+        //Setear idprestacion e idproducto en ProductoPrestacionPK
+        productoPrestacionPK.setIdPrestacion(this.getIdPrestacionSelecionada());
+        productoPrestacionPK.setIdProducto(this.getProducPrestacion());
+
+        boolean existe = false;
+        List<ProductoPrestacion> todosProducPres = productosPrestacion();
+        for (ProductoPrestacion iterador : todosProducPres) {
+            if (iterador.getPrestacion().equals(new Prestacion(this.getIdPrestacionSelecionada()))) {
+                if (iterador.getProducto().equals(new Producto(this.getProducPrestacion()))) {
+                    existe = true;
+                    System.out.println("Producto ya esta incluido en esta Prestación");
+                }
+            }
+        }
+
+        if (existe == false) {
+            //Setear productoPrestacionPk en productoPrestacion para guardar en tabla producto_prestacion en la base de datps
+            productoPrestacion.setProductoPrestacionPK(productoPrestacionPK);
+            productoPrestacion.setPrestacion(new Prestacion(this.getIdPrestacionSelecionada()));
+            productoPrestacion.setProducto(new Producto(this.getProducPrestacion()));
+            productoPrestacion.setCantidad(this.getCantidad());
+
+            getProductoPrestacionFacade().create(productoPrestacion);
+
+            //Edición de el costo de la prestación
+            Prestacion pres = getPrestacionFacade().find(this.getIdPrestacionSelecionada());
+            Producto prod = getProductoFacade().find(this.getProducPrestacion());
+
+            //costo anterior y nuevo costo de prestación
+            double costoPrestacion = pres.getCostoPrestacion();
+            double costoUnit = prod.getCostoUnit();
+            double costoPorUnidades = costoUnit * this.getCantidad();
+            double costoTotalPrestacion = costoPrestacion + costoPorUnidades;
+
+            //Edición de prestación con nuevo costo de prestación
+            pres.setCostoPrestacion(costoTotalPrestacion);
+            getPrestacionFacade().edit(pres);
+
+            productoPrestacionPK = new ProductoPrestacionPK();
+            productoPrestacion = new ProductoPrestacion();
+        }
+
         return "gestion_prestaciones";
     }
 
-    public String eliminarProdPrestacion(Producto prod) {
-//        Prestacion pres = getPrestacionFacade().find(this.getIdPrestacionSelecionada());
-//        List<Producto> prodPres = pres.getProductoList();
-//        prodPres.remove(prod);
-//        pres.setProductoList(prodPres);
-//        //Actualizar el costo de la prestacion restando el costo del producto eliminado
-//        getPrestacionFacade().edit(pres);
+    public String eliminarProdPrestacion(ProductoPrestacion prodPres) {
+        //Obtiene prestacion y producto a eliminar
+        Prestacion pres = getPrestacionFacade().find(prodPres.getPrestacion().getIdPrestacion());
+        Producto prod = getProductoFacade().find(prodPres.getProducto().getIdProducto());
+
+        //Valor anterior y nuevo costo de prestación
+        double costoPrestacion = pres.getCostoPrestacion();
+        double costoUnit = prod.getCostoUnit();
+        double costoPorUnidades = costoUnit * prodPres.getCantidad();
+        double costoTotalPrestacion = costoPrestacion - costoPorUnidades;
+        pres.setCostoPrestacion(costoTotalPrestacion);
+
+        getPrestacionFacade().edit(pres);
+        getProductoPrestacionFacade().remove(prodPres);
         return "gestion_prestaciones";
     }
-    
-    public String buscarEmpleadosPrestacion(){
-        System.out.println("Prestacion seleccionada: "+this.getIdPresGestion());
+
+    public String buscarEmpleadosPrestacion() {
+        System.out.println("Prestacion seleccionada: " + this.getIdPresGestion());
         return null;
     }
 
     public void addPresEmp() {
+        //Obtener empleado para poder ingresar en la lista de prestaciones
         Empleados emp = getEmpleadosFacade().find(getEmpleadoSelecionado());
         List<Prestacion> prestacionList = emp.getPrestacionList();
         prestacionList.add(new Prestacion(this.getIdPrestacionAsirnar()));
         emp.setPrestacionList(prestacionList);
-        getEmpleadosFacade().edit(emp);
-        this.setIdPrestacionAsirnar(0);
-    }
-    
-    public void addEmpPres(){
-        Empleados emp = getEmpleadosFacade().find(getEmpleadoSelecionado());
-        System.out.println("Empleado: " + emp.getNombreEmpleado());
         
-        List<Prestacion> prestacionList = emp.getPrestacionList();
-        prestacionList.add(new Prestacion(this.getIdPresGestion()));
-        emp.setPrestacionList(prestacionList);
-        
-        Prestacion pres = getPrestacionFacade().find(this.getIdPresGestion());
+        Prestacion pres = getPrestacionFacade().find(this.getIdPrestacionAsirnar());
         List<Empleados> empleadosList = pres.getEmpleadosList();
         empleadosList.add(emp);
         
-        getPrestacionFacade().edit(pres);        
+        getPrestacionFacade().edit(pres);
         getEmpleadosFacade().edit(emp);
-        
-        
+        this.setIdPrestacionAsirnar(0);
+    }
+
+    public void addEmpPres() {
+        //Obtiene empleado para sewr ingresado en la lista de prestaciones
+        Empleados emp = getEmpleadosFacade().find(getEmpleadoSelecionado());
+        System.out.println("Empleado: " + emp.getNombreEmpleado());
+
+        List<Prestacion> prestacionList = emp.getPrestacionList();
+        prestacionList.add(new Prestacion(this.getIdPresGestion()));
+        emp.setPrestacionList(prestacionList);
+
+        Prestacion pres = getPrestacionFacade().find(this.getIdPresGestion());
+        List<Empleados> empleadosList = pres.getEmpleadosList();
+        empleadosList.add(emp);
+
+        getPrestacionFacade().edit(pres);
+        getEmpleadosFacade().edit(emp);
+
     }
 
     public void eliminarPresEmp(Prestacion pres) {
+        //Se elimina empleado de la lista Prestaciones List y se edita información de empleado
         Empleados emp = getEmpleadosFacade().find(getEmpleadoSelecionado());
         List<Prestacion> prestacionList = emp.getPrestacionList();
         prestacionList.remove(pres);
         emp.setPrestacionList(prestacionList);
-        getEmpleadosFacade().edit(emp);
-    }
-    
-    public String eliminarEmpleadoPrestacion(Empleados emp){
-        List<Prestacion> prestacionList = emp.getPrestacionList();
-        prestacionList.remove(new Prestacion(this.getIdPresGestion()));
-        emp.setPrestacionList(prestacionList);
         
-        Prestacion pres = getPrestacionFacade().find(this.getIdPresGestion());
         List<Empleados> empleadosList = pres.getEmpleadosList();
         empleadosList.remove(emp);
         
         getPrestacionFacade().edit(pres);
         getEmpleadosFacade().edit(emp);
-        
+    }
+
+    public String eliminarEmpleadoPrestacion(Empleados emp) {
+        List<Prestacion> prestacionList = emp.getPrestacionList();
+        prestacionList.remove(new Prestacion(this.getIdPresGestion()));
+        emp.setPrestacionList(prestacionList);
+
+        Prestacion pres = getPrestacionFacade().find(this.getIdPresGestion());
+        List<Empleados> empleadosList = pres.getEmpleadosList();
+        empleadosList.remove(emp);
+
+        getPrestacionFacade().edit(pres);
+        getEmpleadosFacade().edit(emp);
+
         return null;
     }
-    
-    public void nuevoEmpPrestacion(ActionEvent event){
-        if (this.getIdPresGestion()== 0) {
+
+    public void nuevoEmpPrestacion(ActionEvent event) {
+        if (this.getIdPresGestion() == 0) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Seleccione una Prestación"));
         } else {
             this.setDireccionNacional(0);
@@ -426,6 +511,9 @@ public class manejadorPrestaciones implements Serializable {
         } else {
             RequestContext.getCurrentInstance().execute("PF('asigPrestaciones').show()");
         }
+    }
+    
+    public manejadorPrestaciones() {
     }
 
 }

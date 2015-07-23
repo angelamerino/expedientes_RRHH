@@ -26,7 +26,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "IdiomasCaracteristicas.findAll", query = "SELECT i FROM IdiomasCaracteristicas i"),
     @NamedQuery(name = "IdiomasCaracteristicas.findByIdCaractIdioma", query = "SELECT i FROM IdiomasCaracteristicas i WHERE i.idiomasCaracteristicasPK.idCaractIdioma = :idCaractIdioma"),
     @NamedQuery(name = "IdiomasCaracteristicas.findByIdIdioma", query = "SELECT i FROM IdiomasCaracteristicas i WHERE i.idiomasCaracteristicasPK.idIdioma = :idIdioma"),
-    //REVISAR: @NamedQuery(name = "IdiomasCaracteristicas.findByIdIdiomaIdEmpleado", query = "SELECT i FROM IdiomasCaracteristicas i WHERE i.idiomasCaracteristicasPK.idIdioma = :idIdioma AND i.idEmpleado = :idEmpleado"),
+    @NamedQuery(name = "IdiomasCaracteristicas.findByIdIdiomaIdEmpleado", query = "SELECT i FROM IdiomasCaracteristicas i WHERE i.idiomasCaracteristicasPK.idIdioma = :idIdioma AND i.idEmpleado = :idEmpleado"),
     @NamedQuery(name = "IdiomasCaracteristicas.findByInstitucionIdioma", query = "SELECT i FROM IdiomasCaracteristicas i WHERE i.institucionIdioma = :institucionIdioma")})
 public class IdiomasCaracteristicas implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -90,6 +90,15 @@ public class IdiomasCaracteristicas implements Serializable {
         this.idiomas = idiomas;
     }
 
+    public Integer getIdEmpleado() {
+        return idEmpleado;
+    }
+
+    public void setIdEmpleado(Integer idEmpleado) {
+        this.idEmpleado = idEmpleado;
+    }
+
+    
     public CaracteristicasIdioma getCaracteristicasIdioma() {
         return caracteristicasIdioma;
     }
@@ -123,8 +132,6 @@ public class IdiomasCaracteristicas implements Serializable {
         return "sv.gob.cultura.rrhh.entidades.IdiomasCaracteristicas[ idiomasCaracteristicasPK=" + idiomasCaracteristicasPK + " ]";
     }
 
-    public void setIdEmpleado(int empleadoSelecionado) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+   
     
 }
