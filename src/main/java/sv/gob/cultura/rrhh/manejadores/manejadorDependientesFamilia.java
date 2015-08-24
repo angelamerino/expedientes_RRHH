@@ -56,10 +56,11 @@ public class manejadorDependientesFamilia implements Serializable {
 //****** VARIABLES QUE CONTRENDRAN ID´S O STRING DE FORMULARIOS ****************
     private Date fechaNacFamiliaDependiente = new Date();       // fecha naciemeinto familiares
     private int edadFamiliaDependiente;                         // edad familiares calculada a partir de fecha
-    private int direccionNacional;
-    private int dependecia;
-    private int empleadoSelecionado;
-    private String nombreEmp;
+    private int direccionNacional;                              // id direccion nacional para filtar dependencias
+    private int dependecia;                                     // id de dependecias para filtrar empleados
+    private int empleadoSelecionado;                            // id d eempleado selecinado
+    private String nombreEmp;                                   // nombre de empleado selecinado
+    private String NR;                                          // NR de empleado para realizar busquda
 //********************** GET DE ENTERPRICE JAVA BEAN ***************************
 
     public FamiliaDependientesEmpFacade getFamiliaDependientesEmpFacade() {
@@ -159,6 +160,15 @@ public class manejadorDependientesFamilia implements Serializable {
         this.nombreEmp = nombreEmp;
     }
 
+    public String getNR() {
+        return NR;
+    }
+
+    public void setNR(String NR) {
+        this.NR = NR;
+    }
+
+    
 // **************** LISTA DE ELEMENTOS EN TABLAS *******************************  
     public List<Parentesco> todosParentesco() {
         return getParentescoFacade().findAll();
@@ -244,11 +254,23 @@ public class manejadorDependientesFamilia implements Serializable {
     }
 
     public void empleadoSelecionadoValido(ActionEvent event) {
+        //verifica si se selecino un empleado o si se busco un empleado
         if (this.getEmpleadoSelecionado() == 0) {
             familiaDependientesEmp = new FamiliaDependientesEmp();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Seleccione un Empleado"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe Buscar un Empleado"));
         } else {
             RequestContext.getCurrentInstance().execute("PF('familia').show()");
+        }
+    }
+    
+    public void buscarNR(ActionEvent event){
+        // busca empleado por nr
+        Empleados emp = getEmpleadosFacade().buscarEmpNR(this.getNR());
+        if (emp == null) {
+            this.setNombreEmp("");
+        } else {
+            this.setEmpleadoSelecionado(emp.getIdEmpleado());
+            this.setNombreEmp(emp.getNombreEmpleado());
         }
     }
 }

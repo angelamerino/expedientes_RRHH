@@ -42,7 +42,7 @@ public class manejadorPrendasProductos implements Serializable {
     private Producto producto = new Producto();
 //****** VARIABLES QUE CONTRENDRAN ID´S O STRING DE FORMULARIOS ****************
 //******************************************************************************  
-    private int proveedorProd;
+    private int proveedorProd;          // id de proveedor de productos
 //********************** GET DE ENTERPRICE JAVA BEAN ***************************
 //******************************************************************************
 

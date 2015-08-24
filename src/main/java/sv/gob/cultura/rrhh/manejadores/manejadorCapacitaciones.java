@@ -10,7 +10,6 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.faces.event.ValueChangeEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import org.primefaces.context.RequestContext;
@@ -62,14 +61,14 @@ public class manejadorCapacitaciones implements Serializable {
     HorariosCap horariosCap = new HorariosCap();
 //****** VARIABLES QUE CONTRENDRAN ID´S O STRING DE FORMULARIOS ****************
 //******************************************************************************
-    private int anio;
-    private Date anioEditar;
-    private int idCapHorasDias;
-    private int idCapAsig;
-    private int direccionNacional;
-    private int dependecia;
-    private int empleadoSelecionado;
-    private String nombreEmp;
+    private int anio;                           // id de año que se selecciono
+    private int idCapHorasDias;                 // id de horas y dias de capacitación
+    private int idCapAsig;                      // id de Asignacion de capacitaciones
+    private int direccionNacional;              // id dirección nacional para filtrar dependencias
+    private int dependecia;                     // id dependencias para filtrar empleado
+    private int empleadoSelecionado;            // id de empleado selecionado o buscado en el formulario
+    private String nombreEmp;                   // Nombre de empleado seleccinado o buscado
+    private Date anioEditar;                    // Fecha del cual se necesita unicamente el año
 //********************** GET DE ENTERPRICE JAVA BEAN ***************************
 //******************************************************************************
 
@@ -149,6 +148,7 @@ public class manejadorCapacitaciones implements Serializable {
 
     public void setAnioEditar(Date anioEditar) {
         this.anioEditar = anioEditar;
+        // Obtenemos unicamente el año de la fecha ingresada
         this.setAnio(obtenerAnio(anioEditar));
     }
 
@@ -173,6 +173,8 @@ public class manejadorCapacitaciones implements Serializable {
     }
 
     public void setDireccionNacional(int direccionNacional) {
+        //Al seleccinar una dirección nacional, la dependencia y el empleado
+        //y nombre de empleado se hacen nulos o ceros
         this.direccionNacional = direccionNacional;
         this.setNombreEmp("");
         this.setDependecia(0);
@@ -194,6 +196,7 @@ public class manejadorCapacitaciones implements Serializable {
     }
 
     public void setEmpleadoSelecionado(int empleadoSelecionado) {
+        //buscamos empleado y obtenemos su nombre si no se encuenta se setea nulo
         this.empleadoSelecionado = empleadoSelecionado;
         Empleados emp = getEmpleadosFacade().find(getEmpleadoSelecionado());
 
@@ -271,7 +274,7 @@ public class manejadorCapacitaciones implements Serializable {
         }
         return emp;
     }
-//*************************** FUNCIONES DE GUARDAR *****************************
+//********************************* FUNCIONES **********************************
 //******************************************************************************
 
     public String guardarCapacitacion() {
@@ -382,13 +385,13 @@ public class manejadorCapacitaciones implements Serializable {
     public manejadorCapacitaciones() {
     }
 
-    public Date fechaAnio(int anio) {
+    public Date fechaAnio(int anio) { //Regresa una fecha 31 de diiembre de un año dado
         anio = anio - 1900;
         Date fecha = new Date(anio, 11, 31);
         return fecha;
     }
 
-    public int obtenerAnio(Date date) {
+    public int obtenerAnio(Date date) { // Regresa un año de una fecha dada
         if (null == date) {
             return 0;
         } else {

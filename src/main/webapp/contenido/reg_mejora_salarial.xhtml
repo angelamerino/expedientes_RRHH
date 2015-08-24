@@ -1,0 +1,142 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="./../resources/plantilla/plantilla.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <div class="page-header">
+            <h1><strong>REGISTRO DE MEJORA SALARIAL</strong></h1>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading"><strong>Ingreso de Mejora Salarial</strong></div>
+            <div class="panel-body">
+
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">  
+                        <h2 class="text-info text-center">Buscar Empleado</h2>
+                        <div class="clearfix"></div>
+                        <br />
+                    </div>                            
+                    <div class="col-md-2"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6"> 
+
+                        <h:form prependId="false" id="buscar">
+                            <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                            <div class="form-group">
+                                <h:outputLabel value="Dirección Nacional:"/>                                
+                                <h:selectOneMenu  class="form-control" id="dirNacionalFiltrarJefe" style="width: 100%" value="#{manejadorAumentoMejoraSalarial.direccionNacional}" rendered="true" requiredMessage="Seleccione una Dirección Nacional">
+                                    <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                    <f:selectItems value="#{manejadorAumentoMejoraSalarial.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
+                                    <f:ajax render="filtrarDependencia filtrarEmpleado nombre tabla"/>
+                                </h:selectOneMenu>
+                            </div>
+
+                            <div class="form-group">
+                                <h:outputLabel value="Dependencia / Unidad organizativa:"/>
+                                <h:selectOneMenu class="form-control" id="filtrarDependencia"  style="width: 100%" value="#{manejadorAumentoMejoraSalarial.dependecia}" rendered="true" requiredMessage="Seleccione una Dependencia/Unidad Organizativa">
+                                    <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                    <f:selectItems value="#{manejadorAumentoMejoraSalarial.dependenciasFiltradas()}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
+                                    <f:ajax render="filtrarEmpleado nombre tabla"/>
+                                </h:selectOneMenu>
+                            </div>
+
+                            <div class="form-group">
+                                <h:outputLabel class="control-label" value="Empleado:"/>
+                                <h:selectOneMenu class="form-control" id="filtrarEmpleado" style="width: 100%" value="#{manejadorAumentoMejoraSalarial.empleadoSelecionado}" rendered="true" requiredMessage="Seleccione un Empleado">
+                                    <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                    <f:selectItems value="#{manejadorAumentoMejoraSalarial.empleadoFiltrado()}" var="emple" itemLabel="#{emple.nombreEmpleado}" itemValue="#{emple.idEmpleado}"/>
+                                    <f:ajax render="salarioActualHsalarial" />
+                                </h:selectOneMenu>
+                            </div>
+
+                        </h:form>
+
+                    </div>                            
+                    <div class="col-md-3"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">  
+                        <h2 class="text-info text-center">Mejora Salarial</h2>
+                        <div class="clearfix"></div>
+                        <br />
+                    </div>                            
+                    <div class="col-md-2"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">  
+                        <h:form prependId="false" class="form-horizontal">
+
+                            <div class="form-group">
+                                <h:outputLabel value="Tipo de Mejora Salarial:" styleClass="col-lg-4 control-label"/>
+                                <div class="col-lg-7">
+                                    <h:selectOneMenu styleClass="form-control" id="idMejoraSal" value="#{manejadorAumentoMejoraSalarial.historialSalarial.idMejoraSal}" converter="#{tipoMejoraSalarialConvertidor}" required="true" requiredMessage="Seleccione un Tipo de Mejora Salarial">
+                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                        <f:selectItems value="#{manejadorAumentoMejoraSalarial.todosTiposMejora()}" var="tipoMejora" itemLabel="#{tipoMejora.nombreMejoraSal}" itemValue="#{tipoMejora}"/>
+                                    </h:selectOneMenu>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <h:outputLabel value="Salario Actual: $" styleClass="col-lg-4 control-label"/>
+                                <div class="col-lg-7">
+                                    <h:outputText styleClass="form-control" id="salarioActualHsalarial" value="#{manejadorAumentoMejoraSalarial.salarioActual}" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <h:outputLabel value="Porcentaje de Aplicacón:" styleClass="col-lg-4 control-label"/>
+                                <div class="col-lg-6">
+                                    <h:inputText styleClass="form-control" id="porcentajeHsalarial" value="#{manejadorAumentoMejoraSalarial.porcentaje}" required="true" requiredMessage="Ingrese porcentaje de Aplicación">
+                                        <f:ajax render="nuevoSalarioHsalarial" />
+                                    </h:inputText>
+                                </div>
+                                <h:outputLabel value="%" styleClass="col-lg-1 control-label"/>
+                            </div>
+
+                            <div class="form-group">
+                                <h:outputLabel value="Nuevo Salario: $" styleClass="col-lg-4 control-label"/>
+                                <div class="col-lg-7">
+                                    <h:outputText styleClass="form-control" id="nuevoSalarioHsalarial" value="#{manejadorAumentoMejoraSalarial.salarioNuevo}" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <h:outputLabel value="Fecha de Aplicacón:" styleClass="col-lg-4 control-label"/>
+                                <div class="col-lg-7">
+                                    <p:calendar pattern="dd/MM/yyyy" locale="es" id="fechaHsalarial" showOn="button" value="#{manejadorAumentoMejoraSalarial.historialSalarial.fechaHsalarial}" required="true" requiredMessage="Ingrese Fecha de Aplicación" />
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <div class="col-lg-4"></div>
+                                <div class="col-lg-8">
+                                    <h:commandLink style="margin: 2px; color: white" styleClass="btn btn-info" value="Guardar" action="#{manejadorAumentoMejoraSalarial.guardarMejoraSalarial()}" />
+                                    <h:commandLink style="margin: 2px; color: white" styleClass="btn btn-info" value="Cancelar" action="#{manejadorAumentoMejoraSalarial.cancelar()}" immediate="true"/>
+                                </div>
+                            </div>
+
+                        </h:form>
+
+                    </div>                            
+                    <div class="col-md-2"></div>
+                </div>
+
+            </div>
+        </div> 
+    </ui:define>
+
+</ui:composition>

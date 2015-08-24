@@ -1,0 +1,253 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../resources/plantilla/plantilla.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+
+        <div class="page-header">
+            <h1><strong>REGISTRO DE MOVIMIENTOS DE EMPLEADOS</strong></h1>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading"><strong>Ingreso de Movientos de Empleados</strong></div>
+            <div class="panel-body">
+
+
+                <div class="col-md-3"></div>    
+                <div class="col-md-6">
+                    <h:form prependId="false" class="form-horizontal">
+                        <p:messages showDetail="true" />
+                        <div class="form-group">
+                            <h:outputLabel value="NR del Empleado:" styleClass="col-lg-4 control-label"/>
+                            <div class="col-lg-6">
+                                <p:inputMask styleClass="form-control" value="#{manejadorMovimientosEmp.NR}" mask="NR 9999-999999-999-9"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <h:outputLabel value="Tipo de Movimiento:" styleClass="col-lg-4 control-label"/>
+                            <div class="col-lg-6">
+                                <h:selectOneMenu class="form-control" id="idTipoMov" value="#{manejadorMovimientosEmp.tipoMovimiento}" required="true" requiredMessage="Seleccione un tipo de movimiento">
+                                    <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                    <f:selectItems value="#{manejadorMovimientosEmp.todosTipoMov()}" var="tipoMov" itemLabel="#{tipoMov.nombreMov}" itemValue="#{tipoMov.idTipoMov}"/>
+                                </h:selectOneMenu>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-4"> </div>
+                            <div class="col-lg-6">
+                                <h:commandButton class="btn btn-info" actionListener="#{manejadorMovimientosEmp.agregarinformacion()}" value="Agregar Información" />
+                            </div>
+                        </div>
+                    </h:form>
+                </div>
+                <div class="col-md-3"></div>   
+            </div>
+        </div>
+
+        <p:dialog header="Ingreso de Información Movimiento por Traslado" widgetVar="traslado" closable="false" modal="true" height="auto" width="auto" resizable="false" position="center,top">
+            <h:form prependId="false" class="form-horizontal">
+                <br/>
+                <legend  style="font-size: 15px" align="center">Información Actual</legend>
+                <div class="form-group">
+                    <h:outputLabel value="Dependencia Actual:" styleClass="col-lg-4 control-label"/>
+                    <div class="col-lg-8">
+                        <h:outputText styleClass="form-control" id="dependenciaActual" value="#{manejadorMovimientosEmp.depenActual}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <h:outputLabel value="Cargo Actual:" styleClass="col-lg-4 control-label"/>
+                    <div class="col-lg-8">
+                        <h:outputText styleClass="form-control" id="cargoActual" value="#{manejadorMovimientosEmp.antiguoCargo}"/>
+                    </div>
+                </div>
+
+                <legend  style="font-size: 15px" align="center">Nueva Información</legend>
+
+                <div class="form-group">
+                    <h:outputLabel value="Dirección Nacional:" styleClass="col-lg-4 control-label"/>
+                    <div class="col-lg-8">
+                        <h:selectOneMenu styleClass="form-control" id="dirNacional" style="width: 100%" value="#{manejadorMovimientosEmp.dirNacinal}" required="true" requiredMessage="Seleccione una Dirección Nacional">
+                            <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                            <f:selectItems value="#{manejadorMovimientosEmp.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
+                            <p:ajax update="depen"/>
+                        </h:selectOneMenu>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <h:outputLabel value="Dependencia / Unida Organizativa:" styleClass="col-lg-4 control-label"/>
+                    <div class="col-lg-8">
+                        <h:selectOneMenu styleClass="form-control" id="depen" style="width: 100%" value="#{manejadorMovimientosEmp.dependencia}" required="true" requiredMessage="Seleccione una Dirección Nacional">
+                            <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                            <f:selectItems value="#{manejadorMovimientosEmp.dependenciasFiltradas()}" var="dep" itemLabel="#{dep.nombreDependencia}" itemValue="#{dep.idDependencia}"/>
+                        </h:selectOneMenu>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel value="Nuevo Cargo:" styleClass="col-lg-4 control-label"/>
+                    <div class="col-lg-8">
+                        <h:inputText styleClass="form-control" id="cargonuevo" value="#{manejadorMovimientosEmp.nuevoCargo}" required="true" requiredMessage="Ingrese Nuevo Cargo"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel value="Fecha de Traslado (A partir de):" styleClass="col-lg-4 control-label"/>
+                    <p:calendar pattern="dd/MM/yyyy" locale="es" styleClass="col-md-8" id="inicio" showOn="button" value="#{manejadorMovimientosEmp.fechaTralado}" required="true" requiredMessage="Ingese Fecha." />
+                </div>
+                
+                <div class="form-group">
+                    <h:outputLabel value="Fecha de Notificación:" styleClass="col-lg-4 control-label"/>
+                    <p:calendar pattern="dd/MM/yyyy" locale="es" styleClass="col-md-8" id="noti" showOn="button" value="#{manejadorMovimientosEmp.fechaNoti}" required="true" requiredMessage="Ingese Fecha." />
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel value="Documento de Respaldo:" styleClass="col-lg-4 control-label"/>
+                    <div class="col-lg-8">
+                        <h:outputText styleClass="form-control" id="doc" value="#{fixme}"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-lg-4"></div>
+                    <div class="col-lg-8">
+                        <h:commandLink style="margin: 2px; color: white" styleClass="btn btn-info" value="Guardar" action="#{manejadorMovimientosEmp.guardarMovTraslado()}"/>
+                        <h:commandLink style="margin: 2px; color: white" styleClass="btn btn-info" value="Cancelar" action="#{manejadorMovimientosEmp.cancelarModal()}" immediate="true"/>
+                    </div>
+                </div>
+            </h:form>
+        </p:dialog>
+
+
+        <p:dialog header="Ingreso de Información Movimiento por Ascenso" widgetVar="ascenso" closable="false" modal="true" height="auto" width="750px" resizable="false" position="center,top">
+            <h:form prependId="false" class="form-horizontal">
+                <br/>
+                <legend  style="font-size: 15px" align="center">Información Actual</legend>
+                <div class="form-group">
+                    <h:outputLabel value="Cargo Actual:" styleClass="col-lg-4 control-label"/>
+                    <div class="col-lg-8">
+                        <h:outputText styleClass="form-control" id="cargoActualAsc" value="#{manejadorMovimientosEmp.antiguoCargo}"/>
+                    </div>
+                </div>
+
+                <legend  style="font-size: 15px" align="center">Nueva Información</legend>
+
+                <div class="form-group">
+                    <h:outputLabel value="Nuevo Cargo:" styleClass="col-lg-4 control-label"/>
+                    <div class="col-lg-8">
+                        <h:inputText styleClass="form-control" id="cargonuevoAsc" value="#{manejadorMovimientosEmp.nuevoCargo}" required="true" requiredMessage="Ingrese Nuevo Cargo"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel value="Fecha de Traslado (Nuevo Cargo):" styleClass="col-lg-4 control-label"/>
+                    <p:calendar pattern="dd/MM/yyyy" locale="es" styleClass="col-md-8" id="inicioAsc" showOn="button" value="#{manejadorMovimientosEmp.fechaTralado}" required="true" requiredMessage="Ingese Fecha." />
+                </div>                
+                <div class="form-group">
+                    <h:outputLabel value="Fecha de Notificación:" styleClass="col-lg-4 control-label"/>
+                    <p:calendar pattern="dd/MM/yyyy" locale="es" styleClass="col-md-8" id="notiAsc" showOn="button" value="#{manejadorMovimientosEmp.fechaNoti}" required="true" requiredMessage="Ingese Fecha." />
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel value="Documento de Respaldo:" styleClass="col-lg-4 control-label"/>
+                    <div class="col-lg-8">
+                        <h:outputText styleClass="form-control" id="docAsc" value="#{fixme}"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-lg-4"></div>
+                    <div class="col-lg-8">
+                        <h:commandLink style="margin: 2px; color: white" styleClass="btn btn-info" value="Guardar" action="#{manejadorMovimientosEmp.guardarMovAsc()}"/>
+                        <h:commandLink style="margin: 2px; color: white" styleClass="btn btn-info" value="Cancelar" action="#{manejadorMovimientosEmp.cancelarModal()}" immediate="true"/>
+                    </div>
+                </div>
+            </h:form>
+        </p:dialog>
+
+
+        <p:dialog header="Ingreso de Información Movimiento por Traslado Temporal" widgetVar="trasladoTemp" closable="false" modal="true" height="auto" width="auto" resizable="false" position="center,top">
+            <h:form prependId="false" class="form-horizontal">
+                <br/>
+                <legend  style="font-size: 15px" align="center">Información Actual</legend>
+                <div class="form-group">
+                    <h:outputLabel value="Dependencia Actual:" styleClass="col-lg-4 control-label"/>
+                    <div class="col-lg-8">
+                        <h:outputText styleClass="form-control" id="dependenciaActualTemp" value="#{manejadorMovimientosEmp.depenActual}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <h:outputLabel value="Cargo Actual:" styleClass="col-lg-4 control-label"/>
+                    <div class="col-lg-8">
+                        <h:outputText styleClass="form-control" id="cargoActualTemp" value="#{manejadorMovimientosEmp.antiguoCargo}"/>
+                    </div>
+                </div>
+
+                <legend  style="font-size: 15px" align="center">Nueva Información</legend>
+
+                <div class="form-group">
+                    <h:outputLabel value="Dirección Nacional:" styleClass="col-lg-4 control-label"/>
+                    <div class="col-lg-8">
+                        <h:selectOneMenu styleClass="form-control" id="dirNacionalTemp" style="width: 100%" value="#{manejadorMovimientosEmp.dirNacinal}" required="true" requiredMessage="Seleccione una Dirección Nacional">
+                            <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                            <f:selectItems value="#{manejadorMovimientosEmp.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
+                            <p:ajax update="depenTemp"/>
+                        </h:selectOneMenu>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <h:outputLabel value="Dependencia / Unida Organizativa:" styleClass="col-lg-4 control-label"/>
+                    <div class="col-lg-8">
+                        <h:selectOneMenu styleClass="form-control" id="depenTemp" style="width: 100%" value="#{manejadorMovimientosEmp.dependencia}" required="true" requiredMessage="Seleccione una Dirección Nacional">
+                            <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                            <f:selectItems value="#{manejadorMovimientosEmp.dependenciasFiltradas()}" var="dep" itemLabel="#{dep.nombreDependencia}" itemValue="#{dep.idDependencia}"/>
+                        </h:selectOneMenu>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel value="Nuevo Cargo:" styleClass="col-lg-4 control-label"/>
+                    <div class="col-lg-8">
+                        <h:inputText styleClass="form-control" id="cargonuevoTemp" value="#{manejadorMovimientosEmp.nuevoCargo}" required="true" requiredMessage="Ingrese Nuevo Cargo"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel value="Fecha de Traslado:" styleClass="col-lg-4 control-label"/>
+                    <p:calendar pattern="dd/MM/yyyy" locale="es" styleClass="col-md-8" id="trasladoTemp" showOn="button" value="#{manejadorMovimientosEmp.fechaTralado}" required="true" requiredMessage="Ingese Fecha." />
+                </div>
+                
+                <div class="form-group">
+                    <h:outputLabel value="Fecha Inicial" styleClass="col-lg-4 control-label"/>
+                    <p:calendar pattern="dd/MM/yyyy" locale="es" styleClass="col-md-8" id="inicioTemp" showOn="button" value="#{manejadorMovimientosEmp.fechaInicio}" required="true" requiredMessage="Ingese Fecha." />
+                </div>
+                
+                <div class="form-group">
+                    <h:outputLabel value="Fecha Final" styleClass="col-lg-4 control-label"/>
+                    <p:calendar pattern="dd/MM/yyyy" locale="es" styleClass="col-md-8" id="finalTemp" showOn="button" value="#{manejadorMovimientosEmp.fechaFinal}" required="true" requiredMessage="Ingese Fecha." />
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel value="Documento de Respaldo:" styleClass="col-lg-4 control-label"/>
+                    <div class="col-lg-8">
+                        <h:outputText styleClass="form-control" id="docTemp" value="#{fixme}"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-lg-4"></div>
+                    <div class="col-lg-8">
+                        <h:commandLink style="margin: 2px; color: white" styleClass="btn btn-info" value="Guardar" action="#{manejadorMovimientosEmp.guardarMovTemp()}"/>
+                        <h:commandLink style="margin: 2px; color: white" styleClass="btn btn-info" value="Cancelar" action="#{manejadorMovimientosEmp.cancelarModal()}" immediate="true"/>
+                    </div>
+                </div>
+            </h:form>
+        </p:dialog>
+
+    </ui:define>
+
+</ui:composition>

@@ -42,6 +42,7 @@
                 display: none;
             }
         </style>
+        
         <script type="text/javascript">
             PrimeFaces.locales['es'] = {
                 closeText: 'Cerrar',
@@ -147,36 +148,36 @@
 
                                             <li><a>Movimientos</a>
                                                 <ul class="dropdown-menu">
-                                                    <li><h:link value="Registro de Movimientos" outcome="empleado"/></li>
+                                                    <li><h:link value="Registro de Movimientos" outcome="reg_movimientos"/></li>
                                                     <li class="divider"></li>
-                                                    <li><h:link value="Gestión de Movimientos" outcome="catalogos"/></li>
+                                                    <li><h:link value="Gestión de Movimientos" outcome="gestion_movimientos"/></li>
                                                 </ul>
                                             </li>
 
                                             <li><a>Mejora Salarial</a>
                                                 <ul class="dropdown-menu">
-                                                    <li><h:link outcome="empleado" value="Registro de Mejora Salarial"/></li>
+                                                    <li><h:link value="Registro de Mejora Salarial" outcome="reg_mejora_salarial" /></li>
                                                     <li class="divider"></li>
-                                                    <li><h:link outcome="catalogos" value="Gestión de Mejora Salarial"/></li>
+                                                    <li><h:link value="Gestión de Mejora Salarial" outcome="gestion_mejora_salarial"/></li>
                                                 </ul>
                                             </li>
 
                                             <li><a>Aumento Salarial</a>
                                                 <ul class="dropdown-menu">
-                                                    <li><h:link outcome="empleado" value="Registro de Aumento Salarial"/></li>
+                                                    <li><h:link value="Registro de Aumento Salarial" outcome="reg_aumento_salarial"/></li>
                                                     <li class="divider"></li>
-                                                    <li><h:link outcome="catalogos" value="Gestión de Aumento Salarial"/></li>
+                                                    <li><h:link value="Gestión de Aumento Salarial" outcome="gestion_aumento_salarial"/></li>
                                                 </ul>
                                             </li>
 
                                             <li class="divider"></li>
-                                            <li class="dropdown-header">DESCUENTOS DEL EMPLEADO</li>
+                                            <li class="dropdown-header">Descuentos del Empleado</li>
 
                                             <li><a>Descuentos</a>
                                                 <ul class="dropdown-menu">
-                                                    <li><h:link outcome="empleado" value="Registro de Descuentos"/></li>
+                                                    <li><h:link value="Registro de Descuentos" outcome="reg_descuentos_emp"/></li>
                                                     <li class="divider"></li>
-                                                    <li><h:link outcome="catalogos" value="Gestión de Descuentos"/></li>
+                                                    <li><h:link value="Gestión de Descuentos" outcome="gestion_descuentos_emp"/></li>
                                                 </ul>
                                             </li>
                                             <!--<li class="divider"></li>
@@ -305,22 +306,22 @@
                                         <ul class="dropdown-menu">
                                             <li><a>Reconocimientos</a>
                                                 <ul class="dropdown-menu">
-                                                    <li><h:link outcome="empleado" value="Registro de Reconocimientos"/></li>
+                                                    <li><h:link outcome="reg_reconocimientos" value="Registro de Reconocimientos"/></li>
                                                     <li class="divider"></li>
-                                                    <li><h:link outcome="catalogos" value="Gestión de Reconocimientos"/></li>
+                                                    <li><h:link outcome="gestion_reconocimientos" value="Gestión de Reconocimientos"/></li>
                                                 </ul>
                                             </li>
                                             <li class="divider"></li>
 
                                             <li><a>Amonestaciones o Sanciones</a>
                                                 <ul class="dropdown-menu">
-                                                    <li><h:link outcome="empleado" value="Registro de Amonestación o Sanción"/></li>
+                                                    <li><h:link outcome="reg_amonestaciones_sancinoes" value="Registro de Amonestación o Sanción"/></li>
                                                     <li class="divider"></li>
-                                                    <li><h:link outcome="catalogos" value="Gestión de Amonestaciones o Sanciones"/></li>
+                                                    <li><h:link outcome="gestion_amonestaciones_sancinoes" value="Gestión de Amonestaciones o Sanciones"/></li>
                                                 </ul>
                                             </li>
                                             <li class="divider"></li>
-                                            <li><a href="#">Formulario Evaluación del Desempeño</a></li>
+                                            <li><h:link outcome="evaluacion" value="Formulario Evaluación del Desempeño"/></li>
 
                                             <!--<li class="divider"></li>
                                             <li class="dropdown-header">Encabezado de Submenú</li>
@@ -351,7 +352,8 @@
                                     </li>
                                     <li><h:link class="glyphicon glyphicon-paperclip" value=" Acciones Personal"/> 
                                         <ul class="dropdown-menu">
-                                            <li><a href="#">Formulario de Acciones de Personal</a></li>
+                                            <li><h:link outcome="acciones" value="Formulario de Acciones de Personal"/></li>
+                                            
                                             <!--<li class="divider"></li>
                                             <li class="dropdown-header">Encabezado de Submenú</li>
                                             <li><a href="#">Acción separada 2.1</a></li>

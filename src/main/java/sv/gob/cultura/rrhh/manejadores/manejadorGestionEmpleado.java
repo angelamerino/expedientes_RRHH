@@ -92,30 +92,30 @@ public class manejadorGestionEmpleado implements Serializable {
 //******************************************************************************
 //****** VARIABLES QUE CONTRENDRAN IDÂ´S O STRING DE FORMULARIOS ****************
 //******************************************************************************
-    private final String[] path = new String[10];              // contiene url de documentos
-    private final String[] nombreImgDoc = new String[10];
-    private final String[] tipoImgDoc = new String[10];
-    private final int[] sizeImgDoc = new int[10];
-    private String userx = "userx.png";
-    private String pathServer;
-    private String nombreImagen;
-    private Date fechaNacEmpleado = new Date();                // fehca nacimiento empleado
-    private int dirDepto;                                   // id departamento residencia
-    private int dirMuni;                                    // id municipio residencia
-    private int parentescoId;                               // id Parentesco    
-    private int empJefe;                                    // id de Jefe de empleado
-    private int depto, deptonac;                    // id´s departamento municipio Nacimiento
-    private int muni;                               // id municipio Nacimiento           
-    private int edadEmpleado;                       // edad de empleado calculada a partir de fecha
-    private int dirNacionalFiltrarJefe;             // id´s direccion nacional
-    private int dependeciasFiltrarJefe;             // id´s dependencias
-    private int dirNacionalNominal;
-    private int dependenciaNominal;
-    private int dirNacionalFuncional;
-    private int dependenciaFuncional;
-    private int estadoEditar;
-    private int empleadoEditar;
-    private String nombreEmpleadoEditar;
+    private final String[] path = new String[10];               // contiene url de documentos
+    private final String[] nombreImgDoc = new String[10];       // nombre de archivo
+    private final String[] tipoImgDoc = new String[10];         // tipo de archivo
+    private final int[] sizeImgDoc = new int[10];               // tamaño de archivo
+    private String userx = "userx.png";                         // imagen por defecto en ingreso de empleado
+    private String pathServer;                                  // path de servidor
+    private String nombreImagen;                                // nombre de la imgen
+    private Date fechaNacEmpleado = new Date();                 // fehca nacimiento empleado
+    private int dirDepto;                                       // id departamento residencia
+    private int dirMuni;                                        // id municipio residencia
+    private int parentescoId;                                   // id Parentesco    
+    private int empJefe;                                        // id de Jefe de empleado
+    private int depto, deptonac;                                // id´s departamento municipio Nacimiento
+    private int muni;                                           // id municipio Nacimiento           
+    private int edadEmpleado;                                   // edad de empleado calculada a partir de fecha
+    private int dirNacionalFiltrarJefe;                         // id´s direccion nacional
+    private int dependeciasFiltrarJefe;                         // id´s dependencias
+    private int dirNacionalNominal;                             // id direcion ncacional para filtrar dependencias
+    private int dependenciaNominal;                             // id dependencia Nominal
+    private int dirNacionalFuncional;                           // id direcion nacional para filtar dependencias
+    private int dependenciaFuncional;                           // Id depenndecia Funcional
+    private int estadoEditar;                                   // id de estado empleado
+    private int empleadoEditar;                                 // id empleado a editar
+    private String nombreEmpleadoEditar;                        // nombre de empleado a editar
 // *****************************************************************************
 //********************** GET DE ENTERPRICE JAVA BEAN ***************************
 //******************************************************************************
@@ -631,6 +631,7 @@ public class manejadorGestionEmpleado implements Serializable {
         return anios;
     }
 
+    //Archivos al servidor
     public void handleFileUpload(FileUploadEvent event) {
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -699,6 +700,7 @@ public class manejadorGestionEmpleado implements Serializable {
         }
     }
 
+    //Para mostrar imagenes
     private StreamedContent graphicImage;
 
     public void prepararImagen() {
@@ -728,6 +730,8 @@ public class manejadorGestionEmpleado implements Serializable {
         this.graphicImage = graphicImage;
     }
 
+    
+    //restaura todos los selecionables de los formularios
     public void restaurarSelecionables() {
         this.setDepto(0);
         this.setMuni(0);
@@ -745,6 +749,7 @@ public class manejadorGestionEmpleado implements Serializable {
         this.path[2]=null;
     }
 
+    //setea valores en los inputs para ser editados
     public String editarEmpleado() {
         DirNacional dirNominal = empleado.getIdDependenciaN().getIdDirNac();
         DirNacional dirFuncional = empleado.getIdDependenciaF().getIdDirNac();

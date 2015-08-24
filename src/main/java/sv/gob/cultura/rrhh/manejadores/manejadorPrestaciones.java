@@ -73,15 +73,16 @@ public class manejadorPrestaciones implements Serializable {
 
 //****** VARIABLES QUE CONTRENDRAN ID´S O STRING DE FORMULARIOS ****************
 //****************************************************************************** 
-    private int producPrestacion;
-    private int cantidad;
-    private int idPrestacionSelecionada;
-    private int direccionNacional;
-    private int dependecia;
-    private int empleadoSelecionado;
-    private int idPrestacionAsirnar;
-    private int idPresGestion;
-    private String nombreEmp;
+    private int producPrestacion;               // id de productos
+    private int cantidad;                       // cantidad de productos
+    private int idPrestacionSelecionada;        // id de prestacin selecionada
+    private int direccionNacional;              // id direccion nacional para filtar dependencias
+    private int dependecia;                     // id dependecia para filtar empleado
+    private int empleadoSelecionado;            // id empleado selecionado
+    private int idPrestacionAsirnar;            // id prestacion asignar
+    private int idPresGestion;                  // id prestacion para editar y adicionar productos
+    private String nombreEmp;                   // nombre de empleado selecionado
+    private String NR;                          // NR empleado para busqueda
 
 //********************** GET DE ENTERPRICE JAVA BEAN ***************************
 //******************************************************************************
@@ -258,6 +259,16 @@ public class manejadorPrestaciones implements Serializable {
     public void setProductoPrestacion(ProductoPrestacion productoPrestacion) {
         this.productoPrestacion = productoPrestacion;
     }
+
+    public String getNR() {
+        return NR;
+    }
+
+    public void setNR(String NR) {
+        this.NR = NR;
+    }
+    
+    
 // **************** LISTA DE ELEMENTOS EN TABLAS *******************************
 //******************************************************************************
 
@@ -434,16 +445,28 @@ public class manejadorPrestaciones implements Serializable {
     public void addPresEmp() {
         //Obtener empleado para poder ingresar en la lista de prestaciones
         Empleados emp = getEmpleadosFacade().find(getEmpleadoSelecionado());
+
+        boolean existe = false;
         List<Prestacion> prestacionList = emp.getPrestacionList();
-        prestacionList.add(new Prestacion(this.getIdPrestacionAsirnar()));
-        emp.setPrestacionList(prestacionList);
-        
-        Prestacion pres = getPrestacionFacade().find(this.getIdPrestacionAsirnar());
-        List<Empleados> empleadosList = pres.getEmpleadosList();
-        empleadosList.add(emp);
-        
-        getPrestacionFacade().edit(pres);
-        getEmpleadosFacade().edit(emp);
+
+        for (Prestacion iterador : prestacionList) {
+            if (iterador.getIdPrestacion() == this.getIdPrestacionAsirnar()) {
+                existe = true;
+                System.out.println("Prestacion Ya ha sido asignada");
+            }
+        }
+
+        if (existe == false) {
+            prestacionList.add(new Prestacion(this.getIdPrestacionAsirnar()));
+            emp.setPrestacionList(prestacionList);
+
+            Prestacion pres = getPrestacionFacade().find(this.getIdPrestacionAsirnar());
+            List<Empleados> empleadosList = pres.getEmpleadosList();
+            empleadosList.add(emp);
+
+            getPrestacionFacade().edit(pres);
+            getEmpleadosFacade().edit(emp);
+        }
         this.setIdPrestacionAsirnar(0);
     }
 
@@ -452,17 +475,27 @@ public class manejadorPrestaciones implements Serializable {
         Empleados emp = getEmpleadosFacade().find(getEmpleadoSelecionado());
         System.out.println("Empleado: " + emp.getNombreEmpleado());
 
+        boolean existe = false;
         List<Prestacion> prestacionList = emp.getPrestacionList();
-        prestacionList.add(new Prestacion(this.getIdPresGestion()));
-        emp.setPrestacionList(prestacionList);
 
-        Prestacion pres = getPrestacionFacade().find(this.getIdPresGestion());
-        List<Empleados> empleadosList = pres.getEmpleadosList();
-        empleadosList.add(emp);
+        for (Prestacion iterador : prestacionList) {
+            if (iterador.getIdPrestacion() == this.getIdPresGestion()) {
+                existe = true;
+                System.out.println("Prestacion Ya ha sido asignada");
+            }
+        }
 
-        getPrestacionFacade().edit(pres);
-        getEmpleadosFacade().edit(emp);
+        if (existe == false) {
+            prestacionList.add(new Prestacion(this.getIdPresGestion()));
+            emp.setPrestacionList(prestacionList);
 
+            Prestacion pres = getPrestacionFacade().find(this.getIdPresGestion());
+            List<Empleados> empleadosList = pres.getEmpleadosList();
+            empleadosList.add(emp);
+
+            getPrestacionFacade().edit(pres);
+            getEmpleadosFacade().edit(emp);
+        }
     }
 
     public void eliminarPresEmp(Prestacion pres) {
@@ -471,10 +504,10 @@ public class manejadorPrestaciones implements Serializable {
         List<Prestacion> prestacionList = emp.getPrestacionList();
         prestacionList.remove(pres);
         emp.setPrestacionList(prestacionList);
-        
+
         List<Empleados> empleadosList = pres.getEmpleadosList();
         empleadosList.remove(emp);
-        
+
         getPrestacionFacade().edit(pres);
         getEmpleadosFacade().edit(emp);
     }
@@ -507,12 +540,22 @@ public class manejadorPrestaciones implements Serializable {
 
     public void empleadoSelecionadoValido(ActionEvent event) {
         if (this.getEmpleadoSelecionado() == 0) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Seleccione un Empleado"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe buscar un Empleado"));
         } else {
             RequestContext.getCurrentInstance().execute("PF('asigPrestaciones').show()");
         }
     }
     
+    public void buscarNR(ActionEvent event){
+        Empleados emp = getEmpleadosFacade().buscarEmpNR(this.getNR());
+        if (emp == null) {
+            this.setNombreEmp("");
+        } else {
+            this.setEmpleadoSelecionado(emp.getIdEmpleado());
+            this.setNombreEmp(emp.getNombreEmpleado());
+        }
+    }
+
     public manejadorPrestaciones() {
     }
 

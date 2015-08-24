@@ -1,0 +1,218 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="./../resources/plantilla/plantilla.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <link href="#{request.contextPath}/resources/datatables/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
+        <div class="page-header">
+            <h1><strong>GESTIÓN DE MEJORA SALARIAL</strong></h1>
+            <h:form>
+                <h:commandLink value="Nuevo Registro" styleClass="btn btn-info pull-right"  style="text-decoration:none;" action="#{manejadorAumentoMejoraSalarial.nuevaMejora}" immediate="true" />
+            </h:form>
+            <div class="clearfix" ></div>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading"><strong>Editar / Eliminar Mejora Salarial</strong></div>
+            <div class="panel-body">
+                <div class="table table-responsive">
+                    <f:view>
+                        <h:form prependId="false">
+                            <h:panelGroup id ="tabla">
+                                <h:dataTable id="listHistorialSalalarial" value="#{manejadorAumentoMejoraSalarial.todosHistorialSalarial()}" var="item" style="font-size: 14px" styleClass="table table-striped table-hover">
+                                    <h:column>
+
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Nombre Empleado"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.idEmpleado.nombreEmpleado}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <center>
+                                                <h:outputText value="Tipo de Mejora"/>
+                                            </center>
+                                        </f:facet>
+                                        <center>
+                                            <h:outputText value="#{item.idMejoraSal.nombreMejoraSal}"/>
+                                        </center>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <center>
+                                                <h:outputText value="Fecha de Aplicación"/>
+                                            </center>
+                                        </f:facet>
+                                        <center>
+                                            <h:outputText value="#{item.fechaHsalarial}">
+                                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                                            </h:outputText>
+                                        </center>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <center>
+                                                <h:outputText value="Salario Anterior"/>
+                                            </center>
+                                        </f:facet>
+                                        <center>
+                                            <h:outputText value="$ #{item.salarioActualHsalarial}"/>
+                                        </center>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <center>
+                                                <h:outputText value="Nuevo Salario"/>
+                                            </center>
+                                        </f:facet>
+                                        <center>
+                                            <h:outputText value="$ #{item.nuevoSalarioHsalarial}"/>
+                                        </center>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Unidad Organizativa"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.idEmpleado.idDependenciaF.nombreDependencia}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <center>
+                                                <h:outputText value="Editar/Eliminar"/>
+                                            </center>
+                                        </f:facet>
+                                        <center>
+                                            <h:commandLink styleClass="btn-sm glyphicon glyphicon-pencil" style="text-decoration:none;" title="Editar">
+                                                <f:setPropertyActionListener value="#{item}" target="#{manejadorAumentoMejoraSalarial.historialSalarial}"/>
+                                                <f:setPropertyActionListener value="#{item.salarioActualHsalarial}" target="#{manejadorAumentoMejoraSalarial.salarioActual}"/>
+                                                <f:setPropertyActionListener value="#{item.nuevoSalarioHsalarial}" target="#{manejadorAumentoMejoraSalarial.salarioNuevo}"/>
+                                                <f:setPropertyActionListener value="#{item.nuevoSalarioHsalarial}" target="#{manejadorAumentoMejoraSalarial.salarioNuevoEditar}"/>
+                                                <f:setPropertyActionListener value="#{item.porcentajeHsalarial}" target="#{manejadorAumentoMejoraSalarial.porcentajeEditar}"/>
+                                                <f:setPropertyActionListener value="#{item.salarioActualHsalarial}" target="#{manejadorAumentoMejoraSalarial.salarioAnteriorEditar}"/>
+                                                <f:setPropertyActionListener value="#{item.idEmpleado.idEmpleado}" target="#{manejadorAumentoMejoraSalarial.empleadoSelecionado}"/>
+                                                <p:ajax update="panelEditar" />
+                                                <p:ajax update="tabla"  onsuccess="PF('mejoraEditar').show()"/>
+                                            </h:commandLink>
+                                            <h:commandLink action="#{manejadorAumentoMejoraSalarial.eliminarMejora(item)}" styleClass="btn-sm glyphicon glyphicon-remove" style="text-decoration:none;" title="Eliminar" immediate="true">
+                                            </h:commandLink>                                                        
+                                        </center>
+                                    </h:column>
+                                </h:dataTable>
+                            </h:panelGroup>
+                        </h:form>
+                    </f:view>
+
+                </div>
+            </div>
+        </div> 
+
+        <p:dialog header="Editar Mejora Salarial" widgetVar="mejoraEditar" closable="false" modal="true" height="auto" width="600px" resizable="false" position="center,top">
+            <div class="row">
+                <h:form prependId="false" class="form-horizontal">
+                    <h:panelGroup id ="panelEditar">
+                        <div class="form-group">
+                            <h:outputLabel value="Tipo de Mejora Salarial:" styleClass="col-lg-4 control-label"/>
+                            <div class="col-lg-7">
+                                <h:selectOneMenu styleClass="form-control" id="idMejoraSal" value="#{manejadorAumentoMejoraSalarial.historialSalarial.idMejoraSal}" converter="#{tipoMejoraSalarialConvertidor}" required="true" requiredMessage="Seleccione un Tipo de Mejora Salarial">
+                                    <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                    <f:selectItems value="#{manejadorAumentoMejoraSalarial.todosTiposMejora()}" var="tipoMejora" itemLabel="#{tipoMejora.nombreMejoraSal}" itemValue="#{tipoMejora}"/>
+                                </h:selectOneMenu>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <h:outputLabel value="Salario Actual: $" styleClass="col-lg-4 control-label"/>
+                            <div class="col-lg-7">
+                                <h:outputText styleClass="form-control" id="salarioActualHsalarial" value="#{manejadorAumentoMejoraSalarial.historialSalarial.salarioActualHsalarial}" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <h:outputLabel value="Porcentaje de Aplicacón:" styleClass="col-lg-4 control-label"/>
+                            <div class="col-lg-6">
+                                <h:inputText styleClass="form-control" id="porcentajeHsalarial" value="#{manejadorAumentoMejoraSalarial.porcentajeEditar}" required="true" requiredMessage="Ingrese porcentaje de Aplicación">
+                                    <f:ajax render="nuevoSalarioHsalarial" />
+                                </h:inputText>
+                            </div>
+                            <h:outputLabel value="%" styleClass="col-lg-1 control-label"/>
+                        </div>
+
+                        <div class="form-group">
+                            <h:outputLabel value="Nuevo Salario: $" styleClass="col-lg-4 control-label"/>
+                            <div class="col-lg-7">
+                                <h:outputText styleClass="form-control" id="nuevoSalarioHsalarial" value="#{manejadorAumentoMejoraSalarial.salarioNuevoEditar}" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <h:outputLabel value="Fecha de Aplicacón:" styleClass="col-lg-4 control-label"/>
+                            <div class="col-lg-7">
+                                <p:calendar pattern="dd/MM/yyyy" locale="es" id="fechaHsalarial" showOn="button" value="#{manejadorAumentoMejoraSalarial.historialSalarial.fechaHsalarial}" required="true" requiredMessage="Ingrese Fecha de Aplicación" />
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <div class="col-lg-4"></div>
+                            <div class="col-lg-8">
+                                <h:commandLink style="margin: 2px; color: white" styleClass="btn btn-info" value="Modificar" action="#{manejadorAumentoMejoraSalarial.editarMejoraSalarial()}" />
+                                <h:commandLink style="margin: 2px; color: white" styleClass="btn btn-info" value="Cancelar" action="#{manejadorAumentoMejoraSalarial.cancelarEditarMejora()}" immediate="true"/>
+                            </div>
+                        </div>
+                    </h:panelGroup>
+                </h:form>
+            </div>
+        </p:dialog>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                var t = $('#listHistorialSalalarial').DataTable({
+                    "columnDefs": [{
+                            "searchable": false,
+                            "orderable": false,
+                            "targets": 0
+                        }],
+                    "order": [[1, 'asc']],
+                    "oLanguage": {
+                        "sProcessing": "Procesando...",
+                        "sLengthMenu": "Mostrar _MENU_ registros",
+                        "sZeroRecords": "No se encontraron resultados",
+                        "sEmptyTable": "Ningún dato disponible en esta tabla",
+                        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                        "sInfoPostFix": "",
+                        "sSearch": "Buscar:",
+                        "sUrl": "",
+                        "sInfoThousands": ",",
+                        "sLoadingRecords": "Cargando...",
+                        "oPaginate": {
+                            "sFirst": "Primero",
+                            "sLast": "Último",
+                            "sNext": "Siguiente",
+                            "sPrevious": "Anterior"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                        }
+                    }
+                });
+
+                t.on('order.dt search.dt', function () {
+                    t.column(0, {search: 'applied', order: 'applied'}).nodes().each(function (cell, i) {
+                        cell.innerHTML = i + 1;
+                    });
+                }).draw();
+            });
+        </script>
+        <script src="#{request.contextPath}/resources/datatables/jquery.dataTables.min.js" type="text/javascript"></script>
+    </ui:define>
+
+</ui:composition>

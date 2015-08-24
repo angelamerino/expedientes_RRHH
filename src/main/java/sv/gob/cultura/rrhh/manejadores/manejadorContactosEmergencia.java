@@ -60,11 +60,11 @@ public class manejadorContactosEmergencia implements Serializable {
 //******************************************************************************
 //****** VARIABLES QUE CONTRENDRAN ID´S O STRING DE FORMULARIOS ****************
 //******************************************************************************    
-    private int direccionNacional;
-    private int dependecia;
-    private int empleadoSelecionado;
-    private String nombreEmp;
-    private String NR;
+    private int direccionNacional;      // id de Direccion Nacional para filtrar dependencias
+    private int dependecia;             // id de dependencias para filtrar empleados
+    private int empleadoSelecionado;    // id de empleado selecinado
+    private String nombreEmp;           // nombre de empleado selecinado
+    private String NR;                  // NR de empleado para hacer la busqueda
 
 // *****************************************************************************
 //********************** GET DE ENTERPRICE JAVA BEAN ***************************
@@ -224,9 +224,10 @@ public class manejadorContactosEmergencia implements Serializable {
     }
     
     public void empleadoSelecionadoValido(ActionEvent event) {
+        //verifica si se seleciono un empleado o si se busco un empleado
         if (this.getEmpleadoSelecionado() == 0) {
             contactoEmergenciaEmp = new ContactoEmergenciaEmp();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Seleccione un Empleado"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe Buscar un Empleado"));
         } else {
             RequestContext.getCurrentInstance().execute("PF('emergencia').show()");
         }

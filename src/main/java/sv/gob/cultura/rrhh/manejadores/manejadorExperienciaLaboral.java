@@ -52,10 +52,11 @@ public class manejadorExperienciaLaboral implements Serializable{
 //******************************************************************************
 //****** VARIABLES QUE CONTRENDRAN ID´S O STRING DE FORMULARIOS ****************
 //******************************************************************************
-    private int direccionNacional;
-    private int dependecia;
-    private int empleadoSelecionado;
-    private String nombreEmp;
+    private int direccionNacional;          // id direccion nacional para filtrar dependencias
+    private int dependecia;                 // id dependencia para filtrar empleado
+    private int empleadoSelecionado;        // id de empleado selecionado
+    private String nombreEmp;               // nombre de empleado seleccionado
+    private String NR;                      // NR de empleado para realizar busqueda
 // *****************************************************************************
 //********************** GET DE ENTERPRICE JAVA BEAN ***************************
 //******************************************************************************
@@ -128,6 +129,15 @@ public class manejadorExperienciaLaboral implements Serializable{
     public void setNombreEmp(String nombreEmp) {
         this.nombreEmp = nombreEmp;
     }
+
+    public String getNR() {
+        return NR;
+    }
+
+    public void setNR(String NR) {
+        this.NR = NR;
+    }
+    
     
    
 //******************************************************************************
@@ -191,19 +201,32 @@ public class manejadorExperienciaLaboral implements Serializable{
     }   
     
     public void empleadoSelecionadoValidoP(ActionEvent event) {
+        // verifica que se seleciono un empleado o que se busco un empleado
         if (this.getEmpleadoSelecionado() == 0) {
             experienciaLaboral = new ExperienciaLaboral();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Seleccione un Empleado"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe Buscar un Empleado"));
         } else {
             RequestContext.getCurrentInstance().execute("PF('publico').show()");
         }
     }
     public void empleadoSelecionadoValidoPP(ActionEvent event) {
+        // verifica que se seleciono un empleado o que se busco un empleado
         if (this.getEmpleadoSelecionado() == 0) {
             experienciaLaboral = new ExperienciaLaboral();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Seleccione un Empleado"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe Buscar un Empleado"));
         } else {
             RequestContext.getCurrentInstance().execute("PF('privado').show()");
+        }
+    }
+    
+    public void buscarNR(ActionEvent event){
+        // busca empleado por nr
+        Empleados emp = getEmpleadosFacade().buscarEmpNR(this.getNR());
+        if (emp == null) {
+            this.setNombreEmp("");
+        } else {
+            this.setEmpleadoSelecionado(emp.getIdEmpleado());
+            this.setNombreEmp(emp.getNombreEmpleado());
         }
     }
 

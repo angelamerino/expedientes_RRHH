@@ -89,21 +89,22 @@ public class manejadorEstudiosEmpleados implements Serializable {
     private DirNacional DirNacional = new DirNacional();
 
 //****** VARIABLES QUE CONTRENDRAN IDÂ´S O STRING DE FORMULARIOS ****************
-    private int anio;                               // AÃ±o de Estudios
-    private Date anioedit;
-    private final String[] path = new String[10];                                     // contiene url de documentos
-    private final String[] nombreImgDoc = new String[10];
-    private final String[] tipoImgDoc = new String[10];
-    private final int[] sizeImgDoc = new int[10];
-    private int idiomaSelecionado;
-    private String instIdioma;
-    private String idiomaSelecionadoNombre;
-    private int idCaracteristicaIdioma;             // Id Caracteristica de idioma
-    private int direccionNacional;
-    private int dependecia;
-    private int empleadoSelecionado;
-    private String nombreEmp;
-    private ArrayList<IdiomasCaracteristicas> carac = new ArrayList<IdiomasCaracteristicas>();
+    private int anio;                                               // Año de Estudios
+    private Date anioedit;                                          // fecha del para estudios solo se necesita año
+    private final String[] path = new String[10];                   // contiene url de documentos
+    private final String[] nombreImgDoc = new String[10];           // nombre de documento
+    private final String[] tipoImgDoc = new String[10];             // tipo de documento
+    private final int[] sizeImgDoc = new int[10];                   // tamaño de archivo
+    private int idiomaSelecionado;                                  // id de idioma selecinado
+    private String instIdioma;                                      // Nombre de la institucion donde se curso un idioma
+    private String idiomaSelecionadoNombre;                         // Nombre del idioma selecionado
+    private int idCaracteristicaIdioma;                             // Id Caracteristica de idioma
+    private int direccionNacional;                                  // id de dirección nacional para filtrar dependencias
+    private int dependecia;                                         // id dependencias para filtrar empleado
+    private int empleadoSelecionado;                                // id de empleado seleccinado
+    private String nombreEmp;                                       // Nombre de empleado seleccionado
+    private String NR;                                              // NR para busqueda de empleado
+    
 //********************** GET DE ENTERPRICE JAVA BEAN ***************************
 
     public ImgDocFacade getImgDocFacade() {
@@ -345,6 +346,15 @@ public class manejadorEstudiosEmpleados implements Serializable {
         this.setAnio(obtenerAnio(anioedit));        
     }
 
+    public String getNR() {
+        return NR;
+    }
+
+    public void setNR(String NR) {
+        this.NR = NR;
+    }
+
+    
 // **************** LISTA DE ELEMENTOS EN TABLAS *******************************
     public List<EstudiosEmp> todosEstudiosFomales() {
         Empleados empEst = getEmpleadosFacade().find(this.getEmpleadoSelecionado());
@@ -614,7 +624,7 @@ public class manejadorEstudiosEmpleados implements Serializable {
         return fecha;
     }
     
-    public int obtenerAnio(Date date){
+    public int obtenerAnio(Date date){ // obtiene año de una fecha dada
     if (null == date){
         return 0;
     }
@@ -626,29 +636,43 @@ public class manejadorEstudiosEmpleados implements Serializable {
 }
 
     public void empleadoSelecionadoValidoF(ActionEvent event) {
+        //verifica que se seleciono o se busco un empleado
         if (this.getEmpleadoSelecionado() == 0) {
             estudiosEmp = new EstudiosEmp();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Seleccione un Empleado"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe Buscar un Empleado"));
         } else {
             RequestContext.getCurrentInstance().execute("PF('formal').show()");
         }
     }
 
     public void empleadoSelecionadoValidoNF(ActionEvent event) {
+        //verifica que se seleciono o se busco un empleado
         if (this.getEmpleadoSelecionado() == 0) {
             estudiosEmp = new EstudiosEmp();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Seleccione un Empleado"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe Buscar un Empleado"));
         } else {
             RequestContext.getCurrentInstance().execute("PF('noformal').show()");
         }
     }
 
     public void empleadoSelecionadoValidoI(ActionEvent event) {
+        //verifica que se seleciono o se busco un empleado
         if (this.getEmpleadoSelecionado() == 0) {
             estudiosEmp = new EstudiosEmp();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Seleccione un Empleado"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe Buscar un Empleado"));
         } else {
             RequestContext.getCurrentInstance().execute("PF('idiomas').show()");
+        }
+    }
+    
+    public void buscarNR(ActionEvent event){
+        //Busca empleado por NR
+        Empleados emp = getEmpleadosFacade().buscarEmpNR(this.getNR());
+        if (emp == null) {
+            this.setNombreEmp("");
+        } else {
+            this.setEmpleadoSelecionado(emp.getIdEmpleado());
+            this.setNombreEmp(emp.getNombreEmpleado());
         }
     }
 }

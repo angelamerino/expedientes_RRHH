@@ -29,8 +29,8 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-6"> 
+                    <div class="col-md-1"></div>
+                    <div class="col-md-5"> 
 
                         <h:form prependId="false">
                             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
@@ -63,8 +63,24 @@
                         </h:form>
 
                     </div>                            
-                    <div class="col-md-3"></div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-4">
+                        <h:form prependId="false" >
+                            <h:outputLabel value="NR del Empleado:" styleClass="control-label col-md-12"/>
+                            <div class="form-group">
+                                <div class="col-md-8">
+                                    <p:inputMask styleClass="form-control" value="#{manejadorExperienciaLaboral.NR}" mask="NR 9999-999999-999-9"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <h:commandButton  class="btn btn-info" actionListener="#{manejadorExperienciaLaboral.buscarNR}" value="Buscar" />
+                                </div>
+                            </div>
+                        </h:form>
+                    </div>
+                    <div class="col-md-1"></div>
                 </div>
+                
+                <br /><hr /><br />
 
                 <div class="row">
                     <div class="col-md-2"></div>

@@ -66,7 +66,7 @@ public class EstudiosEmp implements Serializable {
     @Column(name = "tipo_estudio")
     private String tipoEstudio;
     @Size(min = 1, max = 1024)
-    @Column(name = "descripcion_no_formal")
+    @Column(name = "descripcion_no_informal")
     private String descripcionNoFormal;
     @Column(name = "user_crea_estudios")
     private Integer userCreaEstudios;

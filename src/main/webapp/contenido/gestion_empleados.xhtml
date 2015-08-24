@@ -76,6 +76,7 @@
                                     <center>
                                         <h:commandLink styleClass="btn-sm glyphicon glyphicon-pencil"  style="text-decoration:none;" action="#{manejadorGestionEmpleado.editarEmpleado()}" immediate="true" title="Editar">
                                             <f:setPropertyActionListener value="#{item.edadEmp}" target="#{manejadorGestionEmpleado.edadEmpleado}"/>
+                                            <f:setPropertyActionListener value="#{item.fechaNac}" target="#{manejadorGestionEmpleado.fechaNacEmpleado}"/>
                                             <f:setPropertyActionListener value="#{item}" target="#{manejadorGestionEmpleado.empleado}"/>
                                         </h:commandLink>
                                         <!--                                        <p:commandButton process="empleadoList" action="{manejadorGestionEmpleado.prepareList()}" icon="ui-icon-pencil" title="Editar">
