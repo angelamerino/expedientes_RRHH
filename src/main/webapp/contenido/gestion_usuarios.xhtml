@@ -25,7 +25,7 @@
                     
                    <div class="table table-responsive table-bordered">
                     <f:view>
-                        <h:form prependId="false">
+                        <h:form prependId="false" id="form">
                             <h:dataTable style="font-size: 14px" id="lista-usuarios" value="#{manejadorUsuarios.todosUsuarios}" var="usuario" styleClass="table table-striped table-hover">
                                 <h:column>
 
@@ -76,12 +76,12 @@
                                     </f:facet>
                                     <center>
                                         <h:commandLink styleClass="btn-sm glyphicon glyphicon-pencil"  style="text-decoration:none;" action="#{manejadorUsuarios.editarUsuario()}" immediate="true" title="Editar">
-                                            <f:setPropertyActionListener value="#{usuario}" target="#{manejadorUsuarios.usuariosistema}"/>
-                                            <p:ajax update="lista-usuarios"  onsuccess="PF('dlgModifUsuario').show()"/>
+                                            <f:setPropertyActionListener value="#{usuario}" target="#{manejadorUsuarios.usuarioSeleccionado}"/>
+                                            <p:ajax update="form:lista-usuarios"  onsuccess="PF('dlgModifUsuario').show()"/>
                                         </h:commandLink>
                                         
                                         <h:commandLink styleClass="btn-sm glyphicon glyphicon-refresh" style="text-decoration:none;" action="#{manejadorUsuarios.setNombreUsuarioEditar(usuario.nombreCompleto)}" title="Cambiar Estado">
-                                            <f:setPropertyActionListener value="#{usuario.idUsuario}" target="#{manejadorUsuarios.usuarioEditar}"/>
+                                            <f:setPropertyActionListener value="#{usuario.idUsuario}" target="#{manejadorUsuarios.usuarioSeleccionado}"/>
                                             <f:setPropertyActionListener value="#{usuario.nombreCompleto}" target="#{manejadorUsuarios.nombreUsuarioEditar}"/>
                                             <p:ajax update="lista-usuarios"  onsuccess="PF('dlgEstadoUsuario').show()"/>
                                             
@@ -117,8 +117,8 @@
                 <br />
                 <h:commandButton style="margin: 2px" styleClass="btn btn-info" value="Guardar" action="#{manejadorUsuarios.cambiarEstado()}"/>
                 <h:commandButton style="margin: 2px"  styleClass="btn btn-info"  value="Cancelar" onclick="PF('dlgEstadoUsuario').hide()">
-                    <f:ajax execute="@this" render="panelEstado" />
-                    <p:resetInput target="panelEstado" />
+                    <f:ajax execute="@this" render="estUsuario" />
+                    <p:resetInput target="estUsuario" />
                 </h:commandButton>
             </h:form>
         </p:dialog>
@@ -139,7 +139,7 @@
                             <h:outputLabel value="Fecha de Creación:" for="fechaCreaUsuario" />
                             <h:outputLabel id="fechaCreaUsuario" value="#{manejadorUsuarios.usuarioSeleccionado.fechaCreaUsistema}" title="Fecha de Creación del Registro" class="form-control"/>
                         </h:panelGrid>
-                        <p:commandButton icon="ui ui-icon-disk" value="Actualizar usuario" process="@this modiUsuario" action="{managerUsuarios.editUsuario()}" update="@this modiUsuario" oncomplete="PF('dlgModifUsuario').hide();"/>
+                        <p:commandButton icon="ui ui-icon-disk" value="Actualizar usuario" process="@this modiUsuario" action="#{managerUsuarios.editUsuario()}" update="@this modiUsuario" oncomplete="PF('dlgModifUsuario').hide();"/>
                     </div>
                 </p:dialog>
 

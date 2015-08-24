@@ -54,12 +54,8 @@ public class HistorialSalarial implements Serializable {
     @NotNull
     @Column(name = "salario_actual_hsalarial")
     private double salarioActualHsalarial;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "nuevo_salario_hsalarial")
     private double nuevoSalarioHsalarial;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "porcentaje_hsalarial")
     private int porcentajeHsalarial;
     @Basic(optional = false)
@@ -81,10 +77,10 @@ public class HistorialSalarial implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaModHsal;
     @JoinColumn(name = "id_mejora_sal", referencedColumnName = "id_mejora_sal")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private TipoMejoraSalarial idMejoraSal;
     @JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Empleados idEmpleado;
     @OneToMany(mappedBy = "idHsalarial")
     private List<ImgDoc> imgDocList;

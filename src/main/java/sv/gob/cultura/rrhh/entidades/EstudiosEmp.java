@@ -66,7 +66,7 @@ public class EstudiosEmp implements Serializable {
     @Column(name = "tipo_estudio")
     private String tipoEstudio;
     @Size(min = 1, max = 1024)
-    @Column(name = "descripcion_no_informal")
+    @Column(name = "descripcion_no_formal")
     private String descripcionNoFormal;
     @Column(name = "user_crea_estudios")
     private Integer userCreaEstudios;
@@ -83,7 +83,7 @@ public class EstudiosEmp implements Serializable {
     @OneToMany(mappedBy = "idEstudio")
     private List<ImgDoc> imgDocList;
     @JoinColumn(name = "id_prof_oficio", referencedColumnName = "id_prof_oficio")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private ProfOficios idProfOficio;
 
     public EstudiosEmp() {
