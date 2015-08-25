@@ -10,7 +10,7 @@
 
     <ui:define name="content">
         <link href="#{request.contextPath}/resources/datatables/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
-    
+
         <div class="page-header">
             <h1 class="pull-left"><strong>GESTIÓN DE USUARIOS DEL SISTEMA</strong></h1>
             <h:form>
@@ -18,77 +18,81 @@
             </h:form>
             <div class="clearfix" ></div>
         </div>
-        
-            <div class="panel panel-info">
-                <div class="panel-heading"><strong>Editar / Eliminar Usuarios</strong></div>
-                <div class="panel-body">
-                    
-                   <div class="table table-responsive table-bordered">
-                    <f:view>
-                        <h:form prependId="false" id="form">
-                            <h:dataTable style="font-size: 14px" id="lista-usuarios" value="#{manejadorUsuarios.todosUsuarios}" var="usuario" styleClass="table table-striped table-hover">
-                                <h:column>
 
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="Nombre Completo"/>
-                                    </f:facet>
-                                    <h:outputText value="#{usuario.nombreCompleto}"/>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">
+        <div class="panel panel-info">
+            <div class="panel-heading"><strong>Editar / Eliminar Usuarios</strong></div>
+            <div class="panel-body">
+
+                <div class="table table-responsive table-bordered">
+                    <f:view>
+                        <h:form prependId="false">
+                            <h:panelGroup id ="tablaUsuarios">
+                                <h:dataTable style="font-size: 14px" id="listaUsuarios" value="#{manejadorUsuarios.todosUsuarios}" var="usuario" styleClass="table table-striped table-hover">
+                                    <h:column>
+
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Nombre Completo"/>
+                                        </f:facet>
+                                        <h:outputText value="#{usuario.nombreCompleto}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <center>
+                                                <h:outputText value="Usuario"/>
+                                            </center>
+                                        </f:facet>
                                         <center>
-                                            <h:outputText value="Usuario"/>
+                                            <h:outputText value="#{usuario.usuario}"/>
                                         </center>
-                                    </f:facet>
-                                    <center>
-                                        <h:outputText value="#{usuario.usuario}"/>
-                                    </center>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <center>
+                                                <h:outputText value="Estado"/>
+                                            </center>
+                                        </f:facet>
                                         <center>
-                                            <h:outputText value="Estado"/>
+                                            <h:outputText value="#{usuario.idEstadoUsuario.nombreEstadoUsuario}"/>
                                         </center>
-                                    </f:facet>
-                                    <center>
-                                        <h:outputText value="#{usuario.idEstadoUsuario.nombreEstadoUsuario}"/>
-                                    </center>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <center>
+                                                <h:outputText value="Fecha de Creación"/>
+                                            </center>
+                                        </f:facet> 
                                         <center>
-                                            <h:outputText value="Fecha de Creación"/>
-                                        </center>
-                                    </f:facet> 
-                                    <center>
-                                        <h:outputText value="#{usuario.fechaCreaUsistema}">
-                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm a" />
-                                        </h:outputText>
-                                    </center>                                   
-                                </h:column>
-                                <p:column style="font-size: 12px; text-align: center;" width="15%">
-                                    <f:facet name="header">
+                                            <h:outputText value="#{usuario.fechaCreaUsistema}">
+                                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm a" />
+                                            </h:outputText>
+                                        </center>                                   
+                                    </h:column>
+                                    <p:column style="font-size: 12px; text-align: center;" width="15%">
+                                        <f:facet name="header">
+                                            <center>
+                                                <h:outputText value="Editar/Cambiar Estado"/>
+                                            </center>
+                                        </f:facet>
                                         <center>
-                                            <h:outputText value="Editar/Cambiar Estado"/>
+                                            <h:commandLink styleClass="btn-sm glyphicon glyphicon-pencil"  style="text-decoration:none;" title="Editar">
+                                                <f:setPropertyActionListener value="#{usuario}" target="#{manejadorUsuarios.usuarioSeleccionado}"/>
+                                                <p:ajax update="panelUsuarioEditar" />
+                                                <p:ajax update="tablaUsuarios"  onsuccess="PF('dlgModifUsuario').show()"/>
+                                            </h:commandLink>
+
+                                            <h:commandLink styleClass="btn-sm glyphicon glyphicon-refresh" style="text-decoration:none;" action="#{manejadorUsuarios.setNombreUsuarioEditar(usuario.nombreCompleto)}" title="Cambiar Estado">
+                                                <f:setPropertyActionListener value="#{usuario.idUsuario}" target="#{manejadorUsuarios.usuarioEditar}"/>
+                                                <f:setPropertyActionListener value="#{usuario.nombreCompleto}" target="#{manejadorUsuarios.nombreUsuarioEditar}"/>
+                                                <p:ajax update="nombreUsuario" />
+                                                <p:ajax update="listaUsuarios"  onsuccess="PF('dlgEstadoUsuario').show()"/>
+                                            </h:commandLink>
+
                                         </center>
-                                    </f:facet>
-                                    <center>
-                                        <h:commandLink styleClass="btn-sm glyphicon glyphicon-pencil"  style="text-decoration:none;" action="#{manejadorUsuarios.editarUsuario()}" immediate="true" title="Editar">
-                                            <f:setPropertyActionListener value="#{usuario}" target="#{manejadorUsuarios.usuarioSeleccionado}"/>
-                                            <p:ajax update="form:lista-usuarios"  onsuccess="PF('dlgModifUsuario').show()"/>
-                                        </h:commandLink>
-                                        
-                                        <h:commandLink styleClass="btn-sm glyphicon glyphicon-refresh" style="text-decoration:none;" action="#{manejadorUsuarios.setNombreUsuarioEditar(usuario.nombreCompleto)}" title="Cambiar Estado">
-                                            <f:setPropertyActionListener value="#{usuario.idUsuario}" target="#{manejadorUsuarios.usuarioSeleccionado}"/>
-                                            <f:setPropertyActionListener value="#{usuario.nombreCompleto}" target="#{manejadorUsuarios.nombreUsuarioEditar}"/>
-                                            <p:ajax update="lista-usuarios"  onsuccess="PF('dlgEstadoUsuario').show()"/>
-                                            
-                                        </h:commandLink>
-                                    </center>
-                                </p:column>
-                            </h:dataTable>
+                                    </p:column>
+                                </h:dataTable>
+                            </h:panelGroup>
                         </h:form>
                     </f:view>
                 </div>
@@ -122,42 +126,84 @@
                 </h:commandButton>
             </h:form>
         </p:dialog>
-        
-        <p:dialog header="Actualizar usuario" modal="true" widgetVar="dlgModifUsuario" position="center top">
-                    <div class="table-responsive">
-                        <h:panelGrid id="modiUsuario" columns="2" class="table">
-                            <h:outputLabel value="N°:" for="idUsuario" />
-                            <h:outputLabel id="idUsuario" value="#{manejadorUsuarios.usuarioSeleccionado.idUsuario}" title="IdUsuario" class="form-control"/>
-                            <h:outputLabel value="Nombre Completo:" for="nombreUsuario" />
-                            <h:inputText id="nombreUsuario" value="#{manejadorUsuarios.usuarioSeleccionado.nombreCompleto}" title="Nombre Completo" required="true" class="form-control"/>
-                            <h:outputLabel value="Usuario:" for="usuario" />
-                            <h:inputText id="usuario" value="#{manejadorUsuarios.usuarioSeleccionado.usuario}" title="Nombre de Usuario" required="true" class="form-control"/>
-                            <h:outputLabel value="Estado:" for="estadoUsuario" />
-                            <h:inputText id="estadoUsuario" value="#{manejadorUsuarios.usuarioSeleccionado.idEstadoUsuario.nombreEstadoUsuario}" title="Estado del Usuario" class="form-control"/>
-                            <h:outputLabel value="Tipo de usuario:" for="tipoUsuario" />
-                            <h:inputText id="tipoUsuario" value="#{manejadorUsuarios.usuarioSeleccionado.idRolUsuario.nombreRolUsuario}" title="Tipo o Rol del Usuario" class="form-control"/>
-                            <h:outputLabel value="Fecha de Creación:" for="fechaCreaUsuario" />
-                            <h:outputLabel id="fechaCreaUsuario" value="#{manejadorUsuarios.usuarioSeleccionado.fechaCreaUsistema}" title="Fecha de Creación del Registro" class="form-control"/>
-                        </h:panelGrid>
-                        <p:commandButton icon="ui ui-icon-disk" value="Actualizar usuario" process="@this modiUsuario" action="#{managerUsuarios.editUsuario()}" update="@this modiUsuario" oncomplete="PF('dlgModifUsuario').hide();"/>
+
+        <p:dialog header="Editar Usuario" modal="true" widgetVar="dlgModifUsuario" height="auto" width="auto" resizable="false" position="center,top">
+            <h:form class="form-horizontal" prependId="false">
+                <p:messages showSummary="true" />
+                <h:panelGroup id ="panelUsuarioEditar">
+<!--                    <div class="form-group">
+                        <h:outputLabel value="Nombre nombreUsuario:" styleClass="col-lg-4 control-label"/>
+                        <div class="col-lg-8">
+                            <h:inputText id="nombreCompleto" styleClass="form-control" value="{manejadorUsuarios.usuarioSeleccionado.nombreCompleto}" required="true" requiredMessage="Ingrese Nombre Completo"/>
+                        </div>
                     </div>
-                </p:dialog>
+                    <div class="form-group">
+                        <h:outputLabel value="Usuario:" styleClass="col-lg-4 control-label"/>
+                        <div class="col-lg-8">
+                            <h:inputText id="nombreUsuario" styleClass="form-control" value="{manejadorUsuarios.usuarioSeleccionado.usuario}" required="true" requiredMessage="Ingrese Nombre Completo"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <h:outputLabel value="Contraseña" styleClass="col-lg-4 control-label"/>
+                        <div class="col-lg-8">
+                            <h:inputText id="clave" styleClass="form-control" value="{manejadorUsuarios.usuarioSeleccionado.clave}" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <h:outputLabel value="Estado:" styleClass="col-lg-4 control-label"/>
+                        <div class="col-lg-8">
+                            <h:selectOneMenu styleClass="form-control" id="estadoUsuario" value="{manejadorUsuarios.usuarioSeleccionado.idEstadoUsuario.nombreEstadoUsuario}" converter="{estadoConvertidor}" style="width: 100%" required="true" requiredMessage="Selecione un Estado del Usuario">
+                                <f:selectItems value="{manejadorUsuarios.todosEstadosUsuarios()}" var="estadouser" itemLabel="{estadouser.nombreEstadoUsuario}" itemValue="{estadouser}"/>
+                            </h:selectOneMenu>
+                            <h:inputText id="estadoUsuario" value="{manejadorUsuarios.usuarioSeleccionado.idEstadoUsuario.nombreEstadoUsuario}" title="Estado del Usuario" class="form-control"/>
+                        </div>
+                    </div>-->
+
+<div class="table-responsive">
+                                            <h:panelGrid id="modiUsuario" columns="2" class="table">
+                                                <h:outputLabel value="N°:" for="idUsuario" />
+                                                <h:outputLabel id="idUsuario" value="#{manejadorUsuarios.usuarioSeleccionado.idUsuario}" title="IdUsuario" class="form-control"/>
+                                                <h:outputLabel value="Nombre Completo:" for="nombreUsuario" />
+                                                <h:inputText id="nombreUsuario" value="#{manejadorUsuarios.usuarioSeleccionado.nombreCompleto}" title="Nombre Completo" required="true" class="form-control"/>
+                                                <h:outputLabel value="Usuario:" for="usuario" />
+                                                <h:inputText id="usuario" value="#{manejadorUsuarios.usuarioSeleccionado.usuario}" title="Nombre de Usuario" required="true" class="form-control"/>
+                                                <h:outputLabel value="Estado:" for="estadoUsuario" />
+                                                <h:inputText id="estadoUsuario" value="#{manejadorUsuarios.usuarioSeleccionado.idEstadoUsuario.nombreEstadoUsuario}" title="Estado del Usuario" class="form-control"/>
+                                                <h:outputLabel value="Tipo de usuario:" for="tipoUsuario" />
+                                                <h:inputText id="tipoUsuario" value="#{manejadorUsuarios.usuarioSeleccionado.idRolUsuario.nombreRolUsuario}" title="Tipo o Rol del Usuario" class="form-control"/>
+                                                <h:outputLabel value="Fecha de Creación:" for="fechaCreaUsuario" />
+                                                <h:outputLabel id="fechaCreaUsuario" value="#{manejadorUsuarios.usuarioSeleccionado.fechaCreaUsistema}" title="Fecha de Creación del Registro" class="form-control"/>
+                                            </h:panelGrid>
+<!--                                            <p:commandButton icon="ui ui-icon-disk" value="Actualizar usuario" process="@this modiUsuario" action="{managerUsuarios.editUsuario()}" update="@this modiUsuario" oncomplete="PF('dlgModifUsuario').hide();"/>-->
+                                        </div>
+                    <div class="form-group">
+                        <div class="col-lg-4"></div>
+                        <div class="col-lg-8">
+                            <h:commandButton style="margin: 2px" styleClass="btn btn-info" value="Modificar" action="#{manejadorUsuarios.editarUsuario()}"/>
+                            <h:commandButton style="margin: 2px"  styleClass="btn btn-info"  value="Cancelar" onclick="PF('dlgModifUsuario').hide()">
+                                <f:ajax execute="@this" render="panelUsuarioEditar" />
+                                <p:resetInput target="panelUsuarioEditar" />
+                            </h:commandButton>
+                        </div>                    
+                    </div>
+           </h:panelGroup>
+            </h:form>
+        </p:dialog>
 
         <script type="text/javascript">
             $(document).ready(function () {
-                var t = $('#lista-usuarios').DataTable({
+                var t = $('#listaUsuarios').DataTable({
                     "columnDefs": [{
                             "searchable": false,
                             "orderable": false,
                             "targets": 0
                         },
-                    {
+                        {
                             "searchable": false,
                             "orderable": false,
                             "targets": 5
                         }],
                     "order": [[1, 'asc']],
-                    
                     "oLanguage": {
                         "sProcessing": "Procesando...",
                         "sLengthMenu": "Mostrar _MENU_ registros",
@@ -193,140 +239,6 @@
         </script>
         <script src="#{request.contextPath}/resources/datatables/jquery.dataTables.min.js" type="text/javascript"></script>
 
-                            
-                            
-    
-
-                        <!--                            <div class="table-responsive">
-                                                        <p:dataTable  id="lista-usuarios" value="{manejadorUsuarios.todosUsuarios}" widgetVar="tabla-usuarios" var="usuario" paginator="true" rows="5" rowsPerPageTemplate="5,10,15,20,50,100"  
-                                                                      emptyMessage="No existen registros con esos criterios de búsqueda" filteredValue="{manejadorUsuarios.usuariosFiltrados}">
-                                                            <f:facet name="header">
-                                    <p:outputPanel>
-                                        <h:outputText value="Buscar: " />
-                                        <p:inputText id="globalFilter" onkeyup="PF('tabla-usuarios').filter()" style="width:150px" placeholder="Ingresar dato a buscar"/>
-                                    </p:outputPanel>
-                                </f:facet>
-                                                            <p:column width="10%">
-                                                                <f:facet name="header">
-                                                                    <h:outputText style="font-size: 12px"  value="N°" />
-                                                                </f:facet>
-                                                                <h:outputText style="font-size: 12px"  value="{usuario.idUsuario}"/>
-                                                            </p:column>
-                                                            <p:column filterBy="{usuario.nombreCompleto}" sortBy="{usuario.nombreCompleto}">
-                                                                <f:facet name="header">
-                                                                    <h:outputText style="font-size: 12px" value="Nombre completo"/>
-                                                                </f:facet>
-                                                                <h:outputText style="font-size: 12px" value="{usuario.nombreCompleto}"/>
-                                                            </p:column>
-                                                            <p:column filterBy="{usuario.usuario}" sortBy="{usuario.usuario}">
-                                                                <f:facet name="header">
-                                                                    <h:outputText style="font-size: 12px" value="Nombre de Usuario"/>
-                                                                </f:facet>
-                                                                <h:outputText style="font-size: 12px" value="{usuario.usuario}"/>
-                                                            </p:column>
-                                                            <p:column>
-                                                                <f:facet name="header">
-                                                                    <h:outputText style="font-size: 12px" value="Estado"/>
-                                                                </f:facet>
-                                                                <h:outputText style="font-size: 12px" value="{usuario.idEstadoUsuario.nombreEstadoUsuario}"/>
-                                                            </p:column>
-                                                            <p:column filterBy="{usuario.fechaCreaUsistema}">
-                                                                <f:facet name="header">
-                                                                    <h:outputText style="font-size: 12px" value="Fecha creación"/>
-                                                                </f:facet>
-                                                                <h:outputText style="font-size: 12px" value="{usuario.fechaCreaUsistema}">
-                                                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm a" />
-                                                                </h:outputText>
-                                                            </p:column>
-                                                            <p:column width="15%">
-                                                                <f:facet name="header">
-                                                                    <h:outputText style="font-size: 12px; text-align: center" value="Editar"/>
-                                                                </f:facet>
-                                                                <div align="center">  
-                                                                <p:commandButton process="@this" update=":form-usuario:lista-usuarios" oncomplete="PF('ActualizarUsuario_Dialog').show()" icon="ui-icon-pencil" title="Editar">
-                                                                <f:setPropertyActionListener value="{usuario}" target="{manejadorUsuarios.usuarioSeleccionado}"/>
-                                                            </p:commandButton>
-                                                                </div>
-                                                             </p:column>
-                                                            
-                                                            <p:column width="15%">
-                                                                <f:facet name="header">
-                                                                    <h:outputText style="font-size: 12px; text-align: center" value="Eliminar"/>
-                                                                </f:facet>
-                                                             <div align="center">      
-                                                            <p:commandButton  process="@this" icon="ui-icon-closethick" title="Eliminar">
-                                                                <f:setPropertyActionListener value="{usuario}" target="{manejadorUsuarios.usuarioSeleccionado}"/>
-                                                            </p:commandButton>
-                                                             </div>   
-                                                                <p:commandButton process="@this" update="form-usuario:lista-usuarios" action="{manejadorUsuarios.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
-                                                                <f:setPropertyActionListener value="{usuario}" target="{manejadorUsuarios.usuarioSeleccionado}"/>
-                                                            </p:commandButton>
-                                                                
-                                                            </p:column>
-                                                        </p:dataTable>
-                                                    </div>-->
-
-<!--                    </div>
-                </div>-->
-<!--                <p:dialog header="Actualizar usuario" modal="true" widgetVar="dlgModifUsuario" position="center top">
-                    <div class="table-responsive">
-                        <h:panelGrid id="modiUsuario" columns="2" class="table">
-                            <h:outputLabel value="N°:" for="idUsuario" />
-                            <h:outputLabel id="idUsuario" value="{manejadorUsuarios.usuarioSeleccionado.idUsuario}" title="IdUsuario" class="form-control"/>
-                            <h:outputLabel value="Nombre Completo:" for="nombreUsuario" />
-                            <h:inputText id="nombreUsuario" value="{manejadorUsuarios.usuarioSeleccionado.nombreCompleto}" title="Nombre Completo" required="true" class="form-control"/>
-                            <h:outputLabel value="Usuario:" for="usuario" />
-                            <h:inputText id="usuario" value="{manejadorUsuarios.usuarioSeleccionado.usuario}" title="Nombre de Usuario" required="true" class="form-control"/>
-                            <h:outputLabel value="Estado:" for="estadoUsuario" />
-                            <h:inputText id="estadoUsuario" value="{manejadorUsuarios.usuarioSeleccionado.idEstadoUsuario.nombreEstadoUsuario}" title="Estado del Usuario" class="form-control"/>
-                            <h:outputLabel value="Tipo de usuario:" for="tipoUsuario" />
-                            <h:inputText id="tipoUsuario" value="{manejadorUsuarios.usuarioSeleccionado.idRolUsuario.nombreRolUsuario}" title="Tipo o Rol del Usuario" class="form-control"/>
-                            <h:outputLabel value="Fecha de Creación:" for="fechaCreaUsuario" />
-                            <h:inputText id="fechaCreaUsuario" value="{manejadorUsuarios.usuarioSeleccionado.fechaCreaUsistema}" title="Fecha de Creación del Registro" class="form-control"/>
-                        </h:panelGrid>
-                        <p:commandButton icon="ui ui-icon-disk" value="Actualizar usuario" process="@this modiUsuario" action="{managerUsuarios.editUsuario()}" update="modiUsuario :form-usuario:accordion-users:user-list" oncomplete="PF('dlgModifUsuario').hide();"/>
-                    </div>
-                </p:dialog>-->
-   
-
-    <!-- PARA PAGINACION Y BUSQUEDA EN TABLA UTILIZANDO Bootstrap-->
-    
-        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) Yo agregué esto-->
-        <!--        <h:outputScript library="primefaces" name="jquery/jquery.js"/>
-                <script src="{request.contextPath}/resources/datatables/jquery.dataTables.js" type="text/javascript"></script>-->
-        <!-- fin que de lo que agregué-->
-<!--        <script>
-            $(document).ready(function () {
-                $('.paginada').dataTable(
-                        {
-                            "oLanguage": {
-                                "sProcessing": "Procesando...",
-                                "sLengthMenu": "Mostrar _MENU_ registros",
-                                "sZeroRecords": "No se encontraron resultados",
-                                "sEmptyTable": "Ningún dato disponible en esta tabla",
-                                "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                                "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
-                                "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
-                                "sInfoPostFix": "",
-                                "sSearch": "Buscar:",
-                                "sUrl": "",
-                                "sInfoThousands": ",",
-                                "sLoadingRecords": "Cargando...",
-                                "oPaginate": {
-                                    "sFirst": "Primero",
-                                    "sLast": "Último",
-                                    "sNext": "Siguiente",
-                                    "sPrevious": "Anterior"
-                                },
-                                "oAria": {
-                                    "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
-                                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                                }
-                            }
-                        }
-                );
-            });
-        </script>-->
 
     </ui:define>
 

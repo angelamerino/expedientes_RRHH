@@ -57,7 +57,7 @@ public class HistorialSalarial implements Serializable {
     @Column(name = "nuevo_salario_hsalarial")
     private double nuevoSalarioHsalarial;
     @Column(name = "porcentaje_hsalarial")
-    private int porcentajeHsalarial;
+    private double porcentajeHsalarial;
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha_hsalarial")
@@ -124,7 +124,7 @@ public class HistorialSalarial implements Serializable {
         this.nuevoSalarioHsalarial = nuevoSalarioHsalarial;
     }
 
-    public int getPorcentajeHsalarial() {
+    public double getPorcentajeHsalarial() {
         return porcentajeHsalarial;
     }
 

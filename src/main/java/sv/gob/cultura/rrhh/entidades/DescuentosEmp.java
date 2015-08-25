@@ -73,6 +73,8 @@ public class DescuentosEmp implements Serializable {
     private double cuotaMensual;
     @Basic(optional = false)
     @NotNull
+    @Column(name = "cuota_complemento")
+    private double cuotaComplemento;
     @Column(name = "monto_total")
     private double montoTotal;
     @Basic(optional = false)
@@ -237,6 +239,14 @@ public class DescuentosEmp implements Serializable {
 
     public void setIdEmpleado(Empleados idEmpleado) {
         this.idEmpleado = idEmpleado;
+    }
+
+    public double getCuotaComplemento() {
+        return cuotaComplemento;
+    }
+
+    public void setCuotaComplemento(double cuotaComplemento) {
+        this.cuotaComplemento = cuotaComplemento;
     }
 
     @Override

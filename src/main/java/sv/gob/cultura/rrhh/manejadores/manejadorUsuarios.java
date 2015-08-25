@@ -55,8 +55,8 @@ public class manejadorUsuarios implements Serializable{
     private int dependeciasFiltrar;             // id´s dependencias
     
     private int estadoEditar;
-    private int usuarioEditar;
-    private String nombreUsuarioEditar;
+    private int usuarioEditar;                  //id del usuario a editar
+    private String nombreUsuarioEditar;         //nombre del usuario a editar
        
     public List<EstadosUsuarios> todosEstadosUsuarios() {
         return getEstadosUsuariosFacade().findAll();
