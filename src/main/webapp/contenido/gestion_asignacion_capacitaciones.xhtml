@@ -11,7 +11,8 @@
         <link href="#{request.contextPath}/resources/datatables/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
         <div class="page-header">
             <h1><strong>GESTIÓN DE ASIGNACIÓN DE CAPACITACIONES</strong></h1>
-            <h:form>
+            <h:form prependId="false">
+                <p:growl id="growl" showDetail="false"  autoUpdate="true" life="10000" />
                 <h:commandLink value="Nuevo Registro" styleClass="btn btn-info pull-right"  style="text-decoration:none;" action="#{manejadorCapacitaciones.nuevaAsigCapacitacion()}" immediate="true" />
             </h:form>
             <div class="clearfix" ></div>

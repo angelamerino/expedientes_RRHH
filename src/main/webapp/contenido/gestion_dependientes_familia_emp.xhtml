@@ -1,0 +1,253 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../resources/plantilla/plantilla.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+
+        <div class="page-header">
+            <h1><strong>DEPENDIENTES/FAMILIA</strong></h1>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading"><strong>Agregar/Eliminar</strong></div>
+            <div class="panel-body">
+
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">  
+                        <h2 class="text-info text-center">Buscar Empleado</h2>
+                        <div class="clearfix"></div>
+                        <br />
+                    </div>                            
+                    <div class="col-md-2"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-5"> 
+
+                        <h:form prependId="false">
+                            <p:growl id="growl" showDetail="false"  autoUpdate="true" life="10000" />
+                            <div class="form-group">
+                                <h:outputLabel value="Dirección Nacional:"/>                                
+                                <h:selectOneMenu  class="form-control" id="dirNacionalFiltrarJefe" style="width: 100%" value="#{manejadorDependientesFamilia.direccionNacional}">
+                                    <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                    <f:selectItems value="#{manejadorDependientesFamilia.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
+                                    <f:ajax render="filtrarDependencia filtrarEmpleado nombre tabla"/>
+                                </h:selectOneMenu>
+                            </div>
+
+                            <div class="form-group">
+                                <h:outputLabel value="Dependencia / Unidad organizativa:"/>
+                                <h:selectOneMenu class="form-control" id="filtrarDependencia"  style="width: 100%" value="#{manejadorDependientesFamilia.dependecia}">
+                                    <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                    <f:selectItems value="#{manejadorDependientesFamilia.dependenciasFiltradas()}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
+                                    <f:ajax render="filtrarEmpleado nombre tabla"/>
+                                </h:selectOneMenu>
+                            </div>
+
+                            <div class="form-group">
+                                <h:outputLabel class="control-label" value="Empleado:"/>
+                                <h:selectOneMenu class="form-control" id="filtrarEmpleado" style="width: 100%" value="#{manejadorDependientesFamilia.empleadoSelecionado}" >
+                                    <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                    <f:selectItems value="#{manejadorDependientesFamilia.empleadoFiltrado()}" var="emple" itemLabel="#{emple.nombreEmpleado}" itemValue="#{emple.idEmpleado}"/>
+                                    <f:ajax render="tabla nombre" />
+                                </h:selectOneMenu>
+                            </div>
+
+                        </h:form>
+
+                    </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-4">
+                        <h:form prependId="false" >
+                            <p:outputLabel for="nr" value="NR del Empleado:" styleClass="control-label col-md-12"/>
+                            <div class="form-group">
+                                <div class="col-md-8">
+                                    <p:inputMask id="nr" style="width: 100%; padding: 9px;" value="#{manejadorDependientesFamilia.NR}" mask="NR 9999-999999-999-9"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <h:commandButton  class="btn btn-info" actionListener="#{manejadorDependientesFamilia.buscarNR}" action="#{manejadorDependientesFamilia.tabla()}" value="Buscar" />
+                                </div>
+                            </div>
+                        </h:form>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+
+                <br /><hr /><br />
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">  
+                        <h:form prependId="false">
+                            <h2 class="text-info text-center">Dependientes o Falimia</h2>
+                            <h:commandButton id="agregar"  value="Agregar" class="pull-right btn btn-info" actionListener="#{manejadorDependientesFamilia.empleadoSelecionadoValido}">
+                                <f:ajax />
+                            </h:commandButton>
+                            <p:outputLabel id="nombre"  style="font-size: 1.2em" value="Empleado: #{manejadorDependientesFamilia.nombreEmp}" />
+                            <div class="clearfix"></div>
+                            <br /> 
+                        </h:form>
+                    </div>
+                    <div class="col-md-2"></div>
+                </div><br />
+
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10"> 
+                        <div class="table table-responsive">
+                            <f:view>
+                                <h:form prependId="false">
+                                    <p:dataTable id ="tabla" value="#{manejadorDependientesFamilia.todosFamiliaDependientesEmp()}" var="item"
+                                                 emptyMessage="" 
+                                                 rows="10"
+                                                 paginator="true"
+                                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                 rowsPerPageTemplate="5,10,15"
+                                                 widgetVar="listado"
+                                                 paginatorPosition="bottom">
+
+                                        <f:facet name="header">
+                                            <p:outputPanel style="text-align: right;">
+                                                <h:outputText value="Buscar:  " />
+                                                <p:inputText id="globalFilter" onkeyup="PF('listado').filter()" style="width:200px;"/>
+                                            </p:outputPanel>
+                                        </f:facet>
+
+                                        <p:column headerText="Nombre" filterBy="#{item.nombreFamilia}" style="width:40%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
+                                            <h:outputText value="#{item.nombreFamilia}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Parentesco" filterBy="#{item.idParentesco.nombreParentesco}" style="width:13%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
+                                            <h:outputText value="#{item.idParentesco.nombreParentesco}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Fecha Nacimiento" filterBy="#{item.fechaNacFamilia}" style="width:17%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
+                                            <h:outputText value="#{item.fechaNacFamilia}">
+                                                <f:convertDateTime pattern="MM/dd/yyyy" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Edad" filterBy="#{item.edadFamilia}" style="width:10%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
+                                            <h:outputText value="#{item.edadFamilia}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Editar/Eliminar" filterBy="" style="width:20%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
+                                            <h:commandLink styleClass="btn-sm glyphicon glyphicon-pencil" style="text-decoration:none; color: #1d9ce5;" title="Editar">
+                                                <f:setPropertyActionListener value="#{item}" target="#{manejadorDependientesFamilia.familiaDependientesEmp}"/>
+                                                <f:setPropertyActionListener value="#{item.fechaNacFamilia}" target="#{manejadorDependientesFamilia.fechaNacFamiliaDependiente}"/>
+                                                <f:setPropertyActionListener value="#{item.edadFamilia}" target="#{manejadorDependientesFamilia.edadFamiliaDependiente}"/>
+                                                <p:ajax update="panelFamiliaEdit" />
+                                                <p:ajax update="tabla"  onsuccess="PF('familiaEdit').show()"/>
+                                            </h:commandLink>
+                                            <h:commandLink  action="#{manejadorDependientesFamilia.dependienteSeleccionado(item)}" styleClass="btn-sm glyphicon glyphicon-remove" style="text-decoration:none; color: #1d9ce5;" title="Eliminar" immediate="true">
+                                                <p:ajax update="tabla"  onsuccess="PF('confirmation').show()"/>
+                                            </h:commandLink>
+                                        </p:column>
+
+                                    </p:dataTable>
+                                </h:form>
+                            </f:view>
+
+                        </div>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <p:confirmDialog  message="Desea Eliminar Dependiente de Empleado" header="Confirmación"  closable="false" severity="info" widgetVar="confirmation">
+            <h:form prependId="false" class="form-horizontal">
+                <h:commandLink value="Aceptar" actionListener="#{manejadorDependientesFamilia.eliminar()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true" />
+                <h:commandLink value="Cancelar" actionListener="#{manejadorDependientesFamilia.cancelar()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true"/>
+            </h:form>
+        </p:confirmDialog>
+
+        <p:dialog  header="Ingreso de Dependientes o Falimiares" widgetVar="familia" modal="true" height="auto" width="50%" draggable="false" resizable="false" closable="false" styleClass="disable-scroll" position="center,top">
+            <h:form id="familiaDepen" prependId="false">                
+                <p:panelGrid id="panelFamilia" style="width: 100%;" styleClass="noBordes">
+                    <p:row>
+                        <p:column><p:outputLabel for="nombreFamilia" value="Nombre:"/></p:column>
+                        <p:column colspan="3"><p:inputText validatorMessage="Nombre: Ingrese Únicamente letras" id="nombreFamilia" value="#{manejadorDependientesFamilia.familiaDependientesEmp.nombreFamilia}" style="width: 100%; padding: 9px;" required="true" requiredMessage="Ingrese Nombre de Dependiente" ><f:validateRegex pattern="[A-Za-z ]*"  /></p:inputText></p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column><p:outputLabel for="idParentesco" value="Parentesco:"/></p:column>
+                        <p:column colspan="3">
+                            <p:selectOneMenu id="idParentesco" value="#{manejadorDependientesFamilia.familiaDependientesEmp.idParentesco}" style="width: 100%" required="true" converter="#{parentescoConvertidor}" requiredMessage="Seleccione Parentesco">
+                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                <f:selectItems value="#{manejadorDependientesFamilia.todosParentesco()}" var="parentesco" itemLabel="#{parentesco.nombreParentesco}" itemValue="#{parentesco}"/>
+                            </p:selectOneMenu>
+                        </p:column>                                       
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="1"><p:outputLabel for="fechaNacFamilia" value="Fecha de Nacimiento:"/></p:column>                                            
+                        <p:column colspan="1">
+                            <p:calendar id="fechaNacFamilia" value="#{manejadorDependientesFamilia.fechaNacFamiliaDependiente}"  locale="es" navigator="true" pattern="dd/MM/yyyy" yearRange="c-100:c+10">
+                                <p:ajax event="dateSelect" update="edadnacimiento"/>
+                            </p:calendar>
+                        </p:column>                                         
+                        <p:column colspan="1"><h:outputLabel value="Edad:"/></p:column>
+                        <p:column colspan="1"><h:outputText id="edadnacimiento" value="#{manejadorDependientesFamilia.edadFamiliaDependiente}"/></p:column>
+                    </p:row>
+                </p:panelGrid>
+                <br />
+                <h:commandButton style="margin: 2px" styleClass="btn btn-info" value="Guardar" action="#{manejadorDependientesFamilia.guardarFamiliaDependiente()}" >
+                    <f:ajax execute="panelFamilia" render="panelFamilia" />
+                </h:commandButton>
+                <h:commandButton style="margin: 2px"  styleClass="btn btn-info"  actionListener="#{manejadorDependientesFamilia.reset()}" value="Cancelar" onclick="PF('familia').hide()">
+                    <f:ajax render="panelFamilia" />
+                    <p:resetInput target="panelFamilia" />
+                </h:commandButton>
+
+
+            </h:form>
+        </p:dialog>
+
+        <p:dialog  header="Modificación de Dependientes o Falimiares" widgetVar="familiaEdit" modal="true" height="auto" width="50%" draggable="false" resizable="false" closable="false" styleClass="disable-scroll" position="center,top">
+            <h:form prependId="false">
+                <p:panelGrid id="panelFamiliaEdit" style="width: 100%;" styleClass="noBordes">
+                    <p:row>
+                        <p:column><p:outputLabel for="nombreFamiliae" value="Nombre:"/></p:column>
+                        <p:column colspan="3"><p:inputText validatorMessage="Nombre: Ingrese Únicamente letras" id="nombreFamiliae" value="#{manejadorDependientesFamilia.familiaDependientesEmp.nombreFamilia}" style="width: 100%; padding: 9px" required="true" requiredMessage="Ingrese Nombre de Dependiente"><f:validateRegex pattern="[A-Za-z ]*"  /></p:inputText></p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column><p:outputLabel for="idParentescoe" value="Parentesco:"/></p:column>
+                        <p:column colspan="3">
+                            <p:selectOneMenu id="idParentescoe" value="#{manejadorDependientesFamilia.familiaDependientesEmp.idParentesco}" style="width: 100%" required="true" converter="#{parentescoConvertidor}" requiredMessage="Seleccione Parentesco">
+                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                <f:selectItems value="#{manejadorDependientesFamilia.todosParentesco()}" var="parentesco" itemLabel="#{parentesco.nombreParentesco}" itemValue="#{parentesco}"/>
+                            </p:selectOneMenu>
+                        </p:column>                                       
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="1"><p:outputLabel for="fechaNacFamiliae" value="Fecha de Nacimiento:"/></p:column>                                            
+                        <p:column colspan="1">
+                            <p:calendar id="fechaNacFamiliae" value="#{manejadorDependientesFamilia.fechaNacFamiliaDependiente}" locale="es" navigator="true" pattern="dd/MM/yyyy" yearRange="c-100:c+10">
+                                <p:ajax event="dateSelect" update="edadnacimiento"/>
+                            </p:calendar>
+                        </p:column>                                         
+                        <p:column colspan="1"><h:outputLabel value="Edad:"/></p:column>
+                        <p:column colspan="1"><h:outputText id="edadnacimientoe" value="#{manejadorDependientesFamilia.edadFamiliaDependiente}"/></p:column>
+                    </p:row>
+                </p:panelGrid>
+                <br />
+                <h:commandButton style="margin: 2px" styleClass="btn btn-info" value="Modificar" action="#{manejadorDependientesFamilia.editarFamiliaDependiente()}">
+                    <f:ajax execute="panelFamiliaEdit" render="panelFamiliaEdit" />
+                </h:commandButton>
+                <h:commandButton style="margin: 2px"  styleClass="btn btn-info"  value="Cancelar" actionListener="#{manejadorDependientesFamilia.reset()}" onclick="PF('familiaEdit').hide()">
+                    <f:ajax render="panelFamiliaEdit" />
+                    <p:resetInput target="panelFamiliaEdit" />
+                </h:commandButton>
+
+
+            </h:form>
+        </p:dialog>
+
+    </ui:define>
+
+</ui:composition>

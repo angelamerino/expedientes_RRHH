@@ -14,6 +14,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import org.primefaces.context.RequestContext;
@@ -65,14 +66,16 @@ public class manejadorMovimientosEmp implements Serializable {
     private Date fechaNoti;                             // fecha de notificacion de traslado
     private Date fechaInicio;                           // fecha de inicio en nuevo cargo temporalmente
     private Date fechaFinal;                            // fecha de finalicacion en nuevo cargo temporalmente        
-    private String NR = "NR 0614-090179-134-0";         // NR empleado para busqueda
+    private String NR;                                  // NR empleado para busqueda
     private String nombreEmp;                           // nombre de empleado encontrado
     private String depenActual;                         // Nombre de la dependencia actual
     private String nuevoCargo;                          // nombre de nuevo cargo
     private String antiguoCargo;                        // nombre de antiguo cargo
+    private int direccionNacional;                      // id de dirección nacional para filtrar dependencias
+    private int dependecia;                             // id dependencias para filtrar empleado
+
 //********************** GET DE ENTERPRICE JAVA BEAN ***************************
 //******************************************************************************
-
     public MovimientosEmpFacade getMovimientosEmpFacade() {
         return movimientosEmpFacade;
     }
@@ -140,6 +143,8 @@ public class manejadorMovimientosEmp implements Serializable {
     }
 
     public void setEmpleadoSelecionado(int empleadoSelecionado) {
+        Empleados emp = getEmpleadosFacade().find(empleadoSelecionado);
+        this.setNombreEmp(emp.getNombreEmpleado());
         this.empleadoSelecionado = empleadoSelecionado;
     }
 
@@ -231,6 +236,22 @@ public class manejadorMovimientosEmp implements Serializable {
         this.nombreEmp = nombreEmp;
     }
 
+    public int getDireccionNacional() {
+        return direccionNacional;
+    }
+
+    public void setDireccionNacional(int direccionNacional) {
+        this.direccionNacional = direccionNacional;
+    }
+
+    public int getDependecia() {
+        return dependecia;
+    }
+
+    public void setDependecia(int dependecia) {
+        this.dependecia = dependecia;
+    }
+
 // **************** LISTA DE ELEMENTOS EN TABLAS *******************************
 //******************************************************************************
     public List<TipoMov> todosTipoMov() {
@@ -245,279 +266,348 @@ public class manejadorMovimientosEmp implements Serializable {
         return getDependenciasFacade().buscarDependencias(this.getDirNacinal());
     }
 
+    public List<Dependencias> dependenciasFiltradasBusqueda() {
+        return getDependenciasFacade().buscarDependencias(this.getDireccionNacional());
+    }
+
+    public List<Empleados> empleadoFiltrado() {
+        return getEmpleadosFacade().buscarEmp(this.getDependecia());
+    }
+
     public List<MovimientosEmp> todosMoviemientosEmp() {
         return getMovimientosEmpFacade().findAll();
     }
 //********************************* FUNCIONES **********************************
 //******************************************************************************
 
-    public void agregarinformacion() { 
-        // Para continuar con el proceso de ingreso de inforacion 
-        // verifica el NR digitado y el tipo de movimiento de empleado
-        System.out.println("Buscamos empleado");
-        System.out.println(this.getTipoMovimiento());
-        System.out.println(this.getNR());
+    public void agregarinformacion() {
+        try {
+            // Para continuar con el proceso de ingreso de inforacion 
+            // verifica empleado buscado y el tipo de movimiento de empleado
 
-        Empleados emp = getEmpleadosFacade().buscarEmpNR(this.getNR());
+            Empleados emp = getEmpleadosFacade().find(this.getEmpleadoSelecionado());
+            //Empleados emp = getEmpleadosFacade().buscarEmpNR(this.getNR());
 
-        if (emp == null) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Empleado No encontrado"));
-        } else {
+            if (emp == null) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Empleado No encontrado", "Empleado No encontrado"));
+            } else {
 
-            //Informacin Requrida de empleado
+                //Informacin Requrida de empleado
+                this.setNR(emp.getNrEmpleado());
+                this.setEmpleadoSelecionado(emp.getIdEmpleado());
+                this.setDepenActual(emp.getIdDependenciaF().getNombreDependencia());
+                this.setDepActual(emp.getIdDependenciaF().getIdDependencia());
+                this.setAntiguoCargo(emp.getCargoFuncional());
+
+                System.out.println(emp.getNombreEmpleado());
+
+                switch (this.getTipoMovimiento()) { // Según el tipo de movimiento
+                    case 1:
+                        RequestContext.getCurrentInstance().execute("PF('traslado').show()");
+                        break;
+                    case 2:
+                        RequestContext.getCurrentInstance().execute("PF('ascenso').show()");
+                        break;
+                    case 3:
+                        RequestContext.getCurrentInstance().execute("PF('trasladoTemp').show()");
+                        break;
+                }
+            }
+        } catch (Exception e) {
+            //Caso de Error
+        }
+    }
+
+    public String guardarMovTraslado() {
+        try {
+            //guarda movimiento por traslado
+            Empleados emp = empleadosFacade.buscarEmpNR(this.getNR());
+        // CARGO ACTUAL ***
+            // NUEVO CARGO ***
+
+            //Registro del Moviemiento de empleado
+            this.movimientosEmp.setIdTipoMov(new TipoMov(this.getTipoMovimiento()));
+            this.movimientosEmp.setIdEmpleado(new Empleados(this.getEmpleadoSelecionado()));
+            this.movimientosEmp.setIdDependencia(new Dependencias(this.getDependencia())); //Nueva dependencia
+            this.movimientosEmp.setDepIdDependencia(emp.getIdDependenciaF()); //Antigua dependencia
+            this.movimientosEmp.setDependenciaActual(this.getDepenActual());
+            this.movimientosEmp.setNuevoCargoMov(this.getNuevoCargo()); //nuevo cargo
+            this.movimientosEmp.setCargoActualMov(emp.getCargoFuncional()); //cargo actual
+            this.movimientosEmp.setFechaMov(this.getFechaTralado());
+            this.movimientosEmp.setFechaNoti(this.getFechaNoti());
+            this.movimientosEmp.setUserCreaMov(1);
+            this.movimientosEmp.setFechaCreaMov(new Date());
+            getMovimientosEmpFacade().create(movimientosEmp);
+
+            //Se edita información  de empleado
+            emp.setCargoFuncional(this.getNuevoCargo());
+            emp.setUserModEmp(1);                                                       //USUARIO QUE MODIFICO
+            emp.setFechaModEmp(new Date());
+            getEmpleadosFacade().edit(emp);
+
+            movimientosEmp = new MovimientosEmp();
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Guardado", "Registro Guardado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return "gestion_movimientos";
+        } catch (Exception e) {
+            return "reg_movimientos";
+        }
+    }
+
+    public String guardarMovAsc() {
+        try {
+            //Guarda movimiento por Ascenso
+            Empleados emp = empleadosFacade.buscarEmpNR(this.getNR());
+        // CARGO ACTUAL ***
+            // NUEVO CARGO ***
+
+            //Registro del Moviemiento de empleado
+            this.movimientosEmp.setIdTipoMov(new TipoMov(this.getTipoMovimiento()));
+            this.movimientosEmp.setIdEmpleado(new Empleados(this.getEmpleadoSelecionado()));
+
+            this.movimientosEmp.setIdDependencia(emp.getIdDependenciaF()); //nueva dependencia sigue siendo la misma
+            this.movimientosEmp.setDepIdDependencia(emp.getIdDependenciaF()); //antigua dependecncia sigue siendo la misma
+
+            this.movimientosEmp.setDependenciaActual(this.getDepenActual());
+            this.movimientosEmp.setNuevoCargoMov(this.getNuevoCargo()); //nuevo cargo
+            this.movimientosEmp.setCargoActualMov(emp.getCargoFuncional()); //cargo actual
+            this.movimientosEmp.setFechaMov(this.getFechaTralado());
+            this.movimientosEmp.setFechaNoti(this.getFechaNoti());
+            this.movimientosEmp.setUserCreaMov(1);
+            this.movimientosEmp.setFechaCreaMov(new Date());
+            getMovimientosEmpFacade().create(movimientosEmp);
+
+            //Se edita información  de empleado
+            emp.setCargoFuncional(this.getNuevoCargo());
+            emp.setUserModEmp(1);                                                       //USUARIO QUE MODIFICO
+            emp.setFechaModEmp(new Date());
+            getEmpleadosFacade().edit(emp);
+
+            movimientosEmp = new MovimientosEmp();
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Guardado", "Registro Guardado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return "gestion_movimientos";
+        } catch (Exception e) {
+            return "reg_movimientos";
+        }
+    }
+
+    public String guardarMovTemp() {
+        try {
+            //guarda movimiento tempralmente
+            Empleados emp = empleadosFacade.buscarEmpNR(this.getNR());
+        // CARGO ACTUAL ***
+            // NUEVO CARGO ***
+
+            //Registro del Moviemiento de empleado
+            this.movimientosEmp.setIdTipoMov(new TipoMov(this.getTipoMovimiento()));
+            this.movimientosEmp.setIdEmpleado(new Empleados(this.getEmpleadoSelecionado()));
+            this.movimientosEmp.setIdDependencia(new Dependencias(this.getDependencia())); //Nueva dependencia
+            this.movimientosEmp.setDepIdDependencia(emp.getIdDependenciaF()); //Antigua dependencia
+            this.movimientosEmp.setDependenciaActual(this.getDepenActual());
+            this.movimientosEmp.setNuevoCargoMov(this.getNuevoCargo()); //nuevo cargo
+            this.movimientosEmp.setCargoActualMov(emp.getCargoFuncional()); //cargo actual
+            this.movimientosEmp.setFechaMov(this.getFechaTralado());
+            this.movimientosEmp.setFechaIniTemp(this.getFechaInicio());
+            this.movimientosEmp.setFechaFinTemp(this.getFechaFinal());
+            this.movimientosEmp.setUserCreaMov(1);
+            this.movimientosEmp.setFechaCreaMov(new Date());
+            getMovimientosEmpFacade().create(movimientosEmp);
+
+            //Se edita información  de empleado
+            emp.setCargoFuncional(this.getNuevoCargo());
+            emp.setUserModEmp(1);                                                       //USUARIO QUE MODIFICO
+            emp.setFechaModEmp(new Date());
+            getEmpleadosFacade().edit(emp);
+
+            movimientosEmp = new MovimientosEmp();
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Guardado", "Registro Guardado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return "gestion_movimientos";
+        } catch (Exception e) {
+            return "reg_movimientos";
+        }
+    }
+
+    public String editarMovTraslado() { //MOVIEMNTO POR TRASLADO
+        try {
+            Empleados emp = empleadosFacade.buscarEmpNR(this.getNR());
+        // CARGO ACTUAL ***
+            // NUEVO CARGO ***
+
+            //Registro del Moviemiento de empleado
+            this.movimientosEmp.setIdDependencia(new Dependencias(this.getDependencia())); //Nueva dependencia
+            this.movimientosEmp.setDepIdDependencia(emp.getIdDependenciaF()); //Antigua dependencia
+            this.movimientosEmp.setDependenciaActual(this.getDepenActual());
+            this.movimientosEmp.setNuevoCargoMov(this.getNuevoCargo()); //nuevo cargo
+            this.movimientosEmp.setCargoActualMov(emp.getCargoFuncional()); //cargo actual
+            this.movimientosEmp.setFechaMov(this.getFechaTralado());
+            this.movimientosEmp.setFechaNoti(this.getFechaNoti());
+            this.movimientosEmp.setUserModMov(1);
+            this.movimientosEmp.setFechaModMov(new Date());
+            getMovimientosEmpFacade().edit(movimientosEmp);
+
+            //Se edita información  de empleado
+            emp.setCargoFuncional(this.getNuevoCargo());
+            emp.setUserModEmp(1);                                                       //USUARIO QUE MODIFICO
+            emp.setFechaModEmp(new Date());
+            getEmpleadosFacade().edit(emp);
+
+            movimientosEmp = new MovimientosEmp();
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Modificado", "Registro Modificado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return "gestion_movimientos";
+        } catch (Exception e) {
+            return "gestion_movimientos";
+        }
+    }
+
+    public String editarMovAsc() { //MOVIMIENTO POR ASCENSO
+        try {
+            Empleados emp = empleadosFacade.buscarEmpNR(this.getNR());
+        // CARGO ACTUAL ***
+            // NUEVO CARGO ***
+
+            //Registro del Moviemiento de empleado
+            this.movimientosEmp.setIdDependencia(emp.getIdDependenciaF()); //nueva dependencia sigue siendo la misma
+            this.movimientosEmp.setDepIdDependencia(emp.getIdDependenciaF()); //antigua dependecncia sigue siendo la misma
+
+            this.movimientosEmp.setDependenciaActual(this.getDepenActual());
+            this.movimientosEmp.setNuevoCargoMov(this.getNuevoCargo()); //nuevo cargo
+            this.movimientosEmp.setCargoActualMov(emp.getCargoFuncional()); //cargo actual
+            this.movimientosEmp.setFechaMov(this.getFechaTralado());
+            this.movimientosEmp.setFechaNoti(this.getFechaNoti());
+            this.movimientosEmp.setUserModMov(1);
+            this.movimientosEmp.setFechaModMov(new Date());
+            getMovimientosEmpFacade().edit(movimientosEmp);
+
+            //Se edita información  de empleado
+            emp.setCargoFuncional(this.getNuevoCargo());
+            emp.setUserModEmp(1);                                                       //USUARIO QUE MODIFICO
+            emp.setFechaModEmp(new Date());
+            getEmpleadosFacade().edit(emp);
+
+            movimientosEmp = new MovimientosEmp();
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Modificado", "Registro Modificado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return "gestion_movimientos";
+        } catch (Exception e) {
+            return "gestion_movimientos";
+        }
+    }
+
+    public String editarMovTemp() { //MOVIMIENTO TEMPORALMENTE
+        try {
+            Empleados emp = empleadosFacade.buscarEmpNR(this.getNR());
+        // CARGO ACTUAL ***
+            // NUEVO CARGO ***
+
+            //Registro del Moviemiento de empleado
+            this.movimientosEmp.setIdDependencia(new Dependencias(this.getDependencia())); //Nueva dependencia
+            this.movimientosEmp.setDepIdDependencia(emp.getIdDependenciaF()); //Antigua dependencia
+            this.movimientosEmp.setDependenciaActual(this.getDepenActual());
+            this.movimientosEmp.setNuevoCargoMov(this.getNuevoCargo()); //nuevo cargo
+            this.movimientosEmp.setCargoActualMov(emp.getCargoFuncional()); //cargo actual
+            this.movimientosEmp.setFechaMov(this.getFechaTralado());
+            this.movimientosEmp.setFechaIniTemp(this.getFechaInicio());
+            this.movimientosEmp.setFechaFinTemp(this.getFechaFinal());
+            this.movimientosEmp.setUserModMov(1);
+            this.movimientosEmp.setFechaModMov(new Date());
+            getMovimientosEmpFacade().edit(movimientosEmp);
+
+            //Se edita información  de empleado
+            emp.setCargoFuncional(this.getNuevoCargo());
+            emp.setUserModEmp(1);                                                       //USUARIO QUE MODIFICO
+            emp.setFechaModEmp(new Date());
+            getEmpleadosFacade().edit(emp);
+
+            movimientosEmp = new MovimientosEmp();
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Modificado", "Registro Modificado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return "gestion_movimientos";
+        } catch (Exception e) {
+            return "gestion_movimientos";
+        }
+    }
+
+    public String editarTipoMov(MovimientosEmp movEmp) {
+        try {
+            //obtine el tipo de movimiento 
+            movimientosEmp = movEmp;
+            Empleados emp = getEmpleadosFacade().find(movEmp.getIdEmpleado().getIdEmpleado());
+            TipoMov m = movEmp.getIdTipoMov();
+            this.setNR(movEmp.getIdEmpleado().getNrEmpleado());
             this.setEmpleadoSelecionado(emp.getIdEmpleado());
             this.setDepenActual(emp.getIdDependenciaF().getNombreDependencia());
             this.setDepActual(emp.getIdDependenciaF().getIdDependencia());
             this.setAntiguoCargo(emp.getCargoFuncional());
 
-            System.out.println(emp.getNombreEmpleado());
+            //Llenado de Campos para edición
+            this.setNombreEmp(movEmp.getIdEmpleado().getNombreEmpleado());
+            this.setDirNacinal(movEmp.getDepIdDependencia().getIdDirNac().getIdDirNac());
+            this.setDependencia(movEmp.getIdDependencia().getIdDependencia());
+            this.setNuevoCargo(movEmp.getNuevoCargoMov());
+            this.setFechaTralado(movEmp.getFechaMov());
+            this.setFechaNoti(movEmp.getFechaNoti());
+            this.setFechaInicio(movEmp.getFechaIniTemp());
+            this.setFechaFinal(movEmp.getFechaFinTemp());
 
-            switch (this.getTipoMovimiento()) { // Según el tipo de movimiento
-                case 1:
-                    RequestContext.getCurrentInstance().execute("PF('traslado').show()");
+            //Solo existen 3 tipos de movimeintos
+            switch (m.getIdTipoMov()) {
+                case 1: // TRASLADO
+                    RequestContext.getCurrentInstance().execute("PF('trasladoEditar').show()");
                     break;
-                case 2:
-                    RequestContext.getCurrentInstance().execute("PF('ascenso').show()");
+                case 2: // ASCENSO
+                    RequestContext.getCurrentInstance().execute("PF('ascensoEditar').show()");
                     break;
-                case 3:
-                    RequestContext.getCurrentInstance().execute("PF('trasladoTemp').show()");
+                case 3: // TRASLADO TEMPORAL
+                    RequestContext.getCurrentInstance().execute("PF('temEditar').show()");
                     break;
+
             }
+            return "gestion_movimientos";
+        } catch (Exception e) {
+            return "gestion_movimientos";
         }
     }
 
-    public String guardarMovTraslado() {
-        //guarda movimiento por traslado
-        Empleados emp = empleadosFacade.buscarEmpNR(this.getNR());
-        // CARGO ACTUAL ***
-        // NUEVO CARGO ***
-
-        //Registro del Moviemiento de empleado
-        this.movimientosEmp.setIdTipoMov(new TipoMov(this.getTipoMovimiento()));
-        this.movimientosEmp.setIdEmpleado(new Empleados(this.getEmpleadoSelecionado()));
-        this.movimientosEmp.setIdDependencia(new Dependencias(this.getDependencia())); //Nueva dependencia
-        this.movimientosEmp.setDepIdDependencia(emp.getIdDependenciaF()); //Antigua dependencia
-        this.movimientosEmp.setDependenciaActual(this.getDepenActual());
-        this.movimientosEmp.setNuevoCargoMov(this.getNuevoCargo()); //nuevo cargo
-        this.movimientosEmp.setCargoActualMov(emp.getCargoFuncional()); //cargo actual
-        this.movimientosEmp.setFechaMov(this.getFechaTralado());
-        this.movimientosEmp.setFechaNoti(this.getFechaNoti());
-        this.movimientosEmp.setUserCreaMov(1);
-        this.movimientosEmp.setFechaCreaMov(new Date());
-        getMovimientosEmpFacade().create(movimientosEmp);
-
-        //Se edita información  de empleado
-        emp.setCargoFuncional(this.getNuevoCargo());
-        emp.setUserModEmp(1);                                                       //USUARIO QUE MODIFICO
-        emp.setFechaModEmp(new Date());
-        getEmpleadosFacade().edit(emp);
-
-        movimientosEmp = new MovimientosEmp();
-        return "gestion_movimientos_emp";
-    }
-
-    public String guardarMovAsc() {
-        //Guarda movimiento por Ascenso
-        Empleados emp = empleadosFacade.buscarEmpNR(this.getNR());
-        // CARGO ACTUAL ***
-        // NUEVO CARGO ***
-
-        //Registro del Moviemiento de empleado
-        this.movimientosEmp.setIdTipoMov(new TipoMov(this.getTipoMovimiento()));
-        this.movimientosEmp.setIdEmpleado(new Empleados(this.getEmpleadoSelecionado()));
-
-        this.movimientosEmp.setIdDependencia(emp.getIdDependenciaF()); //nueva dependencia sigue siendo la misma
-        this.movimientosEmp.setDepIdDependencia(emp.getIdDependenciaF()); //antigua dependecncia sigue siendo la misma
-
-        this.movimientosEmp.setDependenciaActual(this.getDepenActual());
-        this.movimientosEmp.setNuevoCargoMov(this.getNuevoCargo()); //nuevo cargo
-        this.movimientosEmp.setCargoActualMov(emp.getCargoFuncional()); //cargo actual
-        this.movimientosEmp.setFechaMov(this.getFechaTralado());
-        this.movimientosEmp.setFechaNoti(this.getFechaNoti());
-        this.movimientosEmp.setUserCreaMov(1);
-        this.movimientosEmp.setFechaCreaMov(new Date());
-        getMovimientosEmpFacade().create(movimientosEmp);
-
-        //Se edita información  de empleado
-        emp.setCargoFuncional(this.getNuevoCargo());
-        emp.setUserModEmp(1);                                                       //USUARIO QUE MODIFICO
-        emp.setFechaModEmp(new Date());
-        getEmpleadosFacade().edit(emp);
-
-        movimientosEmp = new MovimientosEmp();
-        return "gestion_movimientos_emp";
-    }
-    
-    public String guardarMovTemp() {
-        //guarda movimiento tempralmente
-        Empleados emp = empleadosFacade.buscarEmpNR(this.getNR());
-        // CARGO ACTUAL ***
-        // NUEVO CARGO ***
-
-        //Registro del Moviemiento de empleado
-        this.movimientosEmp.setIdTipoMov(new TipoMov(this.getTipoMovimiento()));
-        this.movimientosEmp.setIdEmpleado(new Empleados(this.getEmpleadoSelecionado()));
-        this.movimientosEmp.setIdDependencia(new Dependencias(this.getDependencia())); //Nueva dependencia
-        this.movimientosEmp.setDepIdDependencia(emp.getIdDependenciaF()); //Antigua dependencia
-        this.movimientosEmp.setDependenciaActual(this.getDepenActual());
-        this.movimientosEmp.setNuevoCargoMov(this.getNuevoCargo()); //nuevo cargo
-        this.movimientosEmp.setCargoActualMov(emp.getCargoFuncional()); //cargo actual
-        this.movimientosEmp.setFechaMov(this.getFechaTralado());
-        this.movimientosEmp.setFechaIniTemp(this.getFechaInicio());
-        this.movimientosEmp.setFechaFinTemp(this.getFechaFinal());
-        this.movimientosEmp.setUserCreaMov(1);
-        this.movimientosEmp.setFechaCreaMov(new Date());
-        getMovimientosEmpFacade().create(movimientosEmp);
-
-        //Se edita información  de empleado
-        emp.setCargoFuncional(this.getNuevoCargo());
-        emp.setUserModEmp(1);                                                       //USUARIO QUE MODIFICO
-        emp.setFechaModEmp(new Date());
-        getEmpleadosFacade().edit(emp);
-
-        movimientosEmp = new MovimientosEmp();
-        return "gestion_movimientos_emp";
-    }
-    
-    public String editarMovTraslado() { //MOVIEMNTO POR TRASLADO
-        Empleados emp = empleadosFacade.buscarEmpNR(this.getNR());
-        // CARGO ACTUAL ***
-        // NUEVO CARGO ***
-
-        //Registro del Moviemiento de empleado
-        this.movimientosEmp.setIdDependencia(new Dependencias(this.getDependencia())); //Nueva dependencia
-        this.movimientosEmp.setDepIdDependencia(emp.getIdDependenciaF()); //Antigua dependencia
-        this.movimientosEmp.setDependenciaActual(this.getDepenActual());
-        this.movimientosEmp.setNuevoCargoMov(this.getNuevoCargo()); //nuevo cargo
-        this.movimientosEmp.setCargoActualMov(emp.getCargoFuncional()); //cargo actual
-        this.movimientosEmp.setFechaMov(this.getFechaTralado());
-        this.movimientosEmp.setFechaNoti(this.getFechaNoti());
-        this.movimientosEmp.setUserModMov(1);
-        this.movimientosEmp.setFechaModMov(new Date());
-        getMovimientosEmpFacade().edit(movimientosEmp);
-
-        //Se edita información  de empleado
-        emp.setCargoFuncional(this.getNuevoCargo());
-        emp.setUserModEmp(1);                                                       //USUARIO QUE MODIFICO
-        emp.setFechaModEmp(new Date());
-        getEmpleadosFacade().edit(emp);
-
-        movimientosEmp = new MovimientosEmp();
-        return "gestion_movimientos_emp";
-    }
-
-    public String editarMovAsc() { //MOVIMIENTO POR ASCENSO
-        Empleados emp = empleadosFacade.buscarEmpNR(this.getNR());
-        // CARGO ACTUAL ***
-        // NUEVO CARGO ***
-
-        //Registro del Moviemiento de empleado
-        this.movimientosEmp.setIdDependencia(emp.getIdDependenciaF()); //nueva dependencia sigue siendo la misma
-        this.movimientosEmp.setDepIdDependencia(emp.getIdDependenciaF()); //antigua dependecncia sigue siendo la misma
-
-        this.movimientosEmp.setDependenciaActual(this.getDepenActual());
-        this.movimientosEmp.setNuevoCargoMov(this.getNuevoCargo()); //nuevo cargo
-        this.movimientosEmp.setCargoActualMov(emp.getCargoFuncional()); //cargo actual
-        this.movimientosEmp.setFechaMov(this.getFechaTralado());
-        this.movimientosEmp.setFechaNoti(this.getFechaNoti());
-        this.movimientosEmp.setUserModMov(1);
-        this.movimientosEmp.setFechaModMov(new Date());
-        getMovimientosEmpFacade().edit(movimientosEmp);
-
-        //Se edita información  de empleado
-        emp.setCargoFuncional(this.getNuevoCargo());
-        emp.setUserModEmp(1);                                                       //USUARIO QUE MODIFICO
-        emp.setFechaModEmp(new Date());
-        getEmpleadosFacade().edit(emp);
-
-        movimientosEmp = new MovimientosEmp();
-        return "gestion_movimientos_emp";
-    }
-    
-    public String editarMovTemp() { //MOVIMIENTO TEMPORALMENTE
-        Empleados emp = empleadosFacade.buscarEmpNR(this.getNR());
-        // CARGO ACTUAL ***
-        // NUEVO CARGO ***
-
-        //Registro del Moviemiento de empleado
-        this.movimientosEmp.setIdDependencia(new Dependencias(this.getDependencia())); //Nueva dependencia
-        this.movimientosEmp.setDepIdDependencia(emp.getIdDependenciaF()); //Antigua dependencia
-        this.movimientosEmp.setDependenciaActual(this.getDepenActual());
-        this.movimientosEmp.setNuevoCargoMov(this.getNuevoCargo()); //nuevo cargo
-        this.movimientosEmp.setCargoActualMov(emp.getCargoFuncional()); //cargo actual
-        this.movimientosEmp.setFechaMov(this.getFechaTralado());
-        this.movimientosEmp.setFechaIniTemp(this.getFechaInicio());
-        this.movimientosEmp.setFechaFinTemp(this.getFechaFinal());
-        this.movimientosEmp.setUserModMov(1);
-        this.movimientosEmp.setFechaModMov(new Date());
-        getMovimientosEmpFacade().edit(movimientosEmp);
-
-        //Se edita información  de empleado
-        emp.setCargoFuncional(this.getNuevoCargo());
-        emp.setUserModEmp(1);                                                       //USUARIO QUE MODIFICO
-        emp.setFechaModEmp(new Date());
-        getEmpleadosFacade().edit(emp);
-
-        movimientosEmp = new MovimientosEmp();
-        return "gestion_movimientos_emp";
-    }
-
-    public String editarTipoMov(MovimientosEmp movEmp) {
-
-        //obtine el tipo de movimiento 
+    public void eliminar(MovimientosEmp movEmp) {
         movimientosEmp = movEmp;
-        Empleados emp = getEmpleadosFacade().find(movEmp.getIdEmpleado().getIdEmpleado());
-        TipoMov m = movEmp.getIdTipoMov();
-        this.setNR(movEmp.getIdEmpleado().getNrEmpleado());        
-        this.setEmpleadoSelecionado(emp.getIdEmpleado());
-        this.setDepenActual(emp.getIdDependenciaF().getNombreDependencia());
-        this.setDepActual(emp.getIdDependenciaF().getIdDependencia());
-        this.setAntiguoCargo(emp.getCargoFuncional());
-        
-
-        //Llenado de Campos para edición
-        this.setNombreEmp(movEmp.getIdEmpleado().getNombreEmpleado());
-        this.setDirNacinal(movEmp.getDepIdDependencia().getIdDirNac().getIdDirNac());
-        this.setDependencia(movEmp.getIdDependencia().getIdDependencia());
-        this.setNuevoCargo(movEmp.getNuevoCargoMov());
-        this.setFechaTralado(movEmp.getFechaMov());
-        this.setFechaNoti(movEmp.getFechaNoti());
-        this.setFechaInicio(movEmp.getFechaIniTemp());
-        this.setFechaFinal(movEmp.getFechaFinTemp());
-
-        //Solo existen 3 tipos de movimeintos
-        switch (m.getIdTipoMov()) {
-            case 1: // TRASLADO
-                RequestContext.getCurrentInstance().execute("PF('trasladoEditar').show()");
-                break;
-            case 2: // ASCENSO
-                RequestContext.getCurrentInstance().execute("PF('ascensoEditar').show()");
-                break;
-            case 3: // TRASLADO TEMPORAL
-                RequestContext.getCurrentInstance().execute("PF('temEditar').show()");
-                break;
-
-        }
-        return "gestion_movimientos_emp";
     }
-    
-    public String eliminarMov(MovimientosEmp movEmp) {
-        getMovimientosEmpFacade().remove(movEmp);
-        return "gestion_movimientos_emp";
+
+    public String eliminarMov() {
+        try {
+            String cargo = movimientosEmp.getCargoActualMov();
+            Dependencias dependenciaEmp = movimientosEmp.getDepIdDependencia();
+
+            Empleados emp = getEmpleadosFacade().find(movimientosEmp.getIdEmpleado().getIdEmpleado());
+
+            emp.setCargoFuncional(cargo);
+            emp.setIdDependenciaF(dependenciaEmp);
+            getEmpleadosFacade().edit(emp);
+
+            getMovimientosEmpFacade().remove(movimientosEmp);
+            movimientosEmp = new MovimientosEmp();
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Eliminado", "Registro Eliminado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return "gestion_movimientos";
+        } catch (Exception e) {
+            return "gestion_movimientos";
+        }
     }
 
     public String nuevoMovientoEmp() {
-        return "reg_movimientos_emp";
+        return "reg_movimientos";
     }
 
     public String cancelarModal() {
         refresh();
-        return "reg_movimientos_emp";
+        return "reg_movimientos";
     }
 
     public String cancelarEditar() {
         refresh();
-        return "gestion_movimientos_emp";
+        return "gestion_movimientos";
     }
 
     public void refresh() { //elimina bean para nuevo ungreso o cancelación
@@ -528,7 +618,18 @@ public class manejadorMovimientosEmp implements Serializable {
         context.setViewRoot(viewRoot);
         context.renderResponse();
     }
-    
+
+    public void buscarNR(ActionEvent event) {
+        //Busca empleado por NR
+        Empleados emp = getEmpleadosFacade().buscarEmpNR(this.getNR());
+        if (emp == null) {
+            this.setNombreEmp("");
+        } else {
+            this.setEmpleadoSelecionado(emp.getIdEmpleado());
+            this.setNombreEmp(emp.getNombreEmpleado());
+        }
+    }
+
     public manejadorMovimientosEmp() {
     }
 

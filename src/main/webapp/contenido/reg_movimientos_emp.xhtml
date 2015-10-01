@@ -17,15 +17,78 @@
             <div class="panel-heading"><strong>Ingreso de Movientos de Empleados</strong></div>
             <div class="panel-body">
 
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">  
+                        <h2 class="text-info text-center">Buscar Empleado</h2>
+                        <div class="clearfix"></div>
+                        <br />
+                    </div>                            
+                    <div class="col-md-2"></div>
+                </div>
 
-                <div class="col-md-3"></div>    
-                <div class="col-md-6">
-                    <h:form prependId="false" class="form-horizontal">
-                        <p:messages showDetail="true" />
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-5"> 
+
+                        <h:form prependId="false">
+                            <p:growl id="growl" showDetail="false"  autoUpdate="true" life="10000" />
+                            <div class="form-group">
+                                <h:outputLabel value="Dirección Nacional:"/>
+                                <h:selectOneMenu class="form-control" id="dirNacionalFiltrarJefe" style="width: 100%" value="#{manejadorMovimientosEmp.direccionNacional}">
+                                    <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                    <f:selectItems value="#{manejadorMovimientosEmp.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
+                                    <f:ajax render="filtrarDependencia filtrarEmpleado empleado"/>
+                                </h:selectOneMenu>
+                            </div>
+
+                            <div class="form-group">
+                                <h:outputLabel value="Dependencia / Unidad organizativa:"/>
+                                <h:selectOneMenu class="form-control" id="filtrarDependencia"  style="width: 100%" value="#{manejadorMovimientosEmp.dependecia}">
+                                    <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                    <f:selectItems value="#{manejadorMovimientosEmp.dependenciasFiltradasBusqueda()}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
+                                    <f:ajax render="filtrarEmpleado empleado"/>
+                                </h:selectOneMenu>
+                            </div>
+
+                            <div class="form-group">
+                                <h:outputLabel value="Empleado:"/>
+                                <h:selectOneMenu class="form-control" id="filtrarEmpleado" style="width: 100%" value="#{manejadorMovimientosEmp.empleadoSelecionado}" >
+                                    <f:selectItem itemLabel="Seleccione uno..."  itemValue="#{null}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{manejadorMovimientosEmp.empleadoFiltrado()}" var="emple" itemLabel="#{emple.nombreEmpleado}" itemValue="#{emple.idEmpleado}"/>
+                                    <f:ajax render="empleado"/>
+                                </h:selectOneMenu>
+                            </div>
+
+                        </h:form>
+
+                    </div>                            
+                    <div class="col-md-1"></div>
+                    <div class="col-md-4">
+                        <h:form prependId="false">
+                            <h:outputLabel value="NR del Empleado:" styleClass="control-label col-md-12"/>
+                            <div class="form-group">
+                                <div class="col-md-8">
+                                    <p:inputMask styleClass="form-control" value="#{manejadorMovimientosEmp.NR}" mask="NR 9999-999999-999-9"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <h:commandButton  class="btn btn-info" actionListener="#{manejadorMovimientosEmp.buscarNR}" value="Buscar" />
+                                </div>
+                            </div>
+                        </h:form>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+                
+                <br /><hr /><br />
+
+                <div class="col-md-2"></div>    
+                <div class="col-md-8">
+                    <h:form prependId="false" class="form-horizontal">                        
                         <div class="form-group">
-                            <h:outputLabel value="NR del Empleado:" styleClass="col-lg-4 control-label"/>
+                            <h:outputLabel value="Empleado:" styleClass="col-lg-4 control-label"/>
                             <div class="col-lg-6">
-                                <p:inputMask styleClass="form-control" value="#{manejadorMovimientosEmp.NR}" mask="NR 9999-999999-999-9"/>
+                                <h:outputText id="empleado" styleClass="form-control" value="#{manejadorMovimientosEmp.nombreEmp}"/>
                             </div>
                         </div>
                         <div class="form-group">
@@ -45,7 +108,7 @@
                         </div>
                     </h:form>
                 </div>
-                <div class="col-md-3"></div>   
+                <div class="col-md-2"></div>   
             </div>
         </div>
 

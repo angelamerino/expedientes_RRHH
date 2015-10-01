@@ -26,17 +26,17 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-6"> 
+                    <div class="col-md-1"></div>
+                    <div class="col-md-5"> 
 
                         <h:form prependId="false" id="buscar">
-                            <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                            <p:growl id="growl" showDetail="false"  autoUpdate="true" life="10000" />
                             <div class="form-group">
                                 <h:outputLabel value="Dirección Nacional:"/>                                
                                 <h:selectOneMenu  class="form-control" id="dirNacionalFiltrarJefe" style="width: 100%" value="#{manejadorDescuentosEmp.direccionNacional}" rendered="true" requiredMessage="Seleccione una Dirección Nacional">
                                     <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
                                     <f:selectItems value="#{manejadorDescuentosEmp.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
-                                    <f:ajax render="filtrarDependencia filtrarEmpleado nombre tabla"/>
+                                    <f:ajax render="filtrarDependencia filtrarEmpleado nombre tabla empleado"/>
                                 </h:selectOneMenu>
                             </div>
 
@@ -45,7 +45,7 @@
                                 <h:selectOneMenu class="form-control" id="filtrarDependencia"  style="width: 100%" value="#{manejadorDescuentosEmp.dependecia}" rendered="true" requiredMessage="Seleccione una Dependencia/Unidad Organizativa">
                                     <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
                                     <f:selectItems value="#{manejadorDescuentosEmp.dependenciasFiltradas()}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
-                                    <f:ajax render="filtrarEmpleado nombre tabla"/>
+                                    <f:ajax render="filtrarEmpleado nombre tabla empleado"/>
                                 </h:selectOneMenu>
                             </div>
 
@@ -54,16 +54,37 @@
                                 <h:selectOneMenu class="form-control" id="filtrarEmpleado" style="width: 100%" value="#{manejadorDescuentosEmp.empleadoSelecionado}" rendered="true" requiredMessage="Seleccione un Empleado">
                                     <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
                                     <f:selectItems value="#{manejadorDescuentosEmp.empleadoFiltrado()}" var="emple" itemLabel="#{emple.nombreEmpleado}" itemValue="#{emple.idEmpleado}"/>
-                                    <f:ajax render="salarioActualHsalarial" />
+                                    <f:ajax render="salarioActualHsalarial empleado" />
                                 </h:selectOneMenu>
                             </div>
 
                         </h:form>
 
                     </div>                            
-                    <div class="col-md-3"></div>
+                    <div class="col-md-1"></div>
+
+                    <div class="col-md-4">
+                        <h:form prependId="false" >
+                            <h:panelGroup id="busqueda" >
+                                <p:outputLabel for="nr" value="NR del Empleado:" styleClass="control-label col-md-12"/>
+                                <div class="form-group">
+                                    <div class="col-md-8">
+                                        <p:inputMask id="nr" style="width: 100%; padding: 9px;" value="#{manejadorDescuentosEmp.NR}" mask="NR 9999-999999-999-9" required="true" requiredMessage="Ingrese NR Empleado"/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h:commandButton  class="btn btn-info" actionListener="#{manejadorDescuentosEmp.buscarNR}" value="Buscar" >
+                                            <p:ajax update="busqueda empleado" process="busqueda" />
+                                        </h:commandButton>
+                                    </div>
+                                </div>
+                            </h:panelGroup>
+                        </h:form>
+                    </div>
+
+                    <div class="col-md-1"></div>
                 </div>
             </div>
+            <hr />
             <div class="row">
                 <div class="col-md-2"></div>
                 <div class="col-md-8">  
@@ -74,67 +95,85 @@
                 <div class="col-md-2"></div>
             </div>
             <div class="row">
-                <div class="col-md-2"></div>
-                <div class="col-md-8">
+                <div class="col-md-1"></div>
+                <div class="col-md-10">
                     <h:form prependId="false" class="form-horizontal">
 
                         <div class="form-group">
-                            <h:outputLabel value="Tipo de Descuento:" styleClass="col-lg-3 control-label"/>
+                            <p:outputLabel value="Empleado:" styleClass="col-lg-3 control-label" />
                             <div class="col-lg-8">
-                                <h:selectOneMenu styleClass="form-control"  id="idDescuento" value="#{manejadorDescuentosEmp.descuentosEmp.idDescuento}"  converter="#{tipoDescuentoConvertidor}" required="true" requiredMessage="Seleccione un Tipo de Descuento">
+                                <h:outputText id="empleado" styleClass="form-control" value="#{manejadorDescuentosEmp.nombreEmp}" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <p:outputLabel for="idDescuento" value="Tipo de Descuento:" styleClass="col-lg-3 control-label"/>
+                            <div class="col-lg-8">
+                                <p:selectOneMenu style="width: 100%;" id="idDescuento" value="#{manejadorDescuentosEmp.descuentosEmp.idDescuento}"  converter="#{tipoDescuentoConvertidor}" required="true" requiredMessage="Seleccione un Tipo de Descuento">
                                     <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
                                     <f:selectItems value="#{manejadorDescuentosEmp.todosTIpoDescuentos()}" var="tipoDes" itemLabel="#{tipoDes.nombreDescuento}" itemValue="#{tipoDes}"/>
-                                </h:selectOneMenu>
+                                </p:selectOneMenu>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <h:outputLabel value="Nombre de Institución / Juzgado:" styleClass="col-lg-3 control-label" />
+                            <p:outputLabel for="nombreInstitucionDesc" value="Nombre de Institución / Juzgado:" styleClass="col-lg-3 control-label" />
                             <div class="col-lg-8">
-                                <h:inputText id="nombreInstitucionDesc" styleClass="form-control" value="#{manejadorDescuentosEmp.descuentosEmp.nombreInstitucionDesc}" required="true" requiredMessage="Ingrese Nombre de Institución / Jusgado"/>
+                                <p:inputText id="nombreInstitucionDesc" style="width: 100%; padding: 9px;" value="#{manejadorDescuentosEmp.descuentosEmp.nombreInstitucionDesc}" required="true" requiredMessage="Ingrese Nombre de Institución / Jusgado"/>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <h:outputLabel value="No de Referencía de Crédito / Embargo:" styleClass="col-lg-3 control-label" />
+                            <p:outputLabel for="numRefCredito" value="No de Referencía de Crédito / Embargo:" styleClass="col-lg-3 control-label" />
                             <div class="col-lg-8">
-                                <h:inputText id="numRefCredito" styleClass="form-control" value="#{manejadorDescuentosEmp.descuentosEmp.numRefCredito}" required="true" requiredMessage="Ingrese No de Referecia de Crédito / Embargo "/>
+                                <p:inputText id="numRefCredito" style="width: 100%; padding: 9px;" value="#{manejadorDescuentosEmp.descuentosEmp.numRefCredito}" required="true" requiredMessage="Ingrese No de Referecia de Crédito / Embargo "/>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <h:outputLabel value="Cantidad de Cuotas:" styleClass="col-lg-3 control-label" />
-                            <div class="col-lg-8">
-                                <p:spinner style="margin-top: 5px" size="5" id="numCuotas" value="#{manejadorDescuentosEmp.descuentosEmp.numCuotas}" required="true" requiredMessage="Ingrese No de Cuotas" min="0" max="500" />
+                            <p:outputLabel for="numCuotas" value="Cantidad de Cuotas:" styleClass="col-lg-3 control-label" />
+                            <div class="col-lg-3">
+                                <p:spinner  validatorMessage="Cantidad de Cuotas no debe ser cero" style="margin-top: 5px" size="5" id="numCuotas" value="#{manejadorDescuentosEmp.descuentosEmp.numCuotas}" required="true" requiredMessage="Ingrese No de Cuotas" min="0" max="500" >
+                                    <f:validateLongRange minimum="1" />
+                                </p:spinner>
+                            </div>
+                            <p:outputLabel for="cuotaMensual" value="Cuota Mensual: $" styleClass="col-lg-2 control-label" />
+                            <div class="col-lg-3">
+                                <p:inputText validatorMessage="Cuota Mensua No debe ser cero" id="cuotaMensual" style="width: 100%; padding: 9px;" value="#{manejadorDescuentosEmp.descuentosEmp.cuotaMensual}" required="true" requiredMessage="Ingrese Cuota Mensual" >
+                                    <f:validateDoubleRange minimum="0.01" />
+                                </p:inputText>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <h:outputLabel value="Cuota Mensual: $" styleClass="col-lg-3 control-label" />
+                            <p:outputLabel value="Cuota Complemento: $" styleClass="col-lg-3 control-label" />
                             <div class="col-lg-3">
-                                <h:inputText id="cuotaMensual" styleClass="form-control" value="#{manejadorDescuentosEmp.descuentosEmp.cuotaMensual}" required="true" requiredMessage="Ingrese Cuota Mensual"/>
+                                <p:inputText validatorMessage="Cuota Complemento No debe ser cero" id="cuotaComp" style="width: 100%; padding: 9px;" value="#{manejadorDescuentosEmp.descuentosEmp.cuotaComplemento}" />
                             </div>
-
-                            <h:outputLabel value="Monto total: $" styleClass="col-lg-2 control-label" />
+                            <p:outputLabel for="montoTotal" value="Monto total: $" styleClass="col-lg-2 control-label" />
                             <div class="col-lg-3">
-                                <h:inputText id="montoTotal" styleClass="form-control" value="#{manejadorDescuentosEmp.descuentosEmp.montoTotal}" required="true" requiredMessage="ingrese Monto Total"/>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <h:outputLabel value="Fecha Inicial:" styleClass="col-lg-3 control-label" />
-                            <div class="col-lg-3">
-                                <p:calendar pattern="dd/MM/yyyy" locale="es" id="fechaIniDesc" showOn="button" value="#{manejadorDescuentosEmp.descuentosEmp.fechaIniDesc}" required="true" requiredMessage="Ingrese Fecja Inicial" />
-                            </div>
-                           
-                            <h:outputLabel value="Fecha Final:" styleClass="col-lg-2 control-label" />
-                            <div class="col-lg-3">
-                                <p:calendar pattern="dd/MM/yyyy" locale="es" id="fechaFinDesc" showOn="button" value="#{manejadorDescuentosEmp.descuentosEmp.fechaFinDesc}" />
+                                <p:inputText validatorMessage="Monto Total No debe ser cero" id="montoTotal" style="width: 100%; padding: 9px;" value="#{manejadorDescuentosEmp.descuentosEmp.montoTotal}" required="true" requiredMessage="ingrese Monto Total" >
+                                    <f:validateDoubleRange minimum="0.01" />
+                                </p:inputText>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <h:outputLabel value="Docuemento de Respaldo:" styleClass="col-lg-3 control-label" />
+                            <p:outputLabel for="fechaIniDesc" value="Fecha Inicial:" styleClass="col-lg-3 control-label" />
+                            <div class="col-lg-3">
+                                <p:calendar  pattern="dd/MM/yyyy" locale="es" id="fechaIniDesc" value="#{manejadorDescuentosEmp.fechaInicio}" required="true" requiredMessage="Ingrese Fecha Inicial" >
+                                    <p:ajax event="dateSelect" update="fechaFinDesc" />
+                                </p:calendar>
+                            </div>
+
+                            <p:outputLabel for="fechaFinDesc" value="Fecha Final:" styleClass="col-lg-2 control-label" />
+                            <div class="col-lg-3">
+                                <p:calendar pattern="dd/MM/yyyy" mindate="#{manejadorDescuentosEmp.fechaInicio}" locale="es" id="fechaFinDesc" value="#{manejadorDescuentosEmp.descuentosEmp.fechaFinDesc}" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <p:outputLabel for="documento" value="Docuemento de Respaldo:" styleClass="col-lg-3 control-label" />
                             <div class="col-lg-8">
                                 <h:outputText id="documento" styleClass="form-control" value="#{fixme}"/>
                             </div>
@@ -152,7 +191,7 @@
                     </h:form>
 
                 </div>
-                <div class="col-md-2"></div>
+                <div class="col-md-1"></div>
             </div> 
         </div>
     </ui:define>

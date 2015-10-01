@@ -19,19 +19,25 @@
                 <div class="row">
                     <div class="col-md-12">
                         <h:form prependId="false" class="form-horizontal">
-                            <p:messages showDetail="true"  autoUpdate="true"/>
-                            <div class="form-group">
-                                <h:outputLabel value="Nombre de Capacitación:" styleClass="col-lg-3 control-label"/>
-                                <div class="col-lg-3">
-                                    <h:selectOneMenu  id="cap" class="form-control" value="#{manejadorCapacitaciones.idCapAsig}" required="true" requiredMessage="Seleccione una Capacitación">
-                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="false" itemValue="#{0}"/>
+                            <p:growl id="growl" showDetail="false"  autoUpdate="true" life="10000" />
+                            <h:panelGroup id="busqueda">
+                                <div class="form-group">
+                                
+                                <p:outputLabel for="cap" value="Nombre de Capacitación:" styleClass="col-lg-5 control-label"/>
+                                <div class="col-lg-4">
+                                    <p:selectOneMenu  id="cap" style="width: 100%;" value="#{manejadorCapacitaciones.idCapAsig}" required="true" requiredMessage="Seleccione una Capacitación">
+                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="false" itemValue="#{null}"/>
                                         <f:selectItems value="#{manejadorCapacitaciones.todasCapacitaciones()}" var="capa" itemLabel="#{capa.temaCap}" itemValue="#{capa.idCap}"/>
-                                    </h:selectOneMenu>
+                                        <p:ajax update="tabla" />
+                                    </p:selectOneMenu>
                                 </div>
-                                <div class="col-lg-6">
-                                    <h:commandButton style="margin-right: 5px" class="btn btn-info" actionListener="#{manejadorCapacitaciones.buscarEmpleadosCapa}" value="Buscar Empleados" />
-                                </div>
+<!--                                <div class="col-lg-6" >
+                                    <h:commandButton class="btn btn-info" actionListener="{manejadorCapacitaciones.buscarEmpleadosCapa}" value="Buscar Empleados" action="{manejadorCapacitaciones.actualizarTabla()}" >
+                                        <p:ajax update="busqueda" process="busqueda" />
+                                    </h:commandButton>
+                                </div>-->
                             </div>
+                            </h:panelGroup>
                         </h:form>
                     </div>
                 </div>
@@ -41,46 +47,46 @@
                 <div class="table table-responsive">
                     <f:view>
                         <h:form prependId="false">
-                            <h:panelGroup id ="tabla">
-                                <h:dataTable id="asistenciaList" value="#{manejadorCapacitaciones.empleadoAsignacionesCap()}" var="item" style="font-size: 14px" styleClass="table table-striped table-hover">
-                                    <h:column>
-                                        
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Nombre"/>
-                                        </f:facet>
+                            <h:panelGroup >
+                                <p:dataTable id ="tabla" value="#{manejadorCapacitaciones.empleadoAsignacionesCap()}" var="item"
+                                             emptyMessage="" 
+                                             rows="10"
+                                             paginator="true"
+                                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             rowsPerPageTemplate="5,10,15"
+                                             widgetVar="listado"
+                                             paginatorPosition="bottom">
+                                    <f:facet name="header">
+                                        <p:outputPanel style="text-align: right;">
+                                            <h:outputText value="Buscar:  " />
+                                            <p:inputText id="globalFilter" onkeyup="PF('listado').filter()" style="width:300px;"/>
+                                        </p:outputPanel>
+                                    </f:facet>
+
+                                    <p:column style="width: 30%;" filterBy="#{item.idEmpleado.nombreEmpleado}" headerText="Nombre del Empleado" filterMatchMode="contains" filterStyle="display:none">
                                         <h:outputText value="#{item.idEmpleado.nombreEmpleado}"/>
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Dependencia"/>
-                                        </f:facet>
+                                    </p:column>
+
+                                    <p:column style="width: 30%;" filterBy="#{item.idEmpleado.idDependenciaF.nombreDependencia}" headerText="Dependencia / Unidad Organizativa" filterMatchMode="contains" filterStyle="display:none">
                                         <h:outputText value="#{item.idEmpleado.idDependenciaF.nombreDependencia}"/>
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Correo Electrónico"/>
-                                        </f:facet>
+                                    </p:column>
+
+                                    <p:column style="width: 30%;" filterBy="#{item.idEmpleado.correoInstitucional}" headerText="Correo" filterMatchMode="contains" filterStyle="display:none">
                                         <h:outputText value="#{item.idEmpleado.correoInstitucional}"/>
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <center>
-                                            <h:outputText value="Asistió a Capacitación"/>
-                                            </center>
-                                        </f:facet>
-                                        <center>
-                                            <h:selectBooleanCheckbox value="#{item.capAsistida}" >
-                                                <f:ajax listener="#{manejadorCapacitaciones.cambioAistencia(item)}" />
-                                            </h:selectBooleanCheckbox>
-                                        </center>
-                                    </h:column>
-                                   
-                                </h:dataTable>
+                                    </p:column>
+
+                                    <p:column headerText="Asistió a Capacitación" style="width: 10%; text-align: center;">
+                                        <h:selectBooleanCheckbox value="#{item.capAsistida}" >
+                                            <p:ajax update="tabla" listener="#{manejadorCapacitaciones.cambioAistencia(item)}" />
+                                        </h:selectBooleanCheckbox>
+                                    </p:column>                             
+
+
+                                </p:dataTable>
                             </h:panelGroup>
                         </h:form>
                     </f:view>
+
                 </div>
             </div>
         </div>

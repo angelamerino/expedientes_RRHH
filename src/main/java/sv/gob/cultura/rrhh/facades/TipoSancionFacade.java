@@ -5,6 +5,7 @@
  */
 package sv.gob.cultura.rrhh.facades;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,6 +27,10 @@ public class TipoSancionFacade extends AbstractFacade<TipoSancion> {
 
     public TipoSancionFacade() {
         super(TipoSancion.class);
+    }
+    
+    public List<TipoSancion> buscarTipoSancionByGradoSancion(int idGradoSancion){
+        return getEntityManager().createNamedQuery("TipoSancion.findByIdGradoSancion").setParameter("idGradoSancion", idGradoSancion).getResultList();
     }
     
 }

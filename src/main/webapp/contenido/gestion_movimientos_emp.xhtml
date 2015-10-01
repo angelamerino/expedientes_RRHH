@@ -11,7 +11,8 @@
         <link href="#{request.contextPath}/resources/datatables/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
         <div class="page-header">
             <h1><strong>GESTIÓN DE MOVIMIENTOS DE EMPLEADOS</strong></h1>
-            <h:form>
+            <h:form prependId="false">
+                <p:growl id="growl" showDetail="false"  autoUpdate="true" life="10000" />  
                 <h:commandLink value="Nuevo Registro" styleClass="btn btn-info pull-right"  style="text-decoration:none;" action="#{manejadorMovimientosEmp.nuevoMovientoEmp()}" immediate="true" />
             </h:form>
             <div class="clearfix" ></div>
@@ -79,7 +80,8 @@
                                             <h:commandLink  styleClass="btn-sm glyphicon glyphicon-pencil" style="text-decoration:none;" title="Editar">
                                                 <p:ajax update="panelTrasladoEditar panelAscensoEditar panelTemEditar" listener="#{manejadorMovimientosEmp.editarTipoMov(item)}"/>
                                             </h:commandLink>
-                                            <h:commandLink action="#{manejadorMovimientosEmp.eliminarMov(item)}" styleClass="btn-sm glyphicon glyphicon-remove" style="text-decoration:none;" title="Eliminar" immediate="true">
+                                            <h:commandLink actionListener="#{manejadorMovimientosEmp.eliminar(item)}" styleClass="btn-sm glyphicon glyphicon-remove" style="text-decoration:none;" title="Eliminar" immediate="true">
+                                                <p:ajax update="tabla"  onsuccess="PF('confirmation').show()"/>
                                             </h:commandLink>                                                        
                                         </center>
                                     </h:column>
@@ -92,9 +94,15 @@
             </div>
         </div>
 
+        <p:confirmDialog  message="Desea Eliminar Moviemiento de Empleado" header="Confirmación"  closable="false" severity="info" widgetVar="confirmation">
+            <h:form prependId="false" class="form-horizontal">
+                <h:commandLink value="Aceptar" actionListener="#{manejadorMovimientosEmp.eliminarMov()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true" />
+                <h:commandLink value="Cancelar" actionListener="#{manejadorMovimientosEmp.cancelarEditar()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true"/>
+            </h:form>
+        </p:confirmDialog>
+
         <p:dialog header="Editar Información Movimiento por Traslado" widgetVar="trasladoEditar" closable="false" modal="true" height="auto" width="auto" resizable="false" position="center,top">
             <h:form prependId="false" class="form-horizontal">
-
                 <h:panelGroup id ="panelTrasladoEditar">
 
                     <div class="form-group">
@@ -156,7 +164,6 @@
             <h:form prependId="false" class="form-horizontal">
                 <h:panelGroup id ="panelAscensoEditar">
 
-
                     <div class="form-group">
                         <h:outputLabel value="Empleado:" styleClass="col-lg-4 control-label"/>
                         <div class="col-lg-8">
@@ -193,7 +200,6 @@
 
         <p:dialog header="Editar de Información Movimiento por Traslado Temporal" widgetVar="temEditar" closable="false" modal="true" height="auto" width="auto" resizable="false" position="center,top">
             <h:form prependId="false" class="form-horizontal">
-
                 <h:panelGroup id ="panelTemEditar">
 
                     <div class="form-group">
@@ -257,7 +263,7 @@
         </p:dialog>
 
         <script type="text/javascript">
-            
+
             $(document).ready(function () {
                 var t = $('#listMovimientosEmp').DataTable({
                     "columnDefs": [{

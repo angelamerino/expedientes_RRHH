@@ -139,6 +139,38 @@ public class Sanciones implements Serializable {
         this.idEmpleado = idEmpleado;
     }
 
+    public Integer getUserCreaSancion() {
+        return userCreaSancion;
+    }
+
+    public void setUserCreaSancion(Integer userCreaSancion) {
+        this.userCreaSancion = userCreaSancion;
+    }
+
+    public Date getFechaCreaSancion() {
+        return fechaCreaSancion;
+    }
+
+    public void setFechaCreaSancion(Date fechaCreaSancion) {
+        this.fechaCreaSancion = fechaCreaSancion;
+    }
+
+    public Integer getUserModSancion() {
+        return userModSancion;
+    }
+
+    public void setUserModSancion(Integer userModSancion) {
+        this.userModSancion = userModSancion;
+    }
+
+    public Date getFechaModSancion() {
+        return fechaModSancion;
+    }
+
+    public void setFechaModSancion(Date fechaModSancion) {
+        this.fechaModSancion = fechaModSancion;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;

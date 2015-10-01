@@ -25,8 +25,8 @@
             <h1><strong>REGISTRO DE EMPLEADOS</strong></h1>
         </div>
 
-        <h:form class="form-horizontal">
-
+        <h:form class="form-horizontal" prependId="false">
+            <p:messages showSummary="true" autoUpdate="true" />
             <div id="rootwizard">
 
                 <ul class="nav">                  
@@ -79,13 +79,17 @@
                                                     <div class="form-group">
                                                         <h:outputLabel value="Nombre según ISSS:" styleClass="col-lg-4 control-label"/>
                                                         <div class="col-lg-8">
-                                                            <p:inputText styleClass="form-control" id="nombreIsss" value="#{manejadorGestionEmpleado.empleado.nombreIsss}" style="width: 100%" />
+                                                            <p:inputText validatorMessage="Nombre según ISSS: Debe Ingresar solo letras" styleClass="form-control" id="nombreIsss" value="#{manejadorGestionEmpleado.empleado.nombreIsss}" style="width: 100%" >
+                                                                <f:validateRegex pattern="[A-Za-z ]*"  />
+                                                            </p:inputText>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <h:outputLabel value="Nombre según NIT:" styleClass="col-lg-4 control-label"/>
                                                         <div class="col-lg-8">
-                                                            <p:inputText id="nombreNit" styleClass="form-control" value="#{manejadorGestionEmpleado.empleado.nombreNit}" style="width: 100%" />
+                                                            <p:inputText validatorMessage="Nombre según NIT: Ingrese Únicamente Letras" id="nombreNit" styleClass="form-control" value="#{manejadorGestionEmpleado.empleado.nombreNit}" style="width: 100%" >
+                                                                <f:validateRegex pattern="[A-Za-z ]*"  />
+                                                            </p:inputText>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
@@ -100,7 +104,7 @@
                                                     <div class="form-group">
                                                         <h:outputLabel value="Fecha de Nacimiento:" styleClass="col-lg-4 control-label"/>
                                                         <div class="col-lg-5">
-                                                            <p:calendar  id="fechaNac" value="#{manejadorGestionEmpleado.fechaNacEmpleado}" showOn="button" locale="es" navigator="true" pattern="dd/MM/yyyy" yearRange="c-100:c+10">
+                                                            <p:calendar id="fechaNac" value="#{manejadorGestionEmpleado.fechaNacEmpleado}" showOn="button" locale="es" navigator="true" pattern="dd/MM/yyyy" yearRange="c-100:c+10">
                                                                 <p:ajax event="dateSelect" update="edadEmp"/>
                                                             </p:calendar>
                                                         </div>
@@ -121,13 +125,13 @@
                                                     <div class="form-group">
                                                         <h:outputLabel value="ISSS:" styleClass="col-lg-4 control-label"/>
                                                         <div class="col-lg-8">
-                                                            <p:inputMask styleClass="form-control" id="numIsss" value="#{manejadorGestionEmpleado.empleado.numIsss}" mask="ISSS 9999999999" style="width: 100%"  />
+                                                            <p:inputMask styleClass="form-control" id="numIsss" value="#{manejadorGestionEmpleado.empleado.numIsss}" mask="ISSS 999999999" style="width: 100%"  />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <h:outputLabel value="Númeor Único de Previsión:" styleClass="col-lg-4 control-label"/>
                                                         <div class="col-lg-8">
-                                                            <p:inputMask styleClass="form-control" id="numNup" value="#{manejadorGestionEmpleado.empleado.numNup}" mask="NUP 99999999999" style="width: 100%" />
+                                                            <p:inputMask styleClass="form-control" id="numNup" value="#{manejadorGestionEmpleado.empleado.numNup}" mask="NUP 999999999999" style="width: 100%" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
@@ -165,7 +169,9 @@
                                                     <div class="form-group">
                                                         <h:outputLabel value="Nombre Completo:" styleClass="col-lg-4 control-label"/>
                                                         <div class="col-lg-8">
-                                                            <p:inputText styleClass="form-control" id="nombreEmpleado" value="#{manejadorGestionEmpleado.empleado.nombreEmpleado}"  style="width: 100%" required="true" requiredMessage="Ingrese Nombre del Empleado"/>
+                                                            <p:inputText styleClass="form-control" validatorMessage="Nombre Completo: Ingrese Únicamente Letras" id="nombreEmpleado" value="#{manejadorGestionEmpleado.empleado.nombreEmpleado}"  style="width: 100%" required="true" requiredMessage="Ingrese Nombre del Empleado" >
+                                                                <f:validateRegex pattern="[A-Za-z ]*"  />
+                                                            </p:inputText>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
@@ -308,7 +314,9 @@
                                             <div class="form-group">
                                                 <h:outputLabel value="Correo Personal:" styleClass="col-lg-4 control-label"/>
                                                 <div class="col-lg-8">
-                                                    <p:inputText styleClass="form-control" id="correoPersonal" value="#{manejadorGestionEmpleado.empleado.correoPersonal}" style="width: 100%" />
+                                                    <p:inputText required="false" styleClass="form-control" validatorMessage="Correo Personal: Ingrese Email Válido" id="correoPersonal" value="#{manejadorGestionEmpleado.empleado.correoPersonal}" style="width: 100%" >
+                                                         <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                                                    </p:inputText>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -342,7 +350,7 @@
                                             <div class="form-group">
                                                 <h:outputLabel value="Dirección Nacional:" styleClass="col-lg-4 control-label"/>
                                                 <div class="col-lg-8">
-                                                    <h:selectOneMenu styleClass="form-control" id="dirNacionalNominal" style="width: 100%" value="#{manejadorGestionEmpleado.dirNacionalNominal}" required="true" requiredMessage="Seleccione una Dirección Nacional">
+                                                    <h:selectOneMenu styleClass="form-control" id="dirNacionalNominal" style="width: 100%" value="#{manejadorGestionEmpleado.dirNacionalNominal}" required="true" requiredMessage="Seleccione una Dirección Nacional para cargo Nominal">
                                                         <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
                                                         <f:selectItems value="#{manejadorGestionEmpleado.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
                                                         <p:ajax update="dependeciaNominal"/>
@@ -358,7 +366,7 @@
                                             <div class="form-group">
                                                 <h:outputLabel value="Dirección Nacional:" styleClass="col-lg-4 control-label"/>
                                                 <div class="col-lg-8">
-                                                    <h:selectOneMenu styleClass="form-control" id="dirNacionalFuncional" style="width: 100%" value="#{manejadorGestionEmpleado.dirNacionalFuncional}" required="true" requiredMessage="Seleccione una Dirección Nacional">
+                                                    <h:selectOneMenu styleClass="form-control" id="dirNacionalFuncional" style="width: 100%" value="#{manejadorGestionEmpleado.dirNacionalFuncional}" required="true" requiredMessage="Seleccione una Dirección Nacional para cargo Funcional">
                                                         <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
                                                         <f:selectItems value="#{manejadorGestionEmpleado.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
                                                         <p:ajax update="dependeciaFuncional"/>
@@ -368,7 +376,9 @@
                                             <div class="form-group">
                                                 <h:outputLabel value="Salario: $ " styleClass="col-lg-4 control-label"/>
                                                 <div class="col-lg-8">
-                                                    <p:inputText styleClass="form-control" id="salarioEmp" style="width: 100%" value="#{manejadorGestionEmpleado.empleado.salarioEmp}"/>
+                                                    <p:inputText styleClass="form-control" id="Salario" style="width: 100%" value="#{manejadorGestionEmpleado.empleado.salarioEmp}" >
+                                                        <f:validateDoubleRange minimum="0.00" maximum="999999.99"  />
+                                                    </p:inputText>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -399,7 +409,7 @@
                                             <div class="form-group">
                                                 <h:outputLabel value="Dependencia / Unidad organizativa:" styleClass="col-lg-4 control-label"/>
                                                 <div class="col-lg-8">
-                                                    <h:selectOneMenu styleClass="form-control" id="dependeciaNominal"  style="width: 100%" value="#{manejadorGestionEmpleado.dependenciaNominal}" required="true" requiredMessage="Seleccione una Dependencia">
+                                                    <h:selectOneMenu styleClass="form-control" id="dependeciaNominal"  style="width: 100%" value="#{manejadorGestionEmpleado.dependenciaNominal}" required="true" requiredMessage="Seleccione una Dependencia para cargo Nominal">
                                                         <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
                                                         <f:selectItems value="#{manejadorGestionEmpleado.dependenciasFiltradas(2)}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
 
@@ -414,7 +424,7 @@
                                             <div class="form-group">
                                                 <h:outputLabel value="Dependencia / Unidad organizativa:" styleClass="col-lg-4 control-label"/>
                                                 <div class="col-lg-8">
-                                                    <h:selectOneMenu styleClass="form-control" id="dependeciaFuncional"  style="width: 100%" value="#{manejadorGestionEmpleado.dependenciaFuncional}" required="true" requiredMessage="Seleccione una Dependencia">
+                                                    <h:selectOneMenu styleClass="form-control" id="dependeciaFuncional"  style="width: 100%" value="#{manejadorGestionEmpleado.dependenciaFuncional}" required="true" requiredMessage="Seleccione una Dependencia para cargo Funcional">
                                                         <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
                                                         <f:selectItems value="#{manejadorGestionEmpleado.dependenciasFiltradas(3)}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
 
@@ -422,9 +432,11 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <h:outputLabel value="CorreoInstitucional:" styleClass="col-lg-4 control-label"/>
+                                                <h:outputLabel value="Correo Institucional" styleClass="col-lg-4 control-label"/>
                                                 <div class="col-lg-8">
-                                                    <p:inputText styleClass="form-control" id="correoInstitucional" style="width: 100%" value="#{manejadorGestionEmpleado.empleado.correoInstitucional}"/>
+                                                    <p:inputText styleClass="form-control" validatorMessage="Correo Institucional: Ingrese Email Válido" id="correoInstitucional" style="width: 100%" value="#{manejadorGestionEmpleado.empleado.correoInstitucional}" >
+                                                        <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                                                    </p:inputText>
                                                 </div>
                                             </div>
                                             <div class="form-group">

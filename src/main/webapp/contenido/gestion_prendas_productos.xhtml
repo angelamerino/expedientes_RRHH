@@ -8,10 +8,12 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="content">
+        
         <link href="#{request.contextPath}/resources/datatables/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
         <div class="page-header">
             <h1><strong>GESTIÓN DE PRENDAS Y PRODUCTOS</strong></h1>
-            <h:form>
+            <h:form prependId="false">
+                <p:growl id="growl" showDetail="false"  autoUpdate="true" life="10000" />
                 <h:commandLink value="Nuevo Registro" styleClass="btn btn-info pull-right"  style="text-decoration:none;" action="#{manejadorPrendasProductos.nuevoProducto()}" immediate="true" />
             </h:form>
             <div class="clearfix" ></div>
@@ -33,12 +35,6 @@
                                             <h:outputText value="Nombre Producto"/>
                                         </f:facet>
                                         <h:outputText value="#{item.nombreProd}"/>
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Descripción"/>
-                                        </f:facet>
-                                        <h:outputText value="#{item.descripcionProd}"/>
                                     </h:column>
                                     <h:column>
                                         <f:facet name="header">
@@ -71,8 +67,8 @@
                                                 <p:ajax update="panelProductoEditar" />
                                                 <p:ajax update="tabla"  onsuccess="PF('producto').show()"/>
                                             </h:commandLink>
-                                            <h:commandLink action="#{manejadorPrendasProductos.eliminarProducto(item)}" styleClass="btn-sm glyphicon glyphicon-remove" style="text-decoration:none;" title="Eliminar">
-                                                <f:ajax execute="@this" render="tabla" />
+                                            <h:commandLink actionListener="#{manejadorPrendasProductos.productoSeleccinado(item)}" styleClass="btn-sm glyphicon glyphicon-remove" style="text-decoration:none;" title="Eliminar" immediate="true">
+                                                <p:ajax update="tabla"  onsuccess="PF('confirmation').show()"/>
                                             </h:commandLink>                                                        
                                         </center>
                                     </h:column>
@@ -83,43 +79,47 @@
                 </div>
             </div>
         </div>
+        
+        <p:confirmDialog  message="Desea Eliminar Producto" header="Confirmación"  closable="false" severity="info" widgetVar="confirmation">
+            <h:form prependId="false" class="form-horizontal">
+                <h:commandLink value="Aceptar" actionListener="#{manejadorPrendasProductos.eliminarProducto()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true" />
+                <h:commandLink value="Cancelar" actionListener="#{manejadorPrendasProductos.gestionProductos()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true"/>
+            </h:form>
+        </p:confirmDialog>
 
-        <p:dialog header="Editar Prendas o Productos" widgetVar="producto" modal="true" height="auto" width="auto" resizable="false" position="center,top">
+        <p:dialog header="Editar Prendas o Productos" widgetVar="producto" modal="true" height="auto" width="50%" resizable="false" position="center,top" draggable="false" closable="false" styleClass="disable-scroll">
             <h:form class="form-horizontal" prependId="false">
-                <p:messages showSummary="true" />
                 <h:panelGroup id ="panelProductoEditar">
                     <div class="form-group">
-                        <h:outputLabel value="Nombre del Producto:" styleClass="col-lg-4 control-label"/>
+                        <p:outputLabel for="nombreProd" value="Nombre del Producto:" styleClass="col-lg-4 control-label"/>
                         <div class="col-lg-8">
-                            <h:inputText id="nombreProd" styleClass="form-control" value="#{manejadorPrendasProductos.producto.nombreProd}" required="true" requiredMessage="Ingrese Nombre del Producto"/>
+                            <p:inputText style="width: 100%; padding: 9px;"  id="nombreProd" value="#{manejadorPrendasProductos.producto.nombreProd}" required="true" requiredMessage="Ingrese Nombre del Producto"/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <h:outputLabel value="Descripción:" styleClass="col-lg-4 control-label"/>
+                        <p:outputLabel for="prov" value="Proveedor:" styleClass="col-lg-4 control-label"/>
                         <div class="col-lg-8">
-                            <h:inputText id="descripcionProd" styleClass="form-control" value="#{manejadorPrendasProductos.producto.descripcionProd}" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <h:outputLabel value="Proveedor:" styleClass="col-lg-4 control-label"/>
-                        <div class="col-lg-8">
-                            <h:selectOneMenu class="form-control" value="#{manejadorPrendasProductos.producto.idProveedor}" style="width: 100%" converter="#{proveedorConvertidor}" required="true" requiredMessage="Seleccione un Proveedor">
+                            <p:selectOneMenu id="prov" value="#{manejadorPrendasProductos.producto.idProveedor}" style="width: 100%" converter="#{proveedorConvertidor}" required="true" requiredMessage="Seleccione un Proveedor">
                                 <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
                                 <f:selectItems value="#{manejadorPrendasProductos.todosProveedores()}" var="proveedores" itemLabel="#{proveedores.nombreProv}" itemValue="#{proveedores}"/>                                                    
-                            </h:selectOneMenu>
+                            </p:selectOneMenu>
                         </div>
                     </div>
                     <div class="form-group">
-                        <h:outputLabel value="Costo Unitario: $ " styleClass="col-lg-4 control-label"/>
+                        <p:outputLabel for="costoUnit" value="Costo Unitario: $ " styleClass="col-lg-4 control-label"/>
                         <div class="col-lg-8">
-                            <h:inputText id="costoUnit" styleClass="form-control" value="#{manejadorPrendasProductos.producto.costoUnit}" required="true" requiredMessage="Ingrese Costo Unitario"/>
+                            <p:inputText style="width: 100%; padding: 9px;" id="costoUnit" value="#{manejadorPrendasProductos.producto.costoUnit}" required="true" requiredMessage="Ingrese Costo Unitario" >
+                                <f:validateDoubleRange minimum="0.01" />
+                            </p:inputText>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-lg-4"></div>
                         <div class="col-lg-8">
 
-                            <h:commandButton style="margin: 2px" styleClass="btn btn-info" value="Modificar" action="#{manejadorPrendasProductos.editarProducto()}"/>
+                            <h:commandButton style="margin: 2px" styleClass="btn btn-info" value="Modificar" action="#{manejadorPrendasProductos.editarProducto()}" >
+                                <p:ajax update="panelProductoEditar" process="panelProductoEditar" />
+                            </h:commandButton>
                             <h:commandButton style="margin: 2px"  styleClass="btn btn-info"  value="Cancelar" onclick="PF('producto').hide()">
                                 <f:ajax execute="@this" render="panelProductoEditar" />
                                 <p:resetInput target="panelProductoEditar" />

@@ -14,7 +14,8 @@
 
         <div class="page-header">
             <h1 class="pull-left"><strong>GESTIÓN DE EMPLEADOS</strong></h1>
-            <h:form>
+            <h:form prependId="false">
+                <p:growl id="growl" showDetail="false"  autoUpdate="true" life="10000" />
                 <h:commandLink value="Nuevo Registro" styleClass="btn btn-info pull-right"  style="text-decoration:none;" action="#{manejadorGestionEmpleado.nuevoEmpleado()}" immediate="true" />
             </h:form>
             <div class="clearfix" ></div>
@@ -79,18 +80,7 @@
                                             <f:setPropertyActionListener value="#{item.fechaNac}" target="#{manejadorGestionEmpleado.fechaNacEmpleado}"/>
                                             <f:setPropertyActionListener value="#{item}" target="#{manejadorGestionEmpleado.empleado}"/>
                                         </h:commandLink>
-                                        <!--                                        <p:commandButton process="empleadoList" action="{manejadorGestionEmpleado.prepareList()}" icon="ui-icon-pencil" title="Editar">
-                                        <f:setPropertyActionListener value="{item}" target="{manejadorGestionEmpleado.empleado}"/>
-                                        </p:commandButton>-->
-                                        <!--                                    </center>
-                                        </p:column>
-                                        <p:column style="font-size: 12px; text-align: center;" width="15%">
-                                        <f:facet name="header">
-                                        <center>
-                                            <h:outputText value="Cambiar Estado"/>
-                                        </center>
-                                        </f:facet>
-                                        <center>                                        -->
+
                                         <h:commandLink styleClass="btn-sm glyphicon glyphicon-refresh" style="text-decoration:none;" action="#{manejadorGestionEmpleado.setNombreEmpleadoEditar(item.nombreEmpleado)}" title="Cambiar Estado">
                                             <f:setPropertyActionListener value="#{item.idEmpleado}" target="#{manejadorGestionEmpleado.empleadoEditar}"/>
                                             <f:setPropertyActionListener value="#{item.nombreEmpleado}" target="#{manejadorGestionEmpleado.nombreEmpleadoEditar}"/>
@@ -106,21 +96,20 @@
             </div>
         </div>
 
-        <p:dialog header="Cambiar Estado de Empleado" widgetVar="estadoEditar" modal="true" height="auto" width="auto" resizable="false" position="center,top">
-            <h:form prependId="false">
-                <h:messages showSummary="true"/>
+        <p:dialog header="Cambiar Estado de Empleado" widgetVar="estadoEditar" modal="true" height="auto" width="40%" draggable="false" closable="false" resizable="false" position="center,top">
+            <h:form prependId="false">                
                 <p:panelGrid id="panelEstado" style="width: 100%;" styleClass="noBordes" rendered="#{not empty manejadorGestionEmpleado.empleadoEditar}">
                     <p:row>
                         <p:column><h:outputLabel value="Empleado:"/></p:column>
-                        <p:column><h:outputLabel id="nombre4" value="#{manejadorGestionEmpleado.nombreEmpleadoEditar}" style="width: 100%"/></p:column>
+                        <p:column><h:outputText styleClass="form-control" id="nombre4" value="#{manejadorGestionEmpleado.nombreEmpleadoEditar}" style="width: 100%"/></p:column>
                     </p:row>
                     <p:row>    
                         <p:column><h:outputLabel value="Estado:"/></p:column>
                         <p:column>
-                            <h:selectOneMenu styleClass="form-control" id="idEstado" value="#{manejadorGestionEmpleado.estadoEditar}" style="width: 100%" required="true" requiredMessage="Seleccione un Estado">
+                            <p:selectOneMenu styleClass="form-control" id="idEstado" value="#{manejadorGestionEmpleado.estadoEditar}" style="width: 100%" required="true" requiredMessage="Seleccione un Estado">
                                 <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
                                 <f:selectItems value="#{manejadorGestionEmpleado.todosEstados()}" var="estados" itemLabel="#{estados.nombreEstado}" itemValue="#{estados.idEstado}"/>
-                            </h:selectOneMenu>
+                            </p:selectOneMenu>
                         </p:column>
                     </p:row>
 

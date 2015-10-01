@@ -5,9 +5,11 @@
  */
 package sv.gob.cultura.rrhh.facades;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import sv.gob.cultura.rrhh.entidades.Anio;
 import sv.gob.cultura.rrhh.entidades.Prestacion;
 
 /**
@@ -28,4 +30,7 @@ public class PrestacionFacade extends AbstractFacade<Prestacion> {
         super(Prestacion.class);
     }
     
+    public List<Prestacion> buscarPrestacionAnio(int anio){
+        return getEntityManager().createNamedQuery("Prestacion.findByAnio").setParameter("anio", anio).getResultList();
+    }
 }

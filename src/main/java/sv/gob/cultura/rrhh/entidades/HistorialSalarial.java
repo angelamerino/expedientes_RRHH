@@ -34,7 +34,9 @@ import javax.validation.constraints.Size;
 @NamedQueries({
     @NamedQuery(name = "HistorialSalarial.findAll", query = "SELECT h FROM HistorialSalarial h"),
     @NamedQuery(name = "HistorialSalarial.findByIdHsalarial", query = "SELECT h FROM HistorialSalarial h WHERE h.idHsalarial = :idHsalarial"),
+    @NamedQuery(name = "HistorialSalarial.findByIdEmpleado", query = "SELECT h FROM HistorialSalarial h WHERE h.idEmpleado.idEmpleado = :idEmpleado"),
     @NamedQuery(name = "HistorialSalarial.findBySalarioActualHsalarial", query = "SELECT h FROM HistorialSalarial h WHERE h.salarioActualHsalarial = :salarioActualHsalarial"),
+    @NamedQuery(name = "HistorialSalarial.findByTipo", query = "SELECT h FROM HistorialSalarial h WHERE h.tipoHistorial = :tipoHistorial"),
     @NamedQuery(name = "HistorialSalarial.findByNuevoSalarioHsalarial", query = "SELECT h FROM HistorialSalarial h WHERE h.nuevoSalarioHsalarial = :nuevoSalarioHsalarial"),
     @NamedQuery(name = "HistorialSalarial.findByPorcentajeHsalarial", query = "SELECT h FROM HistorialSalarial h WHERE h.porcentajeHsalarial = :porcentajeHsalarial"),
     @NamedQuery(name = "HistorialSalarial.findByFechaHsalarial", query = "SELECT h FROM HistorialSalarial h WHERE h.fechaHsalarial = :fechaHsalarial"),
@@ -68,6 +70,14 @@ public class HistorialSalarial implements Serializable {
     private String numDocDecreto;
     @Column(name = "user_crea_hsal")
     private Integer userCreaHsal;
+    @Column(name = "tipo_historial")
+    private Integer tipoHistorial;
+    @Column(name = "verificacion_historial")
+    private Integer verificacionHistorial;
+    @Column(name = "sal_min")
+    private double salMin;
+    @Column(name = "sal_max")
+    private double salMax;
     @Column(name = "fecha_crea_hsal")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreaHsal;
@@ -128,7 +138,7 @@ public class HistorialSalarial implements Serializable {
         return porcentajeHsalarial;
     }
 
-    public void setPorcentajeHsalarial(int porcentajeHsalarial) {
+    public void setPorcentajeHsalarial(double porcentajeHsalarial) {
         this.porcentajeHsalarial = porcentajeHsalarial;
     }
 
@@ -196,6 +206,38 @@ public class HistorialSalarial implements Serializable {
         this.idEmpleado = idEmpleado;
     }
 
+    public Integer getTipoHistorial() {
+        return tipoHistorial;
+    }
+
+    public void setTipoHistorial(Integer tipoHistorial) {
+        this.tipoHistorial = tipoHistorial;
+    }
+
+    public Integer getVerificacionHistorial() {
+        return verificacionHistorial;
+    }
+
+    public void setVerificacionHistorial(Integer verificacionHistorial) {
+        this.verificacionHistorial = verificacionHistorial;
+    }
+
+    public double getSalMin() {
+        return salMin;
+    }
+
+    public void setSalMin(double salMin) {
+        this.salMin = salMin;
+    }
+
+    public double getSalMax() {
+        return salMax;
+    }
+
+    public void setSalMax(double salMax) {
+        this.salMax = salMax;
+    }
+    
     public List<ImgDoc> getImgDocList() {
         return imgDocList;
     }

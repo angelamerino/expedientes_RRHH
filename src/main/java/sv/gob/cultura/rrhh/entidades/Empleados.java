@@ -165,6 +165,13 @@ public class Empleados implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "salario_emp")
     private Double salarioEmp;
+    @Column(name = "id_historial_salarial")
+    private Integer idHistorialSalarial;
+    @Column(name = "salario_historial_aumento")
+    private double salarioHistorialAumento;
+    @Column(name = "fecha_ultimo_aumento")
+    @Temporal(TemporalType.DATE)
+    private Date fechaUltimoAumento;
     @Size(max = 100)
     @Column(name = "correo_institucional")
     private String correoInstitucional;
@@ -739,6 +746,30 @@ public class Empleados implements Serializable {
 
     public void setIdEstadoCivil(EstadoCivil idEstadoCivil) {
         this.idEstadoCivil = idEstadoCivil;
+    }
+
+    public Integer getIdHistorialSalarial() {
+        return idHistorialSalarial;
+    }
+
+    public void setIdHistorialSalarial(Integer idHistorialSalarial) {
+        this.idHistorialSalarial = idHistorialSalarial;
+    }
+
+    public double getSalarioHistorialAumento() {
+        return salarioHistorialAumento;
+    }
+
+    public void setSalarioHistorialAumento(double salarioHistorialAumento) {
+        this.salarioHistorialAumento = salarioHistorialAumento;
+    }
+
+    public Date getFechaUltimoAumento() {
+        return fechaUltimoAumento;
+    }
+
+    public void setFechaUltimoAumento(Date fechaUltimoAumento) {
+        this.fechaUltimoAumento = fechaUltimoAumento;
     }
 
     public List<Empleados> getEmpleadosList() {

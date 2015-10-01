@@ -33,7 +33,7 @@
                     <div class="col-md-5"> 
 
                         <h:form prependId="false">
-                            <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                            <p:growl id="growl" showDetail="false"  autoUpdate="true" life="10000" />
                             <div class="form-group">
                                 <h:outputLabel value="Dirección Nacional:"/>                                
                                 <h:selectOneMenu  class="form-control" id="dirNacionalFiltrarJefe" style="width: 100%" value="#{manejadorPrestaciones.direccionNacional}">
@@ -65,27 +65,27 @@
 
                     </div>                           
                     <div class="col-md-1"></div>
-                    
+
                     <div class="col-md-4">
                         <h:form prependId="false" >
-                            <h:outputLabel value="NR del Empleado:" styleClass="control-label col-md-12"/>
+                            <p:outputLabel for="nr" value="NR del Empleado:" styleClass="control-label col-md-12"/>
                             <div class="form-group">
                                 <div class="col-md-8">
-                                    <p:inputMask styleClass="form-control" value="#{manejadorPrestaciones.NR}" mask="NR 9999-999999-999-9"/>
+                                    <p:inputMask id="nr" style="width: 100%; padding: 9px;" value="#{manejadorPrestaciones.NR}" mask="NR 9999-999999-999-9" />
                                 </div>
                                 <div class="col-md-4">
-                                    <h:commandButton  class="btn btn-info" actionListener="#{manejadorPrestaciones.buscarNR}" value="Buscar" />
+                                    <h:commandButton  class="btn btn-info" actionListener="#{manejadorPrestaciones.buscarNR}" action="#{manejadorPrestaciones.tabla()}" value="Buscar" />
                                 </div>
                             </div>
                         </h:form>
                     </div>
-                    
+
                     <div class="col-md-1"></div>
 
                 </div>
 
                 <br /><hr /><br />
-                
+
                 <div class="row">
                     <div class="col-md-2"></div>
                     <div class="col-md-8">  
@@ -106,43 +106,53 @@
                 <div class="row">
                     <div class="col-md-2"></div>
                     <div class="col-md-8"> 
-                        <div class="table table-responsive">
-                            <f:view>
-                                <h:form prependId="false">
-                                    <h:panelGroup id ="tabla">
-                                        <h:dataTable id="listPrestaciones" value="#{manejadorPrestaciones.todasPrestacionesEmpleado()}" var="item" style="font-size: 14px" styleClass="table table-striped table-hover">
-                                            <h:column>
 
-                                            </h:column>    
-                                            <h:column>
-                                                <f:facet name="header">
-                                                    <h:outputText value="Tipo Prestación"/>
-                                                </f:facet>
-                                                <h:outputText value="#{item.idTipoPrestacion.nombreTipoPrestacion}"/>
-                                            </h:column>
-                                            <h:column>
-                                                <f:facet name="header">
-                                                    <h:outputText value="Año"/>
-                                                </f:facet>
-                                                <h:outputText value="#{item.idAnio.anio}"/>
-                                            </h:column>
-                                            <h:column>
-                                                <f:facet name="header">
-                                                    <center>
-                                                        <h:outputText value="Eliminar"/>
-                                                    </center>
-                                                </f:facet>
-                                                <center>
-                                                    <h:commandLink action="#{manejadorPrestaciones.eliminarPresEmp(item)}" styleClass="btn-sm glyphicon glyphicon-remove" style="text-decoration:none;" title="Eliminar">
-                                                        <f:ajax execute="@this" render="tabla" />
-                                                    </h:commandLink>
-                                                </center>
-                                            </h:column>
-                                        </h:dataTable>
-                                    </h:panelGroup>
-                                </h:form>
-                            </f:view>
-                        </div>
+                        <f:view>
+                            <h:form prependId="false">
+                                <p:dataTable id="tabla" value="#{manejadorPrestaciones.todasPrestacionesEmpleado()}" var="item" 
+                                             emptyMessage="" 
+                                             rows="10"
+                                             paginator="true"
+                                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             rowsPerPageTemplate="5,10,15"
+                                             widgetVar="listado"
+                                             paginatorPosition="bottom">
+                                    <f:facet name="header">
+                                        <p:outputPanel style="text-align: right;">
+                                            <h:outputText value="Buscar:  " />
+                                            <p:inputText id="globalFilter" onkeyup="PF('listado').filter()" style="width:200px;"/>
+                                        </p:outputPanel>
+                                    </f:facet>
+                                    <p:column filterBy="#{item.idTipoPrestacion.nombreTipoPrestacion}" style="width:50%;"  filterMatchMode="contains" filterStyle="display:none">
+                                        <f:facet name="header">
+                                            <h:outputText value="Tipo Prestación"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.idTipoPrestacion.nombreTipoPrestacion}"/>
+                                    </p:column>
+                                    <p:column filterBy="#{item.costoPrestacion}" style="width:20%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
+                                        <f:facet name="header">
+                                            <h:outputText value="Costo Prestación"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.costoPrestacion}"/>
+                                    </p:column>                                        
+                                    <p:column filterBy="#{item.idAnio.anio}" style="width:10%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
+                                        <f:facet name="header">
+                                            <h:outputText value="Anio"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.idAnio.anio}"/>
+                                    </p:column>
+                                    <p:column style="width:20%; text-align: center;" >
+                                        <f:facet name="header">
+                                            <h:outputText value="Eliminar"/>
+                                        </f:facet>
+                                        <h:commandLink actionListener="#{manejadorPrestaciones.prestacionSelecionada(item)}" styleClass="btn-sm glyphicon glyphicon-remove" style="text-decoration:none; color: #1d9ce5;" title="Eliminar">
+                                            <p:ajax update="tabla"  onsuccess="PF('confirmation').show()"/>
+                                        </h:commandLink>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:form>
+                        </f:view>
+
                     </div>
                     <div class="col-md-2"></div>
                 </div> 
@@ -150,28 +160,38 @@
             </div>
         </div>
 
-        <p:dialog header="Asignar Prestaciones" widgetVar="asigPrestaciones" modal="true" height="auto" width="auto" resizable="false" position="center,top">
+        <p:confirmDialog  message="Desea Eliminar Prestacion Asignada" header="Confirmación"  closable="false" severity="info" widgetVar="confirmation">
+            <h:form prependId="false" class="form-horizontal">
+                <h:commandLink value="Aceptar" actionListener="#{manejadorPrestaciones.eliminarPresEmp()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true" />
+                <h:commandLink value="Cancelar" actionListener="#{manejadorPrestaciones.cancelarEditar()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true"/>
+            </h:form>
+        </p:confirmDialog>
+
+        <p:dialog header="Asignar Prestaciones" widgetVar="asigPrestaciones" modal="true" height="auto" width="40%" resizable="false" position="center,top" draggable="false" closable="false" styleClass="disable-scroll">
             <h:form class="form-horizontal" prependId="false">
                 <h:panelGroup id ="panelPrestaciones">
                     <div class="form-group">
                         <h:outputLabel value="Empleado:" styleClass="col-lg-3 control-label"/>
-                        <h:outputLabel id="nombre1" value="#{manejadorPrestaciones.nombreEmp}" styleClass="col-lg-9 control-label"/>
-                        
-                    </div>
-                    <div class="form-group">
-                        <h:outputLabel value="Prestacion:" styleClass="col-lg-3 control-label"/>
                         <div class="col-lg-9">
-                            <h:selectOneMenu class="form-control" id="idAnio" value="#{manejadorPrestaciones.idPrestacionAsirnar}" required="true" requiredMessage="Seleccione una Prestación">
-                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
-                                <f:selectItems value="#{manejadorPrestaciones.todasPrestaciones()}" var="pres" itemLabel="#{pres.idTipoPrestacion.nombreTipoPrestacion}" itemValue="#{pres.idPrestacion}"/>
-                            </h:selectOneMenu>
+                            <h:outputText class="form-control" id="nombre1" value="#{manejadorPrestaciones.nombreEmp}"/>
                         </div>
                     </div>
-                     <div class="form-group">
+                    <div class="form-group">
+                        <p:outputLabel for="idAnio" value="Prestacion:" styleClass="col-lg-3 control-label"/>
+                        <div class="col-lg-9">
+                            <p:selectOneMenu id="idAnio" style="width: 100%;" value="#{manejadorPrestaciones.idPrestacionAsirnar}" required="true" requiredMessage="Seleccione una Prestación">
+                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                <f:selectItems value="#{manejadorPrestaciones.todasPrestaciones()}" var="pres" itemLabel="#{pres.idTipoPrestacion.nombreTipoPrestacion}" itemValue="#{pres.idPrestacion}"/>
+                            </p:selectOneMenu>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <div class="col-lg-3"></div>
                         <div class="col-lg-9">
-                            <h:commandButton style="margin: 2px" styleClass="btn btn-info" value="Guardar" action="#{manejadorPrestaciones.addPresEmp()}"/>
-                            <h:commandButton style="margin: 2px"  styleClass="btn btn-info"  value="Cancelar" action="#{manejadorPrestaciones.cancelar()}" onclick="PF('asigPrestaciones').hide()">
+                            <h:commandButton style="margin: 2px; color: white;" styleClass="btn btn-info" value="Guardar" action="#{manejadorPrestaciones.addPresEmp()}">
+                                <p:ajax update="panelPrestaciones" process="panelPrestaciones"/>
+                            </h:commandButton>
+                            <h:commandButton style="margin: 2px; color: white;"  styleClass="btn btn-info"  value="Cancelar" action="#{manejadorPrestaciones.cancelarEditar()}" onclick="PF('asigPrestaciones').hide()" immediate="true">
                                 <f:ajax execute="@this" render="panelPrestaciones" />
                                 <p:resetInput target="panelPrestaciones" />
                             </h:commandButton>

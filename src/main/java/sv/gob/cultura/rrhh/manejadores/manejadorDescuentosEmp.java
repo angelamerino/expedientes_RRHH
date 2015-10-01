@@ -11,6 +11,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import sv.gob.cultura.rrhh.entidades.Dependencias;
@@ -55,6 +56,9 @@ public class manejadorDescuentosEmp implements Serializable {
     private int direccionNacional;                  //id Direccion Nacional Para filtar dependencias
     private int dependecia;                         //id Dependencia para filtar empleado
     private int empleadoSelecionado = 0;            //id empleado inicialmente en cero = ninguno
+    private String nombreEmp;                       // nombre de empleado selecinado
+    private String NR;                              // NR de empleado para hacer la busqueda
+    private Date fechaInicio;
 //********************** GET DE ENTERPRICE JAVA BEAN ***************************
 //******************************************************************************
 
@@ -125,7 +129,33 @@ public class manejadorDescuentosEmp implements Serializable {
     }
 
     public void setEmpleadoSelecionado(int empleadoSelecionado) {
+        Empleados emp = getEmpleadosFacade().find(empleadoSelecionado);
+        this.setNombreEmp(emp.getNombreEmpleado());
         this.empleadoSelecionado = empleadoSelecionado;
+    }
+
+    public String getNombreEmp() {
+        return nombreEmp;
+    }
+
+    public void setNombreEmp(String nombreEmp) {
+        this.nombreEmp = nombreEmp;
+    }
+
+    public String getNR() {
+        return NR;
+    }
+
+    public void setNR(String NR) {
+        this.NR = NR;
+    }
+
+    public Date getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(Date fechaInicio) {
+        this.fechaInicio = fechaInicio;
     }
 
 // **************** LISTA DE ELEMENTOS EN TABLAS *******************************
@@ -153,44 +183,77 @@ public class manejadorDescuentosEmp implements Serializable {
 //******************************************************************************
 
     public String guardarDescuento() {
-        if (this.getEmpleadoSelecionado() == 0) { //Verifica que se ha seleccinado un empleado
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Seleccione un Empleado"));
-            return null;
-        } else {
-            descuentosEmp.setIdEmpleado(new Empleados(this.getEmpleadoSelecionado()));
-            descuentosEmp.setUserCreaDesc(1); // USUARIO CREA
-            descuentosEmp.setFechaCreaDesc(new Date());
-            getDescuentosEmpFacade().create(descuentosEmp);
-            descuentosEmp = new DescuentosEmp();
-            empleadoSelecionado = 0;
-            return "gestion_descuentos_emp";
+        try {
+            if (this.getEmpleadoSelecionado() == 0) { //Verifica que se ha seleccinado un empleado
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Seleccione un Empleado", "Seleccione un Empleado"));
+                return null;
+            } else {
+                descuentosEmp.setIdEmpleado(new Empleados(this.getEmpleadoSelecionado()));
+                descuentosEmp.setFechaIniDesc(this.getFechaInicio());
+                descuentosEmp.setUserCreaDesc(1); // USUARIO CREA
+                descuentosEmp.setFechaCreaDesc(new Date());
+                getDescuentosEmpFacade().create(descuentosEmp);
+                descuentosEmp = new DescuentosEmp();
+                empleadoSelecionado = 0;
+                this.setFechaInicio(new Date());
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Ingresado", "Registro Ingresado");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+                return "gestion_descuentos_emp";
+            }
+        } catch (Exception e) {
+            return "reg_descuentos_emp";
         }
     }
 
     public String editarDescuento() {
-        descuentosEmp.setUserModDesc(1); // USUARIO MODIFICA
-        descuentosEmp.setFechaModDesc(new Date());
-        getDescuentosEmpFacade().edit(descuentosEmp);
-        descuentosEmp = new DescuentosEmp();
-        empleadoSelecionado = 0;
-        return "gestion_descuentos_emp";
+        try {
+            descuentosEmp.setFechaIniDesc(this.getFechaInicio());
+            descuentosEmp.setUserModDesc(1); // USUARIO MODIFICA
+            descuentosEmp.setFechaModDesc(new Date());
+            getDescuentosEmpFacade().edit(descuentosEmp);
+            descuentosEmp = new DescuentosEmp();
+            empleadoSelecionado = 0;
+            this.setFechaInicio(new Date());
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Modificado", "Registro Modificado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return "gestion_descuentos_emp";
+        } catch (Exception e) {
+            return "gestion_descuentos_emp";
+        }
+    }
+
+    public void buscarNR(ActionEvent event) {
+        Empleados emp = getEmpleadosFacade().buscarEmpNR(this.getNR());
+        if (emp == null) {
+            this.setNombreEmp("");
+        } else {
+            this.setEmpleadoSelecionado(emp.getIdEmpleado());
+            this.setNombreEmp(emp.getNombreEmpleado());
+        }
     }
 
     public String cancelar() {
-        return "reg_descuentos_emp";
-    }
-   
-    public String cancelarEditar() {
         return "gestion_descuentos_emp";
     }
-    
+
     public String nuevoDescuento() {
         return "reg_descuentos_emp";
     }
-    
-    public String eliminarDescuento(DescuentosEmp DesEmp) {
-        getDescuentosEmpFacade().remove(DesEmp);
-        return "gestion_descuentos_emp";
+
+    public void descuentoSeleccionado(DescuentosEmp DesEmp) {
+        descuentosEmp = DesEmp;
+    }
+
+    public String eliminarDescuento() {
+        try {
+            getDescuentosEmpFacade().remove(descuentosEmp);
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Eliminado", "Registro Eliminado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            descuentosEmp = new DescuentosEmp();
+            return "gestion_descuentos_emp";
+        } catch (Exception e) {
+            return "gestion_descuentos_emp";
+        }
     }
 
     public manejadorDescuentosEmp() {

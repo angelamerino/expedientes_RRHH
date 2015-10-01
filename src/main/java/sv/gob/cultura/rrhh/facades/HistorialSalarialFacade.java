@@ -5,6 +5,7 @@
  */
 package sv.gob.cultura.rrhh.facades;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,4 +29,11 @@ public class HistorialSalarialFacade extends AbstractFacade<HistorialSalarial> {
         super(HistorialSalarial.class);
     }
     
+    public List<HistorialSalarial> buscarHistorialEmpleado(int idEmp){
+        return getEntityManager().createNamedQuery("HistorialSalarial.findByIdEmpleado").setParameter("idEmpleado", idEmp).getResultList();
+    }
+    
+    public List<HistorialSalarial> buscarHistorialTipo(int tipo){
+        return getEntityManager().createNamedQuery("HistorialSalarial.findByTipo").setParameter("tipoHistorial", tipo).getResultList();
+    }
 }

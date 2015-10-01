@@ -6,12 +6,14 @@
 package sv.gob.cultura.rrhh.manejadores;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
@@ -267,11 +269,9 @@ public class manejadorPrestaciones implements Serializable {
     public void setNR(String NR) {
         this.NR = NR;
     }
-    
-    
+
 // **************** LISTA DE ELEMENTOS EN TABLAS *******************************
 //******************************************************************************
-
     public List<TipoPrestacion> todosTipoPrestacion() {
         return getTipoPrestacionFacade().findAll();
     }
@@ -286,6 +286,11 @@ public class manejadorPrestaciones implements Serializable {
 
     public List<Prestacion> todasPrestaciones() {
         return getPrestacionFacade().findAll();
+    }
+
+    public List<Prestacion> todasPrestacionesPorAnio() {//AÑO EN CURSO
+        List<Prestacion> pres = getPrestacionFacade().buscarPrestacionAnio(obtenerAnio(new Date()));
+        return pres;
     }
 
     public List<Prestacion> todasPrestacionesEmpleado() {
@@ -328,35 +333,60 @@ public class manejadorPrestaciones implements Serializable {
 //*************************** FUNCIONES DE GUARDAR *****************************
 //******************************************************************************    
     public String guardarPrestacion() {
-        prestacion.setFechaCreaPrestacion(new Date());      //Fecha de creación
-        prestacion.setUserCreaPrestacion(1);                //Usuario que crea Prestación
-        prestacion.setCostoPrestacion(0.00);
-        getPrestacionFacade().create(prestacion);
-        prestacion = new Prestacion();
-        return "gestion_prestaciones";
+        try {
+            prestacion.setFechaCreaPrestacion(new Date());      //Fecha de creación
+            prestacion.setUserCreaPrestacion(1);                //Usuario que crea Prestación
+            prestacion.setCostoPrestacion(0.00);
+            getPrestacionFacade().create(prestacion);
+            prestacion = new Prestacion();
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Ingresado", "Registro Ingresado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return "gestion_prestaciones";
+        } catch (Exception e) {
+            return "prestaciones";
+        }
     }
 
     //Edita unicamente el año
     public String editarPrestacion() {
-        prestacion.setFechaModPrestacion(new Date());
-        prestacion.setUserModPrestacion(1);
-        getPrestacionFacade().edit(prestacion);
-        prestacion = new Prestacion();
-        return "gestion_prestaciones";
+        try {
+            prestacion.setFechaModPrestacion(new Date());
+            prestacion.setUserModPrestacion(1);
+            getPrestacionFacade().edit(prestacion);
+            prestacion = new Prestacion();
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Modificado", "Registro Modificado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return "gestion_prestaciones";
+        } catch (Exception e) {
+            return "gestion_prestaciones";
+        }
     }
 
-    public String eliminarPrestacion(Prestacion pres) {
-        //Elimina productos de la prestacion para eliminar en cascada
-        List<ProductoPrestacion> todosProducPres = productosPrestacion();
-        //Elimina cada uno de los productos
-        Iterator<ProductoPrestacion> nombreIterator = todosProducPres.iterator();
-        while (nombreIterator.hasNext()) {
-            ProductoPrestacion elemento = nombreIterator.next();
-            getProductoPrestacionFacade().remove(elemento);
-        }
+    public void prestacionSelecionada(Prestacion pres) {
+        prestacion = pres;
+    }
 
-        getPrestacionFacade().remove(pres);
-        return "gestion_prestaciones";
+    public String eliminarPrestacion() {
+        try {
+            //Elimina productos de la prestacion para eliminar en cascada
+            List<ProductoPrestacion> todosProducPres = productosPrestacion();
+            //Elimina cada uno de los productos
+            Iterator<ProductoPrestacion> nombreIterator = todosProducPres.iterator();
+            while (nombreIterator.hasNext()) {
+                ProductoPrestacion elemento = nombreIterator.next();
+                getProductoPrestacionFacade().remove(elemento);
+            }
+
+            getPrestacionFacade().remove(prestacion);
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Eliminado", "Registro Eliminado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+
+            prestacion = new Prestacion();
+
+            return "gestion_prestaciones";
+        } catch (Exception e) {
+            return "gestion_prestaciones";
+        }
     }
 
     public String cancelarPrestacion() {
@@ -371,165 +401,237 @@ public class manejadorPrestaciones implements Serializable {
     }
 
     public String nuevaPrestacion() {
-        return "reg_prestaciones";
+        return "prestaciones";
     }
 
-    public String addProdPrestacion() {
-        //Setear idprestacion e idproducto en ProductoPrestacionPK
-        productoPrestacionPK.setIdPrestacion(this.getIdPrestacionSelecionada());
-        productoPrestacionPK.setIdProducto(this.getProducPrestacion());
+    public void addProdPrestacion() {
+        try {
+            //Setear idprestacion e idproducto en ProductoPrestacionPK
+            productoPrestacionPK.setIdPrestacion(this.getIdPrestacionSelecionada());
+            productoPrestacionPK.setIdProducto(this.getProducPrestacion());
 
-        boolean existe = false;
-        List<ProductoPrestacion> todosProducPres = productosPrestacion();
-        for (ProductoPrestacion iterador : todosProducPres) {
-            if (iterador.getPrestacion().equals(new Prestacion(this.getIdPrestacionSelecionada()))) {
-                if (iterador.getProducto().equals(new Producto(this.getProducPrestacion()))) {
-                    existe = true;
-                    System.out.println("Producto ya esta incluido en esta Prestación");
+            boolean existe = false;
+            List<ProductoPrestacion> todosProducPres = productosPrestacion();
+            for (ProductoPrestacion iterador : todosProducPres) {
+                if (iterador.getPrestacion().equals(new Prestacion(this.getIdPrestacionSelecionada()))) {
+                    if (iterador.getProducto().equals(new Producto(this.getProducPrestacion()))) {
+                        existe = true;
+                        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Producto ya esta incluido en esta Prestació", "Producto ya esta incluido en esta Prestación");
+                        FacesContext.getCurrentInstance().addMessage(null, message);
+                    }
                 }
             }
-        }
 
-        if (existe == false) {
-            //Setear productoPrestacionPk en productoPrestacion para guardar en tabla producto_prestacion en la base de datps
-            productoPrestacion.setProductoPrestacionPK(productoPrestacionPK);
-            productoPrestacion.setPrestacion(new Prestacion(this.getIdPrestacionSelecionada()));
-            productoPrestacion.setProducto(new Producto(this.getProducPrestacion()));
-            productoPrestacion.setCantidad(this.getCantidad());
+            if (existe == false) {
+                //Setear productoPrestacionPk en productoPrestacion para guardar en tabla producto_prestacion en la base de datps
+                productoPrestacion.setProductoPrestacionPK(productoPrestacionPK);
+                productoPrestacion.setPrestacion(new Prestacion(this.getIdPrestacionSelecionada()));
+                productoPrestacion.setProducto(new Producto(this.getProducPrestacion()));
+                productoPrestacion.setCantidad(this.getCantidad());
 
-            getProductoPrestacionFacade().create(productoPrestacion);
+                getProductoPrestacionFacade().create(productoPrestacion);
 
-            //Edición de el costo de la prestación
-            Prestacion pres = getPrestacionFacade().find(this.getIdPrestacionSelecionada());
-            Producto prod = getProductoFacade().find(this.getProducPrestacion());
+                //Edición de el costo de la prestación
+                Prestacion pres = getPrestacionFacade().find(this.getIdPrestacionSelecionada());
+                Producto prod = getProductoFacade().find(this.getProducPrestacion());
 
-            //costo anterior y nuevo costo de prestación
-            double costoPrestacion = pres.getCostoPrestacion();
-            double costoUnit = prod.getCostoUnit();
-            double costoPorUnidades = costoUnit * this.getCantidad();
-            double costoTotalPrestacion = costoPrestacion + costoPorUnidades;
+                //costo anterior y nuevo costo de prestación
+                double costoPrestacion = pres.getCostoPrestacion();
+                double costoUnit = prod.getCostoUnit();
+                double costoPorUnidades = costoUnit * this.getCantidad();
+                double costoTotalPrestacion = costoPrestacion + costoPorUnidades;
 
-            //Edición de prestación con nuevo costo de prestación
-            pres.setCostoPrestacion(costoTotalPrestacion);
-            getPrestacionFacade().edit(pres);
+                //Edición de prestación con nuevo costo de prestación
+                pres.setCostoPrestacion(costoTotalPrestacion);
+                getPrestacionFacade().edit(pres);
+
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Ingresado", "Registro Ingresado");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            }
+            
+            this.setProducPrestacion(0);
+            this.setCantidad(0);
+            
+            RequestContext.getCurrentInstance().update("tablaProdPres");
+            RequestContext.getCurrentInstance().execute("PF('addProductoPres').hide()");
 
             productoPrestacionPK = new ProductoPrestacionPK();
             productoPrestacion = new ProductoPrestacion();
-        }
 
-        return "gestion_prestaciones";
+
+        } catch (Exception e) {
+        }
     }
 
-    public String eliminarProdPrestacion(ProductoPrestacion prodPres) {
-        //Obtiene prestacion y producto a eliminar
-        Prestacion pres = getPrestacionFacade().find(prodPres.getPrestacion().getIdPrestacion());
-        Producto prod = getProductoFacade().find(prodPres.getProducto().getIdProducto());
+    public void productoPrestacionSelecionada(ProductoPrestacion prodPres) {
+        productoPrestacion = prodPres;
+    }
 
-        //Valor anterior y nuevo costo de prestación
-        double costoPrestacion = pres.getCostoPrestacion();
-        double costoUnit = prod.getCostoUnit();
-        double costoPorUnidades = costoUnit * prodPres.getCantidad();
-        double costoTotalPrestacion = costoPrestacion - costoPorUnidades;
-        pres.setCostoPrestacion(costoTotalPrestacion);
+    public void eliminarProdPrestacion() {
+        try {
+            //Obtiene prestacion y producto a eliminar
+            Prestacion pres = getPrestacionFacade().find(productoPrestacion.getPrestacion().getIdPrestacion());
+            Producto prod = getProductoFacade().find(productoPrestacion.getProducto().getIdProducto());
 
-        getPrestacionFacade().edit(pres);
-        getProductoPrestacionFacade().remove(prodPres);
-        return "gestion_prestaciones";
+            //Valor anterior y nuevo costo de prestación
+            double costoPrestacion = pres.getCostoPrestacion();
+            double costoUnit = prod.getCostoUnit();
+            double costoPorUnidades = costoUnit * productoPrestacion.getCantidad();
+            double costoTotalPrestacion = costoPrestacion - costoPorUnidades;
+            pres.setCostoPrestacion(costoTotalPrestacion);
+
+            getPrestacionFacade().edit(pres);
+            getProductoPrestacionFacade().remove(productoPrestacion);
+
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Eliminado", "Registro Eliminado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+
+            productoPrestacion = new ProductoPrestacion();
+
+            RequestContext.getCurrentInstance().update("tablaProdPres");
+            RequestContext.getCurrentInstance().execute("PF('confirmationProd').hide()");
+
+        } catch (Exception e) {
+        }
     }
 
     public String buscarEmpleadosPrestacion() {
-        System.out.println("Prestacion seleccionada: " + this.getIdPresGestion());
         return null;
     }
 
     public void addPresEmp() {
-        //Obtener empleado para poder ingresar en la lista de prestaciones
-        Empleados emp = getEmpleadosFacade().find(getEmpleadoSelecionado());
+        try {
+            //Obtener empleado para poder ingresar en la lista de prestaciones
+            Empleados emp = getEmpleadosFacade().find(getEmpleadoSelecionado());
 
-        boolean existe = false;
-        List<Prestacion> prestacionList = emp.getPrestacionList();
+            boolean existe = false;
+            List<Prestacion> prestacionList = emp.getPrestacionList();
 
-        for (Prestacion iterador : prestacionList) {
-            if (iterador.getIdPrestacion() == this.getIdPrestacionAsirnar()) {
-                existe = true;
-                System.out.println("Prestacion Ya ha sido asignada");
+            for (Prestacion iterador : prestacionList) {
+                if (iterador.getIdPrestacion() == this.getIdPrestacionAsirnar()) {
+                    existe = true;
+                    FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Prestación Ya fue asignada a este Empleado", "Prestación Ya fue asignada a este Empleado");
+                    FacesContext.getCurrentInstance().addMessage(null, message);
+                }
             }
+
+            if (existe == false) {
+                prestacionList.add(new Prestacion(this.getIdPrestacionAsirnar()));
+                emp.setPrestacionList(prestacionList);
+
+                Prestacion pres = getPrestacionFacade().find(this.getIdPrestacionAsirnar());
+                List<Empleados> empleadosList = pres.getEmpleadosList();
+                empleadosList.add(emp);
+
+                getPrestacionFacade().edit(pres);
+                getEmpleadosFacade().edit(emp);
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Ingresado", "Registro Ingresado");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            }
+            this.setIdPrestacionAsirnar(0);
+            RequestContext.getCurrentInstance().execute("PF('asigPrestaciones').hide()");
+            tabla();
+           // return null;
+        } catch (Exception e) {
+            this.setIdPrestacionAsirnar(0);
+            //return null;
         }
-
-        if (existe == false) {
-            prestacionList.add(new Prestacion(this.getIdPrestacionAsirnar()));
-            emp.setPrestacionList(prestacionList);
-
-            Prestacion pres = getPrestacionFacade().find(this.getIdPrestacionAsirnar());
-            List<Empleados> empleadosList = pres.getEmpleadosList();
-            empleadosList.add(emp);
-
-            getPrestacionFacade().edit(pres);
-            getEmpleadosFacade().edit(emp);
-        }
-        this.setIdPrestacionAsirnar(0);
     }
 
     public void addEmpPres() {
-        //Obtiene empleado para sewr ingresado en la lista de prestaciones
-        Empleados emp = getEmpleadosFacade().find(getEmpleadoSelecionado());
-        System.out.println("Empleado: " + emp.getNombreEmpleado());
+        try {
+            //Obtiene empleado para sewr ingresado en la lista de prestaciones
+            Empleados emp = getEmpleadosFacade().find(getEmpleadoSelecionado());
 
-        boolean existe = false;
-        List<Prestacion> prestacionList = emp.getPrestacionList();
+            boolean existe = false;
+            List<Prestacion> prestacionList = emp.getPrestacionList();
 
-        for (Prestacion iterador : prestacionList) {
-            if (iterador.getIdPrestacion() == this.getIdPresGestion()) {
-                existe = true;
-                System.out.println("Prestacion Ya ha sido asignada");
+            for (Prestacion iterador : prestacionList) {
+                if (iterador.getIdPrestacion() == this.getIdPresGestion()) {
+                    existe = true;
+                    FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Prestación ya fue asignada a este Empleado", "Prestación ya fue asignada a este Empleado");
+                    FacesContext.getCurrentInstance().addMessage(null, message);
+                }
             }
+
+            if (existe == false) {
+                prestacionList.add(new Prestacion(this.getIdPresGestion()));
+                emp.setPrestacionList(prestacionList);
+
+                Prestacion pres = getPrestacionFacade().find(this.getIdPresGestion());
+                List<Empleados> empleadosList = pres.getEmpleadosList();
+                empleadosList.add(emp);
+
+                getPrestacionFacade().edit(pres);
+                getEmpleadosFacade().edit(emp);
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Ingresado", "Registro Ingresado");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+                RequestContext.getCurrentInstance().execute("PF('nuevoEmp').hide()");
+                RequestContext.getCurrentInstance().update("tabla");
+            }
+        } catch (Exception e) {
+
+        }
+    }
+
+    public String eliminarPresEmp() {
+        try {
+            //Se elimina empleado de la lista Prestaciones List y se edita información de empleado
+            Empleados emp = getEmpleadosFacade().find(getEmpleadoSelecionado());
+            List<Prestacion> prestacionList = emp.getPrestacionList();
+            prestacionList.remove(prestacion);
+            emp.setPrestacionList(prestacionList);
+
+            List<Empleados> empleadosList = prestacion.getEmpleadosList();
+            empleadosList.remove(emp);
+
+            getPrestacionFacade().edit(prestacion);
+            getEmpleadosFacade().edit(emp);
+
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Eliminado", "Registro Eliminado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            prestacion = new Prestacion();
+            return null;
+        } catch (Exception e) {
+            return null;
         }
 
-        if (existe == false) {
-            prestacionList.add(new Prestacion(this.getIdPresGestion()));
-            emp.setPrestacionList(prestacionList);
+    }
+
+    public String cancelarEditar() {
+        return null;
+    }
+
+    public void empleadoSeleccionado(Empleados emp) {
+        empleado = emp;
+    }
+
+    public String eliminarEmpleadoPrestacion() {
+        try {
+            List<Prestacion> prestacionList = empleado.getPrestacionList();
+            prestacionList.remove(new Prestacion(this.getIdPresGestion()));
+            empleado.setPrestacionList(prestacionList);
 
             Prestacion pres = getPrestacionFacade().find(this.getIdPresGestion());
             List<Empleados> empleadosList = pres.getEmpleadosList();
-            empleadosList.add(emp);
+            empleadosList.remove(empleado);
 
             getPrestacionFacade().edit(pres);
-            getEmpleadosFacade().edit(emp);
+            getEmpleadosFacade().edit(empleado);
+
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Eliminado", "Registro Eliminado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+
+            empleado = new Empleados();
+            return null;
+        } catch (Exception e) {
+            return null;
         }
-    }
-
-    public void eliminarPresEmp(Prestacion pres) {
-        //Se elimina empleado de la lista Prestaciones List y se edita información de empleado
-        Empleados emp = getEmpleadosFacade().find(getEmpleadoSelecionado());
-        List<Prestacion> prestacionList = emp.getPrestacionList();
-        prestacionList.remove(pres);
-        emp.setPrestacionList(prestacionList);
-
-        List<Empleados> empleadosList = pres.getEmpleadosList();
-        empleadosList.remove(emp);
-
-        getPrestacionFacade().edit(pres);
-        getEmpleadosFacade().edit(emp);
-    }
-
-    public String eliminarEmpleadoPrestacion(Empleados emp) {
-        List<Prestacion> prestacionList = emp.getPrestacionList();
-        prestacionList.remove(new Prestacion(this.getIdPresGestion()));
-        emp.setPrestacionList(prestacionList);
-
-        Prestacion pres = getPrestacionFacade().find(this.getIdPresGestion());
-        List<Empleados> empleadosList = pres.getEmpleadosList();
-        empleadosList.remove(emp);
-
-        getPrestacionFacade().edit(pres);
-        getEmpleadosFacade().edit(emp);
-
-        return null;
     }
 
     public void nuevoEmpPrestacion(ActionEvent event) {
         if (this.getIdPresGestion() == 0) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Seleccione una Prestación"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Seleccione una Prestación", "Seleccione una Prestación"));
         } else {
             this.setDireccionNacional(0);
             this.setDependecia(0);
@@ -540,13 +642,18 @@ public class manejadorPrestaciones implements Serializable {
 
     public void empleadoSelecionadoValido(ActionEvent event) {
         if (this.getEmpleadoSelecionado() == 0) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe buscar un Empleado"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe buscar un Empleado", "Debe buscar un Empleado"));
         } else {
             RequestContext.getCurrentInstance().execute("PF('asigPrestaciones').show()");
         }
     }
     
-    public void buscarNR(ActionEvent event){
+    public void tabla(){
+        RequestContext.getCurrentInstance().update("tabla");
+    }
+
+
+    public void buscarNR(ActionEvent event) {
         Empleados emp = getEmpleadosFacade().buscarEmpNR(this.getNR());
         if (emp == null) {
             this.setNombreEmp("");
@@ -556,7 +663,27 @@ public class manejadorPrestaciones implements Serializable {
         }
     }
 
+    public Date fechaAnio(int anio) { //Regresa una fecha 31 de diiembre de un año dado
+        anio = anio - 1900;
+        Date fecha = new Date(anio, 11, 31);
+        return fecha;
+    }
+
+    public int obtenerAnio(Date date) { // Regresa un año de una fecha dada
+        if (null == date) {
+            return 0;
+        } else {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
+            return Integer.parseInt(dateFormat.format(date));
+        }
+    }
+
     public manejadorPrestaciones() {
+    }
+    
+    //Mostrar Mensajes en la siguiente peticion!
+    public static Flash flashScope() {
+        return (FacesContext.getCurrentInstance().getExternalContext().getFlash());
     }
 
 }

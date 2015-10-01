@@ -170,6 +170,7 @@ public class manejadorContactosEmergencia implements Serializable {
 //******************************************************************************
 // **************** LISTA DE ELEMENTOS EN TABLAS *******************************
 //******************************************************************************
+
     public List<Parentesco> todosParentesco() {
         return getParentescoFacade().findAll();
     }
@@ -192,43 +193,86 @@ public class manejadorContactosEmergencia implements Serializable {
 //******************************************************************************
 //*************************** FUNCIONES DE GUARDAR *****************************
 //******************************************************************************
+
     public void guardarContactosEmergencia() {
-        //Setea Id empleado, fecha de creacion y el usuario que lo ingreso de momento idUsuer 1
-        contactoEmergenciaEmp.setIdEmpleado(new Empleados(this.getEmpleadoSelecionado()));
-        contactoEmergenciaEmp.setFechaCreaContac(new Date());
-        contactoEmergenciaEmp.setUserCreaContac(1);     
-        getContactoEmergenciaEmpFacade().create(contactoEmergenciaEmp);
-        contactoEmergenciaEmp = new ContactoEmergenciaEmp();
-    }
-    
-    public void editarEmergencia(){
-        contactoEmergenciaEmp.setFechaModContac(new Date());
-        contactoEmergenciaEmp.setUserModContac(1); 
-        getContactoEmergenciaEmpFacade().edit(contactoEmergenciaEmp);
-        contactoEmergenciaEmp = new ContactoEmergenciaEmp();
+        try {
+            //Setea Id empleado, fecha de creacion y el usuario que lo ingreso de momento idUsuer 1
+            contactoEmergenciaEmp.setIdEmpleado(new Empleados(this.getEmpleadoSelecionado()));
+            contactoEmergenciaEmp.setFechaCreaContac(new Date());
+            contactoEmergenciaEmp.setUserCreaContac(1);
+            getContactoEmergenciaEmpFacade().create(contactoEmergenciaEmp);
+            contactoEmergenciaEmp = new ContactoEmergenciaEmp();
+            RequestContext.getCurrentInstance().execute("PF('emergencia').hide()");
+            RequestContext.getCurrentInstance().update("tabla");
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Ingresado", "Registro Ingresado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        } catch (Exception e) {
+
+        }
     }
 
-    public String eliminar(ContactoEmergenciaEmp contacto) {
-        getContactoEmergenciaEmpFacade().remove(contacto);
+    public void editarEmergencia() {
+        try {
+            contactoEmergenciaEmp.setFechaModContac(new Date());
+            contactoEmergenciaEmp.setUserModContac(1);
+            getContactoEmergenciaEmpFacade().edit(contactoEmergenciaEmp);
+            contactoEmergenciaEmp = new ContactoEmergenciaEmp();
+            RequestContext.getCurrentInstance().execute("PF('emergenciaEdit').hide()");
+            RequestContext.getCurrentInstance().update("tabla");
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Modificado", "Registro Modificado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        } catch (Exception e) {
+
+        }
+    }
+
+    public void contactoEmerSeleccionado(ContactoEmergenciaEmp contacto) {
+        contactoEmergenciaEmp = contacto;
+    }
+
+    public String eliminar() {
+        try {
+            getContactoEmergenciaEmpFacade().remove(contactoEmergenciaEmp);
+            contactoEmergenciaEmp = new ContactoEmergenciaEmp();
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Eliminado", "Registro Eliminado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return null;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public String cancelar() {
         return null;
     }
 
-    public void buscarNR(ActionEvent event){
+    public void buscarNR(ActionEvent event) {
         Empleados emp = getEmpleadosFacade().buscarEmpNR(this.getNR());
         if (emp == null) {
             this.setNombreEmp("");
+            this.setEmpleadoSelecionado(0);
         } else {
             this.setEmpleadoSelecionado(emp.getIdEmpleado());
             this.setNombreEmp(emp.getNombreEmpleado());
         }
     }
-    
+
+    public void reset() {
+        contactoEmergenciaEmp = new ContactoEmergenciaEmp();
+    }
+
+    public void tabla() {//Actualiza tabla y nombre de empleado
+        RequestContext.getCurrentInstance().update("nombre");
+        RequestContext.getCurrentInstance().update("tabla");
+    }
+
     public void empleadoSelecionadoValido(ActionEvent event) {
         //verifica si se seleciono un empleado o si se busco un empleado
         if (this.getEmpleadoSelecionado() == 0) {
             contactoEmergenciaEmp = new ContactoEmergenciaEmp();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe Buscar un Empleado"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe Buscar un Empleado", "Debe Buscar un Empleado"));
         } else {
+            RequestContext.getCurrentInstance().update("panelEmergencia");
             RequestContext.getCurrentInstance().execute("PF('emergencia').show()");
         }
     }

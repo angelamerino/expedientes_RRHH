@@ -24,8 +24,9 @@
             <h1><strong>EDITAR EMPLEADO</strong></h1>
         </div>
 
-        <h:form class="form-horizontal">
-            <h:messages showSummary="true"/>
+    <h:form class="form-horizontal" prependId="false">
+		
+       <p:messages showSummary="true" autoUpdate="true" />
             <div id="rootwizard">
 
                 <ul class="nav">                  
@@ -120,7 +121,7 @@
                                                     <div class="form-group">
                                                         <h:outputLabel value="ISSS:" styleClass="col-lg-4 control-label"/>
                                                         <div class="col-lg-8">
-                                                            <p:inputMask styleClass="form-control" id="numIsss" value="#{manejadorGestionEmpleado.empleado.numIsss}" mask="ISSS999999999" style="width: 100%"  />
+                                                            <p:inputMask styleClass="form-control" id="numIsss" value="#{manejadorGestionEmpleado.empleado.numIsss}" mask="ISSS 999999999" style="width: 100%"  />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">

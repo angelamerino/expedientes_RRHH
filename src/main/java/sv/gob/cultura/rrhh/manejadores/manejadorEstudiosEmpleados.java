@@ -104,9 +104,8 @@ public class manejadorEstudiosEmpleados implements Serializable {
     private int empleadoSelecionado;                                // id de empleado seleccinado
     private String nombreEmp;                                       // Nombre de empleado seleccionado
     private String NR;                                              // NR para busqueda de empleado
-    
-//********************** GET DE ENTERPRICE JAVA BEAN ***************************
 
+//********************** GET DE ENTERPRICE JAVA BEAN ***************************
     public ImgDocFacade getImgDocFacade() {
         return imgDocFacade;
     }
@@ -343,7 +342,7 @@ public class manejadorEstudiosEmpleados implements Serializable {
 
     public void setAnioedit(Date anioedit) {
         this.anioedit = anioedit;
-        this.setAnio(obtenerAnio(anioedit));        
+        this.setAnio(obtenerAnio(anioedit));
     }
 
     public String getNR() {
@@ -354,7 +353,6 @@ public class manejadorEstudiosEmpleados implements Serializable {
         this.NR = NR;
     }
 
-    
 // **************** LISTA DE ELEMENTOS EN TABLAS *******************************
     public List<EstudiosEmp> todosEstudiosFomales() {
         Empleados empEst = getEmpleadosFacade().find(this.getEmpleadoSelecionado());
@@ -445,175 +443,285 @@ public class manejadorEstudiosEmpleados implements Serializable {
 //*************************** FUNCIONES DE GUARDAR ***************************** 
 
     public void guardarEstudioFormal() {
+        try {
+            // Persiste el nuevo estudio ingresado
+            estudiosEmp.setTipoEstudio("Formal");
+            estudiosEmp.setAnioEstudio(fechaAnio(anio));
 
-        // Persiste el nuevo estudio ingresado
-        estudiosEmp.setTipoEstudio("Formal");
-        estudiosEmp.setAnioEstudio(fechaAnio(anio));
-        
-        //Fecaha de Creacion y Usuario id =1
-        estudiosEmp.setFechaCreaEstudios(new Date());
-        estudiosEmp.setUserCreaEstudios(1);
-        
-        getEstudiosEmpFacade().create(estudiosEmp);
+            //Fecaha de Creacion y Usuario id =1
+            estudiosEmp.setFechaCreaEstudios(new Date());
+            estudiosEmp.setUserCreaEstudios(1);
 
-        // Obtiene Empleado al cual se agregara un nuevo estudio (empleadoId) contendra el id de Empleado
-        Empleados empEst = getEmpleadosFacade().find(this.getEmpleadoSelecionado());
+            getEstudiosEmpFacade().create(estudiosEmp);
 
-        // Obtine Listado de Estudios ya ingresados y agrega el que se acaba de persistir
-        List<EstudiosEmp> estudiosIngresados = empEst.getEstudiosEmpList();
-        estudiosIngresados.add(estudiosEmp);
+            // Obtiene Empleado al cual se agregara un nuevo estudio (empleadoId) contendra el id de Empleado
+            Empleados empEst = getEmpleadosFacade().find(this.getEmpleadoSelecionado());
 
-        if (this.path[3] != null) {
-            // Ingreso de documento que lo respalda
-            imagenDocumento.setIdEstudio(estudiosEmp);
-            imagenDocumento.setIdEmpleado(empEst);
-            imagenDocumento.setRefImgDoc(empEst.getNrEmpleado());
-            imagenDocumento.setNombreArchivo(this.nombreImgDoc[3]);
-            imagenDocumento.setSizeArchivo(this.sizeImgDoc[3]);
-            imagenDocumento.setDescripcion("Documento de Estudio Formal");
-            imagenDocumento.setRutaArchivo(this.path[3]);
-            imagenDocumento.setTipoArchivo(this.tipoImgDoc[3]);
-            getImgDocFacade().create(imagenDocumento);
-        }
+            // Obtine Listado de Estudios ya ingresados y agrega el que se acaba de persistir
+            List<EstudiosEmp> estudiosIngresados = empEst.getEstudiosEmpList();
+            estudiosIngresados.add(estudiosEmp);
 
-        // Setea el nuevo listado de Estudios y edita la informacion
-        empEst.setEstudiosEmpList(estudiosIngresados);
-        getEmpleadosFacade().edit(empEst);
-
-        estudiosEmp = new EstudiosEmp();
-        this.setAnio(0);
-        imagenDocumento = new ImgDoc();
-    }
-    
-    public void editarEstudio(){
-        //Fecaha de Creacion y Usuario id =1
-        estudiosEmp.setFechaModEstudios(new Date());
-        estudiosEmp.setUserModEstudios(1);
-        estudiosEmp.setAnioEstudio(fechaAnio(anio));
-        getEstudiosEmpFacade().edit(estudiosEmp);
-        estudiosEmp = new EstudiosEmp();
-        this.setAnio(0);
-    }
-
-    public void guardarEstudioNoFormal() {
-        // Igual a Estudio Formal
-        estudiosEmp.setTipoEstudio("No Formal");
-        estudiosEmp.setAnioEstudio(fechaAnio(anio));
-        
-        //Fecaha de Creacion y Usuario id =1
-        estudiosEmp.setFechaCreaEstudios(new Date());
-        estudiosEmp.setUserCreaEstudios(1);
-        
-        getEstudiosEmpFacade().create(estudiosEmp);
-        Empleados empEst = getEmpleadosFacade().find(this.getEmpleadoSelecionado());
-        List<EstudiosEmp> estudiosIngresados = empEst.getEstudiosEmpList();
-        estudiosIngresados.add(estudiosEmp);
-
-        if (this.path[3] != null) {
-            imagenDocumento.setIdEstudio(estudiosEmp);
-            imagenDocumento.setIdEmpleado(empEst);
-            imagenDocumento.setRefImgDoc(empEst.getNrEmpleado());
-            imagenDocumento.setNombreArchivo(this.nombreImgDoc[4]);
-            imagenDocumento.setSizeArchivo(this.sizeImgDoc[4]);
-            imagenDocumento.setDescripcion("Documento de Estudio No Formal");
-            imagenDocumento.setRutaArchivo(this.path[4]);
-            imagenDocumento.setTipoArchivo(this.tipoImgDoc[4]);
-            getImgDocFacade().create(imagenDocumento);
-        }
-
-        empEst.setEstudiosEmpList(estudiosIngresados);
-        getEmpleadosFacade().edit(empEst);
-        estudiosEmp = new EstudiosEmp();
-        this.setAnio(0);
-        imagenDocumento = new ImgDoc();
-    }
-
-    public void guardarIdioma() {
-        Empleados empIdioma = getEmpleadosFacade().find(this.getEmpleadoSelecionado());
-        List<Idiomas> IdiomasIngresados = empIdioma.getIdiomasList();
-        IdiomasIngresados.add(new Idiomas(this.getIdiomaSelecionado()));
-        empIdioma.setIdiomasList(IdiomasIngresados);
-        getEmpleadosFacade().edit(empIdioma);
-    }
-
-    public void AgregadnoCaracteristicasIdiomas() {
-        //Setea Id idioma y caracteristicas a IdiomasCaracteristicasPK
-        idiomasCaracteristicasPK.setIdCaractIdioma(getIdCaracteristicaIdioma());
-        idiomasCaracteristicasPK.setIdIdioma(this.getIdiomas().getIdIdioma());
-
-        boolean existe = false;
-        List<IdiomasCaracteristicas> todosIdiomasId = todosIdiomasId();
-        for (IdiomasCaracteristicas caracteristica : todosIdiomasId) {
-            if (caracteristica.getIdiomas().equals(this.getIdiomas())) {
-                if (caracteristica.getCaracteristicasIdioma().equals(new CaracteristicasIdioma(this.getIdCaracteristicaIdioma()))) {
-                    existe = true;
-                    System.out.println("Ya Existe un registro de esa caracteristica para este idioma");
-                }
-            }
-        }
-
-        if (existe==false) {
-            //Setea IdIdiomasCaracteristicasPK y Id Idiomas a IdiomasCaracteristicas
-            idiomasCaracteristicas.setInstitucionIdioma(this.getInstIdioma());
-            idiomasCaracteristicas.setIdiomasCaracteristicasPK(idiomasCaracteristicasPK);
-            idiomasCaracteristicas.setIdiomas(new Idiomas(this.getIdiomas().getIdIdioma()));
-            idiomasCaracteristicas.setCaracteristicasIdioma(new CaracteristicasIdioma(getIdCaracteristicaIdioma()));
-            idiomasCaracteristicas.setIdEmpleado(this.empleadoSelecionado);
-            getIdiomasCaracteristicasFacade().create(idiomasCaracteristicas);
-
-            if (this.path[5] != null) {
-                Empleados empIdioma = getEmpleadosFacade().find(this.getEmpleadoSelecionado());
-                imagenDocumento.setIdiomasCaracteristicas(idiomasCaracteristicas);
-                imagenDocumento.setIdEmpleado(empIdioma);
-                imagenDocumento.setRefImgDoc(empIdioma.getNrEmpleado());
-                imagenDocumento.setNombreArchivo(this.nombreImgDoc[5]);
-                imagenDocumento.setSizeArchivo(this.sizeImgDoc[5]);
-                imagenDocumento.setDescripcion("Documento de Idiomas");
-                imagenDocumento.setRutaArchivo(this.path[5]);
-                imagenDocumento.setTipoArchivo(this.tipoImgDoc[5]);
+            if (this.path[3] != null) {
+                // Ingreso de documento que lo respalda
+                imagenDocumento.setIdEstudio(estudiosEmp);
+                imagenDocumento.setIdEmpleado(empEst);
+                imagenDocumento.setRefImgDoc(empEst.getNrEmpleado());
+                imagenDocumento.setNombreArchivo(this.nombreImgDoc[3]);
+                imagenDocumento.setSizeArchivo(this.sizeImgDoc[3]);
+                imagenDocumento.setDescripcion("Documento de Estudio Formal");
+                imagenDocumento.setRutaArchivo(this.path[3]);
+                imagenDocumento.setTipoArchivo(this.tipoImgDoc[3]);
                 getImgDocFacade().create(imagenDocumento);
             }
 
-            idiomasCaracteristicasPK = new IdiomasCaracteristicasPK();
-            idiomasCaracteristicas = new IdiomasCaracteristicas();
+            // Setea el nuevo listado de Estudios y edita la informacion
+            empEst.setEstudiosEmpList(estudiosIngresados);
+            getEmpleadosFacade().edit(empEst);
+
+            estudiosEmp = new EstudiosEmp();
+            this.setAnio(0);
             imagenDocumento = new ImgDoc();
-        } 
 
+            RequestContext.getCurrentInstance().execute("PF('formal').hide()");
+            RequestContext.getCurrentInstance().update("tabla1");
+
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Ingresado", "Registro Ingresado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            RequestContext.getCurrentInstance().execute("PF('formal').hide()");
+        } catch (Exception e) {
+
+        }
     }
 
-    public String eliminarEstudio(EstudiosEmp estudio) {
-        Empleados emp = getEmpleadosFacade().find(this.getEmpleadoSelecionado());
-        List<EstudiosEmp> estudiosEmpList = emp.getEstudiosEmpList();
-        estudiosEmpList.remove(estudio);
-        emp.setEstudiosEmpList(estudiosEmpList);
-        getEmpleadosFacade().edit(emp);
-        getEstudiosEmpFacade().remove(estudio);
-        return null;
+    public void editarEstudio() {
+        try {
+            //Fecaha de Creacion y Usuario id =1
+            estudiosEmp.setFechaModEstudios(new Date());
+            estudiosEmp.setUserModEstudios(1);
+            estudiosEmp.setAnioEstudio(fechaAnio(anio));
+            getEstudiosEmpFacade().edit(estudiosEmp);
+            estudiosEmp = new EstudiosEmp();
+            this.setAnio(0);
+
+            RequestContext.getCurrentInstance().execute("PF('formalEdit').hide()");
+            RequestContext.getCurrentInstance().update("tabla1");
+            RequestContext.getCurrentInstance().execute("PF('noformalEdit').hide()");
+            RequestContext.getCurrentInstance().update("tabla2");
+
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Modificado", "Registro Modificado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        } catch (Exception e) {
+
+        }
     }
 
-    public String eliminarCaracteristica(IdiomasCaracteristicas caracteristicas) {
-        getIdiomasCaracteristicasFacade().remove(caracteristicas);
-        return null;
+    public void guardarEstudioNoFormal() {
+        try {
+            // Igual a Estudio Formal
+            estudiosEmp.setTipoEstudio("No Formal");
+            estudiosEmp.setAnioEstudio(fechaAnio(anio));
+
+            //Fecaha de Creacion y Usuario id =1
+            estudiosEmp.setFechaCreaEstudios(new Date());
+            estudiosEmp.setUserCreaEstudios(1);
+
+            getEstudiosEmpFacade().create(estudiosEmp);
+            Empleados empEst = getEmpleadosFacade().find(this.getEmpleadoSelecionado());
+            List<EstudiosEmp> estudiosIngresados = empEst.getEstudiosEmpList();
+            estudiosIngresados.add(estudiosEmp);
+
+            if (this.path[3] != null) {
+                imagenDocumento.setIdEstudio(estudiosEmp);
+                imagenDocumento.setIdEmpleado(empEst);
+                imagenDocumento.setRefImgDoc(empEst.getNrEmpleado());
+                imagenDocumento.setNombreArchivo(this.nombreImgDoc[4]);
+                imagenDocumento.setSizeArchivo(this.sizeImgDoc[4]);
+                imagenDocumento.setDescripcion("Documento de Estudio No Formal");
+                imagenDocumento.setRutaArchivo(this.path[4]);
+                imagenDocumento.setTipoArchivo(this.tipoImgDoc[4]);
+                getImgDocFacade().create(imagenDocumento);
+            }
+
+            empEst.setEstudiosEmpList(estudiosIngresados);
+            getEmpleadosFacade().edit(empEst);
+            estudiosEmp = new EstudiosEmp();
+            this.setAnio(0);
+            imagenDocumento = new ImgDoc();
+
+            RequestContext.getCurrentInstance().execute("PF('noformal').hide()");
+            RequestContext.getCurrentInstance().update("tabla2");
+
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Ingresado", "Registro Ingresado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        } catch (Exception e) {
+        }
     }
 
-    public String eliminarIdioma(Idiomas idioma) {
+    public void guardarIdioma() {
+        try {
+            Empleados empIdioma = getEmpleadosFacade().find(this.getEmpleadoSelecionado());
+            List<Idiomas> IdiomasIngresados = empIdioma.getIdiomasList();
 
-        //Eliminar en cascada Obtenemos las caracteriticas del idioma a elimnar
-        List<IdiomasCaracteristicas> todosIdiomasId = todosIdiomasId();
-        //Elimina cada una de las caracteristicas
-        Iterator<IdiomasCaracteristicas> nombreIterator = todosIdiomasId.iterator();
-        while (nombreIterator.hasNext()) {
-            IdiomasCaracteristicas elemento = nombreIterator.next();
-            getIdiomasCaracteristicasFacade().remove(elemento);
+            boolean existe = false;
+            for (Idiomas idioma : IdiomasIngresados) {
+                if (idioma.getIdIdioma().equals(this.getIdiomaSelecionado())) {
+                    existe = true;
+                    RequestContext.getCurrentInstance().execute("PF('idiomas').hide()");
+                    RequestContext.getCurrentInstance().update("tabla3");
+                    FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ya existe idioma para este Empleado", "Ya existe idioma para este Empleado");
+                    FacesContext.getCurrentInstance().addMessage(null, message);
+                }
+            }
+
+            if (existe == false) {
+                IdiomasIngresados.add(new Idiomas(this.getIdiomaSelecionado()));
+                empIdioma.setIdiomasList(IdiomasIngresados);
+                getEmpleadosFacade().edit(empIdioma);
+                RequestContext.getCurrentInstance().execute("PF('idiomas').hide()");
+                RequestContext.getCurrentInstance().update("tabla3");
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Ingresado", "Registro Ingresado");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            }
+
+            this.setIdiomaSelecionado(0);
+        } catch (Exception e) {
+
         }
 
-        //Elimina el idioma de la lista de idiomas.Emplado
-        Empleados empIdioma = getEmpleadosFacade().find(this.getEmpleadoSelecionado());
-        List<Idiomas> IdiomasIngresados = empIdioma.getIdiomasList();
+    }
 
-        IdiomasIngresados.remove(idioma);
-        empIdioma.setIdiomasList(IdiomasIngresados);
-        getEmpleadosFacade().edit(empIdioma);
+    public void AgregadnoCaracteristicasIdiomas() {
+        try {
+            //Setea Id idioma y caracteristicas a IdiomasCaracteristicasPK
+            idiomasCaracteristicasPK.setIdCaractIdioma(getIdCaracteristicaIdioma());
+            idiomasCaracteristicasPK.setIdIdioma(this.getIdiomas().getIdIdioma());
+
+            boolean existe = false;
+            List<IdiomasCaracteristicas> todosIdiomasId = todosIdiomasId();
+            for (IdiomasCaracteristicas caracteristica : todosIdiomasId) {
+                if (caracteristica.getIdiomas().equals(this.getIdiomas())) {
+                    if (caracteristica.getCaracteristicasIdioma().equals(new CaracteristicasIdioma(this.getIdCaracteristicaIdioma()))) {
+                        existe = true;
+                        RequestContext.getCurrentInstance().execute("PF('carac').hide()");
+                        RequestContext.getCurrentInstance().update("tabla4");
+                        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ya existe Característica para este idioma", "Ya existe Característica para este idioma");
+                        FacesContext.getCurrentInstance().addMessage(null, message);
+                    }
+                }
+            }
+
+            if (existe == false) {
+                //Setea IdIdiomasCaracteristicasPK y Id Idiomas a IdiomasCaracteristicas
+                idiomasCaracteristicas.setInstitucionIdioma(this.getInstIdioma());
+                idiomasCaracteristicas.setIdiomasCaracteristicasPK(idiomasCaracteristicasPK);
+                idiomasCaracteristicas.setIdiomas(new Idiomas(this.getIdiomas().getIdIdioma()));
+                idiomasCaracteristicas.setCaracteristicasIdioma(new CaracteristicasIdioma(getIdCaracteristicaIdioma()));
+                idiomasCaracteristicas.setIdEmpleado(this.empleadoSelecionado);
+                getIdiomasCaracteristicasFacade().create(idiomasCaracteristicas);
+
+                if (this.path[5] != null) {
+                    Empleados empIdioma = getEmpleadosFacade().find(this.getEmpleadoSelecionado());
+                    imagenDocumento.setIdiomasCaracteristicas(idiomasCaracteristicas);
+                    imagenDocumento.setIdEmpleado(empIdioma);
+                    imagenDocumento.setRefImgDoc(empIdioma.getNrEmpleado());
+                    imagenDocumento.setNombreArchivo(this.nombreImgDoc[5]);
+                    imagenDocumento.setSizeArchivo(this.sizeImgDoc[5]);
+                    imagenDocumento.setDescripcion("Documento de Idiomas");
+                    imagenDocumento.setRutaArchivo(this.path[5]);
+                    imagenDocumento.setTipoArchivo(this.tipoImgDoc[5]);
+                    getImgDocFacade().create(imagenDocumento);
+                }
+
+                idiomasCaracteristicasPK = new IdiomasCaracteristicasPK();
+                idiomasCaracteristicas = new IdiomasCaracteristicas();
+                imagenDocumento = new ImgDoc();
+                
+                this.setIdCaracteristicaIdioma(0);
+                this.setInstIdioma(null);
+                
+                RequestContext.getCurrentInstance().execute("PF('carac').hide()");
+                RequestContext.getCurrentInstance().update("tabla4");
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Ingresado", "Registro Ingresado");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            }
+        } catch (Exception e) {
+
+        }
+
+    }
+
+    public void estudioSelecionado(EstudiosEmp estudio) {
+        estudiosEmp = estudio;
+    }
+
+    public String eliminarEstudio() {
+        try {
+            Empleados emp = getEmpleadosFacade().find(this.getEmpleadoSelecionado());
+            List<EstudiosEmp> estudiosEmpList = emp.getEstudiosEmpList();
+            estudiosEmpList.remove(estudiosEmp);
+            emp.setEstudiosEmpList(estudiosEmpList);
+            getEmpleadosFacade().edit(emp);
+            getEstudiosEmpFacade().remove(estudiosEmp);
+            estudiosEmp = new EstudiosEmp();
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Eliminado", "Registro Eliminado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return null;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public void caracteristicaSeleccionada(IdiomasCaracteristicas caracteristicas) {
+        idiomasCaracteristicas = caracteristicas;
+    }
+
+    public String eliminarCaracteristica() {
+        try {
+            getIdiomasCaracteristicasFacade().remove(idiomasCaracteristicas);
+            idiomasCaracteristicas = new IdiomasCaracteristicas();
+            RequestContext.getCurrentInstance().execute("PF('confirmation4').hide()");
+            RequestContext.getCurrentInstance().update("tabla4");
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Eliminado", "Registro Eliminado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return null;
+        } catch (Exception e) {
+            return null;
+        }
+
+    }
+
+    public void idiomaSeleccionado(Idiomas idioma) {
+        idiomas = idioma;
+    }
+
+    public String eliminarIdioma() {
+        try {
+            //Eliminar en cascada Obtenemos las caracteriticas del idioma a elimnar
+            List<IdiomasCaracteristicas> todosIdiomasId = todosIdiomasId();
+            //Elimina cada una de las caracteristicas
+            Iterator<IdiomasCaracteristicas> nombreIterator = todosIdiomasId.iterator();
+            while (nombreIterator.hasNext()) {
+                IdiomasCaracteristicas elemento = nombreIterator.next();
+                getIdiomasCaracteristicasFacade().remove(elemento);
+            }
+
+            //Elimina el idioma de la lista de idiomas.Emplado
+            Empleados empIdioma = getEmpleadosFacade().find(this.getEmpleadoSelecionado());
+            List<Idiomas> IdiomasIngresados = empIdioma.getIdiomasList();
+
+            IdiomasIngresados.remove(idiomas);
+            empIdioma.setIdiomasList(IdiomasIngresados);
+            getEmpleadosFacade().edit(empIdioma);
+            idiomas = new Idiomas();
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Eliminado", "Registro Eliminado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return null;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public String cancelar() {
         return null;
     }
 
@@ -623,23 +731,22 @@ public class manejadorEstudiosEmpleados implements Serializable {
         Date fecha = new Date(anio, 11, 31);
         return fecha;
     }
-    
-    public int obtenerAnio(Date date){ // obtiene año de una fecha dada
-    if (null == date){
-        return 0;
-    }
-    else{        
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
-        return Integer.parseInt(dateFormat.format(date));
-    }
 
-}
+    public int obtenerAnio(Date date) { // obtiene año de una fecha dada
+        if (null == date) {
+            return 0;
+        } else {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
+            return Integer.parseInt(dateFormat.format(date));
+        }
+
+    }
 
     public void empleadoSelecionadoValidoF(ActionEvent event) {
         //verifica que se seleciono o se busco un empleado
         if (this.getEmpleadoSelecionado() == 0) {
             estudiosEmp = new EstudiosEmp();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe Buscar un Empleado"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe Buscar un Empleado", "Debe Buscar un Empleado"));
         } else {
             RequestContext.getCurrentInstance().execute("PF('formal').show()");
         }
@@ -649,7 +756,7 @@ public class manejadorEstudiosEmpleados implements Serializable {
         //verifica que se seleciono o se busco un empleado
         if (this.getEmpleadoSelecionado() == 0) {
             estudiosEmp = new EstudiosEmp();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe Buscar un Empleado"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe Buscar un Empleado", "Debe Buscar un Empleado"));
         } else {
             RequestContext.getCurrentInstance().execute("PF('noformal').show()");
         }
@@ -659,20 +766,69 @@ public class manejadorEstudiosEmpleados implements Serializable {
         //verifica que se seleciono o se busco un empleado
         if (this.getEmpleadoSelecionado() == 0) {
             estudiosEmp = new EstudiosEmp();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe Buscar un Empleado"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe Buscar un Empleado", "Debe Buscar un Empleado"));
         } else {
             RequestContext.getCurrentInstance().execute("PF('idiomas').show()");
         }
     }
-    
-    public void buscarNR(ActionEvent event){
+
+    public void cerrarFormal() {
+        try {
+            estudiosEmp = new EstudiosEmp();
+            this.setAnio(0);
+            RequestContext.getCurrentInstance().execute("panelFormal");
+            RequestContext.getCurrentInstance().execute("PF('formal').hide()");
+        } catch (Exception e) {
+
+        }
+    }
+
+    public void cerrarNoFormal() {
+        try {
+            estudiosEmp = new EstudiosEmp();
+            this.setAnio(0);
+            RequestContext.getCurrentInstance().execute("panelNoFormal");
+            RequestContext.getCurrentInstance().execute("PF('noformal').hide()");
+        } catch (Exception e) {
+
+        }
+    }
+
+    public void cancelarIdiomas() {
+        try {
+            estudiosEmp = new EstudiosEmp();
+            this.setIdiomaSelecionado(0);
+            RequestContext.getCurrentInstance().execute("panelIdiomas");
+            RequestContext.getCurrentInstance().execute("PF('idiomas').hide()");
+        } catch (Exception e) {
+            estudiosEmp = new EstudiosEmp();
+        }
+    }
+
+    public void buscarNR(ActionEvent event) {
         //Busca empleado por NR
         Empleados emp = getEmpleadosFacade().buscarEmpNR(this.getNR());
         if (emp == null) {
             this.setNombreEmp("");
+            this.setEmpleadoSelecionado(0);
         } else {
             this.setEmpleadoSelecionado(emp.getIdEmpleado());
             this.setNombreEmp(emp.getNombreEmpleado());
         }
+    }
+
+    public void tabla() {//Actualiza tabla y nombre de empleado
+        RequestContext.getCurrentInstance().update("nombre1");
+        RequestContext.getCurrentInstance().update("nombre2");
+        RequestContext.getCurrentInstance().update("nombre3");
+        RequestContext.getCurrentInstance().update("tabla1");
+        RequestContext.getCurrentInstance().update("tabla2");
+        RequestContext.getCurrentInstance().update("tabla3");
+        RequestContext.getCurrentInstance().update("tabla4");
+    }
+
+    public void reset() {
+        estudiosEmp = new EstudiosEmp();
+        this.setIdiomaSelecionado(0);
     }
 }

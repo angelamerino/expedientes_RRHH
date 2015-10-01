@@ -5,6 +5,8 @@
  */
 package sv.gob.cultura.rrhh.facades;
 
+import java.util.Date;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,6 +28,10 @@ public class CapacitacionesFacade extends AbstractFacade<Capacitaciones> {
 
     public CapacitacionesFacade() {
         super(Capacitaciones.class);
+    }
+    
+    public List<Capacitaciones> buscarCapacitacionByAnio(Date anio){
+        return getEntityManager().createNamedQuery("Capacitaciones.findByAnioCap").setParameter("anioCap", anio).getResultList();
     }
     
 }

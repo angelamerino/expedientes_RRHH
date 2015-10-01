@@ -4,6 +4,13 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
 
+    <application>
+        <resource-bundle>
+            <base-name>resources</base-name>
+            <var>msgs</var>
+        </resource-bundle>
+    </application>
+    
     <navigation-rule>
         
         <navigation-case>
@@ -20,25 +27,25 @@
         
         <navigation-case>
             <from-outcome>estudios</from-outcome>
-            <to-view-id>/contenido/estudios_empleados.xhtml</to-view-id>
+            <to-view-id>/contenido/gestion_estudios_emp.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         
         <navigation-case>
             <from-outcome>contactos</from-outcome>
-            <to-view-id>/contenido/contactos_emergencia.xhtml</to-view-id>
+            <to-view-id>/contenido/gestion_contactos_emergencia_emp.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         
         <navigation-case>
             <from-outcome>dependientes</from-outcome>
-            <to-view-id>/contenido/dependientes_familia.xhtml</to-view-id>
+            <to-view-id>/contenido/gestion_dependientes_familia_emp.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         
         <navigation-case>
             <from-outcome>experiencia</from-outcome>
-            <to-view-id>/contenido/experiencia_laboral.xhtml</to-view-id>
+            <to-view-id>/contenido/gestion_experiencia_laboral_emp.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         
@@ -50,7 +57,7 @@
         
         <navigation-case>
             <from-outcome>editar_empleados</from-outcome>
-            <to-view-id>/contenido/editar_empleados.xhtml</to-view-id>
+            <to-view-id>/contenido/gestion_editar_empleados.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         
@@ -187,13 +194,13 @@
         </navigation-case>
         
         <navigation-case>
-            <from-outcome>reg_amonestaciones_sancinoes</from-outcome>
+            <from-outcome>reg_amonestaciones_sanciones</from-outcome>
             <to-view-id>/contenido/reg_amonestaciones_sanciones.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         
         <navigation-case>
-            <from-outcome>gestion_amonestaciones_sancinoes</from-outcome>
+            <from-outcome>gestion_amonestaciones_sanciones</from-outcome>
             <to-view-id>/contenido/gestion_amonestaciones_sanciones.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
@@ -207,6 +214,24 @@
         <navigation-case>
             <from-outcome>acciones</from-outcome>
             <to-view-id>/contenido/formulario_acciones_personal.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        
+         <navigation-case>
+            <from-outcome>cat_direcciones</from-outcome>
+            <to-view-id>/contenido/gestion_catalogo_direcciones_nacionales.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        
+         <navigation-case>
+            <from-outcome>cat_dependencias</from-outcome>
+            <to-view-id>/contenido/gestion_catalogo_dependencias.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        
+         <navigation-case>
+            <from-outcome>cat_sanciones</from-outcome>
+            <to-view-id>/contenido/gestion_catalogo_Tipo_sancion.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
 

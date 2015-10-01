@@ -168,7 +168,6 @@ public class manejadorDependientesFamilia implements Serializable {
         this.NR = NR;
     }
 
-    
 // **************** LISTA DE ELEMENTOS EN TABLAS *******************************  
     public List<Parentesco> todosParentesco() {
         return getParentescoFacade().findAll();
@@ -192,37 +191,67 @@ public class manejadorDependientesFamilia implements Serializable {
 
 //*************************** FUNCIONES DE GUARDAR *****************************
     public void guardarFamiliaDependiente() {
-        familiaDependientesEmp.setIdEmpleado(new Empleados(this.getEmpleadoSelecionado()));
-        familiaDependientesEmp.setEdadFamilia(getEdadFamiliaDependiente());
-        familiaDependientesEmp.setFechaNacFamilia(getFechaNacFamiliaDependiente());
-        
-        //Fecha de Creación y usuario Id =1
-        familiaDependientesEmp.setFechaCreaFam(new Date());
-        familiaDependientesEmp.setUserCreaFam(1);
-        
-        getFamiliaDependientesEmpFacade().create(familiaDependientesEmp);
-        familiaDependientesEmp = new FamiliaDependientesEmp();
-        this.setEdadFamiliaDependiente(0);
-        this.setFechaNacFamiliaDependiente(new Date());
+        try {
+            familiaDependientesEmp.setIdEmpleado(new Empleados(this.getEmpleadoSelecionado()));
+            familiaDependientesEmp.setEdadFamilia(getEdadFamiliaDependiente());
+            familiaDependientesEmp.setFechaNacFamilia(getFechaNacFamiliaDependiente());
+
+            //Fecha de Creación y usuario Id =1
+            familiaDependientesEmp.setFechaCreaFam(new Date());
+            familiaDependientesEmp.setUserCreaFam(1);
+
+            getFamiliaDependientesEmpFacade().create(familiaDependientesEmp);
+            familiaDependientesEmp = new FamiliaDependientesEmp();
+            this.setEdadFamiliaDependiente(0);
+            this.setFechaNacFamiliaDependiente(new Date());
+            RequestContext.getCurrentInstance().execute("PF('familia').hide()");
+            RequestContext.getCurrentInstance().update("tabla");
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Ingresado", "Registro Ingresado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        } catch (Exception e) {
+
+        }
     }
 
     public void editarFamiliaDependiente() {
-        familiaDependientesEmp.setEdadFamilia(getEdadFamiliaDependiente());
-        familiaDependientesEmp.setFechaNacFamilia(getFechaNacFamiliaDependiente());
-        
-        //Fecha de Modificación y usuario Id =1
-        familiaDependientesEmp.setFechaModFam(new Date());
-        familiaDependientesEmp.setUserModFam(1);
-        
-        getFamiliaDependientesEmpFacade().edit(familiaDependientesEmp);
-        familiaDependientesEmp = new FamiliaDependientesEmp();
-        familiaDependientesEmp = new FamiliaDependientesEmp();
-        this.setEdadFamiliaDependiente(0);
-        this.setFechaNacFamiliaDependiente(new Date());
+        try {
+            familiaDependientesEmp.setEdadFamilia(getEdadFamiliaDependiente());
+            familiaDependientesEmp.setFechaNacFamilia(getFechaNacFamiliaDependiente());
+
+            //Fecha de Modificación y usuario Id =1
+            familiaDependientesEmp.setFechaModFam(new Date());
+            familiaDependientesEmp.setUserModFam(1);
+
+            getFamiliaDependientesEmpFacade().edit(familiaDependientesEmp);
+            familiaDependientesEmp = new FamiliaDependientesEmp();
+            this.setEdadFamiliaDependiente(0);
+            this.setFechaNacFamiliaDependiente(new Date());
+            RequestContext.getCurrentInstance().execute("PF('familiaEdit').hide()");
+            RequestContext.getCurrentInstance().update("tabla");
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Modificado", "Registro Modificado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        } catch (Exception e) {
+
+        }
     }
 
-    public String eliminar(FamiliaDependientesEmp familiar) {
-        getFamiliaDependientesEmpFacade().remove(familiar);
+    public void dependienteSeleccionado(FamiliaDependientesEmp familiar) {
+        familiaDependientesEmp = familiar;
+    }
+
+    public String eliminar() {
+        try {
+            getFamiliaDependientesEmpFacade().remove(familiaDependientesEmp);
+            familiaDependientesEmp = new FamiliaDependientesEmp();
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Eliminado", "Registro Eliminado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return null;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public String cancelar() {
         return null;
     }
 
@@ -257,17 +286,30 @@ public class manejadorDependientesFamilia implements Serializable {
         //verifica si se selecino un empleado o si se busco un empleado
         if (this.getEmpleadoSelecionado() == 0) {
             familiaDependientesEmp = new FamiliaDependientesEmp();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe Buscar un Empleado"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe Buscar un Empleado", "Debe Buscar un Empleado"));
         } else {
+            RequestContext.getCurrentInstance().update("panelFamilia");
             RequestContext.getCurrentInstance().execute("PF('familia').show()");
         }
     }
-    
-    public void buscarNR(ActionEvent event){
+
+    public void reset() {
+        familiaDependientesEmp = new FamiliaDependientesEmp();
+        this.setEdadFamiliaDependiente(0);
+        this.setFechaNacFamiliaDependiente(new Date());
+    }
+
+    public void tabla() {//Actualiza tabla y nombre de empleado
+        RequestContext.getCurrentInstance().update("nombre");
+        RequestContext.getCurrentInstance().update("tabla");
+    }
+
+    public void buscarNR(ActionEvent event) {
         // busca empleado por nr
         Empleados emp = getEmpleadosFacade().buscarEmpNR(this.getNR());
         if (emp == null) {
             this.setNombreEmp("");
+            this.setEmpleadoSelecionado(0);
         } else {
             this.setEmpleadoSelecionado(emp.getIdEmpleado());
             this.setNombreEmp(emp.getNombreEmpleado());

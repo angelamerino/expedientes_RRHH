@@ -8,6 +8,7 @@ package sv.gob.cultura.rrhh.facades;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import sv.gob.cultura.rrhh.entidades.AsignarAsistenciaCap;
 
@@ -34,7 +35,11 @@ public class AsignarAsistenciaCapFacade extends AbstractFacade<AsignarAsistencia
     }
     
     public AsignarAsistenciaCap asignaidCapEmpleado(int emp){
-        return (AsignarAsistenciaCap) getEntityManager().createNamedQuery("AsignarAsistenciaCap.findByidEmpleado").setParameter("idEmpleado", emp).getSingleResult();
+        try {
+            return (AsignarAsistenciaCap) getEntityManager().createNamedQuery("AsignarAsistenciaCap.findByidEmpleado").setParameter("idEmpleado", emp).getSingleResult();
+        }catch(NoResultException e){ //Por si no encuentra ningun resultado que retorne nulo
+            return null;
+        }
     }
     
     

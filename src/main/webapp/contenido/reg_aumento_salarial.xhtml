@@ -4,7 +4,8 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 template="./../resources/plantilla/plantilla.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
         <div class="page-header">
@@ -18,16 +19,32 @@
                     <div class="col-md-2"></div>
                     <div class="col-md-8">
                         <h:form prependId="false" class="form-horizontal">
-                            <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                            <p:growl id="growl" showDetail="false"  autoUpdate="true" life="10000" />
                             <div class="form-group">
-                                <h:outputLabel value="Porcentaje de Aplicacón:" styleClass="col-lg-4 control-label"/>
+                                <h:outputLabel value="Porcentaje de Aplicación:" styleClass="col-lg-4 control-label"/>
                                 <div class="col-lg-6">
-                                    <h:inputText styleClass="form-control" id="porcentajeHsalarial" value="#{manejadorAumentoMejoraSalarial.porcentajeAumento}" required="true" requiredMessage="Ingrese porcentaje de Aplicación"/>
+                                    <h:inputText validatorMessage="Porcentaje debe estar entre 0.01 y 100.00" styleClass="form-control" id="porcentajeHsalarial" value="#{manejadorAumentoMejoraSalarial.porcentajeAumento}" required="true" requiredMessage="Ingrese porcentaje de Aplicación" >
+                                        <f:validateDoubleRange minimum="0.01" maximum="100.00" />
+                                    </h:inputText>
                                 </div>
                                 <h:outputLabel value="%" styleClass="col-lg-1 control-label"/>
                             </div>
                             <div class="form-group">
-                                <h:outputLabel value="Fecha de Aplicacón:" styleClass="col-lg-4 control-label"/>
+                                <h:outputLabel value="Salario Mínimo de Aplicación: $" styleClass="col-lg-4 control-label"/>
+                                <div class="col-lg-2">
+                                    <h:inputText validatorMessage="Salario Mínimo No debe ser Cero" styleClass="form-control" id="min" value="#{manejadorAumentoMejoraSalarial.historialSalarial.salMin}" required="true" requiredMessage="Ingrese Salario Mínimo Aplicación" >
+                                        <f:validateDoubleRange minimum="0.01"/>
+                                    </h:inputText>
+                                </div>
+                                <h:outputLabel value="Salario Máximo Aplicación: $" styleClass="col-lg-4 control-label"/>
+                                <div class="col-lg-2">
+                                    <h:inputText validatorMessage="Salario Máximo No debe ser Cero" styleClass="form-control" id="max" value="#{manejadorAumentoMejoraSalarial.historialSalarial.salMax}" required="true" requiredMessage="Ingrese Salario Máximo de Aplicación" >
+                                        <f:validateDoubleRange minimum="0.01"/>
+                                    </h:inputText>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <h:outputLabel value="Fecha de Aplicación:" styleClass="col-lg-4 control-label"/>
                                 <div class="col-lg-7">
                                     <p:calendar pattern="dd/MM/yyyy" locale="es" id="fechaHsalarial" showOn="button" value="#{manejadorAumentoMejoraSalarial.historialSalarial.fechaHsalarial}" required="true" requiredMessage="Ingrese Fecha de Aplicación" />
                                 </div>

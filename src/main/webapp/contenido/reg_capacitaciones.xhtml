@@ -20,42 +20,44 @@
                         <div class="col-md-2"></div>
                         <div class="col-md-8">
                             <h:form class="form-horizontal" prependId="false">
-                                <p:messages showDetail="true" />
+                                <p:growl id="growl" showDetail="false"  autoUpdate="true" life="10000" />
                                 <div class="form-group">
-                                    <h:outputLabel value="Tema de la Capacitacón:" styleClass="col-lg-4 control-label" />
+                                    <p:outputLabel for="temaCap" value="Tema de la Capacitacón:" styleClass="col-lg-4 control-label" />
                                     <div class="col-lg-8">
-                                        <h:inputText class="form-control" id="temaCap" value="#{manejadorCapacitaciones.capacitaciones.temaCap}" required="true" requiredMessage="Ingrese Tema de Capacitación."/>
+                                        <p:inputText id="temaCap" style="width: 100%; padding: 9px;" value="#{manejadorCapacitaciones.capacitaciones.temaCap}" required="true" requiredMessage="Ingrese Tema de Capacitación."/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <h:outputLabel value="Nombre de Facilitador:" styleClass="col-lg-4 control-label" />
+                                    <p:outputLabel for="facilitadorCap" value="Nombre de Facilitador:" styleClass="col-lg-4 control-label" />
                                     <div class="col-lg-8">
-                                        <h:inputText class="form-control" id="facilitadorCap" value="#{manejadorCapacitaciones.capacitaciones.facilitadorCap}" required="true" requiredMessage="Ingrese Nombre de Facilitador."/>
+                                        <p:inputText style="width: 100%; padding: 9px;" id="facilitadorCap" value="#{manejadorCapacitaciones.capacitaciones.facilitadorCap}" required="true" requiredMessage="Ingrese Nombre de Facilitador." />
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <h:outputLabel value="Institución que Proporciona el Facilitador:" styleClass="col-lg-4 control-label" />
+                                    <p:outputLabel for="institucionCap" value="Institución que Proporciona el Facilitador:" styleClass="col-lg-4 control-label" />
                                     <div class="col-lg-8">
-                                        <h:inputText class="form-control" id="institucionCap" value="#{manejadorCapacitaciones.capacitaciones.institucionCap}" required="true" requiredMessage="Ingrse Institución."/>
+                                        <p:inputText  id="institucionCap" style="width: 100%; padding: 9px;" value="#{manejadorCapacitaciones.capacitaciones.institucionCap}" required="true" requiredMessage="Ingrse Institución."/>
                                     </div>
                                 </div>                                
                                 <div class="form-group">
-                                    <h:outputLabel value="Año de la Capacitación:" styleClass="col-lg-4 control-label" />
+                                    <p:outputLabel for="capasSelect" value="Año de la Capacitación:" styleClass="col-lg-4 control-label" />
                                     <div class="col-lg-3">
-                                        <h:selectOneMenu class="form-control" value="#{manejadorCapacitaciones.anio}" style="width: 100%" required="true" requiredMessage="Seleccione un Año.">
+                                        <p:selectOneMenu id="capasSelect" value="#{manejadorCapacitaciones.anio}" style="width: 100%" required="true" requiredMessage="Seleccione un Año.">
                                             <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
                                             <f:selectItems value="#{manejadorCapacitaciones.todosAnios()}" var="anio" itemLabel="#{anio.anio}" itemValue="#{anio.anio}"/>                                                    
-                                        </h:selectOneMenu>
+                                        </p:selectOneMenu>
                                     </div>
-                                    <h:outputLabel value="Número de Grupo:" styleClass="col-lg-3 control-label" />
+                                    <p:outputLabel for="numGrupo" value="Número de Grupo:" styleClass="col-lg-3 control-label" />
                                     <div class="col-lg-2">
-                                        <h:inputText class="form-control" id="numGrupo" value="#{manejadorCapacitaciones.capacitaciones.numGrupo}" title="NumGrupo" required="true" requiredMessage="Ingrese Número de Grupo."/>
+                                        <p:inputText id="numGrupo" style="width: 100%; padding: 9px;" value="#{manejadorCapacitaciones.capacitaciones.numGrupo}" title="NumGrupo" required="true" requiredMessage="Ingrese Número de Grupo."/>
                                     </div>
                                 </div>    
                                 <div class="form-group">
-                                    <h:outputLabel value="Número de Horas para Capacitación:" styleClass="col-lg-4 control-label" />
+                                    <p:outputLabel for="numHorasCap" value="Número de Horas para Capacitación:" styleClass="col-lg-4 control-label" />
                                     <div class="col-lg-8">
-                                        <p:spinner style="margin-top: 15px" size="5" id="numHorasCap" value="#{manejadorCapacitaciones.capacitaciones.numHorasCap}" min="0" max="500" />
+                                        <p:spinner validatorMessage="Horas deben ser en Enteros" style="margin-top: 10px" size="5" id="numHorasCap" value="#{manejadorCapacitaciones.capacitaciones.numHorasCap}" min="1" max="500" >
+                                            <f:validateLongRange minimum="1" maximum="500" />
+                                        </p:spinner>
                                     </div>
                                 </div>
                                 <div class="form-group">

@@ -27,17 +27,17 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-6"> 
+                    <div class="col-md-1"></div>
+                    <div class="col-md-5"> 
 
                         <h:form prependId="false" id="buscar">
-                            <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                            <p:growl id="growl" showDetail="false"  autoUpdate="true" life="10000" />
                             <div class="form-group">
                                 <h:outputLabel value="Dirección Nacional:"/>                                
                                 <h:selectOneMenu  class="form-control" id="dirNacionalFiltrarJefe" style="width: 100%" value="#{manejadorAumentoMejoraSalarial.direccionNacional}" rendered="true" requiredMessage="Seleccione una Dirección Nacional">
                                     <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
                                     <f:selectItems value="#{manejadorAumentoMejoraSalarial.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
-                                    <f:ajax render="filtrarDependencia filtrarEmpleado nombre tabla"/>
+                                    <f:ajax render="filtrarDependencia filtrarEmpleado nombre tabla empleado"/>
                                 </h:selectOneMenu>
                             </div>
 
@@ -46,7 +46,7 @@
                                 <h:selectOneMenu class="form-control" id="filtrarDependencia"  style="width: 100%" value="#{manejadorAumentoMejoraSalarial.dependecia}" rendered="true" requiredMessage="Seleccione una Dependencia/Unidad Organizativa">
                                     <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
                                     <f:selectItems value="#{manejadorAumentoMejoraSalarial.dependenciasFiltradas()}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
-                                    <f:ajax render="filtrarEmpleado nombre tabla"/>
+                                    <f:ajax render="filtrarEmpleado nombre tabla empleado"/>
                                 </h:selectOneMenu>
                             </div>
 
@@ -55,16 +55,33 @@
                                 <h:selectOneMenu class="form-control" id="filtrarEmpleado" style="width: 100%" value="#{manejadorAumentoMejoraSalarial.empleadoSelecionado}" rendered="true" requiredMessage="Seleccione un Empleado">
                                     <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
                                     <f:selectItems value="#{manejadorAumentoMejoraSalarial.empleadoFiltrado()}" var="emple" itemLabel="#{emple.nombreEmpleado}" itemValue="#{emple.idEmpleado}"/>
-                                    <f:ajax render="salarioActualHsalarial" />
+                                    <f:ajax render="salarioActualHsalarial empleado" />
                                 </h:selectOneMenu>
                             </div>
 
                         </h:form>
 
                     </div>                            
-                    <div class="col-md-3"></div>
+                    <div class="col-md-1"></div>
+
+                    <div class="col-md-4">
+                        <h:form prependId="false" >
+                            <h:outputLabel value="NR del Empleado:" styleClass="control-label col-md-12"/>
+                            <div class="form-group">
+                                <div class="col-md-8">
+                                    <p:inputMask styleClass="form-control" value="#{manejadorAumentoMejoraSalarial.NR}" mask="NR 9999-999999-999-9"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <h:commandButton  class="btn btn-info" actionListener="#{manejadorAumentoMejoraSalarial.buscarNR}" value="Buscar" />
+                                </div>
+                            </div>
+                        </h:form>
+                    </div>
+
+                    <div class="col-md-1"></div>
                 </div>
 
+                <br /><hr /><br />
                 <div class="row">
                     <div class="col-md-2"></div>
                     <div class="col-md-8">  
@@ -79,7 +96,19 @@
                     <div class="col-md-2"></div>
                     <div class="col-md-8">  
                         <h:form prependId="false" class="form-horizontal">
-
+                            
+                            <div class="form-group">
+                                <h:outputLabel value="Empleado:" styleClass="col-lg-4 control-label"/>
+                                <div class="col-lg-7">
+                                    <h:outputText styleClass="form-control" id="empleado" value="#{manejadorAumentoMejoraSalarial.nombreEmp}" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <h:outputLabel value="Salario Actual: $" styleClass="col-lg-4 control-label"/>
+                                <div class="col-lg-7">
+                                    <h:outputText styleClass="form-control" id="salarioActualHsalarial" value="#{manejadorAumentoMejoraSalarial.salarioActual}" />
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <h:outputLabel value="Tipo de Mejora Salarial:" styleClass="col-lg-4 control-label"/>
                                 <div class="col-lg-7">
@@ -89,18 +118,11 @@
                                     </h:selectOneMenu>
                                 </div>
                             </div>
-
-                            <div class="form-group">
-                                <h:outputLabel value="Salario Actual: $" styleClass="col-lg-4 control-label"/>
-                                <div class="col-lg-7">
-                                    <h:outputText styleClass="form-control" id="salarioActualHsalarial" value="#{manejadorAumentoMejoraSalarial.salarioActual}" />
-                                </div>
-                            </div>
-
                             <div class="form-group">
                                 <h:outputLabel value="Porcentaje de Aplicacón:" styleClass="col-lg-4 control-label"/>
                                 <div class="col-lg-6">
-                                    <h:inputText styleClass="form-control" id="porcentajeHsalarial" value="#{manejadorAumentoMejoraSalarial.porcentaje}" required="true" requiredMessage="Ingrese porcentaje de Aplicación">
+                                    <h:inputText validatorMessage="Porcentaje Debe estar entre 0.01 y 100" styleClass="form-control" id="porcentajeHsalarial" value="#{manejadorAumentoMejoraSalarial.porcentaje}" required="true" requiredMessage="Ingrese porcentaje de Aplicación">
+                                        <f:validateDoubleRange minimum="0.01" maximum="100.00" />
                                         <f:ajax render="nuevoSalarioHsalarial" />
                                     </h:inputText>
                                 </div>

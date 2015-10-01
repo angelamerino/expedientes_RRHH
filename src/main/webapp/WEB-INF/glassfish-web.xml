@@ -7,7 +7,7 @@
       <description>Keep a copy of the generated servlet class' java code.</description>
     </property>
   </jsp-config>
-  <property name="alternatedocroot_1" value="from=/upload/ dir=/var/webapp/" />
-<!--  <property name="alternatedocroot_3" value="from=/rrhh/ dir=/home/" />*** PARA SERVER-->
+  <property name="alternatedocroot_1" value="from=/upload/ dir=/var/webapp/"/>
+  <!--  <property name="alternatedocroot_3" value="from=/rrhh/ dir=/home/" />*** PARA SERVER-->
   <parameter-encoding default-charset="UTF-8"/>
 </glassfish-web-app>

@@ -10,80 +10,84 @@
     <ui:define name="content">
         <link href="#{request.contextPath}/resources/datatables/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
         <div class="page-header">
-            <h1><strong>REGISTRO DE ASIGNACIÓN DE CAPACITACIONES</strong></h1>
+            <h1><strong>INGRESO DE GRUPOS DE CAPACITACIÓN</strong></h1>
         </div>
 
         <div class="panel panel-info">
             <div class="panel-heading"><strong>Ingreso de Asiganciones de Capacitaciones</strong></div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+
                         <h:form prependId="false" class="form-horizontal">
-                            <p:messages showDetail="true"  autoUpdate="true"/>
+                            <p:growl id="growl" showDetail="false"  autoUpdate="true" life="10000" />
                             <div class="form-group">
-                                <h:outputLabel value="Nombre de Capacitación:" styleClass="col-lg-3 control-label"/>
-                                <div class="col-lg-3">
-                                    <h:selectOneMenu  id="cap" class="form-control" value="#{manejadorCapacitaciones.idCapAsig}" required="true" requiredMessage="Seleccione una Capacitación">
+                                <p:outputLabel for="anio" value="Año:" styleClass="col-lg-4 control-label"/>
+                                <div class="col-lg-7">
+                                    <p:selectOneMenu  id="anio" style="width: 100%;" value="#{manejadorCapacitaciones.anioFiltro}" required="true" requiredMessage="Seleccione una Capacitación">
                                         <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="false" itemValue="#{0}"/>
-                                        <f:selectItems value="#{manejadorCapacitaciones.todasCapacitaciones()}" var="capa" itemLabel="#{capa.temaCap}" itemValue="#{capa.idCap}"/>
-                                    </h:selectOneMenu>
+                                        <f:selectItems value="#{manejadorCapacitaciones.todosAnios()}" var="anio" itemLabel="#{anio.anio}" itemValue="#{anio.anio}"/>
+                                        <f:ajax render="cap" />
+                                    </p:selectOneMenu>
                                 </div>
-                                <div class="col-lg-6">
+                            </div>
+                            <div class="form-group">
+                                <p:outputLabel for="cap" value="Nombre de Capacitación:" styleClass="col-lg-4 control-label"/>
+                                <div class="col-lg-7">
+                                    <p:selectOneMenu  id="cap" style="width: 100%;" value="#{manejadorCapacitaciones.idCapAsig}" required="true" requiredMessage="Seleccione una Capacitación">
+                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="false" itemValue="#{0}"/>
+                                        <f:selectItems value="#{manejadorCapacitaciones.todasCapacitacionesPorAnio()}" var="capa" itemLabel="#{capa.temaCap}" itemValue="#{capa.idCap}"/>
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-4"></div>
+                                <div class="col-lg-7">
                                     <h:commandButton style="margin-right: 5px" class="btn btn-info" actionListener="#{manejadorCapacitaciones.buscarEmpleadosCapa}" value="Buscar Empleado" />
                                     <h:commandButton class="btn btn-info" actionListener="#{manejadorCapacitaciones.nuevoEmpCapa}" value="Asignar Empleados a Capacitación" />
                                 </div>
                             </div>
                         </h:form>
                     </div>
+                    <div class="col-md-2"></div>
                 </div>
-
-                <br /><hr />
-
+                <hr/>
                 <div class="table table-responsive">
                     <f:view>
                         <h:form prependId="false">
                             <h:panelGroup id ="tabla">
-                                <h:dataTable id="empleadoList" value="#{manejadorCapacitaciones.empleadoCapacitaciones()}" var="item" style="font-size: 14px" styleClass="table table-striped table-hover">
-                                    <h:column>
-
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Empleado"/>
-                                        </f:facet>
+                                <p:dataTable value="#{manejadorCapacitaciones.empleadoCapacitaciones()}" var="item"
+                                             emptyMessage="" 
+                                             rows="10"
+                                             paginator="true"
+                                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             rowsPerPageTemplate="5,10,15"
+                                             widgetVar="listado"
+                                             paginatorPosition="bottom" >
+                                    
+                                    <f:facet name="header">
+                                        <p:outputPanel style="text-align: right;">
+                                            <h:outputText value="Buscar:  " />
+                                            <p:inputText id="globalFilter" onkeyup="PF('listado').filter()" style="width:300px;"/>
+                                        </p:outputPanel>
+                                    </f:facet>
+                                    
+                                    <p:column filterBy="#{item.nombreEmpleado}" headerText="Empleado" filterMatchMode="contains" filterStyle="display:none">
                                         <h:outputText value="#{item.nombreEmpleado}"/>
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Correo Electrónico"/>
-                                        </f:facet>
-                                        <h:outputText value="#{item.correoPersonal}"/>
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Direccion Nacional"/>
-                                        </f:facet>
-                                        <h:outputText value="#{item.idDependenciaN.idDirNac.nombreDirNac}"/>
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Dependencia / Unidad Organizativa"/>
-                                        </f:facet>
+                                    </p:column>
+                                    <p:column filterBy="#{item.correoInstitucional}" headerText="Correo Electrónico" filterMatchMode="contains" filterStyle="display:none">
+                                        <h:outputText value="#{item.correoInstitucional}"/>
+                                    </p:column>
+                                    <p:column filterBy="#{item.idDependenciaN.nombreDependencia}" headerText="Dependencia / Unidad Organizativa" filterMatchMode="contains" filterStyle="display:none">
                                         <h:outputText value="#{item.idDependenciaN.nombreDependencia}"/>
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <center>
-                                                <h:outputText value="Eliminar"/>
-                                            </center>
-                                        </f:facet>
-                                        <center>
-                                            <h:commandLink action="#{manejadorCapacitaciones.eliminarEmpleadoCapacitacion(item)}" styleClass="btn-sm glyphicon glyphicon-remove" style="text-decoration:none;" title="Eliminar">
-                                                <f:ajax execute="@this" render="tabla" />
-                                            </h:commandLink>                                                     
-                                        </center>
-                                    </h:column>
-                                </h:dataTable>
+                                    </p:column>
+                                    <p:column filterBy="" headerText="Eliminar" style="width: 10%; text-align: center;" >
+                                        <h:commandLink actionListener="#{manejadorCapacitaciones.empleadoSeleccionado(item)}" styleClass="btn-sm glyphicon glyphicon-remove" style="text-decoration:none; color: #1d9ce5;" title="Eliminar">
+                                            <p:ajax update="tabla"  onsuccess="PF('confirmation').show()"/>
+                                        </h:commandLink>                                                     
+                                    </p:column>
+                                </p:dataTable>
                             </h:panelGroup>
                         </h:form>
                     </f:view>
@@ -92,7 +96,14 @@
             </div>
         </div>
 
-        <p:dialog header="Agregar Empleado a Capacitación" widgetVar="nuevoEmpCapacitacion" modal="true" height="auto" width="auto" resizable="false" position="center,top">
+        <p:confirmDialog  message="Desea Eliminar Empleado de Capacitación" header="Confirmación"  closable="false" severity="info" widgetVar="confirmation">
+            <h:form prependId="false" class="form-horizontal">
+                <h:commandLink value="Aceptar" actionListener="#{manejadorCapacitaciones.eliminarEmpleadoCapacitacion()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true" />
+                <h:commandLink value="Cancelar" actionListener="#{manejadorCapacitaciones.cancelarEditar()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true"/>
+            </h:form>
+        </p:confirmDialog>
+
+        <p:dialog header="Agregar Empleado a Capacitación" widgetVar="nuevoEmpCapacitacion" modal="true" height="auto" width="40%" resizable="false" position="center,top" draggable="false" closable="false" styleClass="disable-scroll">
             <div class="row">
                 <div class="col-md-2"></div>
                 <div class="col-md-8">  
@@ -108,42 +119,42 @@
                 <div class="col-md-10"> 
 
                     <h:form prependId="false">
-                        <h:panelGroup id ="panelNuevo"></h:panelGroup>
-                        <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-                        <div class="form-group">
-                            <h:outputLabel value="Dirección Nacional:"/>                                
-                            <h:selectOneMenu  class="form-control" id="dirNacionalFiltrarJefe" style="width: 100%" value="#{manejadorCapacitaciones.direccionNacional}">
-                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
-                                <f:selectItems value="#{manejadorCapacitaciones.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
-                                <f:ajax render="filtrarDependencia filtrarEmpleado"/>
-                            </h:selectOneMenu>
-                        </div>
+                        <h:panelGroup id ="panelNuevo">
+                            <div class="form-group">
+                                <p:outputLabel for="dirNacionalFiltrarJefe" value="Dirección Nacional:"/>                                
+                                <p:selectOneMenu  id="dirNacionalFiltrarJefe" style="width: 100%" value="#{manejadorCapacitaciones.direccionNacional}" required="true" requiredMessage="Seleccione Direccion Nacional">
+                                    <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                    <f:selectItems value="#{manejadorCapacitaciones.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
+                                    <f:ajax render="filtrarDependencia Empleado"/>
+                                </p:selectOneMenu>
+                            </div>
 
-                        <div class="form-group">
-                            <h:outputLabel value="Dependencia / Unidad organizativa:"/>
-                            <h:selectOneMenu class="form-control" id="filtrarDependencia"  style="width: 100%" value="#{manejadorCapacitaciones.dependecia}">
-                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
-                                <f:selectItems value="#{manejadorCapacitaciones.dependenciasFiltradas()}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
-                                <f:ajax render="filtrarEmpleado"/>
-                            </h:selectOneMenu>
-                        </div>
+                            <div class="form-group">
+                                <p:outputLabel for="filtrarDependencia" value="Dependencia / Unidad organizativa:" />
+                                <p:selectOneMenu id="filtrarDependencia"  style="width: 100%" value="#{manejadorCapacitaciones.dependecia}"  required="true" requiredMessage="Seleccione Dependencia">
+                                    <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                    <f:selectItems value="#{manejadorCapacitaciones.dependenciasFiltradas()}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
+                                    <f:ajax render="Empleado"/>
+                                </p:selectOneMenu>
+                            </div>
 
-                        <div class="form-group">
-                            <h:outputLabel class="control-label" value="Empleado:"/>
-                            <h:selectOneMenu class="form-control" id="filtrarEmpleado" style="width: 100%" value="#{manejadorCapacitaciones.empleadoSelecionado}" >
-                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
-                                <f:selectItems value="#{manejadorCapacitaciones.empleadoFiltrado()}" var="emple" itemLabel="#{emple.nombreEmpleado}" itemValue="#{emple.idEmpleado}"/>
-
-                            </h:selectOneMenu>
-                        </div>
-                        <div class="form-group">
-                            <h:commandButton style="margin: 2px" styleClass="btn btn-info" value="Agregar" action="#{manejadorCapacitaciones.addEmpCapa()}"/>
-                            <h:commandButton style="margin: 2px"  styleClass="btn btn-info"  value="Cancelar" action="#{manejadorCapacitaciones.cancelar()}" onclick="PF('nuevoEmpCapacitacion').hide()">
-                                <f:ajax execute="@this" render="panelNuevo" />
-                                <p:resetInput target="panelNuevo" />
-                            </h:commandButton>
-                        </div>
-
+                            <div class="form-group">
+                                <p:outputLabel for="Empleado" class="control-label" value="Empleado:"/>
+                                <p:selectOneMenu id="Empleado" style="width: 100%" value="#{manejadorCapacitaciones.empleadoSelecionado}"  required="true" requiredMessage="Seleccione Empleado" >
+                                    <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                    <f:selectItems value="#{manejadorCapacitaciones.empleadoFiltrado()}" var="emple" itemLabel="#{emple.nombreEmpleado}" itemValue="#{emple.idEmpleado}"/>
+                                </p:selectOneMenu>
+                            </div>
+                            <div class="form-group">
+                                <h:commandButton style="margin: 2px" styleClass="btn btn-info" value="Agregar" action="#{manejadorCapacitaciones.addEmpCapa()}" >
+                                    <p:ajax update="panelNuevo" process="panelNuevo"/>
+                                </h:commandButton>
+                                <h:commandButton style="margin: 2px"  styleClass="btn btn-info"  value="Cancelar" action="#{manejadorCapacitaciones.cancelar()}" onclick="PF('nuevoEmpCapacitacion').hide()">
+                                    <f:ajax execute="@this" render="panelNuevo" />
+                                    <p:resetInput target="panelNuevo" />
+                                </h:commandButton>
+                            </div>
+                        </h:panelGroup>
                     </h:form>
 
                 </div>                           

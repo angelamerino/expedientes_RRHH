@@ -8,13 +8,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletResponse;
 import sv.gob.cultura.rrhh.entidades.*;
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.event.FlowEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import sv.gob.cultura.rrhh.facades.AdministradoraPensionesFacade;
@@ -556,6 +556,8 @@ public class manejadorGestionEmpleado implements Serializable {
 
         empleado = new Empleados();
         restaurarSelecionables();
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Ingresado", "Registro Ingresado");
+        FacesContext.getCurrentInstance().addMessage(null, message);
         return "gestion_empleados";
     }
     
@@ -591,6 +593,8 @@ public class manejadorGestionEmpleado implements Serializable {
 
         empleado = new Empleados();
         restaurarSelecionables();
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Modificado", "Registro Modificado");
+        FacesContext.getCurrentInstance().addMessage(null, message);
         return "gestion_empleados";
     }
 
@@ -600,6 +604,8 @@ public class manejadorGestionEmpleado implements Serializable {
         emp.setFechaModEmp(new Date());
         //emp.setUserModEmp(1);  ESTA COMO FECHA
         getEmpleadosFacade().edit(emp);
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Modificado", "Registro Modificado");
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 // *****************************************************************************
 // ************ FUNCIONES EXTRA QUE SE UTLIZAN LOS FORMULARIOS *****************

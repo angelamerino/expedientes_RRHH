@@ -1,0 +1,628 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../resources/plantilla/plantilla.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <ui:define name="content">
+
+        <div class="page-header">
+            <h1><strong>ESTUDIOS</strong></h1>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading"><strong>Agregar/Eliminar</strong></div>
+            <div class="panel-body">
+
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">  
+                        <h2 class="text-info text-center">Buscar Empleado</h2>
+                        <div class="clearfix"></div>
+                        <br />
+                    </div>                            
+                    <div class="col-md-2"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-5"> 
+
+                        <h:form prependId="false">
+                            <p:growl id="growl" showDetail="false"  autoUpdate="true" life="10000" />
+                            <div class="form-group">
+                                <h:outputLabel value="Dirección Nacional:"/>
+                                <h:selectOneMenu class="form-control" id="dirNacionalFiltrarJefe" style="width: 100%" value="#{manejadorEstudiosEmpleados.direccionNacional}">
+                                    <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                    <f:selectItems value="#{manejadorEstudiosEmpleados.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
+                                    <f:ajax render="filtrarDependencia filtrarEmpleado tabla1 tabla2 tabla3 tabla4 nombre1 nombre2 nombre3 nombre4"/>
+                                </h:selectOneMenu>
+                            </div>
+
+                            <div class="form-group">
+                                <h:outputLabel value="Dependencia / Unidad organizativa:"/>
+                                <h:selectOneMenu class="form-control" id="filtrarDependencia"  style="width: 100%" value="#{manejadorEstudiosEmpleados.dependecia}">
+                                    <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                    <f:selectItems value="#{manejadorEstudiosEmpleados.dependenciasFiltradas()}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
+                                    <f:ajax render="filtrarEmpleado tabla1 tabla2 tabla3 tabla4 nombre1 nombre2 nombre3 nombre4"/>
+                                </h:selectOneMenu>
+                            </div>
+
+                            <div class="form-group">
+                                <h:outputLabel value="Empleado:"/>
+                                <h:selectOneMenu class="form-control" id="filtrarEmpleado" style="width: 100%" value="#{manejadorEstudiosEmpleados.empleadoSelecionado}" >
+                                    <f:selectItem itemLabel="Seleccione uno..."  itemValue="#{null}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{manejadorEstudiosEmpleados.empleadoFiltrado()}" var="emple" itemLabel="#{emple.nombreEmpleado}" itemValue="#{emple.idEmpleado}"/>
+                                    <f:ajax render="tabla1 tabla2 tabla3 tabla4 nombre1 nombre2 nombre3 nombre4"/>
+                                </h:selectOneMenu>
+                            </div>
+
+                        </h:form>
+
+                    </div>                            
+                    <div class="col-md-1"></div>
+                    <div class="col-md-4">
+                        <h:form prependId="false">
+                            <p:outputLabel for="nr" value="NR del Empleado:" styleClass="control-label col-md-12"/>
+                            <div class="form-group">
+                                <div class="col-md-8">
+                                    <p:inputMask id="nr" style="width: 100%; padding: 9px;" value="#{manejadorEstudiosEmpleados.NR}" mask="NR 9999-999999-999-9"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <h:commandButton  class="btn btn-info" actionListener="#{manejadorEstudiosEmpleados.buscarNR}" action="#{manejadorEstudiosEmpleados.tabla()}" value="Buscar" />
+                                </div>
+                            </div>
+                        </h:form>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+
+                <br /><hr /><br />
+
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8"> 
+                        <h:form prependId="false">
+                            <h2 class="text-info text-center">Formación Formal</h2>
+                            <h:commandButton  value="Agregar" class="pull-right btn btn-info" actionListener="#{manejadorEstudiosEmpleados.empleadoSelecionadoValidoF}">
+                                <f:ajax />
+                            </h:commandButton> 
+                            <p:outputLabel id="nombre1"  style="font-size: 1.2em" value="Empleado: #{manejadorEstudiosEmpleados.nombreEmp}" />
+                            <div class="clearfix"></div>
+                            <br />
+                        </h:form>
+                    </div>
+                    <div class="col-md-2"></div>
+                </div> 
+
+                <!-- TABLA ESTUDIOS FORMALES -->
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10">
+                        <div class="table table-responsive">
+                            <f:view>
+                                <h:form prependId="false">
+                                    <p:dataTable id ="tabla1" value="#{manejadorEstudiosEmpleados.todosEstudiosFomales()}" var="item"
+                                                 emptyMessage="" 
+                                                 rows="10"
+                                                 paginator="true"
+                                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                 rowsPerPageTemplate="5,10,15"
+                                                 widgetVar="lista"
+                                                 paginatorPosition="bottom">
+
+                                        <f:facet name="header">
+                                            <p:outputPanel style="text-align: right;">
+                                                <h:outputText value="Buscar: " />
+                                                <p:inputText id="globalFilter" onkeyup="PF('lista').filter()" style="width:200px;" />
+                                            </p:outputPanel>
+                                        </f:facet>
+
+                                        <p:column headerText="Descripción" filterBy="#{item.idProfOficio.nombreProfOficio}" style="width:35%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
+                                            <h:outputText value="#{item.idProfOficio.nombreProfOficio}"/>
+                                        </p:column>
+                                        <p:column headerText="Institución" filterBy="#{item.institucionEstudio}" style="width:30%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
+                                            <h:outputText value="#{item.institucionEstudio}"/>
+                                        </p:column>
+                                        <p:column headerText="Año" filterBy="#{item.anioEstudio}" style="width:10%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
+                                            <h:outputText value="#{item.anioEstudio}">
+                                                <f:convertDateTime pattern="yyyy" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Tipo" filterBy="#{item.tipoEstudio}" style="width:10%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
+                                            <h:outputText value="#{item.tipoEstudio}"/>
+                                        </p:column>
+                                        <p:column headerText="Editar/Eliminar" filterBy="" style="width:15%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
+                                            <h:commandLink styleClass="btn-sm glyphicon glyphicon-pencil" style="text-decoration:none; color: #1d9ce5;" title="Editar">
+                                                <f:setPropertyActionListener value="#{item}" target="#{manejadorEstudiosEmpleados.estudiosEmp}"/> 
+                                                <f:setPropertyActionListener value="#{item.anioEstudio}" target="#{manejadorEstudiosEmpleados.anioedit}"/> 
+                                                <p:ajax update="panelFormalEdit" />
+                                                <p:ajax update="tabla1"  onsuccess="PF('formalEdit').show()"/>
+                                            </h:commandLink>
+                                            <h:commandLink actionListener="#{manejadorEstudiosEmpleados.estudioSelecionado(item)}" styleClass="btn-sm glyphicon glyphicon-remove" style="text-decoration:none; color: #1d9ce5;" title="Eliminar" immediate="true">
+                                                <p:ajax update="tabla1"  onsuccess="PF('confirmation1').show()"/>
+                                            </h:commandLink>     
+                                        </p:column>
+
+                                    </p:dataTable>
+                                </h:form>
+                            </f:view>
+                        </div>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+
+
+
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">  
+                        <h:form prependId="false">
+                            <hr />
+                            <h2 class="text-info text-center">Formación No Formal</h2>
+                            <h:commandButton  value="Agregar" class="pull-right btn btn-info" actionListener="#{manejadorEstudiosEmpleados.empleadoSelecionadoValidoNF}">
+                                <f:ajax />
+                            </h:commandButton>
+                            <p:outputLabel id="nombre2"  style="font-size: 1.2em" value="Empleado: #{manejadorEstudiosEmpleados.nombreEmp}" />
+                            <div class="clearfix"></div>
+                            <br />
+                        </h:form>
+                    </div>
+                    <div class="col-md-2"></div>
+                </div> 
+
+                <!-- TABLA ESTUDIOS NO FORMALES -->
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10"> 
+                        <div class="table table-responsive">
+                            <f:view>
+                                <h:form prependId="false">
+                                    <p:dataTable id ="tabla2" value="#{manejadorEstudiosEmpleados.todosEstudiosNoFomales()}" var="item"
+                                                 emptyMessage="" 
+                                                 rows="10"
+                                                 paginator="true"
+                                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                 rowsPerPageTemplate="5,10,15"
+                                                 widgetVar="lista1"
+                                                 paginatorPosition="bottom">
+
+                                        <f:facet name="header">
+                                            <p:outputPanel style="text-align: right;">
+                                                <h:outputText value="Buscar: " />
+                                                <p:inputText id="globalFilter" onkeyup="PF('lista1').filter()" style="width:200px;" />
+                                            </p:outputPanel>
+                                        </f:facet>
+
+                                        <p:column headerText="Descripción" filterBy="#{item.descripcionNoFormal}" style="width:35%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
+                                            <h:outputText value="#{item.descripcionNoFormal}"/>
+                                        </p:column>
+                                        <p:column headerText="Institución" filterBy="#{item.institucionEstudio}" style="width:30%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
+                                            <h:outputText value="#{item.institucionEstudio}"/>
+                                        </p:column>
+                                        <p:column headerText="Año" filterBy="#{item.anioEstudio}" style="width:10%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
+                                            <h:outputText value="#{item.anioEstudio}">
+                                                <f:convertDateTime pattern="yyyy" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Tipo" filterBy="#{item.tipoEstudio}" style="width:10%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
+                                            <h:outputText value="#{item.tipoEstudio}"/>
+                                        </p:column>
+                                        <p:column headerText="Editar/Eliminar" filterBy="" style="width:15%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
+                                            <h:commandLink styleClass="btn-sm glyphicon glyphicon-pencil" style="text-decoration:none; color: #1d9ce5;" title="Editar">
+                                                <f:setPropertyActionListener value="#{item}" target="#{manejadorEstudiosEmpleados.estudiosEmp}"/>
+                                                <f:setPropertyActionListener value="#{item.anioEstudio}" target="#{manejadorEstudiosEmpleados.anioedit}"/>
+                                                <p:ajax update="panelNoFormalEdit" />
+                                                <p:ajax update="tabla2"  onsuccess="PF('noformalEdit').show()"/>
+                                            </h:commandLink>
+                                            <h:commandLink actionListener="#{manejadorEstudiosEmpleados.estudioSelecionado(item)}" styleClass="btn-sm glyphicon glyphicon-remove" style="text-decoration:none; color: #1d9ce5;" title="Eliminar" immediate="true">
+                                                <p:ajax update="tabla2"  onsuccess="PF('confirmation2').show()"/>
+                                            </h:commandLink>       
+                                        </p:column>
+
+                                    </p:dataTable>
+                                </h:form>
+                            </f:view>
+                        </div>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div> 
+
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">  
+                        <h:form prependId="false">
+                            <hr />
+                            <h2 class="text-info text-center">Conocimiento de Idiomas</h2>
+                            <h:commandButton  value="Agregar Idioma" class="pull-right btn btn-info" actionListener="#{manejadorEstudiosEmpleados.empleadoSelecionadoValidoI}">
+                                <f:ajax />
+                            </h:commandButton>
+                            <p:outputLabel id="nombre3"  style="font-size: 1.2em" value="Empleado: #{manejadorEstudiosEmpleados.nombreEmp}" />
+                            <div class="clearfix"></div>
+                            <br />
+                        </h:form>
+                    </div>
+                    <div class="col-md-2"></div>
+                </div> 
+
+                <!-- TABLA IDIOMAS -->
+                <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6">
+                        <div class="table table-responsive">
+
+
+                            <h:form prependId="false">
+                                <p:dataTable id="tabla3" value="#{manejadorEstudiosEmpleados.idiomasEmpleado()}" var="item"
+                                             emptyMessage="" 
+                                             rows="10"
+                                             paginator="true"
+                                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             rowsPerPageTemplate="5,10,15"
+                                             widgetVar="lista2"
+                                             paginatorPosition="bottom">
+
+                                    <f:facet name="header">
+                                        <p:outputPanel style="text-align: right;">
+                                            <h:outputText value="Buscar: " />
+                                            <p:inputText id="globalFilter" onkeyup="PF('lista2').filter()" style="width:200px;" />
+                                        </p:outputPanel>
+                                    </f:facet>
+
+                                    <p:column headerText="Idioma" filterBy="#{item.nombreIdioma}" style="width:35%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
+                                        <h:outputText value="#{item.nombreIdioma}"/>
+                                    </p:column>
+                                    <p:column headerText="Características" style="width:35%; text-align: center;">
+                                        <h:commandLink styleClass="btn-sm  glyphicon glyphicon-eye-open" style="text-decoration:none; color: #1d9ce5;" title="ver">
+                                            <f:setPropertyActionListener value="#{item}" target="#{manejadorEstudiosEmpleados.idiomas}" />
+                                            <p:ajax update="listCarac"  onsuccess="PF('viewIdiomas').show()"/>
+                                        </h:commandLink>  
+                                    </p:column>
+                                    <p:column headerText="Eliminar" style="width:30%; text-align: center;" >
+                                        <h:commandLink actionListener="#{manejadorEstudiosEmpleados.idiomaSeleccionado(item)}" styleClass="btn-sm glyphicon glyphicon-remove" style="text-decoration:none; color: #1d9ce5;" title="Eliminar" immediate="true">
+                                            <p:ajax update="tabla3"  onsuccess="PF('confirmation3').show()"/>
+                                        </h:commandLink>                                                     
+                                    </p:column>
+                                </p:dataTable>
+                            </h:form>
+
+                        </div>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div> 
+
+            </div>
+        </div>
+
+        <p:confirmDialog  message="Desea Eliminar Formación de Empleado" header="Confirmación"  closable="false" severity="info" widgetVar="confirmation1">
+            <h:form prependId="false" class="form-horizontal">
+                <h:commandLink value="Aceptar" actionListener="#{manejadorEstudiosEmpleados.eliminarEstudio()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true" />
+                <h:commandLink value="Cancelar" actionListener="#{manejadorEstudiosEmpleados.cancelar()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true"/>
+            </h:form>
+        </p:confirmDialog>
+
+        <p:confirmDialog  message="Desea Eliminar Formación de Empleado" header="Confirmación"  closable="false" severity="info" widgetVar="confirmation2">
+            <h:form prependId="false" class="form-horizontal">
+                <h:commandLink value="Aceptar" actionListener="#{manejadorEstudiosEmpleados.eliminarEstudio()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true" />
+                <h:commandLink value="Cancelar" actionListener="#{manejadorEstudiosEmpleados.cancelar()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true"/>
+            </h:form>
+        </p:confirmDialog>
+
+        <p:confirmDialog  message="Desea Eliminar Idiomas de Empleado" header="Confirmación"  closable="false" severity="info" widgetVar="confirmation3">
+            <h:form prependId="false" class="form-horizontal">
+                <h:commandLink value="Aceptar" actionListener="#{manejadorEstudiosEmpleados.eliminarIdioma()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true" />
+                <h:commandLink value="Cancelar" actionListener="#{manejadorEstudiosEmpleados.cancelar()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true"/>
+            </h:form>
+        </p:confirmDialog>
+
+        <p:confirmDialog  message="Desea Eliminar Características de Idioma" header="Confirmación"  closable="false" severity="info" widgetVar="confirmation4">
+            <h:form prependId="false" class="form-horizontal">
+                <h:commandLink value="Aceptar" actionListener="#{manejadorEstudiosEmpleados.eliminarCaracteristica()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true" >
+                    <f:ajax rendered="tabla4" execute="confirmation4" />
+                </h:commandLink>
+                <h:commandLink value="Cancelar" actionListener="#{manejadorEstudiosEmpleados.cancelar()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true"/>
+            </h:form>
+        </p:confirmDialog>
+
+        <!-- TABLA CARACTERISTICAS -->
+        <p:dialog  header="Ingreso de Idiomas" widgetVar="viewIdiomas" modal="true" height="auto" width="60%" draggable="false" closable="false" resizable="false" position="center,top">
+            <h2 class="text-info text-center">Caracteristicas de Idioma</h2>
+            <h:commandButton style="margin: 2px" styleClass="pull-right btn btn-info" actionListener="#{manejadorEstudiosEmpleados.reset()}" value="Cancelar" onclick="PF('viewIdiomas').hide()" /> 
+            <h:commandButton style="margin: 2px" value="Agregar Características a Idioma" class="pull-right btn btn-info" onclick="PF('carac').show();" />
+            <div class="clearfix"></div>
+            <br />
+            <div class="table table-responsive">
+                <f:view>
+                    <h:form prependId="false">
+                        <h:panelGroup id="listCarac" >
+                            <p:dataTable id="tabla4" value="#{manejadorEstudiosEmpleados.todosIdiomasId()}" var="item"
+                                         emptyMessage="" 
+                                         rows="10"
+                                         paginator="true"
+                                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         rowsPerPageTemplate="5,10,15"
+                                         widgetVar="lista3"
+                                         paginatorPosition="bottom">
+
+                                <f:facet name="header">
+                                    <p:outputPanel style="text-align: right;">
+                                        <h:outputText value="Buscar: " />
+                                        <p:inputText id="globalFilter" onkeyup="PF('lista3').filter()" style="width:200px" />
+                                    </p:outputPanel>
+                                </f:facet>
+                                <p:column headerText="Idioma" filterBy="#{item.idiomas.nombreIdioma}" style="width:10%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
+                                    <h:outputText value="#{item.idiomas.nombreIdioma}"/>
+                                </p:column>
+                                <p:column headerText="Institución" filterBy="#{item.institucionIdioma}" style="width:35%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
+                                    <h:outputText value="#{item.institucionIdioma}"/>
+                                </p:column>
+                                <p:column headerText="Nivel" filterBy="#{item.idNivel.nombreNivel}" style="width:15%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
+                                    <h:outputText value="#{item.idNivel.nombreNivel}"/>
+                                </p:column>
+                                <p:column headerText="Caracteristicas" filterBy="#{item.caracteristicasIdioma.caracteristicaIdioma}" style="width:30%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
+                                    <h:outputText value="#{item.caracteristicasIdioma.caracteristicaIdioma}"/>
+                                </p:column>
+                                <p:column headerText="Eliminar" style="width:10%; text-align: center;">
+                                    <h:commandLink actionListener="#{manejadorEstudiosEmpleados.caracteristicaSeleccionada(item)}" styleClass="btn-sm glyphicon glyphicon-remove" style="text-decoration:none; color: #1d9ce5;" title="Eliminar" immediate="true">
+                                        <p:ajax update="tabla4"  onsuccess="PF('confirmation4').show()"/>
+                                    </h:commandLink>  
+                                </p:column>
+                            </p:dataTable>
+                        </h:panelGroup>
+                    </h:form>
+                </f:view>
+
+            </div>
+        </p:dialog>
+
+        <p:dialog  header="Ingreso de Idiomas" widgetVar="idiomas" modal="true" height="auto" width="40%" draggable="false" closable="false" resizable="false" position="center,top">
+            <h:form enctype="multipart/form-data" prependId="false">
+
+                <p:panelGrid id="panelIdiomas" style="width: 100%;" styleClass="noBordes">
+                    <p:row>
+                        <p:column><h:outputLabel value="Empleado:"/></p:column>
+                        <p:column><h:outputText class="form-control" id="nombre4" value="#{manejadorEstudiosEmpleados.nombreEmp}" style="width: 100%"/></p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column><p:outputLabel for="idiomas" value="Idioma:"/></p:column>
+                        <p:column>
+                            <p:selectOneMenu id="idiomas" value="#{manejadorEstudiosEmpleados.idiomaSelecionado}" style="width: 100%" required="true"  requiredMessage="Seleccione un Idioma">
+                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                <f:selectItems value="#{manejadorEstudiosEmpleados.todosIdiomas()}" var="idioma" itemLabel="#{idioma.nombreIdioma}" itemValue="#{idioma.idIdioma}"/>
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:row> 
+
+                </p:panelGrid>
+                <br />
+
+                <h:commandButton style="margin: 2px" styleClass="btn btn-info" value="Guardar" action="#{manejadorEstudiosEmpleados.guardarIdioma()}" >
+                    <f:ajax execute="panelIdiomas" render="panelIdiomas" />
+                </h:commandButton>
+                <h:commandButton style="margin: 2px"  styleClass="btn btn-info" actionListener="#{manejadorEstudiosEmpleados.cancelarIdiomas()}" value="Cancelar" immediate="true">
+                    <f:ajax render="panelIdiomas" />
+                    <p:resetInput target="panelIdiomas" />
+                </h:commandButton>                
+
+            </h:form>
+        </p:dialog>
+
+        <p:dialog  header="Ingreso de Caracteristicas" widgetVar="carac" modal="true" height="auto" width="50%" draggable="false" closable="false" position="center,top" resizable="false">
+            <h:form prependId="false">
+
+                <p:panelGrid id="panelCarac" style="width: 100%;" styleClass="noBordes">
+
+                    <p:row>
+                        <p:column><p:outputLabel for="ins" value="Institución:"/></p:column>
+                        <p:column><p:inputText id="ins" value="#{manejadorEstudiosEmpleados.instIdioma}" required="true" requiredMessage="Debe ingresar una Institución" style="width: 100%; padding: 9px" /></p:column>
+                    </p:row>                     
+                    <p:row>
+                        <p:column><p:outputLabel for="caracteristicasIdioma" value="Características:"/></p:column>
+                        <p:column>
+                            <p:selectOneMenu  id="caracteristicasIdioma" value="#{manejadorEstudiosEmpleados.idCaracteristicaIdioma}" style="width: 100%"  required="true"  requiredMessage="Seleccione Caractistica de Idioma">
+                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                <f:selectItems value="#{manejadorEstudiosEmpleados.todasCaracIdiomas()}" var="caracteristica" itemLabel="#{caracteristica.caracteristicaIdioma}" itemValue="#{caracteristica.idCaractIdioma}"/>
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:row> 
+                    <p:row>
+                        <p:column><p:outputLabel for="idNivel" value="Nivel:"/></p:column>
+                        <p:column>
+                            <p:selectOneMenu id="idNivel" value="#{manejadorEstudiosEmpleados.idiomasCaracteristicas.idNivel}" style="width: 100%" converter="#{nivelIdiomaConvertidor}" >
+                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                <f:selectItems value="#{manejadorEstudiosEmpleados.todosNiveles()}" var="nivel" itemLabel="#{nivel.nombreNivel}" itemValue="#{nivel}"/>
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+                <br />
+
+                <h:commandButton style="margin: 2px" styleClass="btn btn-info" value="Guardar" action="#{manejadorEstudiosEmpleados.AgregadnoCaracteristicasIdiomas()}" >
+                    <f:ajax execute="panelCarac" render="panelCarac" />
+                </h:commandButton>
+                <h:commandButton style="margin: 2px"  styleClass="btn btn-info"  value="Cancelar" onclick="PF('carac').hide()">
+                    <f:ajax render="panelCarac" />
+                    <p:resetInput target="panelCarac" />
+                </h:commandButton>
+
+            </h:form>
+        </p:dialog>
+
+        <p:dialog  header="Ingreso de Educación Formal" widgetVar="formal" modal="true" height="auto" width="50%" draggable="false" closable="false" resizable="false" position="center,top">
+            <h:form enctype="multipart/form-data" prependId="false">
+                <p:panelGrid id="panelFormal" style="width: 100%;" styleClass="noBordes">
+                    <p:row>
+                        <p:column><p:outputLabel for="institucionEstudio" value="Institución:"/></p:column>
+                        <p:column><p:inputText id="institucionEstudio" value="#{manejadorEstudiosEmpleados.estudiosEmp.institucionEstudio}" style="width: 100%; padding: 9px" required="true" requiredMessage="Ingrese Institucíon de Estudio"/></p:column>
+                        <p:column><p:outputLabel for="anioEstudio" value="Año:"/></p:column>
+                        <p:column>
+                            <p:selectOneMenu id="anioEstudio" value="#{manejadorEstudiosEmpleados.anio}" style="width: 100%" required="true" requiredMessage="Seleccione un año">
+                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                <f:selectItems value="#{manejadorEstudiosEmpleados.todosAnios()}" var="anio" itemLabel="#{anio.anio}" itemValue="#{anio.anio}"/>                                                    
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:row>                                    
+                    <p:row>
+                        <p:column><p:outputLabel for="idProfOficio" value="Profeción u Oficio:"/></p:column>
+                        <p:column colspan="3">
+                            <p:selectOneMenu  id="idProfOficio" value="#{manejadorEstudiosEmpleados.estudiosEmp.idProfOficio}" style="width: 100%" required="true" converter="#{profOficioConvertidor}" requiredMessage="Seleccione una Profecion/Oficio">
+                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                <f:selectItems value="#{manejadorEstudiosEmpleados.todasProfOficios()}" var="prof" itemLabel="#{prof.nombreProfOficio}" itemValue="#{prof}"/>                                                    
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column><p:outputLabel value="Documento que lo respalda:"/></p:column>                                        
+                        <p:column>
+                            <p:fileUpload mode="advanced" fileUploadListener="#{manejadorGestionEmpleado.handleFileUpload}" label="Examinar..."  allowTypes="/(\.|\/)(gif|jpg|jpeg|gif|png|doc|pdf|docx|PNG|GIF|JPG|JPEG|DOC|PDF|DOCX)$/" auto="true">
+                                <f:attribute name="tipoDoc" value="4" />
+                            </p:fileUpload>
+                        </p:column>
+                        <p:column colspan="2"><p:outputLabel  value="#{fixme}" style="width: 100%"/></p:column>
+                    </p:row>
+                </p:panelGrid>
+                <br />
+                <h:commandButton style="margin: 2px" styleClass="btn btn-info" value="Guardar" action="#{manejadorEstudiosEmpleados.guardarEstudioFormal()}" >
+                    <f:ajax execute="panelFormal" render="panelFormal" />
+                </h:commandButton>
+                <h:commandButton style="margin: 2px"  styleClass="btn btn-info" actionListener="#{manejadorEstudiosEmpleados.cerrarFormal()}" value="Cancelar" immediate="true" >
+                    <f:ajax render="panelFormal" />
+                    <p:resetInput target="panelFormal" />
+                </h:commandButton>                
+
+            </h:form>
+        </p:dialog>
+
+        <p:dialog  header="Ingreso de Educación No Formal" widgetVar="noformal" modal="true" height="auto" width="50%" closable="false" draggable="false" resizable="false" position="center,top">
+            <h:form enctype="multipart/form-data" prependId="false">
+                <p:panelGrid id="panelNoFormal" style="width: 100%;" styleClass="noBordes">
+                    <p:row>
+                        <p:column><p:outputLabel for="institucionEstudionf" value="Institución:"/></p:column>
+                        <p:column><p:inputText  id="institucionEstudionf" value="#{manejadorEstudiosEmpleados.estudiosEmp.institucionEstudio}" style="width: 100%; padding: 9px;" required="true" requiredMessage="Ingrese Institución de Estudio"/></p:column>
+                        <p:column><p:outputLabel for="anioEstudionf" value="Año:"/></p:column>
+                        <p:column>
+                            <p:selectOneMenu id="anioEstudionf" value="#{manejadorEstudiosEmpleados.anio}" style="width: 100%" required="true" requiredMessage="Seleccione un año">
+                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                <f:selectItems value="#{manejadorEstudiosEmpleados.todosAnios()}" var="anio" itemLabel="#{anio.anio}" itemValue="#{anio.anio}"/>                                                    
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:row>                                        
+                    <p:row>
+                        <p:column><p:outputLabel for="idProfOficionf" value="Profeción u Oficio:"/></p:column>
+                        <p:column colspan="3">
+                            <p:inputText id="idProfOficionf" value="#{manejadorEstudiosEmpleados.estudiosEmp.descripcionNoFormal}" style="width: 100%" required="true" requiredMessage="Ingrese Profeción/Oficio"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column><p:outputLabel value="Documento que lo respalda:"/></p:column>                                        
+                        <p:column>
+                            <p:fileUpload mode="advanced" fileUploadListener="#{manejadorGestionEmpleado.handleFileUpload}"  label="Examinar..."  allowTypes="/(\.|\/)(gif|jpg|jpeg|gif|png|doc|pdf|docx|PNG|GIF|JPG|JPEG|DOC|PDF|DOCX)$/" auto="true">
+                                <f:attribute name="tipoDoc" value="5" />
+                            </p:fileUpload>
+                        </p:column>
+                        <p:column colspan="2"><p:outputLabel  value="#{fixme}" style="width: 100%"/></p:column>
+                    </p:row>
+                </p:panelGrid>
+                <br />
+                <h:commandButton style="margin: 2px" styleClass="btn btn-info" value="Guardar" action="#{manejadorEstudiosEmpleados.guardarEstudioNoFormal()}" >
+                    <f:ajax execute="panelNoFormal" render="panelNoFormal" />
+                </h:commandButton>
+                <h:commandButton style="margin: 2px"  styleClass="btn btn-info"  value="Cancelar" actionListener="#{manejadorEstudiosEmpleados.cerrarNoFormal()}" onclick="PF('noformal').hide()" immediate="true">
+                    <f:ajax render="panelNoFormal" />
+                    <p:resetInput target="panelNoFormal" />
+                </h:commandButton>  
+            </h:form>
+        </p:dialog>
+
+        <p:dialog  header="Editar Educación Formal" widgetVar="formalEdit" modal="true" height="auto" width="50%" draggable="false" resizable="false" position="center,top">
+            <h:form enctype="multipart/form-data" prependId="false">
+                <p:panelGrid id="panelFormalEdit" style="width: 100%;" styleClass="noBordes">
+                    <p:row>
+                        <p:column><h:outputLabel value="Institución:"/></p:column>
+                        <p:column><p:inputText class="form-control"  value="#{manejadorEstudiosEmpleados.estudiosEmp.institucionEstudio}" style="width: 100%" required="true" requiredMessage="Ingrese Institución de Estudio"/></p:column>
+                        <p:column><h:outputLabel value="Año:"/></p:column>
+                        <p:column>
+                            <h:selectOneMenu class="form-control"  value="#{manejadorEstudiosEmpleados.anio}" style="width: 100%" required="true" requiredMessage="Seleccione un año">
+                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                <f:selectItems value="#{manejadorEstudiosEmpleados.todosAnios()}" var="anio" itemLabel="#{anio.anio}" itemValue="#{anio.anio}"/>                                                    
+                            </h:selectOneMenu>
+                        </p:column>
+                    </p:row>                                    
+                    <p:row>
+                        <p:column><h:outputLabel value="Profeción u Oficio:"/></p:column>
+                        <p:column colspan="3">
+                            <h:selectOneMenu  class="form-control"  value="#{manejadorEstudiosEmpleados.estudiosEmp.idProfOficio}" style="width: 100%" required="true" converter="#{profOficioConvertidor}" requiredMessage="Seleccione un Profeción/Oficio">
+                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                <f:selectItems value="#{manejadorEstudiosEmpleados.todasProfOficios()}" var="prof" itemLabel="#{prof.nombreProfOficio}" itemValue="#{prof}"/>                                                    
+                            </h:selectOneMenu>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column><h:outputLabel value="Documento que lo respalda:"/></p:column>                                        
+                        <p:column>
+                            <p:fileUpload mode="advanced" fileUploadListener="#{manejadorGestionEmpleado.handleFileUpload}" label="Examinar..." allowTypes="/(\.|\/)(gif|jpg|jpeg|gif|png|doc|pdf|docx|PNG|GIF|JPG|JPEG|DOC|PDF|DOCX)$/" auto="true">
+                                <f:attribute name="tipoDoc" value="4" />
+                            </p:fileUpload>
+                        </p:column>
+                        <p:column colspan="2"><p:outputLabel value="#{fixme}" style="width: 100%"/></p:column>
+                    </p:row>
+                </p:panelGrid>
+                <br />
+                <h:commandButton style="margin: 2px" styleClass="btn btn-info" value="Modificar" action="#{manejadorEstudiosEmpleados.editarEstudio()}" >
+                    <f:ajax execute="panelFormalEdit" render="panelFormalEdit" />
+                </h:commandButton>
+                <h:commandButton style="margin: 2px"  styleClass="btn btn-info"  value="Cancelar" onclick="PF('formalEdit').hide()">
+                    <f:ajax render="panelFormalEdit" />
+                    <p:resetInput target="panelFormalEdit" />
+                </h:commandButton>                
+
+            </h:form>
+        </p:dialog>
+
+        <p:dialog  header="Editar de Educación No Formal" widgetVar="noformalEdit" modal="true" height="auto" width="50%" draggable="false" resizable="false" position="center,top">
+            <h:form enctype="multipart/form-data" prependId="false">
+                <p:panelGrid id="panelNoFormalEdit" style="width: 100%;" styleClass="noBordes">
+                    <p:row>
+                        <p:column><h:outputLabel value="Institución:"/></p:column>
+                        <p:column><p:inputText class="form-control"  value="#{manejadorEstudiosEmpleados.estudiosEmp.institucionEstudio}" style="width: 100%" required="true" requiredMessage="Ingrese Institución de Estudio"/></p:column>
+                        <p:column><h:outputLabel value="Año:"/></p:column>
+                        <p:column>
+                            <h:selectOneMenu class="form-control" value="#{manejadorEstudiosEmpleados.anio}" style="width: 100%" required="true" requiredMessage="Seleccione un año">
+                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                <f:selectItems value="#{manejadorEstudiosEmpleados.todosAnios()}" var="anio" itemLabel="#{anio.anio}" itemValue="#{anio.anio}"/>                                                    
+                            </h:selectOneMenu>
+                        </p:column>
+                    </p:row>                                        
+                    <p:row>
+                        <p:column><h:outputLabel value="Profeción u Oficio:"/></p:column>
+                        <p:column colspan="3">
+                            <p:inputText class="form-control" id="idProfOficioe" value="#{manejadorEstudiosEmpleados.estudiosEmp.descripcionNoFormal}" style="width: 100%" required="true" requiredMessage="Ingrese Profeción/Oficio"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column><h:outputLabel value="Documento que lo respalda:"/></p:column>                                        
+                        <p:column>
+                            <p:fileUpload mode="advanced" fileUploadListener="#{manejadorGestionEmpleado.handleFileUpload}"  label="Examinar..."  allowTypes="/(\.|\/)(gif|jpg|jpeg|gif|png|doc|pdf|docx|PNG|GIF|JPG|JPEG|DOC|PDF|DOCX)$/" auto="true">
+                                <f:attribute name="tipoDoc" value="5" />
+                            </p:fileUpload>
+                        </p:column>
+                        <p:column colspan="2"><p:outputLabel  value="#{fixme}" style="width: 100%"/></p:column>
+                    </p:row>
+                </p:panelGrid>
+                <br />
+                <h:commandButton style="margin: 2px" styleClass="btn btn-info" value="Modificar" action="#{manejadorEstudiosEmpleados.editarEstudio()}" >
+                    <f:ajax execute="panelNoFormalEdit" render="panelNoFormalEdit" />
+                </h:commandButton>
+                <h:commandButton style="margin: 2px"  styleClass="btn btn-info"  value="Cancelar" onclick="PF('noformalEdit').hide()">
+                    <f:ajax render="panelNoFormalEdit" />
+                    <p:resetInput target="panelNoFormalEdit" />
+                </h:commandButton>  
+            </h:form>
+        </p:dialog>
+
+    </ui:define>
+
+</ui:composition>

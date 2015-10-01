@@ -11,7 +11,8 @@
         <link href="#{request.contextPath}/resources/datatables/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
         <div class="page-header">
             <h1><strong>GESTIÓN DE PRESTACIONES</strong></h1>
-            <h:form>
+            <h:form prependId="false">
+                <p:growl id="growl" showDetail="false"  autoUpdate="true" life="10000" />
                 <h:commandLink value="Nuevo Registro" styleClass="btn btn-info pull-right"  style="text-decoration:none;" action="#{manejadorPrestaciones.nuevaPrestacion()}" immediate="true" />
             </h:form>
             <div class="clearfix" ></div>
@@ -28,7 +29,7 @@
                             <f:view>
                                 <h:form prependId="false">
                                     <h:panelGroup id ="tabla">
-                                        <h:dataTable id="listPrestraciones" rendered="#{not empty manejadorPrestaciones.todasPrestaciones()}" value="#{manejadorPrestaciones.todasPrestaciones()}" var="item" style="font-size: 14px" styleClass="table table-striped table-hover">
+                                        <h:dataTable id="listPrestraciones" value="#{manejadorPrestaciones.todasPrestacionesPorAnio()}" var="item" style="font-size: 14px" styleClass="table table-striped table-hover">
                                             <h:column>
 
                                             </h:column>
@@ -82,8 +83,8 @@
                                                         <p:ajax update="panelanioEditar" />
                                                         <p:ajax update="tabla"  onsuccess="PF('anioPres').show()"/>
                                                     </h:commandLink>
-                                                    <h:commandLink action="#{manejadorPrestaciones.eliminarPrestacion(item)}" styleClass="btn-sm glyphicon glyphicon-remove" style="text-decoration:none;" title="Eliminar">
-                                                        <f:ajax execute="@this" render="tabla" />
+                                                    <h:commandLink actionListener="#{manejadorPrestaciones.prestacionSelecionada(item)}" styleClass="btn-sm glyphicon glyphicon-remove" style="text-decoration:none;" title="Eliminar" immediate="true">
+                                                        <p:ajax update="tabla"  onsuccess="PF('confirmation').show()"/>
                                                     </h:commandLink>                                                     
                                                 </center>
                                             </h:column>
@@ -99,118 +100,139 @@
             </div>
         </div>
 
-        <p:dialog header="Agregar Productos a Prestacion" widgetVar="addProductoPres" modal="true" height="auto" width="auto" resizable="false" position="center,top">
-            <h:form class="form-horizontal">
-                <div class="form-group">
-                    <h:outputLabel value="Producto:" styleClass="col-lg-4 control-label"/>
-                    <div class="col-lg-8">
-                        <h:selectOneMenu class="form-control" id="prod" value="#{manejadorPrestaciones.producPrestacion}" required="true" requiredMessage="Seleccione un producto">
-                            <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
-                            <f:selectItems value="#{manejadorPrestaciones.todosProductos()}" var="prod" itemLabel="#{prod.nombreProd}" itemValue="#{prod.idProducto}"/>
-                        </h:selectOneMenu>
+        <p:confirmDialog  message="Desea Eliminar Prestación" header="Confirmación"  closable="false" severity="info" widgetVar="confirmation">
+            <h:form prependId="false" class="form-horizontal">
+                <h:commandLink value="Aceptar" actionListener="#{manejadorPrestaciones.eliminarPrestacion()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true" />
+                <h:commandLink value="Cancelar" actionListener="#{manejadorPrestaciones.cancelarEditar()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true"/>
+            </h:form>
+        </p:confirmDialog>
+
+        <p:dialog header="Agregar Productos a Prestacion" widgetVar="addProductoPres" modal="true" height="auto" width="40%" resizable="false" position="center,top" draggable="false" closable="false" styleClass="disable-scroll">
+            <h:form class="form-horizontal" prependId="false">
+                <h:panelGroup id ="prodPresPanel">
+                    <div class="form-group">
+                        <p:outputLabel for="prod" value="Producto:" styleClass="col-lg-4 control-label"/>
+                        <div class="col-lg-8">
+                            <p:selectOneMenu id="prod" style="width: 100%;" value="#{manejadorPrestaciones.producPrestacion}" required="true" requiredMessage="Seleccione un producto">
+                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                <f:selectItems value="#{manejadorPrestaciones.todosProductos()}" var="prod" itemLabel="#{prod.nombreProd}" itemValue="#{prod.idProducto}"/>
+                            </p:selectOneMenu>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <h:outputLabel value="Cantidad:" styleClass="col-lg-4 control-label"/>
-                    <div class="col-lg-8">
-                        <h:inputText id="cantidad" styleClass="form-control" value="#{manejadorPrestaciones.cantidad}" required="true" requiredMessage="Ingrese cantidad"/>
+                    <div class="form-group">
+                        <p:outputLabel for="cantidad" value="Cantidad:" styleClass="col-lg-4 control-label"/>
+                        <div class="col-lg-8">
+                            <p:inputText id="cantidad" style="width: 100%; padding: 9px;" value="#{manejadorPrestaciones.cantidad}" required="true" requiredMessage="Ingrese cantidad" >
+                                <f:validateLongRange minimum="1" />
+                            </p:inputText>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-lg-4"></div>
-                    <div class="col-lg-8">
-                        <h:commandButton style="margin: 2px" styleClass="btn btn-info" value="Guardar" action="#{manejadorPrestaciones.addProdPrestacion()}"/>
-                        <h:commandButton style="margin: 2px" styleClass="btn btn-info" value="Cancelar" action="#{manejadorPrestaciones.cancelarPrestacion()}"/>
+                    <div class="form-group">
+                        <div class="col-lg-4"></div>
+                        <div class="col-lg-8">
+                            <h:commandLink style="margin: 2px; color: white;" styleClass="btn btn-info" value="Guardar" action="#{manejadorPrestaciones.addProdPrestacion()}" >
+                                <p:ajax update="prodPresPanel" process="prodPresPanel" />
+                            </h:commandLink>
+                            <h:commandLink style="margin: 2px; color: white;" styleClass="btn btn-info" value="Cancelar" immediate="true" >
+                                <p:ajax onsuccess="PF('addProductoPres').hide()"/>
+                            </h:commandLink>
+                        </div>
                     </div>
-                </div>
+                </h:panelGroup>
             </h:form>
         </p:dialog>
 
-        <p:dialog header="Productos de la Prestacion" widgetVar="productoPres" modal="true" height="auto" width="auto" resizable="false" position="center,top">
+        <p:dialog header="Productos de la Prestacion" widgetVar="productoPres" modal="true" height="auto" width="60%" resizable="false" position="center,top" draggable="false" closable="false" styleClass="disable-scroll">
 
-            <h:commandButton value="Agregar Productos a Prestacion" class="pull-right btn btn-info" onclick="PF('addProductoPres').show();" />
+            <h:form>
+                <h:commandLink style="color: white; margin: 2px;" styleClass="pull-right btn btn-info" value="Cancelar" action="#{manejadorPrestaciones.cancelarPrestacion()}" immediate="true"/>
+                <h:commandLink style="color: white; margin: 2px;" value="Agregar Productos a Prestacion" class="pull-right btn btn-info">
+                    <p:ajax update="tablaProdPres"  onsuccess="PF('addProductoPres').show()"/>
+                </h:commandLink>
+            </h:form>
             <div class="clearfix"></div>
             <br />
             <div class="table table-responsive">
                 <f:view>
                     <h:form prependId="false">
-                        <h:panelGroup id ="tablaProdPres">
-                            <h:dataTable rendered="#{not empty manejadorPrestaciones.prestacion}" id="listCarac" value="#{manejadorPrestaciones.productosPrestacion()}" var="item" style="font-size: 14px" styleClass="table table-striped table-hover">
-                                <h:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="Nombre"/>
-                                    </f:facet>
-                                    <h:outputText value="#{item.producto.nombreProd}"/>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">
-                                        <center>
-                                            <h:outputText value="Costo"/>
-                                        </center>
-                                    </f:facet>
-                                    <center>
-                                        <h:outputText value="$ " />
-                                        <h:outputText value="#{item.producto.costoUnit}" >
-                                            <f:convertNumber pattern="#0.00" />
-                                        </h:outputText>
-                                    </center>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">
-                                        <center>
-                                            <h:outputText value="Cantidad"/>
-                                        </center>
-                                    </f:facet>
-                                    <center>
-                                        <h:outputText value="#{item.cantidad}"/>
-                                    </center>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">
-                                        <center>
-                                            <h:outputText value="Eliminar"/>
-                                        </center>
-                                    </f:facet>
-                                    <center>                                        
-                                        <h:commandLink action="#{manejadorPrestaciones.eliminarProdPrestacion(item)}" styleClass="btn-sm glyphicon glyphicon-remove" style="text-decoration:none;" title="Eliminar">
-                                            <f:ajax execute="@this" render="tabla" />
-                                        </h:commandLink>                                                     
-                                    </center>
-                                </h:column>
-                            </h:dataTable>
-                        </h:panelGroup>
+                        <p:dataTable id ="tablaProdPres" value="#{manejadorPrestaciones.productosPrestacion()}" var="item"
+                                     emptyMessage="" 
+                                     rows="5"
+                                     paginator="true"
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15"
+                                     widgetVar="listado"
+                                     paginatorPosition="bottom">
+
+                            <f:facet name="header">
+                                <p:outputPanel style="text-align: right;">
+                                    <h:outputText value="Buscar:  " />
+                                    <p:inputText id="globalFilter" onkeyup="PF('listado').filter()" style="width:200px;"/>
+                                </p:outputPanel>
+                            </f:facet>
+
+                            <p:column headerText="Nombre" filterBy="#{item.producto.nombreProd}" style="width:00%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
+                                <h:outputText value="#{item.producto.nombreProd}"/>
+                            </p:column>
+                            <p:column headerText="Costo" filterBy="#{item.producto.costoUnit}" style="width:00%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
+                                <h:outputText value="$ " />
+                                <h:outputText value="#{item.producto.costoUnit}" >
+                                    <f:convertNumber pattern="#0.00" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Cantidad" filterBy="#{item.cantidad}" style="width:00%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
+                                <h:outputText value="#{item.cantidad}"/>
+                            </p:column>
+                            <p:column headerText="Eliminar" filterBy="" style="width:00%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
+                                <h:commandLink actionListener="#{manejadorPrestaciones.productoPrestacionSelecionada(item)}" styleClass="btn-sm glyphicon glyphicon-remove" style="text-decoration:none; color: #1d9ce5;" title="Eliminar">
+                                    <p:ajax update="tablaProdPres"  onsuccess="PF('confirmationProd').show()"/>
+                                </h:commandLink>
+                            </p:column>
+                        </p:dataTable>
                     </h:form>
                 </f:view>
             </div>
         </p:dialog>
 
-        <p:dialog header="Editar Año de Prestacion" widgetVar="anioPres" modal="true" height="auto" width="auto" resizable="false" position="center,top">
+        <p:confirmDialog  message="Desea Eliminar Producto de esta Prestación" header="Confirmación"  closable="false" severity="info" widgetVar="confirmationProd">
+            <h:form prependId="false" class="form-horizontal">
+                <h:commandLink value="Aceptar" actionListener="#{manejadorPrestaciones.eliminarProdPrestacion()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" >
+                    <f:ajax execute="confirmationProd" render="tablaProdPres" />
+                </h:commandLink>
+                <h:commandLink value="Cancelar" actionListener="#{manejadorPrestaciones.cancelarEditar()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true"/>
+            </h:form>
+        </p:confirmDialog>
+
+        <p:dialog header="Editar Año de Prestacion" widgetVar="anioPres" modal="true" height="auto" width="50%" resizable="false" position="center,top" draggable="false" closable="false" styleClass="disable-scroll">
             <h:form class="form-horizontal" prependId="false">
 
                 <h:panelGroup id ="panelanioEditar">
 
                     <div class="form-group">
-                        <h:outputLabel value="Tipo de Prestación:" styleClass="col-lg-4 control-label"/>
-                        <h:outputLabel value="#{manejadorPrestaciones.prestacion.idTipoPrestacion.nombreTipoPrestacion}" styleClass="col-lg-8 control-label"/>
+                        <p:outputLabel value="Tipo de Prestación:" styleClass="col-lg-4 control-label"/>
+                        <div class="col-lg-8">
+                            <h:outputText value="#{manejadorPrestaciones.prestacion.idTipoPrestacion.nombreTipoPrestacion}" styleClass="form-control"/>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <h:outputLabel value="Año:" styleClass="col-lg-4 control-label"/>
+                        <p:outputLabel for="idAnio" value="Año:" styleClass="col-lg-4 control-label"/>
                         <div class="col-lg-8">
-                            <h:selectOneMenu class="form-control" id="idAnio" value="#{manejadorPrestaciones.prestacion.idAnio}" converter="#{anioConvertidor}" required="true" requiredMessage="Seleccione un Año">
+                            <p:selectOneMenu id="idAnio" style="width: 100%;" value="#{manejadorPrestaciones.prestacion.idAnio}" converter="#{anioConvertidor}" required="true" requiredMessage="Seleccione un Año">
                                 <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
                                 <f:selectItems value="#{manejadorPrestaciones.todosAnios()}" var="anio" itemLabel="#{anio.anio}" itemValue="#{anio}"/>
-                            </h:selectOneMenu>
+                            </p:selectOneMenu>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <div class="col-lg-4"></div>
                         <div class="col-lg-8">
-                            <h:commandButton style="margin: 2px" styleClass="btn btn-info" value="Modificar" action="#{manejadorPrestaciones.editarPrestacion()}"/>
-                            <h:commandButton style="margin: 2px"  styleClass="btn btn-info"  value="Cancelar" action="#{manejadorPrestaciones.cancelarPrestacion()}" onclick="PF('anioPres').hide()">
-                                <f:ajax execute="@this" render="panelanioEditar" />
+                            <h:commandLink style="margin: 2px; color: white;" styleClass="btn btn-info" value="Modificar" action="#{manejadorPrestaciones.editarPrestacion()}">
+                                <p:ajax update="panelanioEditar" process="panelanioEditar" />
+                            </h:commandLink>
+                            <h:commandLink style="margin: 2px; color: white;"  styleClass="btn btn-info"  value="Cancelar" action="#{manejadorPrestaciones.cancelarPrestacion()}" onclick="PF('anioPres').hide()" immediate="true">
                                 <p:resetInput target="panelanioEditar" />
-                            </h:commandButton>
+                            </h:commandLink>
                         </div>   
                     </div>
                 </h:panelGroup>

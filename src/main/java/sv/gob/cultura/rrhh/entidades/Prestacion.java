@@ -35,6 +35,7 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "Prestacion.findAll", query = "SELECT p FROM Prestacion p"),
     @NamedQuery(name = "Prestacion.findByIdPrestacion", query = "SELECT p FROM Prestacion p WHERE p.idPrestacion = :idPrestacion"),
     @NamedQuery(name = "Prestacion.findByUserCreaPrestacion", query = "SELECT p FROM Prestacion p WHERE p.userCreaPrestacion = :userCreaPrestacion"),
+    @NamedQuery(name = "Prestacion.findByAnio", query = "SELECT p FROM Prestacion p WHERE p.idAnio.anio = :anio"),
     @NamedQuery(name = "Prestacion.findByFechaCreaPrestacion", query = "SELECT p FROM Prestacion p WHERE p.fechaCreaPrestacion = :fechaCreaPrestacion"),
     @NamedQuery(name = "Prestacion.findByUserModPrestacion", query = "SELECT p FROM Prestacion p WHERE p.userModPrestacion = :userModPrestacion"),
     @NamedQuery(name = "Prestacion.findByFechaModPrestacion", query = "SELECT p FROM Prestacion p WHERE p.fechaModPrestacion = :fechaModPrestacion")

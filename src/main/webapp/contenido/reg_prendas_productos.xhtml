@@ -23,40 +23,37 @@
                         </div>
                         <div class="col-md-6">
 
-                            <h:form class="form-horizontal">
-                                <p:messages showDetail="true" />
+                            <h:form class="form-horizontal" prependId="false">
+                                <p:growl id="growl" showDetail="false"  autoUpdate="true" life="10000" /> 
                                 <div class="form-group">
-                                    <h:outputLabel value="Nombre del Producto:" styleClass="col-lg-4 control-label"/>
+                                    <p:outputLabel for="nombreProd" value="Nombre del Producto:" styleClass="col-lg-4 control-label"/>
                                     <div class="col-lg-8">
-                                        <h:inputText id="nombreProd" styleClass="form-control" value="#{manejadorPrendasProductos.producto.nombreProd}" required="true" requiredMessage="Ingrese Nombre del Producto"/>
+                                        <p:inputText style="width: 100%; padding: 9px;" id="nombreProd" value="#{manejadorPrendasProductos.producto.nombreProd}" required="true" requiredMessage="Ingrese Nombre del Producto"/>
                                     </div>
                                 </div>
+                                
                                 <div class="form-group">
-                                    <h:outputLabel value="Descripción:" styleClass="col-lg-4 control-label"/>
+                                    <p:outputLabel for="proveedor" value="Proveedor:" styleClass="col-lg-4 control-label"/>
                                     <div class="col-lg-8">
-                                        <h:inputText id="descripcionProd" styleClass="form-control" value="#{manejadorPrendasProductos.producto.descripcionProd}" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <h:outputLabel value="Proveedor:" styleClass="col-lg-4 control-label"/>
-                                    <div class="col-lg-8">
-                                        <h:selectOneMenu class="form-control" value="#{manejadorPrendasProductos.producto.idProveedor}" style="width: 100%" required="true" requiredMessage="Seleccione un Proveedor" converter="#{proveedorConvertidor}">
+                                        <p:selectOneMenu id="proveedor" style="width: 100%;" value="#{manejadorPrendasProductos.producto.idProveedor}" required="true" requiredMessage="Seleccione un Proveedor" converter="#{proveedorConvertidor}">
                                             <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
                                             <f:selectItems value="#{manejadorPrendasProductos.todosProveedores()}" var="proveedores" itemLabel="#{proveedores.nombreProv}" itemValue="#{proveedores}"/>                                                    
-                                        </h:selectOneMenu>
+                                        </p:selectOneMenu>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <h:outputLabel value="Costo Unitario: $ " styleClass="col-lg-4 control-label"/>
+                                    <p:outputLabel for="costo" value="Costo Unitario: $ " styleClass="col-lg-4 control-label"/>
                                     <div class="col-lg-8">
-                                        <h:inputText id="costoUnit" styleClass="form-control" value="#{manejadorPrendasProductos.producto.costoUnit}" required="true" requiredMessage="Ingrese Costo Unitario"/>
+                                        <p:inputText id="costo" style="width: 100%; padding: 9px;" value="#{manejadorPrendasProductos.producto.costoUnit}" required="true" requiredMessage="Ingrese Costo Unitario" >
+                                            <f:validateDoubleRange minimum="0.01" />
+                                        </p:inputText>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-lg-4"></div>
                                     <div class="col-lg-8">
-                                        <h:commandLink style="margin: 2px" styleClass="btn btn-info" value="Guardar" action="#{manejadorPrendasProductos.guardarProducto()}"/>
-                                        <h:commandLink style="margin: 2px" styleClass="btn btn-info" value="Cancelar" action="#{manejadorPrendasProductos.cancelar()}"/>
+                                        <h:commandLink style="margin: 2px" styleClass="btn btn-info"  value="Guardar" action="#{manejadorPrendasProductos.guardarProducto()}" />
+                                        <h:commandLink style="margin: 2px" styleClass="btn btn-info" value="Cancelar" action="#{manejadorPrendasProductos.cancelar()}" immediate="true"/>
                                     </div>
 
                                 </div>

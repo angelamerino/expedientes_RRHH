@@ -11,7 +11,8 @@
         <link href="#{request.contextPath}/resources/datatables/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
         <div class="page-header">
             <h1><strong>GESTIÓN DE MEJORA SALARIAL</strong></h1>
-            <h:form>
+            <h:form prependId="false">
+                <p:growl id="growl" showDetail="false"  autoUpdate="true" life="10000" />
                 <h:commandLink value="Nuevo Registro" styleClass="btn btn-info pull-right"  style="text-decoration:none;" action="#{manejadorAumentoMejoraSalarial.nuevaMejora}" immediate="true" />
             </h:form>
             <div class="clearfix" ></div>
@@ -22,9 +23,9 @@
             <div class="panel-body">
                 <div class="table table-responsive">
                     <f:view>
-                        <h:form prependId="false">
+                        <h:form prependId="false">                             
                             <h:panelGroup id ="tabla">
-                                <h:dataTable id="listHistorialSalalarial" value="#{manejadorAumentoMejoraSalarial.todosHistorialSalarial()}" var="item" style="font-size: 14px" styleClass="table table-striped table-hover">
+                                <h:dataTable id="listHistorialSalalarial" value="#{manejadorAumentoMejoraSalarial.todosHistorialSalarialMejora()}" var="item" style="font-size: 14px" styleClass="table table-striped table-hover">
                                     <h:column>
 
                                     </h:column>
@@ -100,7 +101,8 @@
                                                 <p:ajax update="panelEditar" />
                                                 <p:ajax update="tabla"  onsuccess="PF('mejoraEditar').show()"/>
                                             </h:commandLink>
-                                            <h:commandLink action="#{manejadorAumentoMejoraSalarial.eliminarMejora(item)}" styleClass="btn-sm glyphicon glyphicon-remove" style="text-decoration:none;" title="Eliminar" immediate="true">
+                                            <h:commandLink actionListener="#{manejadorAumentoMejoraSalarial.mejoraSeleccionada(item)}"  styleClass="btn-sm glyphicon glyphicon-remove" style="text-decoration:none;" title="Eliminar" immediate="true">
+                                                <p:ajax update="tabla"  onsuccess="PF('confirmation').show()"/>
                                             </h:commandLink>                                                        
                                         </center>
                                     </h:column>
@@ -112,11 +114,30 @@
                 </div>
             </div>
         </div> 
+        
+        <p:confirmDialog  message="Desea Eliminar Mejora Salarial de Empleado" header="Confirmación"  closable="false" severity="info" widgetVar="confirmation">
+            <h:form prependId="false" class="form-horizontal">
+                <h:commandLink value="Aceptar" actionListener="#{manejadorAumentoMejoraSalarial.eliminarMejora()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true" />
+                <h:commandLink value="Cancelar" actionListener="#{manejadorAumentoMejoraSalarial.cancelarEditarMejora()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true"/>
+            </h:form>
+        </p:confirmDialog>
 
         <p:dialog header="Editar Mejora Salarial" widgetVar="mejoraEditar" closable="false" modal="true" height="auto" width="600px" resizable="false" position="center,top">
             <div class="row">
                 <h:form prependId="false" class="form-horizontal">
                     <h:panelGroup id ="panelEditar">
+                        <div class="form-group">
+                            <h:outputLabel value="Empleado:" styleClass="col-lg-4 control-label"/>
+                            <div class="col-lg-7">
+                                <h:outputText styleClass="form-control" id="empleado" value="#{manejadorAumentoMejoraSalarial.historialSalarial.idEmpleado.nombreEmpleado}" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <h:outputLabel value="Salario Actual: $" styleClass="col-lg-4 control-label"/>
+                            <div class="col-lg-7">
+                                <h:outputText styleClass="form-control" id="salarioActualHsalarial" value="#{manejadorAumentoMejoraSalarial.historialSalarial.salarioActualHsalarial}" />
+                            </div>
+                        </div>
                         <div class="form-group">
                             <h:outputLabel value="Tipo de Mejora Salarial:" styleClass="col-lg-4 control-label"/>
                             <div class="col-lg-7">
@@ -126,18 +147,11 @@
                                 </h:selectOneMenu>
                             </div>
                         </div>
-
-                        <div class="form-group">
-                            <h:outputLabel value="Salario Actual: $" styleClass="col-lg-4 control-label"/>
-                            <div class="col-lg-7">
-                                <h:outputText styleClass="form-control" id="salarioActualHsalarial" value="#{manejadorAumentoMejoraSalarial.historialSalarial.salarioActualHsalarial}" />
-                            </div>
-                        </div>
-
                         <div class="form-group">
                             <h:outputLabel value="Porcentaje de Aplicacón:" styleClass="col-lg-4 control-label"/>
                             <div class="col-lg-6">
-                                <h:inputText styleClass="form-control" id="porcentajeHsalarial" value="#{manejadorAumentoMejoraSalarial.porcentajeEditar}" required="true" requiredMessage="Ingrese porcentaje de Aplicación">
+                                <h:inputText validatorMessage="Porcentaje Debe estar entre 0.01 y 100" styleClass="form-control" id="porcentajeHsalarial" value="#{manejadorAumentoMejoraSalarial.porcentajeEditar}" required="true" requiredMessage="Ingrese porcentaje de Aplicación">
+                                    <f:validateDoubleRange minimum="0.01" maximum="100.00" />
                                     <f:ajax render="nuevoSalarioHsalarial" />
                                 </h:inputText>
                             </div>

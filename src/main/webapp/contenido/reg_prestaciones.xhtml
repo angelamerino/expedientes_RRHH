@@ -22,31 +22,31 @@
                         <div class="col-md-3">
                         </div>
                         <div class="col-md-6">
-                            <h:form class="form-horizontal">
-                                <p:messages showDetail="true" />
+                            <h:form class="form-horizontal" prependId="false">
+                                <p:growl id="growl" showDetail="false"  autoUpdate="true" life="10000" />
                                 <div class="form-group">
-                                    <h:outputLabel value="Tipo de Prestación:" styleClass="col-lg-4 control-label"/>
+                                    <p:outputLabel for="idTipoPrestacion" value="Tipo de Prestación:" styleClass="col-lg-4 control-label"/>
                                     <div class="col-lg-8">
-                                        <h:selectOneMenu class="form-control" id="idTipoPrestacion" value="#{manejadorPrestaciones.prestacion.idTipoPrestacion}" converter="#{tipoPrestacionConvertidor}" required="true" requiredMessage="Seleccione un Tipo de Prestación">
+                                        <p:selectOneMenu id="idTipoPrestacion" style="width: 100%;" value="#{manejadorPrestaciones.prestacion.idTipoPrestacion}" converter="#{tipoPrestacionConvertidor}" required="true" requiredMessage="Seleccione un Tipo de Prestación">
                                             <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
                                             <f:selectItems value="#{manejadorPrestaciones.todosTipoPrestacion()}" var="tipoPres" itemLabel="#{tipoPres.nombreTipoPrestacion}" itemValue="#{tipoPres}"/>
-                                        </h:selectOneMenu>
+                                        </p:selectOneMenu>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <h:outputLabel value="Año:" styleClass="col-lg-4 control-label"/>
+                                    <p:outputLabel for="idAnio" value="Año:" styleClass="col-lg-4 control-label"/>
                                     <div class="col-lg-8">
-                                        <h:selectOneMenu class="form-control" id="idAnio" value="#{manejadorPrestaciones.prestacion.idAnio}" converter="#{anioConvertidor}" required="true" requiredMessage="Seleccione un Año">
+                                        <p:selectOneMenu id="idAnio" style="width: 100%;" value="#{manejadorPrestaciones.prestacion.idAnio}" converter="#{anioConvertidor}" required="true" requiredMessage="Seleccione un Año">
                                             <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
                                             <f:selectItems value="#{manejadorPrestaciones.todosAnios()}" var="anio" itemLabel="#{anio.anio}" itemValue="#{anio}"/>
-                                        </h:selectOneMenu>
+                                        </p:selectOneMenu>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-lg-4"></div>
                                     <div class="col-lg-8">
                                         <h:commandLink style="margin: 2px" styleClass="btn btn-info" value="Guardar" action="#{manejadorPrestaciones.guardarPrestacion()}"/>
-                                        <h:commandLink style="margin: 2px" styleClass="btn btn-info" value="Cancelar" action="#{manejadorPrestaciones.cancelarPrestacion()}"/>
+                                        <h:commandLink style="margin: 2px" styleClass="btn btn-info" value="Cancelar" action="#{manejadorPrestaciones.cancelarPrestacion()}" immediate="true"/>
                                     </div>
                                 </div>
                             </h:form>
