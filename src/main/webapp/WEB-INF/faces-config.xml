@@ -254,6 +254,18 @@
         </navigation-case>
         
         <navigation-case>
+            <from-outcome>rep_genero</from-outcome>
+            <to-view-id>/contenido/generar_rep_genero.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>rep_dir_dep</from-outcome>
+            <to-view-id>/contenido/generar_rep_dir_dep.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        
+        <navigation-case>
             <from-outcome>ayuda</from-outcome>
             <to-view-id>/contenido/ayuda.xhtml</to-view-id>
             <redirect/>

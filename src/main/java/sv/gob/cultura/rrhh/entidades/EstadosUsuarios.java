@@ -58,6 +58,11 @@ public class EstadosUsuarios implements Serializable {
         this.nombreEstadoUsuario = nombreEstadoUsuario;
     }
 
+//    public EstadosUsuarios(int estadoUsuarioEditar) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+
+    
     public Integer getIdEstadoUsuario() {
         return idEstadoUsuario;
     }

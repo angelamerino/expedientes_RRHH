@@ -26,14 +26,16 @@ import sv.gob.cultura.rrhh.facades.DependenciasFacade;
 import sv.gob.cultura.rrhh.facades.EstadosUsuariosFacade;
 import sv.gob.cultura.rrhh.facades.RolesUsuarioFacade;
 import sv.gob.cultura.rrhh.facades.UsuariosSistemaFacade;
-
+import sv.gob.cultura.rrhh.facades.DirNacionalFacade;
+import javax.faces.application.FacesMessage;
 /**
  *
  * @author Angela
  */
 @Named(value = "manejadorUsuarios")
 @ViewScoped
-public class manejadorUsuarios implements Serializable{
+public class manejadorUsuarios implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @EJB
     private RolesUsuarioFacade rolesUsuarioFacade;
@@ -43,38 +45,96 @@ public class manejadorUsuarios implements Serializable{
     private DependenciasFacade dependenciasFacade;
     @EJB
     private UsuariosSistemaFacade usuariosSistemaFacade;
-    
+    @EJB
+    private DirNacionalFacade dirNacionalFacade;
+
+////////////VARIABLE UTILIZADAS///////////////
     private UsuariosSistema nuevoUsuario = new UsuariosSistema(), usuarioSeleccionado = new UsuariosSistema(), usuariosistema = new UsuariosSistema();
-    
+
     private List<UsuariosSistema> usuariosFiltrados;
-    
+
+    private DirNacional dirNacional = new DirNacional();
+
     private int estado, tipoUsuario, dependencia;
     private int dirNacionalFuncional;
-    
-     private int dirNacionalFiltrar;             // id´s direccion nacional
+
+    private int dirNacionalFiltrar;             // id´s direccion nacional
     private int dependeciasFiltrar;             // id´s dependencias
-    
-    private int estadoEditar;
+
+    private int estadoUsuarioEditar;
     private int usuarioEditar;                  //id del usuario a editar
     private String nombreUsuarioEditar;         //nombre del usuario a editar
-       
+    private int rolesUsuarioEditar;             //id del rol para editar
+    private int idDir;
+    private String clave;
+
+
+    ////////////LISTAS UTILIZADAS///////////////
     public List<EstadosUsuarios> todosEstadosUsuarios() {
         return getEstadosUsuariosFacade().findAll();
     }
-    
-   
-    public List<RolesUsuario> todosRoles(){
+
+    public List<RolesUsuario> todosRoles() {
         return getRolesUsuarioFacade().findAll();
     }
-    
+
     public List<Dependencias> dependenciasFiltradas() {
-        
-    return getDependenciasFacade().buscarDependencias(dirNacionalFuncional);
-           
+
+        return getDependenciasFacade().buscarDependencias(dirNacionalFuncional);
+
     }
-    
+
     public List<UsuariosSistema> getTodosUsuarios() {
         return getUsuariosSistemaFacade().findAll();
+    }
+
+    public List<DirNacional> todosDirNacional() {
+        return getDirNacionalFacade().findAll();
+    }
+
+    public DirNacional getDirNacional() {
+        return dirNacional;
+    }
+
+    public List<UsuariosSistema> getUsuariosFiltrados() {
+        return usuariosFiltrados;
+    }
+    
+    
+    
+    
+
+//////////// GET Y SET ///////////////
+    public int getIdDir() {
+        return idDir;
+    }
+    
+    public void setIdDir(int idDir) {
+        this.idDir = idDir;
+    }
+
+    public int getRolesUsuarioEditar() {
+        return rolesUsuarioEditar;
+    }
+
+    public void setRolesUsuarioFacade(RolesUsuarioFacade rolesUsuarioFacade) {
+        this.rolesUsuarioFacade = rolesUsuarioFacade;
+    }
+    
+    public void setRolesUsuarioEditar(int rolesUsuarioEditar) {
+        this.rolesUsuarioEditar = rolesUsuarioEditar;
+    }
+
+    public int getEstadoUsuarioEditar() {
+        return estadoUsuarioEditar;
+    }
+
+    public void setEstadoUsuarioEditar(int estadoUsuarioEditar) {
+        this.estadoUsuarioEditar = estadoUsuarioEditar;
+    }
+
+    public void setDirNacional(DirNacional dirNacional) {
+        this.dirNacional = dirNacional;
     }
 
     public UsuariosSistema getUsuariosistema() {
@@ -85,7 +145,6 @@ public class manejadorUsuarios implements Serializable{
         this.usuariosistema = usuariosistema;
     }
 
-    
     public UsuariosSistema getUsuarioSeleccionado() {
         return usuarioSeleccionado;
     }
@@ -94,15 +153,10 @@ public class manejadorUsuarios implements Serializable{
         this.usuarioSeleccionado = usuarioSeleccionado;
     }
 
-    public List<UsuariosSistema> getUsuariosFiltrados() {
-        return usuariosFiltrados;
-    }
-
     public void setUsuariosFiltrados(List<UsuariosSistema> usuariosFiltrados) {
         this.usuariosFiltrados = usuariosFiltrados;
     }
 
-    
     public int getEstado() {
         return estado;
     }
@@ -134,7 +188,6 @@ public class manejadorUsuarios implements Serializable{
     public void setDirNacionalFuncional(int dirNacionalFuncional) {
         this.dirNacionalFuncional = dirNacionalFuncional;
     }
-    
 
     public DependenciasFacade getDependenciasFacade() {
         return dependenciasFacade;
@@ -151,11 +204,8 @@ public class manejadorUsuarios implements Serializable{
     public EstadosUsuariosFacade getEstadosUsuariosFacade() {
         return estadosUsuariosFacade;
     }
-    
-    
-        
-    //txtfechaCreaUsistema.setText(FechaActual);
 
+    //txtfechaCreaUsistema.setText(FechaActual);
     public UsuariosSistema getNuevoUsuario() {
         return nuevoUsuario;
     }
@@ -163,7 +213,11 @@ public class manejadorUsuarios implements Serializable{
     public void setNuevoUsuario(UsuariosSistema nuevoUsuario) {
         this.nuevoUsuario = nuevoUsuario;
     }
-    
+
+    public DirNacionalFacade getDirNacionalFacade() {
+        return dirNacionalFacade;
+    }
+
     public int getDirNacionalFiltrar() {
         return dirNacionalFiltrar;
     }
@@ -178,14 +232,6 @@ public class manejadorUsuarios implements Serializable{
 
     public void setDependeciasFiltrar(int dependeciasFiltrar) {
         this.dependeciasFiltrar = dependeciasFiltrar;
-    }
-
-    public int getEstadoEditar() {
-        return estadoEditar;
-    }
-
-    public void setEstadoEditar(int estadoEditar) {
-        this.estadoEditar = estadoEditar;
     }
 
     public int getUsuarioEditar() {
@@ -203,14 +249,34 @@ public class manejadorUsuarios implements Serializable{
     public void setNombreUsuarioEditar(String nombreUsuarioEditar) {
         this.nombreUsuarioEditar = nombreUsuarioEditar;
     }
+
+    public String getClave() {
+        return clave;
+    }
+
+    public void setClave(String clave) {
+        this.clave = clave;
+    }
+
+   
+
+    
     
     
     /**
-     * Creates a new instance of manejadorUsuarios
+     * ////////////////// METODOS /////////////// Creates a new instance of
+     * manejadorUsuarios
      */
     public manejadorUsuarios() {
+
     }
 
+    public void mensajeGuardar() {
+        FacesContext context = FacesContext.getCurrentInstance();
+         
+        context.addMessage(null, new FacesMessage("Registro Guardado", "La información fue guardada exitosamente"));
+    }
+    
     public void guardarUsuario() {
 //        System.out.println("entrando guardar");
 //            nuevoUsuario.setUserCreaUsistema(1);
@@ -223,65 +289,67 @@ public class manejadorUsuarios implements Serializable{
 //            System.out.println(nuevoUsuario.getNombreCompleto());
 //            System.out.println(nuevoUsuario.getUserCreaUsistema());
 //            System.out.println(nuevoUsuario.getUsuario());
-nuevoUsuario.setIdDependencia(new Dependencias(dependencia));
-nuevoUsuario.setIdRolUsuario(new RolesUsuario(tipoUsuario));
-nuevoUsuario.setIdEstadoUsuario(new EstadosUsuarios(estado));
-nuevoUsuario.setFechaCreaUsistema(new Date());
-nuevoUsuario.setUserCreaUsistema(1); //guardará el id del usuario logeado
+        nuevoUsuario.setIdDependencia(new Dependencias(dependencia));
+        nuevoUsuario.setIdRolUsuario(new RolesUsuario(tipoUsuario));
+        nuevoUsuario.setIdEstadoUsuario(new EstadosUsuarios(estado));
+        nuevoUsuario.setFechaCreaUsistema(new Date());
+        nuevoUsuario.setUserCreaUsistema(1); //guardará el id del usuario logeado
 
+        getUsuariosSistemaFacade().create(nuevoUsuario);
+        nuevoUsuario = new UsuariosSistema();
+    }
 
-            getUsuariosSistemaFacade().create(nuevoUsuario);
-            nuevoUsuario = new UsuariosSistema();
+    public String editarUsuario() {
+//        try {
+        usuarioSeleccionado.setFechaModUsistema(new Date());
+        usuarioSeleccionado.setUserModUsistema(1);//guardará el id del usuario logeado
+
+        getUsuariosSistemaFacade().edit(usuarioSeleccionado);
+        usuarioSeleccionado = new UsuariosSistema();
+        return "gestion_usuarios";
+//            todosUsuarios = getUsuariosSistemaFacade().findAll();
+//            addMessage(new FacesMessage(FacesMessage.SEVERITY_INFO, "Modificación de Usuario:", "El registro se modificó exitosamente."));
+//        } catch (Exception e) {
+//        }
     }
-    
-     public void editarUsuario() {
-        try {
-            getUsuariosSistemaFacade().edit(usuarioSeleccionado);
-            addMessage(new FacesMessage(FacesMessage.SEVERITY_INFO, "Modificación de Usuario:", "El registro se modificó exitosamente."));
-        } catch (Exception e) {
-        }
+
+    public String cancelarUsuario() {
+        return "gestion_usuarios";
     }
-    
-     public void addMessage(FacesMessage message) {
+
+    public void addMessage(FacesMessage message) {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-     
- public void cambiarEstado(){
-     UsuariosSistema usuarioEst = getUsuariosistema().find(this.usuarioEditar);
-     usuarioEst.setIdEstadoUsuario(new EstadosUsuarios(this.estadoEditar()));
-     getUsuariosSistemaFacade().edit(usuarioEst);
- }
-     
-/*PARA ELIMINAR REGISTROS*/    
-public void eliminarUsuario(){
-    this.usuariosSistemaFacade.remove(usuarioSeleccionado);
-   }
 
-    private Integer estadoEditar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void cambiarEstado() {
+        UsuariosSistema usuariosis = getUsuariosSistemaFacade().find(this.getUsuarioEditar());
+        usuariosis.setIdEstadoUsuario(new EstadosUsuarios(this.getEstadoUsuarioEditar()));
+        getUsuariosSistemaFacade().edit(usuariosis);
+
     }
 
+    /*PARA ELIMINAR REGISTROS*/
+    public void eliminarUsuario() {
+        this.usuariosSistemaFacade.remove(usuarioSeleccionado);
+    }
 
-/* ------------------  PARA ACTUALIZAR REGISTROS ----- */
-//public void actualizarPension(){
-//    getAdministradoraPensionesFacade().edit(pensionSeleccionada);
-//}
+    //Se crea el siguiente clase para fechad del sistema
+    public class FechaActual {
 
- /********************************************************************************************/    
-//Se crea el siguiente clase para fechad del sistema
-public class FechaActual {
-String cadenaFecha;
-public FechaActual(){
-Date fechaActual = new Date();
-SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-cadenaFecha = formato.format(fechaActual);
-}
-public String getFechaActual(){
-return cadenaFecha;
-}
-}  
+        String cadenaFecha;
 
- private Date mostrarFecha;   
+        public FechaActual() {
+            Date fechaActual = new Date();
+            SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            cadenaFecha = formato.format(fechaActual);
+        }
+
+        public String getFechaActual() {
+            return cadenaFecha;
+        }
+    }
+
+    private Date mostrarFecha;
 
     public manejadorUsuarios(Date mostrarFecha) {
         this.mostrarFecha = mostrarFecha;
@@ -294,16 +362,14 @@ return cadenaFecha;
     public void setMostrarFecha(Date mostrarFecha) {
         this.mostrarFecha = mostrarFecha;
     }
- 
 
-public static String fechaSistema(){
-    Date fecha = new Date();
-    SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    return formatoFecha.format(fecha);
-      
-}
+    public static String fechaSistema() {
+        Date fecha = new Date();
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return formatoFecha.format(fecha);
 
-        
+    }
+
 // public class Fechas {
 //    public static void main(String[] args) {
 //        //Instanciamos el objeto Calendar
@@ -324,7 +390,4 @@ public static String fechaSistema(){
 //                                              hora, minuto, segundo);
 //    }
 //}
-
 }
-        
-

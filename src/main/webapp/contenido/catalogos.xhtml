@@ -33,7 +33,8 @@
 
 
         <h:form id="form" class="form-horizontal" role="form" prependId="false">
-            <p:growl id="msgs" showDetail="true" />
+            <!--            <p:growl id="msgs" showDetail="true" />-->
+            <p:messages showSummary="true" autoUpdate="true"/>
             <div class="page-header">
                 <h1>Gestionar registros de catálogos</h1>
             </div>
@@ -78,21 +79,21 @@
                             <p:dataTable id="cat-pensiones" value="#{manejadorCat.administradoraPensiones}" var="admin_pensiones" rendered="#{manejadorCat.opcion eq 1}" paginator="true" rows="5">
                                 <p:column width="10%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Id"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{admin_pensiones.idAdminPension}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{admin_pensiones.idAdminPension}"/>
                                 </p:column>
 
                                 <p:column width="90%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Nombre Administradora de Pensiones"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Nombre Administradora de Pensiones"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{admin_pensiones.nombreAdminPension}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{admin_pensiones.nombreAdminPension}"/>
                                 </p:column>
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                        <h:outputText style="font-size: 11px;" value="Editar"/>
                                     </f:facet>
 
                                     <!-- Button trigger modal para mostrar el modal de prueba que está al inicio-->
@@ -108,17 +109,16 @@
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                        <h:outputText style="font-size: 11px;" value="Eliminar"/>
                                     </f:facet>
 
-                                    <!--   <h:commandButton action="{manejadorCat.eliminarAdminPensiones()}" value="X" title="Eliminar">-->
-                                    <p:commandButton process="cat-pensiones" update="cat-pensiones" action="#{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
+                                    <!--                                    <p:commandButton process="cat-pensiones" update="cat-pensiones" action="{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
+                                                                            <f:setPropertyActionListener value="{admin_pensiones}" target="{manejadorCat.pensionSeleccionada}"/>
+                                                                        </p:commandButton>-->
+
+                                    <p:commandButton icon="ui-icon-closethick" title="Eliminar" process="@this cat-pensiones" oncomplete="PF('eliminarPensionDialog').show()">
                                         <f:setPropertyActionListener value="#{admin_pensiones}" target="#{manejadorCat.pensionSeleccionada}"/>
                                     </p:commandButton>
-                                    <!--                                    <h:commandButton action="{manejadorCat.eliminar()}" value="X" title="Eliminar">
-                                                                            <f:setPropertyActionListener value="{admin_pensiones}" target="{manejadorCat.pensionSeleccionada}"/>
-                                                                            <p:ajax process="cat-pensiones" update="cat-pensiones"/>
-                                                                        </h:commandButton>-->
 
                                 </p:column>
 
@@ -128,7 +128,12 @@
                                         <!-- <span class="label label-primary">Nuevo Registro</span>-->
                                         <span class="panel-info"><strong>Nuevo Registro</strong></span>
                                     </h3>
-                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <!--                                    <p:inputText value="{manejadorCat.nuevo_item}" title="Administradora de Pensiones" 
+                                                                                     required="true" requiredMessage="La Administradora de Pensioneses un dato requerido." style="width: 100%; padding: 9px;">
+                                                                        </p:inputText>-->
+                                    <p:inputText value="#{manejadorCat.nuevo_item}" title="Administradora de Pensiones" 
+                                                 style="width: 100%; padding: 9px;">
+                                    </p:inputText>
                                     <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
                                         <p:ajax process="cat-pensiones" update="cat-pensiones"/>
                                     </h:commandButton>
@@ -140,20 +145,20 @@
                             <p:dataTable id="cat-caractidiomas" value="#{manejadorCat.caracteristicasIdioma}" var="carac_idioma" rendered="#{manejadorCat.opcion eq 2}" paginator="true" rows="5">
                                 <p:column width="10%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Id"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{carac_idioma.idCaractIdioma}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{carac_idioma.idCaractIdioma}"/>
                                 </p:column>
                                 <p:column width="90%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Nombre de la Característica"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Nombre de la Característica"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{carac_idioma.caracteristicaIdioma}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{carac_idioma.caracteristicaIdioma}"/>
                                 </p:column>
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                        <h:outputText style="font-size: 11px;" value="Editar"/>
                                     </f:facet>
 
                                     <p:commandButton process="@this" update=":form:caracteidiomaDetalle" oncomplete="PF('caracteidiomaDialog').show()" icon="ui-icon-pencil" title="Editar">
@@ -164,16 +169,16 @@
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                        <h:outputText style="font-size: 11px;" value="Eliminar"/>
                                     </f:facet>
 
-                                    <p:commandButton process="cat-caractidiomas" update="cat-caractidiomas" action="#{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
+<!--                                    <p:commandButton process="cat-caractidiomas" update="cat-caractidiomas" action="{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
+                                        <f:setPropertyActionListener value="{carac_idioma}" target="{manejadorCat.caractSeleccionada}"/>
+                                    </p:commandButton>-->
+
+                                    <p:commandButton icon="ui-icon-closethick" title="Eliminar" process="@this cat-caractidiomas" oncomplete="PF('eliminarCaracDialog').show()">
                                         <f:setPropertyActionListener value="#{carac_idioma}" target="#{manejadorCat.caractSeleccionada}"/>
                                     </p:commandButton>
-                                    <!--                                    <h:commandButton action="{manejadorCat.eliminar()}" value="X" title="Eliminar">
-                                                                           <f:setPropertyActionListener value="{carac_idioma}" target="{manejadorCat.caractSeleccionada}"/>
-                                                                            <p:ajax process="cat-caractidiomas" update="cat-caractidiomas"/>
-                                                                        </h:commandButton>-->
 
                                 </p:column>
 
@@ -182,7 +187,9 @@
                                     <h3>
                                         <span class="panel-info"><strong>Nuevo Registro</strong></span>
                                     </h3>
-                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <p:inputText  value="#{manejadorCat.nuevo_item}" 
+                                                  style="width: 100%; padding: 9px;">
+                                    </p:inputText>
                                     <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
                                         <p:ajax process="cat-caractidiomas" update="cat-caractidiomas"/>
                                     </h:commandButton>
@@ -194,21 +201,21 @@
                             <p:dataTable id="cat-estadocivil" value="#{manejadorCat.estadoCivil}" var="estado_civil" rendered="#{manejadorCat.opcion eq 3}" class="table" paginator="true" rows="5">
                                 <p:column width="10%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Id"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{estado_civil.idEstadoCivil}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{estado_civil.idEstadoCivil}"/>
                                 </p:column>
 
                                 <p:column width="90%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Nombre del Estado Civil"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Nombre del Estado Civil"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{estado_civil.nombreEstadoCivil}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{estado_civil.nombreEstadoCivil}"/>
                                 </p:column>
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                        <h:outputText style="font-size: 11px;" value="Editar"/>
                                     </f:facet>
                                     <p:commandButton process="@this" update=":form:estadocivilDetalle" oncomplete="PF('estadocivilDialog').show()" icon="ui-icon-pencil" title="Editar">
                                         <f:setPropertyActionListener value="#{estado_civil}" target="#{manejadorCat.estcivilSeleccionado}"/>
@@ -217,9 +224,13 @@
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                        <h:outputText style="font-size: 11px;" value="Eliminar"/>
                                     </f:facet>
-                                    <p:commandButton process="cat-estadocivil" update="cat-estadocivil" action="#{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
+<!--                                    <p:commandButton process="cat-estadocivil" update="cat-estadocivil" action="{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
+                                        <f:setPropertyActionListener value="{estado_civil}" target="{manejadorCat.estcivilSeleccionado}"/>
+                                    </p:commandButton>-->
+                                    
+                                    <p:commandButton icon="ui-icon-closethick" title="Eliminar" process="@this cat-estadocivil" oncomplete="PF('eliminarEstCivilDialog').show()">
                                         <f:setPropertyActionListener value="#{estado_civil}" target="#{manejadorCat.estcivilSeleccionado}"/>
                                     </p:commandButton>
 
@@ -230,7 +241,9 @@
                                     <h3>
                                         <span class="panel-info"><strong>Nuevo Registro</strong></span>
                                     </h3>
-                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <p:inputText value="#{manejadorCat.nuevo_item}" 
+                                                 style="width: 100%; padding: 9px;">
+                                    </p:inputText>
                                     <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
                                         <p:ajax process="cat-estadocivil" update="cat-estadocivil"/>
                                     </h:commandButton>
@@ -242,21 +255,21 @@
                             <p:dataTable id="cat-estados" value="#{manejadorCat.estados}" var="estados" rendered="#{manejadorCat.opcion eq 4}" class="table" paginator="true" rows="5">
                                 <p:column width="10%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Id"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{estados.idEstado}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{estados.idEstado}"/>
                                 </p:column>
 
                                 <p:column width="90%">   
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Nombre del Estado"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Nombre del Estado"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{estados.nombreEstado}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{estados.nombreEstado}"/>
                                 </p:column>
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                        <h:outputText style="font-size: 11px;" value="Editar"/>
                                     </f:facet>
                                     <p:commandButton process="@this" update=":form:estadoempDetalle" oncomplete="PF('estadoempDialog').show()" icon="ui-icon-pencil" title="Editar">
                                         <f:setPropertyActionListener value="#{estados}" target="#{manejadorCat.estadoSeleccionado}"/>
@@ -265,9 +278,12 @@
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                        <h:outputText style="font-size: 11px;" value="Eliminar"/>
                                     </f:facet>
-                                    <p:commandButton process="cat-estados" update="cat-estados" action="#{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
+<!--                                    <p:commandButton process="cat-estados" update="cat-estados" action="{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
+                                        <f:setPropertyActionListener value="{estados}" target="{manejadorCat.estadoSeleccionado}"/>
+                                    </p:commandButton>-->
+                                    <p:commandButton icon="ui-icon-closethick" title="Eliminar" process="@this cat-estados" oncomplete="PF('eliminarEstEmpDialog').show()">
                                         <f:setPropertyActionListener value="#{estados}" target="#{manejadorCat.estadoSeleccionado}"/>
                                     </p:commandButton>
                                 </p:column>
@@ -277,7 +293,9 @@
                                     <h3>
                                         <span class="panel-info"><strong>Nuevo Registro</strong></span>
                                     </h3>
-                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <p:inputText value="#{manejadorCat.nuevo_item}" 
+                                                 style="width: 100%; padding: 9px;">
+                                    </p:inputText>
                                     <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
                                         <p:ajax process="cat-estados" update="cat-estados"/>
                                     </h:commandButton>
@@ -289,21 +307,21 @@
                             <p:dataTable id="cat-gradosancion" value="#{manejadorCat.gradoSancions}" var="grado_sancion" rendered="#{manejadorCat.opcion eq 5}" class="table" paginator="true" rows="5">
                                 <p:column width="10%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Id"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{grado_sancion.idGradoSancion}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{grado_sancion.idGradoSancion}"/>
                                 </p:column>
 
                                 <p:column width="90%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Nombre del Grado de la Sanción"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Nombre del Grado de la Sanción"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{grado_sancion.nombreGradoSancion}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{grado_sancion.nombreGradoSancion}"/>
                                 </p:column>
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                        <h:outputText style="font-size: 11px;" value="Editar"/>
                                     </f:facet>
                                     <p:commandButton process="@this" update=":form:gradosancionDetalle" oncomplete="PF('gradosancionDialog').show()" icon="ui-icon-pencil" title="Editar">
                                         <f:setPropertyActionListener value="#{grado_sancion}" target="#{manejadorCat.gradosancionSeleccionado}"/>
@@ -312,9 +330,12 @@
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                        <h:outputText style="font-size: 11px;" value="Eliminar"/>
                                     </f:facet>
-                                    <p:commandButton process="cat-gradosancion" update="cat-gradosancion" action="#{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
+<!--                                    <p:commandButton process="cat-gradosancion" update="cat-gradosancion" action="{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
+                                        <f:setPropertyActionListener value="{grado_sancion}" target="{manejadorCat.gradosancionSeleccionado}"/>
+                                    </p:commandButton>-->
+                                    <p:commandButton icon="ui-icon-closethick" title="Eliminar" process="@this cat-gradosancion" oncomplete="PF('eliminarGraSancionDialog').show()">
                                         <f:setPropertyActionListener value="#{grado_sancion}" target="#{manejadorCat.gradosancionSeleccionado}"/>
                                     </p:commandButton>
                                 </p:column>
@@ -324,7 +345,9 @@
                                     <h3>
                                         <span class="panel-info"><strong>Nuevo Registro</strong></span>
                                     </h3>
-                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <p:inputText value="#{manejadorCat.nuevo_item}" 
+                                                 style="width: 100%; padding: 9px;">
+                                    </p:inputText>
                                     <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
                                         <p:ajax process="cat-gradosancion" update="cat-gradosancion"/>
                                     </h:commandButton>
@@ -336,21 +359,21 @@
                             <p:dataTable id="cat-idiomas" value="#{manejadorCat.idiomas}" var="idiomas" rendered="#{manejadorCat.opcion eq 6}" class="table" paginator="true" rows="5">
                                 <p:column width="10%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Id"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{idiomas.idIdioma}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{idiomas.idIdioma}"/>
                                 </p:column>
 
                                 <p:column width="90%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Nombre del Idioma"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Nombre del Idioma"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{idiomas.nombreIdioma}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{idiomas.nombreIdioma}"/>
                                 </p:column>
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                        <h:outputText style="font-size: 11px;" value="Editar"/>
                                     </f:facet>
                                     <p:commandButton process="@this" update=":form:idiomaDetalle" oncomplete="PF('idiomaDialog').show()" icon="ui-icon-pencil" title="Editar">
                                         <f:setPropertyActionListener value="#{idiomas}" target="#{manejadorCat.idiomaSeleccionado}"/>
@@ -359,9 +382,12 @@
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                        <h:outputText style="font-size: 11px;" value="Eliminar"/>
                                     </f:facet>
-                                    <p:commandButton process="cat-idiomas" update="cat-idiomas" action="#{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
+<!--                                    <p:commandButton process="cat-idiomas" update="cat-idiomas" action="{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
+                                        <f:setPropertyActionListener value="{idiomas}" target="{manejadorCat.idiomaSeleccionado}"/>
+                                    </p:commandButton>-->
+                                    <p:commandButton icon="ui-icon-closethick" title="Eliminar" process="@this cat-idiomas" oncomplete="PF('eliminarIdiomaDialog').show()">
                                         <f:setPropertyActionListener value="#{idiomas}" target="#{manejadorCat.idiomaSeleccionado}"/>
                                     </p:commandButton>
                                 </p:column>
@@ -371,7 +397,9 @@
                                     <h3>
                                         <span class="panel-info"><strong>Nuevo Registro</strong></span>
                                     </h3>
-                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <p:inputText value="#{manejadorCat.nuevo_item}" 
+                                                 style="width: 100%; padding: 9px;">
+                                    </p:inputText>
                                     <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
                                         <p:ajax process="cat-idiomas" update="cat-idiomas"/>
                                     </h:commandButton>
@@ -383,21 +411,21 @@
                             <p:dataTable id="cat-bancos" value="#{manejadorCat.instBancaria}" var="instBanco" rendered="#{manejadorCat.opcion eq 7}" class="table" paginator="true" rows="5">
                                 <p:column width="10%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Id"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{instBanco.idBanco}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{instBanco.idBanco}"/>
                                 </p:column>
 
                                 <p:column width="90%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Nombre de la Institución Bancaria"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Nombre de la Institución Bancaria"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{instBanco.nombreBanco}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{instBanco.nombreBanco}"/>
                                 </p:column>
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                        <h:outputText style="font-size: 11px;" value="Editar"/>
                                     </f:facet>
                                     <p:commandButton process="@this" update=":form:bancoDetalle" oncomplete="PF('bancoDialog').show()" icon="ui-icon-pencil" title="Editar">
                                         <f:setPropertyActionListener value="#{instBanco}" target="#{manejadorCat.bancoSeleccionado}"/>
@@ -406,10 +434,13 @@
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                        <h:outputText style="font-size: 11px;" value="Eliminar"/>
                                     </f:facet>
-                                    <p:commandButton process="cat-bancos" update="cat-bancos" action="#{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
-                                        <f:setPropertyActionListener value="#{instBanco}" target="#{manejadorCat.bancoSeleccionado}"/>
+<!--                                    <p:commandButton process="cat-bancos" update="cat-bancos" action="{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
+                                        <f:setPropertyActionListener value="{instBanco}" target="{manejadorCat.bancoSeleccionado}"/>
+                                    </p:commandButton>-->
+                                    <p:commandButton icon="ui-icon-closethick" title="Eliminar" process="@this cat-bancos" oncomplete="PF('eliminarBancoDialog').show()">
+                                       <f:setPropertyActionListener value="#{instBanco}" target="#{manejadorCat.bancoSeleccionado}"/>
                                     </p:commandButton>
                                 </p:column>
 
@@ -418,7 +449,9 @@
                                     <h3>
                                         <span class="panel-info"><strong>Nuevo Registro</strong></span>
                                     </h3>
-                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <p:inputText value="#{manejadorCat.nuevo_item}" 
+                                                 style="width: 100%; padding: 9px;">
+                                    </p:inputText>
                                     <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
                                         <p:ajax process="cat-bancos" update="cat-bancos"/>
                                     </h:commandButton>
@@ -430,21 +463,21 @@
                             <p:dataTable id="cat-nivel" value="#{manejadorCat.nivel}" var="nivel" rendered="#{manejadorCat.opcion eq 8}" class="table" paginator="true" rows="5">
                                 <p:column width="10%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Id"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{nivel.idNivel}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{nivel.idNivel}"/>
                                 </p:column>
 
                                 <p:column width="90%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Nivel de conocimiento"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Nivel de conocimiento"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{nivel.nombreNivel}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{nivel.nombreNivel}"/>
                                 </p:column>
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                        <h:outputText style="font-size: 11px;" value="Editar"/>
                                     </f:facet>
                                     <p:commandButton process="@this" update=":form:nivelDetalle" oncomplete="PF('nivelDialog').show()" icon="ui-icon-pencil" title="Editar">
                                         <f:setPropertyActionListener value="#{nivel}" target="#{manejadorCat.nivelSeleccionado}"/>
@@ -453,10 +486,13 @@
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                        <h:outputText style="font-size: 11px;" value="Eliminar"/>
                                     </f:facet>
-                                    <p:commandButton process="cat-nivel" update="cat-nivel" action="#{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
-                                        <f:setPropertyActionListener value="#{nivel}" target="#{manejadorCat.nivelSeleccionado}"/>
+<!--                                    <p:commandButton process="cat-nivel" update="cat-nivel" action="{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
+                                        <f:setPropertyActionListener value="{nivel}" target="{manejadorCat.nivelSeleccionado}"/>
+                                    </p:commandButton>-->
+                                    <p:commandButton icon="ui-icon-closethick" title="Eliminar" process="@this cat-nivel" oncomplete="PF('eliminarNivelDialog').show()">
+                                       <f:setPropertyActionListener value="#{nivel}" target="#{manejadorCat.nivelSeleccionado}"/>
                                     </p:commandButton>
                                 </p:column>
 
@@ -465,7 +501,9 @@
                                     <h3>
                                         <span class="panel-info"><strong>Nuevo Registro</strong></span>
                                     </h3>
-                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <p:inputText value="#{manejadorCat.nuevo_item}" 
+                                                 style="width: 100%; padding: 9px;">
+                                    </p:inputText>
                                     <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
                                         <p:ajax process="cat-nivel" update="cat-nivel"/>
                                     </h:commandButton>
@@ -477,21 +515,21 @@
                             <p:dataTable id="cat-pais" value="#{manejadorCat.paiseses}" var="pais" rendered="#{manejadorCat.opcion eq 9}" class="table" paginator="true" rows="5">
                                 <p:column width="10%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Id"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{pais.idPais}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{pais.idPais}"/>
                                 </p:column>
 
                                 <p:column width="90%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Nombre del País"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Nombre del País"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{pais.nombrePais}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{pais.nombrePais}"/>
                                 </p:column>
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                        <h:outputText style="font-size: 11px;" value="Editar"/>
                                     </f:facet>
                                     <p:commandButton process="@this" update=":form:paisDetalle" oncomplete="PF('paisDialog').show()" icon="ui-icon-pencil" title="Editar">
                                         <f:setPropertyActionListener value="#{pais}" target="#{manejadorCat.paisSeleccionado}"/>
@@ -500,10 +538,13 @@
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                        <h:outputText style="font-size: 11px;" value="Eliminar"/>
                                     </f:facet>
-                                    <p:commandButton process="cat-pais" update="cat-pais" action="#{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
-                                        <f:setPropertyActionListener value="#{pais}" target="#{manejadorCat.paisSeleccionado}"/>
+<!--                                    <p:commandButton process="cat-pais" update="cat-pais" action="{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
+                                        <f:setPropertyActionListener value="{pais}" target="{manejadorCat.paisSeleccionado}"/>
+                                    </p:commandButton>-->
+                                    <p:commandButton icon="ui-icon-closethick" title="Eliminar" process="@this cat-pais" oncomplete="PF('eliminarPaisDialog').show()">
+                                       <f:setPropertyActionListener value="#{pais}" target="#{manejadorCat.paisSeleccionado}"/>
                                     </p:commandButton>
                                 </p:column>
 
@@ -512,7 +553,9 @@
                                     <h3>
                                         <span class="panel-info"><strong>Nuevo Registro</strong></span>
                                     </h3>
-                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <p:inputText value="#{manejadorCat.nuevo_item}" 
+                                                 style="width: 100%; padding: 9px;">
+                                    </p:inputText>
                                     <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
                                         <p:ajax process="cat-pais" update="cat-pais"/>
                                     </h:commandButton>
@@ -524,21 +567,21 @@
                             <p:dataTable id="cat-parentesco" value="#{manejadorCat.parentesco}" var="parentesco" rendered="#{manejadorCat.opcion eq 10}" class="table" paginator="true" rows="5">
                                 <p:column width="10%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Id"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{parentesco.idParentesco}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{parentesco.idParentesco}"/>
                                 </p:column>
 
                                 <p:column width="90%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Nombre del Parentesco"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Nombre del Parentesco"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{parentesco.nombreParentesco}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{parentesco.nombreParentesco}"/>
                                 </p:column>
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                        <h:outputText style="font-size: 11px;" value="Editar"/>
                                     </f:facet>
                                     <p:commandButton process="@this" update=":form:parentescoDetalle" oncomplete="PF('parentescoDialog').show()" icon="ui-icon-pencil" title="Editar">
                                         <f:setPropertyActionListener value="#{parentesco}" target="#{manejadorCat.parentescoSeleccionado}"/>
@@ -547,10 +590,13 @@
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                        <h:outputText style="font-size: 11px;" value="Eliminar"/>
                                     </f:facet>
-                                    <p:commandButton process="cat-parentesco" update="cat-parentesco" action="#{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
-                                        <f:setPropertyActionListener value="#{parentesco}" target="#{manejadorCat.parentescoSeleccionado}"/>
+<!--                                    <p:commandButton process="cat-parentesco" update="cat-parentesco" action="{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
+                                        <f:setPropertyActionListener value="{parentesco}" target="{manejadorCat.parentescoSeleccionado}"/>
+                                    </p:commandButton>-->
+                                    <p:commandButton icon="ui-icon-closethick" title="Eliminar" process="@this cat-parentesco" oncomplete="PF('eliminarParentescoDialog').show()">
+                                       <f:setPropertyActionListener value="#{parentesco}" target="#{manejadorCat.parentescoSeleccionado}"/>
                                     </p:commandButton>
                                 </p:column>
 
@@ -559,7 +605,9 @@
                                     <h3>
                                         <span class="panel-info"><strong>Nuevo Registro</strong></span>
                                     </h3>
-                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <p:inputText value="#{manejadorCat.nuevo_item}" 
+                                                 style="width: 100%; padding: 9px;">
+                                    </p:inputText>
                                     <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
                                         <p:ajax process="cat-parentesco" update="cat-parentesco"/>
                                     </h:commandButton>
@@ -571,21 +619,21 @@
                             <p:dataTable id="cat-prof-oficios" value="#{manejadorCat.profOficioses}" var="prof_oficios" rendered="#{manejadorCat.opcion eq 11}" class="table" paginator="true" rows="5">
                                 <p:column width="10%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Id"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{prof_oficios.idProfOficio}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{prof_oficios.idProfOficio}"/>
                                 </p:column>
 
                                 <p:column width="90%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Nombre de la Profesión u Oficio"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Nombre de la Profesión u Oficio"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{prof_oficios.nombreProfOficio}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{prof_oficios.nombreProfOficio}"/>
                                 </p:column>
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                        <h:outputText style="font-size: 11px;" value="Editar"/>
                                     </f:facet>
                                     <p:commandButton process="@this" update=":form:profofiDetalle" oncomplete="PF('profofiDialog').show()" icon="ui-icon-pencil" title="Editar">
                                         <f:setPropertyActionListener value="#{prof_oficios}" target="#{manejadorCat.profSeleccionado}"/>
@@ -594,10 +642,13 @@
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                        <h:outputText style="font-size: 11px;" value="Eliminar"/>
                                     </f:facet>
-                                    <p:commandButton process="cat-prof-oficios" update="cat-prof-oficios" action="#{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
-                                        <f:setPropertyActionListener value="#{prof_oficios}" target="#{manejadorCat.profSeleccionado}"/>
+<!--                                    <p:commandButton process="cat-prof-oficios" update="cat-prof-oficios" action="{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
+                                        <f:setPropertyActionListener value="{prof_oficios}" target="{manejadorCat.profSeleccionado}"/>
+                                    </p:commandButton>-->
+                                    <p:commandButton icon="ui-icon-closethick" title="Eliminar" process="@this cat-prof-oficios" oncomplete="PF('eliminarProfDialog').show()">
+                                       <f:setPropertyActionListener value="#{prof_oficios}" target="#{manejadorCat.profSeleccionado}"/>
                                     </p:commandButton>
                                 </p:column>
 
@@ -606,7 +657,9 @@
                                     <h3>
                                         <span class="panel-info"><strong>Nuevo Registro</strong></span>
                                     </h3>
-                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <p:inputText value="#{manejadorCat.nuevo_item}" 
+                                                 style="width: 100%; padding: 9px;">
+                                    </p:inputText>
                                     <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
                                         <p:ajax process="cat-prof-oficios" update="cat-prof-oficios"/>
                                     </h:commandButton>
@@ -618,21 +671,21 @@
                             <p:dataTable id="cat-prov" value="#{manejadorCat.proveedors}" var="prov" rendered="#{manejadorCat.opcion eq 12}" class="table" paginator="true" rows="5">
                                 <p:column width="10%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Id"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{prov.idProveedor}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{prov.idProveedor}"/>
                                 </p:column>
 
                                 <p:column width="90%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Nombre del Proveedor"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Nombre del Proveedor"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{prov.nombreProv}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{prov.nombreProv}"/>
                                 </p:column>
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                        <h:outputText style="font-size: 11px;" value="Editar"/>
                                     </f:facet>
                                     <p:commandButton process="@this" update=":form:proveedorDetalle" oncomplete="PF('proveedorDialog').show()" icon="ui-icon-pencil" title="Editar">
                                         <f:setPropertyActionListener value="#{prov}" target="#{manejadorCat.proveedorSeleccionado}"/>
@@ -641,10 +694,13 @@
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                        <h:outputText style="font-size: 11px;" value="Eliminar"/>
                                     </f:facet>
-                                    <p:commandButton process="cat-prov" update="cat-prov" action="#{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
-                                        <f:setPropertyActionListener value="#{prov}" target="#{manejadorCat.proveedorSeleccionado}"/>
+<!--                                    <p:commandButton process="cat-prov" update="cat-prov" action="{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
+                                        <f:setPropertyActionListener value="{prov}" target="{manejadorCat.proveedorSeleccionado}"/>
+                                    </p:commandButton>-->
+                                    <p:commandButton icon="ui-icon-closethick" title="Eliminar" process="@this cat-prov" oncomplete="PF('eliminarProveedorDialog').show()">
+                                       <f:setPropertyActionListener value="#{prov}" target="#{manejadorCat.proveedorSeleccionado}"/>
                                     </p:commandButton>
                                 </p:column>
 
@@ -653,7 +709,9 @@
                                     <h3>
                                         <span class="panel-info"><strong>Nuevo Registro</strong></span>
                                     </h3>
-                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <p:inputText value="#{manejadorCat.nuevo_item}" 
+                                                 style="width: 100%; padding: 9px;">
+                                    </p:inputText>
                                     <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
                                         <p:ajax process="cat-prov" update="cat-prov"/>
                                     </h:commandButton>
@@ -665,21 +723,21 @@
                             <p:dataTable id="cat-descuento" value="#{manejadorCat.tipoDescuentos}" var="descuento" rendered="#{manejadorCat.opcion eq 13}" class="table" paginator="true" rows="5">
                                 <p:column width="10%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Id"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{descuento.idDescuento}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{descuento.idDescuento}"/>
                                 </p:column>
 
                                 <p:column width="90%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Nombre del Tipo de Descuento"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Nombre del Tipo de Descuento"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{descuento.nombreDescuento}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{descuento.nombreDescuento}"/>
                                 </p:column>
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                        <h:outputText style="font-size: 11px;" value="Editar"/>
                                     </f:facet>
                                     <p:commandButton process="@this" update=":form:tdescuentoDetalle" oncomplete="PF('tdescuentoDialog').show()" icon="ui-icon-pencil" title="Editar">
                                         <f:setPropertyActionListener value="#{descuento}" target="#{manejadorCat.tipodesSeleccionado}"/>
@@ -688,10 +746,13 @@
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                        <h:outputText style="font-size: 11px;" value="Eliminar"/>
                                     </f:facet>
-                                    <p:commandButton process="cat-descuento" update="cat-descuento" action="#{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
-                                        <f:setPropertyActionListener value="#{descuento}" target="#{manejadorCat.tipodesSeleccionado}"/>
+<!--                                    <p:commandButton process="cat-descuento" update="cat-descuento" action="{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
+                                        <f:setPropertyActionListener value="{descuento}" target="{manejadorCat.tipodesSeleccionado}"/>
+                                    </p:commandButton>-->
+                                    <p:commandButton icon="ui-icon-closethick" title="Eliminar" process="@this cat-descuento" oncomplete="PF('eliminarDescuentoDialog').show()">
+                                       <f:setPropertyActionListener value="#{descuento}" target="#{manejadorCat.tipodesSeleccionado}"/>
                                     </p:commandButton>
                                 </p:column>
 
@@ -700,7 +761,9 @@
                                     <h3>
                                         <span class="panel-info"><strong>Nuevo Registro</strong></span>
                                     </h3>
-                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <p:inputText value="#{manejadorCat.nuevo_item}" 
+                                                 style="width: 100%; padding: 9px;">
+                                    </p:inputText>
                                     <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
                                         <p:ajax process="cat-descuento" update="cat-descuento"/>
                                     </h:commandButton>
@@ -712,21 +775,21 @@
                             <p:dataTable id="cat-mejorasal" value="#{manejadorCat.tipoMejoraSalarials}" var="mejorasal" rendered="#{manejadorCat.opcion eq 14}" class="table" paginator="true" rows="5">
                                 <p:column width="10%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Id"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{mejorasal.idMejoraSal}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{mejorasal.idMejoraSal}"/>
                                 </p:column>
 
                                 <p:column width="90%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Nombre del Tipo de Mejora Salarial"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Nombre del Tipo de Mejora Salarial"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{mejorasal.nombreMejoraSal}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{mejorasal.nombreMejoraSal}"/>
                                 </p:column>
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                        <h:outputText style="font-size: 11px;" value="Editar"/>
                                     </f:facet>
                                     <p:commandButton process="@this" update=":form:tmejoraDetalle" oncomplete="PF('tmejoraDialog').show()" icon="ui-icon-pencil" title="Editar">
                                         <f:setPropertyActionListener value="#{mejorasal}" target="#{manejadorCat.tipomejoraSeleccionado}"/>
@@ -735,10 +798,13 @@
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                        <h:outputText style="font-size: 11px;" value="Eliminar"/>
                                     </f:facet>
-                                    <p:commandButton process="cat-mejorasal" update="cat-mejorasal" action="#{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
-                                        <f:setPropertyActionListener value="#{mejorasal}" target="#{manejadorCat.tipomejoraSeleccionado}"/>
+<!--                                    <p:commandButton process="cat-mejorasal" update="cat-mejorasal" action="{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
+                                        <f:setPropertyActionListener value="{mejorasal}" target="{manejadorCat.tipomejoraSeleccionado}"/>
+                                    </p:commandButton>-->
+                                    <p:commandButton icon="ui-icon-closethick" title="Eliminar" process="@this cat-mejorasal" oncomplete="PF('eliminarMejorasalDialog').show()">
+                                       <f:setPropertyActionListener value="#{mejorasal}" target="#{manejadorCat.tipomejoraSeleccionado}"/>
                                     </p:commandButton>
                                 </p:column>
 
@@ -747,7 +813,9 @@
                                     <h3>
                                         <span class="panel-info"><strong>Nuevo Registro</strong></span>
                                     </h3>
-                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <p:inputText value="#{manejadorCat.nuevo_item}" 
+                                                 style="width: 100%; padding: 9px;">
+                                    </p:inputText>
                                     <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
                                         <p:ajax process="cat-mejorasal" update="cat-mejorasal"/>
                                     </h:commandButton>
@@ -759,21 +827,21 @@
                             <p:dataTable id="cat-mov" value="#{manejadorCat.tipoMov}" var="mov" rendered="#{manejadorCat.opcion eq 15}" class="table" paginator="true" rows="5">
                                 <p:column width="10%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Id"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{mov.idTipoMov}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{mov.idTipoMov}"/>
                                 </p:column>
 
                                 <p:column width="90%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Nombre del Tipo de Movimiento"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Nombre del Tipo de Movimiento"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{mov.nombreMov}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{mov.nombreMov}"/>
                                 </p:column>
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                        <h:outputText style="font-size: 11px;" value="Editar"/>
                                     </f:facet>
                                     <p:commandButton process="@this" update=":form:tmovDetalle" oncomplete="PF('tmovDialog').show()" icon="ui-icon-pencil" title="Editar">
                                         <f:setPropertyActionListener value="#{mov}" target="#{manejadorCat.tipomovSeleccionado}"/>
@@ -782,10 +850,13 @@
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                        <h:outputText style="font-size: 11px;" value="Eliminar"/>
                                     </f:facet>
-                                    <p:commandButton process="cat-mov" update="cat-mov" action="#{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
-                                        <f:setPropertyActionListener value="#{mov}" target="#{manejadorCat.tipomovSeleccionado}"/>
+<!--                                    <p:commandButton process="cat-mov" update="cat-mov" action="{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
+                                        <f:setPropertyActionListener value="{mov}" target="{manejadorCat.tipomovSeleccionado}"/>
+                                    </p:commandButton>-->
+                                    <p:commandButton icon="ui-icon-closethick" title="Eliminar" process="@this cat-mov" oncomplete="PF('eliminarMovDialog').show()">
+                                       <f:setPropertyActionListener value="#{mov}" target="#{manejadorCat.tipomovSeleccionado}"/>
                                     </p:commandButton>
                                 </p:column>
 
@@ -794,7 +865,9 @@
                                     <h3>
                                         <span class="panel-info"><strong>Nuevo Registro</strong></span>
                                     </h3>
-                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <p:inputText value="#{manejadorCat.nuevo_item}" 
+                                                 style="width: 100%; padding: 9px;">
+                                    </p:inputText>
                                     <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
                                         <p:ajax process="cat-mov" update="cat-mov"/>
                                     </h:commandButton>
@@ -806,21 +879,21 @@
                             <p:dataTable id="cat-prestacion" value="#{manejadorCat.tipoPrestacions}" var="prestacion" rendered="#{manejadorCat.opcion eq 16}" class="table" paginator="true" rows="5">
                                 <p:column width="10%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Id"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{prestacion.idTipoPrestacion}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{prestacion.idTipoPrestacion}"/>
                                 </p:column>
 
                                 <p:column width="90%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Nombre del Tipo de Prestación"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Nombre del Tipo de Prestación"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{prestacion.nombreTipoPrestacion}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{prestacion.nombreTipoPrestacion}"/>
                                 </p:column>
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                        <h:outputText style="font-size: 11px;" value="Editar"/>
                                     </f:facet>
                                     <p:commandButton process="@this" update=":form:tprestacionDetalle" oncomplete="PF('tprestacionDialog').show()" icon="ui-icon-pencil" title="Editar">
                                         <f:setPropertyActionListener value="#{prestacion}" target="#{manejadorCat.tipoprestacionSeleccionada}"/>
@@ -829,10 +902,13 @@
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                        <h:outputText style="font-size: 11px;" value="Eliminar"/>
                                     </f:facet>
-                                    <p:commandButton process="cat-prestacion" update="cat-prestacion" action="#{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
-                                        <f:setPropertyActionListener value="#{prestacion}" target="#{manejadorCat.tipoprestacionSeleccionada}"/>
+<!--                                    <p:commandButton process="cat-prestacion" update="cat-prestacion" action="{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
+                                        <f:setPropertyActionListener value="{prestacion}" target="{manejadorCat.tipoprestacionSeleccionada}"/>
+                                    </p:commandButton>-->
+                                    <p:commandButton icon="ui-icon-closethick" title="Eliminar" process="@this cat-prestacion" oncomplete="PF('eliminarPrestacionDialog').show()">
+                                       <f:setPropertyActionListener value="#{prestacion}" target="#{manejadorCat.tipoprestacionSeleccionada}"/>
                                     </p:commandButton>
                                 </p:column>
 
@@ -841,7 +917,9 @@
                                     <h3>
                                         <span class="panel-info"><strong>Nuevo Registro</strong></span>
                                     </h3>
-                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <p:inputText value="#{manejadorCat.nuevo_item}" 
+                                                 style="width: 100%; padding: 9px;">
+                                    </p:inputText>
                                     <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
                                         <p:ajax process="cat-prestacion" update="cat-prestacion"/>
                                     </h:commandButton>
@@ -853,21 +931,21 @@
                             <p:dataTable id="cat-tipo-sangre" value="#{manejadorCat.tipoSangres}" var="tipo_sangre" rendered="#{manejadorCat.opcion eq 17}" class="table" paginator="true" rows="5">
                                 <p:column width="10%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Id"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Id"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{tipo_sangre.idTipoSangre}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{tipo_sangre.idTipoSangre}"/>
                                 </p:column>
 
                                 <p:column width="90%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Nombre del Tipo de Sangre"/>
+                                        <h:outputText style="font-size: 11.5px;" value="Nombre del Tipo de Sangre"/>
                                     </f:facet>
-                                    <h:outputText style="font-size: 12px;" value="#{tipo_sangre.nombreTipoSangre}"/>
+                                    <h:outputText style="font-size: 11.5px;" value="#{tipo_sangre.nombreTipoSangre}"/>
                                 </p:column>
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Editar"/>
+                                        <h:outputText style="font-size: 11px;" value="Editar"/>
                                     </f:facet>
                                     <p:commandButton process="@this" update=":form:tsangreDetalle" oncomplete="PF('tsangreDialog').show()" icon="ui-icon-pencil" title="Editar">
                                         <f:setPropertyActionListener value="#{tipo_sangre}" target="#{manejadorCat.tiposangreSeleccionado}"/>
@@ -876,10 +954,13 @@
 
                                 <p:column width="15%">
                                     <f:facet name="header">
-                                        <h:outputText style="font-size: 12px;" value="Eliminar"/>
+                                        <h:outputText style="font-size: 11px;" value="Eliminar"/>
                                     </f:facet>
-                                    <p:commandButton process="cat-tipo-sangre" update="cat-tipo-sangre" action="#{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
-                                        <f:setPropertyActionListener value="#{tipo_sangre}" target="#{manejadorCat.tiposangreSeleccionado}"/>
+<!--                                    <p:commandButton process="cat-tipo-sangre" update="cat-tipo-sangre" action="{manejadorCat.eliminar()}" icon="ui-icon-closethick" title="Eliminar">
+                                        <f:setPropertyActionListener value="{tipo_sangre}" target="{manejadorCat.tiposangreSeleccionado}"/>
+                                    </p:commandButton>-->
+                                    <p:commandButton icon="ui-icon-closethick" title="Eliminar" process="@this cat-tipo-sangre" oncomplete="PF('eliminarTsangreDialog').show()">
+                                       <f:setPropertyActionListener value="#{tipo_sangre}" target="#{manejadorCat.tiposangreSeleccionado}"/>
                                     </p:commandButton>
                                 </p:column>
 
@@ -888,7 +969,9 @@
                                     <h3>
                                         <span class="panel-info"><strong>Nuevo Registro</strong></span>
                                     </h3>
-                                    <h:inputText value="#{manejadorCat.nuevo_item}" class="form-control"/>
+                                    <p:inputText value="#{manejadorCat.nuevo_item}" 
+                                                 style="width: 100%; padding: 9px;">
+                                    </p:inputText>
                                     <h:commandButton value="Agregar" action="#{manejadorCat.guardarNuevo()}" class="btn btn-primary">
                                         <p:ajax process="cat-tipo-sangre" update="cat-tipo-sangre"/>
                                     </h:commandButton>
@@ -940,7 +1023,7 @@
                     <h:outputLabel value="Id:"/>
                     <h:outputText value="#{manejadorCat.pensionSeleccionada.idAdminPension}" id="codpension"/>
 
-                    <h:outputLabel value="Nombre:" />
+                    <p:outputLabel value="Nombre:" />
                     <p:inputText style="width: 100%" value="#{manejadorCat.pensionSeleccionada.nombreAdminPension}" id="txtnombre" class="form-control"></p:inputText>
 
                     <f:facet class="modal-footer" name="footer">
@@ -949,7 +1032,8 @@
                             <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" action="#{manejadorCat.actualizar()}" value="Actualizar">
                                 <p:ajax process="pensionDetalle"  update="@form" oncomplete="PF('pensionDialog').hide();"/>
                             </h:commandButton>
-                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('pensionDialog').hide()" />
+                            <!--<h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('pensionDialog').hide()" />-->
+                            <h:link value="Cancelar" outcome="catalogos" class="btn-sm btn-primary" style="color: #ffffff"/>
                             <!--<p:messages id="mensaje" />-->
                         </div>
                     </f:facet>
@@ -957,6 +1041,26 @@
 
             </p:dialog>
 
+            <!-- **** DIALOGO ELIMINAR ADMINISTRADORA DE PENSIONES **** -->
+            <!--<p:confirmDialog message="Are you sure about destroying the world?"
+            header="Initiating destroy process" severity="alert"
+            widgetVar="cd">
+            <p:commandButton value="Yes Sure" actionListener="{buttonBean.destroyWorld}"
+            update="messages" oncomplete="PF('cd').hide()"/>
+            <p:commandButton value="Not Yet" onclick="PF('cd').hide();" type="button" />
+            </p:confirmDialog>-->
+
+            <p:confirmDialog message="¿Está seguro que desea eliminar el registro seleccionado?" widgetVar="eliminarPensionDialog" id="eliminarPensionDialog" header="Confirmación para Eliminar Registro">
+                <!--<p:outputLabel value="¿Está seguro de eliminar el Registro Seleccionado?" />-->
+                <p:commandButton value="Si" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+                                 action="#{manejadorCat.eliminar()}"
+                                 process="@this"
+                                 update="cat-pensiones"
+                                 oncomplete="PF('eliminarPensionDialog').hide();">
+                    <!--                    <f:setPropertyActionListener value="{admin_pensiones}" target="{manejadorCat.pensionSeleccionada}"/>-->
+                </p:commandButton>
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" onclick="PF('eliminarPensionDialog').hide();"/>
+            </p:confirmDialog>
 
             <!-- **** DIALOGO CARACTERISTICAS IDIOMA **** -->
             <p:dialog header="Edición de Características del Idioma" widgetVar="caracteidiomaDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" class="modal-open" >
@@ -975,13 +1079,27 @@
                             <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" action="#{manejadorCat.actualizar()}" value="Actualizar">
                                 <p:ajax process="caracteidiomaDetalle"  update="@form" oncomplete="PF('caracteidiomaDialog').hide();"/>
                             </h:commandButton>
-                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('caracteidiomaDialog').hide()" />
+                            <!--                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('caracteidiomaDialog').hide()" />-->
+                            <h:link value="Cancelar" outcome="catalogos" class="btn-sm btn-primary" style="color: #ffffff"/>
                             <!--<p:messages id="mensaje" />-->
                         </div>
                     </f:facet>
                 </p:panelGrid>
 
             </p:dialog>
+
+
+            <!-- **** DIALOGO ELIMINAR CARACTERISTICAS IDIOMA **** -->
+            <p:confirmDialog message="¿Está seguro que desea eliminar el registro seleccionado?" widgetVar="eliminarCaracDialog" id="eliminarCaracDialog" header="Confirmación para Eliminar Registro">
+                <p:commandButton value="Si" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+                                 action="#{manejadorCat.eliminar()}"
+                                 process="@this"
+                                 update="cat-caractidiomas"
+                                 oncomplete="PF('eliminarCaracDialog').hide();">
+                </p:commandButton>
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" onclick="PF('eliminarCaracDialog').hide();"/>
+            </p:confirmDialog>
+
 
 
             <!-- **** DIALOGO ESTADO CIVIL **** -->
@@ -1001,13 +1119,25 @@
                             <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" action="#{manejadorCat.actualizar()}" value="Actualizar">
                                 <p:ajax process="estadocivilDetalle"  update="@form" oncomplete="PF('estadocivilDialog').hide();"/>
                             </h:commandButton>
-                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('estadocivilDialog').hide()" />
+                            <!--                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('estadocivilDialog').hide()" />-->
+                            <h:link value="Cancelar" outcome="catalogos" class="btn-sm btn-primary" style="color: #ffffff"/>                            
                             <!--<p:messages id="mensaje" />-->
                         </div>
                     </f:facet>
                 </p:panelGrid>
             </p:dialog> 
 
+            
+            <!-- **** DIALOGO ELIMINAR ESTADO CIVIL **** -->
+            <p:confirmDialog message="¿Está seguro que desea eliminar el registro seleccionado?" widgetVar="eliminarEstCivilDialog" id="eliminarEstCivilDialog" header="Confirmación para Eliminar Registro" >
+                <p:commandButton value="Si" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+                                 action="#{manejadorCat.eliminar()}"
+                                 process="@this"
+                                 update="cat-estadocivil"
+                                 oncomplete="PF('eliminarEstCivilDialog').hide();">
+                </p:commandButton>
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" onclick="PF('eliminarEstCivilDialog').hide();"/>
+            </p:confirmDialog>
 
             <!-- **** DIALOGO ESTADOS DEL EMPLEADO **** -->
             <p:dialog header="Edición de Estado del Empleado" widgetVar="estadoempDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" class="modal-open" >
@@ -1026,14 +1156,26 @@
                             <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" action="#{manejadorCat.actualizar()}" value="Actualizar">
                                 <p:ajax process="estadoempDetalle"  update="@form" oncomplete="PF('estadoempDialog').hide();"/>
                             </h:commandButton>
-                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('estadoempDialog').hide()" />
+                            <!--                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('estadoempDialog').hide()" />-->
+                            <h:link value="Cancelar" outcome="catalogos" class="btn-sm btn-primary" style="color: #ffffff"/>                            
                             <!--<p:messages id="mensaje" />-->
                         </div>
                     </f:facet>
                 </p:panelGrid>
             </p:dialog>
 
+            <!-- **** DIALOGO ELIMINAR ESTADOS DEL EMPLEADO **** -->
+            <p:confirmDialog message="¿Está seguro que desea eliminar el registro seleccionado?" widgetVar="eliminarEstEmpDialog" id="eliminarEstEmpDialog" header="Confirmación para Eliminar Registro">
+                <p:commandButton value="Si" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+                                 action="#{manejadorCat.eliminar()}"
+                                 process="@this"
+                                 update="cat-estados"
+                                 oncomplete="PF('eliminarEstEmpDialog').hide();">
+                </p:commandButton>
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" onclick="PF('eliminarEstEmpDialog').hide();"/>
+            </p:confirmDialog>
 
+            
             <!-- **** DIALOGO GRADO DE LA SANCIÓN **** -->
             <p:dialog header="Edición de Grados de la Sanción" widgetVar="gradosancionDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" class="modal-open" >
                 <p:panelGrid id="gradosancionDetalle" columns="2" rendered="#{not empty manejadorCat.gradosancionSeleccionado}" class="table info">
@@ -1051,13 +1193,26 @@
                             <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" action="#{manejadorCat.actualizar()}" value="Actualizar">
                                 <p:ajax process="gradosancionDetalle"  update="@form" oncomplete="PF('gradosancionDialog').hide();"/>
                             </h:commandButton>
-                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('gradosancionDialog').hide()" />
+                            <!--<h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('gradosancionDialog').hide()" />-->
+                            <h:link value="Cancelar" outcome="catalogos" class="btn-sm btn-primary" style="color: #ffffff"/>
                             <!--<p:messages id="mensaje" />-->
                         </div>
                     </f:facet>
                 </p:panelGrid>
             </p:dialog>
 
+             <!-- **** DIALOGO ELIMINAR GRADO DE LA SANCIÓN **** -->
+            <p:confirmDialog message="¿Está seguro que desea eliminar el registro seleccionado?" widgetVar="eliminarGraSancionDialog" id="eliminarGraSancionDialog" header="Confirmación para Eliminar Registro">
+                <p:commandButton value="Si" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+                                 action="#{manejadorCat.eliminar()}"
+                                 process="@this"
+                                 update="cat-gradosancion"
+                                 oncomplete="PF('eliminarGraSancionDialog').hide();">
+                </p:commandButton>
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" onclick="PF('eliminarGraSancionDialog').hide();"/>
+            </p:confirmDialog>
+
+            
             <!-- **** DIALOGO IDIOMAS **** -->
             <p:dialog header="Edición de Idiomas" widgetVar="idiomaDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" class="modal-open" >
                 <p:panelGrid id="idiomaDetalle" columns="2" rendered="#{not empty manejadorCat.idiomaSeleccionado}" class="table info">
@@ -1075,13 +1230,26 @@
                             <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" action="#{manejadorCat.actualizar()}" value="Actualizar">
                                 <p:ajax process="idiomaDetalle"  update="@form" oncomplete="PF('idiomaDialog').hide();"/>
                             </h:commandButton>
-                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('idiomaDialog').hide()" />
+                            <!--                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('idiomaDialog').hide()" />-->
+                            <h:link value="Cancelar" outcome="catalogos" class="btn-sm btn-primary" style="color: #ffffff"/>                            
                             <!--<p:messages id="mensaje" />-->
                         </div>
                     </f:facet>
                 </p:panelGrid>
             </p:dialog>
 
+             <!-- **** DIALOGO ELIMINAR IDIOMAS **** -->
+            <p:confirmDialog message="¿Está seguro que desea eliminar el registro seleccionado?" widgetVar="eliminarIdiomaDialog" id="eliminarIdiomaDialog" header="Confirmación para Eliminar Registro">
+                <p:commandButton value="Si" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+                                 action="#{manejadorCat.eliminar()}"
+                                 process="@this"
+                                 update="cat-idiomas"
+                                 oncomplete="PF('eliminarIdiomaDialog').hide();">
+                </p:commandButton>
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" onclick="PF('eliminarIdiomaDialog').hide();"/>
+            </p:confirmDialog>
+
+            
             <!-- **** DIALOGO INSTITUCIONES BANCARIAS **** -->
             <p:dialog header="Edición de Instituciones Bancarias" widgetVar="bancoDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" class="modal-open" >
                 <p:panelGrid id="bancoDetalle" columns="2" rendered="#{not empty manejadorCat.bancoSeleccionado}" class="table info">
@@ -1099,14 +1267,26 @@
                             <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" action="#{manejadorCat.actualizar()}" value="Actualizar">
                                 <p:ajax process="bancoDetalle"  update="@form" oncomplete="PF('bancoDialog').hide();"/>
                             </h:commandButton>
-                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('bancoDialog').hide()" />
+                            <!--                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('bancoDialog').hide()" />-->
+                            <h:link value="Cancelar" outcome="catalogos" class="btn-sm btn-primary" style="color: #ffffff"/>                            
                             <!--<p:messages id="mensaje" />-->
                         </div>
                     </f:facet>
                 </p:panelGrid>
             </p:dialog>
 
+ <!-- **** DIALOGO ELIMINAR INSTITUCIONES BANCARIAS  **** -->
+            <p:confirmDialog message="¿Está seguro que desea eliminar el registro seleccionado?" widgetVar="eliminarBancoDialog" id="eliminarBancoDialog" header="Confirmación para Eliminar Registro">
+                <p:commandButton value="Si" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+                                 action="#{manejadorCat.eliminar()}"
+                                 process="@this"
+                                 update="cat-bancos"
+                                 oncomplete="PF('eliminarBancoDialog').hide();">
+                </p:commandButton>
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" onclick="PF('eliminarBancoDialog').hide();"/>
+            </p:confirmDialog>
 
+            
             <!-- **** DIALOGO NIVEL DE CONOCIMIENTO **** -->
             <p:dialog header="Edición de Nivel de Conocimientos" widgetVar="nivelDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" class="modal-open" >
                 <p:panelGrid id="nivelDetalle" columns="2" rendered="#{not empty manejadorCat.nivelSeleccionado}" class="table info">
@@ -1124,14 +1304,26 @@
                             <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" action="#{manejadorCat.actualizar()}" value="Actualizar">
                                 <p:ajax process="nivelDetalle"  update="@form" oncomplete="PF('nivelDialog').hide();"/>
                             </h:commandButton>
-                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('nivelDialog').hide()" />
+                            <!--                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('nivelDialog').hide()" />-->
+                            <h:link value="Cancelar" outcome="catalogos" class="btn-sm btn-primary" style="color: #ffffff"/>                            
                             <!--<p:messages id="mensaje" />-->
                         </div>
                     </f:facet>
                 </p:panelGrid>
             </p:dialog>
 
+<!-- **** DIALOGO ELIMINAR NIVEL DE CONOCIMIENTO  **** -->
+            <p:confirmDialog message="¿Está seguro que desea eliminar el registro seleccionado?" widgetVar="eliminarNivelDialog" id="eliminarNivelDialog" header="Confirmación para Eliminar Registro">
+                <p:commandButton value="Si" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+                                 action="#{manejadorCat.eliminar()}"
+                                 process="@this"
+                                 update="cat-nivel"
+                                 oncomplete="PF('eliminarNivelDialog').hide();">
+                </p:commandButton>
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" onclick="PF('eliminarNivelDialog').hide();"/>
+            </p:confirmDialog>
 
+            
             <!-- **** DIALOGO PAISES **** -->
             <p:dialog header="Edición de Países" widgetVar="paisDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" class="modal-open" >
                 <p:panelGrid id="paisDetalle" columns="2" rendered="#{not empty manejadorCat.paisSeleccionado}" class="table info">
@@ -1149,14 +1341,26 @@
                             <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" action="#{manejadorCat.actualizar()}" value="Actualizar">
                                 <p:ajax process="paisDetalle"  update="@form" oncomplete="PF('paisDialog').hide();"/>
                             </h:commandButton>
-                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('paisDialog').hide()" />
+                            <!--                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('paisDialog').hide()" />-->
+                            <h:link value="Cancelar" outcome="catalogos" class="btn-sm btn-primary" style="color: #ffffff"/>                            
                             <!--<p:messages id="mensaje" />-->
                         </div>
                     </f:facet>
                 </p:panelGrid>
             </p:dialog>
 
+<!-- **** DIALOGO ELIMINAR PAISES  **** -->
+            <p:confirmDialog message="¿Está seguro que desea eliminar el registro seleccionado?" widgetVar="eliminarPaisDialog" id="eliminarPaisDialog" header="Confirmación para Eliminar Registro">
+                <p:commandButton value="Si" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+                                 action="#{manejadorCat.eliminar()}"
+                                 process="@this"
+                                 update="cat-pais"
+                                 oncomplete="PF('eliminarPaisDialog').hide();">
+                </p:commandButton>
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" onclick="PF('eliminarPaisDialog').hide();"/>
+            </p:confirmDialog>
 
+            
             <!-- **** DIALOGO PARENTESCO **** -->
             <p:dialog header="Edición de Parentesco" widgetVar="parentescoDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" class="modal-open" >
                 <p:panelGrid id="parentescoDetalle" columns="2" rendered="#{not empty manejadorCat.parentescoSeleccionado}" class="table info">
@@ -1174,13 +1378,27 @@
                             <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" action="#{manejadorCat.actualizar()}" value="Actualizar">
                                 <p:ajax process="parentescoDetalle"  update="@form" oncomplete="PF('parentescoDialog').hide();"/>
                             </h:commandButton>
-                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('parentescoDialog').hide()" />
+                            <!--                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('parentescoDialog').hide()" />-->
+                            <h:link value="Cancelar" outcome="catalogos" class="btn-sm btn-primary" style="color: #ffffff"/>                           
                             <!--<p:messages id="mensaje" />-->
                         </div>
                     </f:facet>
                 </p:panelGrid>
             </p:dialog>
 
+            <!-- **** DIALOGO ELIMINAR PARENTESCO  **** -->
+            <p:confirmDialog message="¿Está seguro que desea eliminar el registro seleccionado?" widgetVar="eliminarParentescoDialog" id="eliminarParentescoDialog" header="Confirmación para Eliminar Registro">
+                <p:commandButton value="Si" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+                                 action="#{manejadorCat.eliminar()}"
+                                 process="@this"
+                                 update="cat-parentesco"
+                                 oncomplete="PF('eliminarParentescoDialog').hide();">
+                </p:commandButton>
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" onclick="PF('eliminarParentescoDialog').hide();"/>
+            </p:confirmDialog>
+
+            
+            
             <!-- **** DIALOGO PROFESIÓN U OFICIO **** -->
             <p:dialog header="Edición de Profesión y Oficio" widgetVar="profofiDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" class="modal-open" >
                 <p:panelGrid id="profofiDetalle" columns="2" rendered="#{not empty manejadorCat.profSeleccionado}" class="table info">
@@ -1198,14 +1416,26 @@
                             <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" action="#{manejadorCat.actualizar()}" value="Actualizar">
                                 <p:ajax process="profofiDetalle"  update="@form" oncomplete="PF('profofiDialog').hide();"/>
                             </h:commandButton>
-                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('profofiDialog').hide()" />
+                            <!--                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('profofiDialog').hide()" />-->
+                            <h:link value="Cancelar" outcome="catalogos" class="btn-sm btn-primary" style="color: #ffffff"/>                            
                             <!--<p:messages id="mensaje" />-->
                         </div>
                     </f:facet>
                 </p:panelGrid>
             </p:dialog>
 
+<!-- **** DIALOGO ELIMINAR PROFESIÓN U OFICIO  **** -->
+            <p:confirmDialog message="¿Está seguro que desea eliminar el registro seleccionado?" widgetVar="eliminarProfDialog" id="eliminarProfDialog" header="Confirmación para Eliminar Registro">
+                <p:commandButton value="Si" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+                                 action="#{manejadorCat.eliminar()}"
+                                 process="@this"
+                                 update="cat-prof-oficios"
+                                 oncomplete="PF('eliminarProfDialog').hide();">
+                </p:commandButton>
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" onclick="PF('eliminarProfDialog').hide();"/>
+            </p:confirmDialog>
 
+            
             <!-- **** DIALOGO PROVEEDOR **** -->
             <p:dialog header="Edición de Proveedores" widgetVar="proveedorDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" class="modal-open" >
                 <p:panelGrid id="proveedorDetalle" columns="2" rendered="#{not empty manejadorCat.proveedorSeleccionado}" class="table info">
@@ -1223,13 +1453,24 @@
                             <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" action="#{manejadorCat.actualizar()}" value="Actualizar">
                                 <p:ajax process="proveedorDetalle"  update="@form" oncomplete="PF('proveedorDialog').hide();"/>
                             </h:commandButton>
-                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('proveedorDialog').hide()" />
+                            <!--                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('proveedorDialog').hide()" />-->
+                            <h:link value="Cancelar" outcome="catalogos" class="btn-sm btn-primary" style="color: #ffffff"/>                            
                             <!--<p:messages id="mensaje" />-->
                         </div>
                     </f:facet>
                 </p:panelGrid>
             </p:dialog>
 
+            <!-- **** DIALOGO ELIMINAR PROVEEDOR  **** -->
+            <p:confirmDialog message="¿Está seguro que desea eliminar el registro seleccionado?" widgetVar="eliminarProveedorDialog" id="eliminarProveedorDialog" header="Confirmación para Eliminar Registro">
+                <p:commandButton value="Si" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+                                 action="#{manejadorCat.eliminar()}"
+                                 process="@this"
+                                 update="cat-prov"
+                                 oncomplete="PF('eliminarProveedorDialog').hide();">
+                </p:commandButton>
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" onclick="PF('eliminarProveedorDialog').hide();"/>
+            </p:confirmDialog>
 
             <!-- **** DIALOGO TIPO DE DESCUENTO **** -->
             <p:dialog header="Edición de Tipo de Descuentos" widgetVar="tdescuentoDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" class="modal-open" >
@@ -1248,13 +1489,25 @@
                             <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" action="#{manejadorCat.actualizar()}" value="Actualizar">
                                 <p:ajax process="tdescuentoDetalle"  update="@form" oncomplete="PF('tdescuentoDialog').hide();"/>
                             </h:commandButton>
-                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('tdescuentoDialog').hide()" />
+                            <!--                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('tdescuentoDialog').hide()" />-->
+                            <h:link value="Cancelar" outcome="catalogos" class="btn-sm btn-primary" style="color: #ffffff"/>                            
                             <!--<p:messages id="mensaje" />-->
                         </div>
                     </f:facet>
                 </p:panelGrid>
             </p:dialog>
 
+            <!-- **** DIALOGO ELIMINAR TIPO DE DESCUENTO   **** -->
+            <p:confirmDialog message="¿Está seguro que desea eliminar el registro seleccionado?" widgetVar="eliminarDescuentoDialog" id="eliminarDescuentoDialog" header="Confirmación para Eliminar Registro">
+                <p:commandButton value="Si" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+                                 action="#{manejadorCat.eliminar()}"
+                                 process="@this"
+                                 update="cat-descuento"
+                                 oncomplete="PF('eliminarDescuentoDialog').hide();">
+                </p:commandButton>
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" onclick="PF('eliminarDescuentoDialog').hide();"/>
+            </p:confirmDialog>
+            
 
             <!-- **** DIALOGO TIPO DE MEJORA SALARIAL **** -->
             <p:dialog header="Edición de Tipo de Mejora Salarial" widgetVar="tmejoraDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" class="modal-open" >
@@ -1273,12 +1526,24 @@
                             <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" action="#{manejadorCat.actualizar()}" value="Actualizar">
                                 <p:ajax process="tmejoraDetalle"  update="@form" oncomplete="PF('tmejoraDialog').hide();"/>
                             </h:commandButton>
-                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('tmejoraDialog').hide()" />
+                            <!--                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('tmejoraDialog').hide()" />-->
+                            <h:link value="Cancelar" outcome="catalogos" class="btn-sm btn-primary" style="color: #ffffff"/>                            
                             <!--<p:messages id="mensaje" />-->
                         </div>
                     </f:facet>
                 </p:panelGrid>
             </p:dialog>
+
+<!-- **** DIALOGO ELIMINAR TIPO DE MEJORA SALARIAL    **** -->
+            <p:confirmDialog message="¿Está seguro que desea eliminar el registro seleccionado?" widgetVar="eliminarMejorasalDialog" id="eliminarMejorasalDialog" header="Confirmación para Eliminar Registro">
+                <p:commandButton value="Si" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+                                 action="#{manejadorCat.eliminar()}"
+                                 process="@this"
+                                 update="cat-mejorasal"
+                                 oncomplete="PF('eliminarMejorasalDialog').hide();">
+                </p:commandButton>
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" onclick="PF('eliminarMejorasalDialog').hide();"/>
+            </p:confirmDialog>
 
 
             <!-- **** DIALOGO TIPO DE MOVIMIENTO **** -->
@@ -1298,13 +1563,27 @@
                             <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" action="#{manejadorCat.actualizar()}" value="Actualizar">
                                 <p:ajax process="tmovDetalle"  update="@form" oncomplete="PF('tmovDialog').hide();"/>
                             </h:commandButton>
-                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('tmovDialog').hide()" />
+                            <!--                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('tmovDialog').hide()" />-->
+                            <h:link value="Cancelar" outcome="catalogos" class="btn-sm btn-primary" style="color: #ffffff"/>                            
                             <!--<p:messages id="mensaje" />-->
                         </div>
                     </f:facet>
                 </p:panelGrid>
             </p:dialog>
 
+            <!-- **** DIALOGO ELIMINAR TIPO DE MOVIMIENTO    **** -->
+            <p:confirmDialog message="¿Está seguro que desea eliminar el registro seleccionado?" widgetVar="eliminarMovDialog" id="eliminarMovDialog" header="Confirmación para Eliminar Registro">
+                <p:commandButton value="Si" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+                                 action="#{manejadorCat.eliminar()}"
+                                 process="@this"
+                                 update="cat-mov"
+                                 oncomplete="PF('eliminarMovDialog').hide();">
+                </p:commandButton>
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" onclick="PF('eliminarMovDialog').hide();"/>
+            </p:confirmDialog>
+
+
+            
 
             <!-- **** DIALOGO TIPO DE PRESTACION **** -->
             <p:dialog header="Edición de Tipo de Prestación" widgetVar="tprestacionDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" class="modal-open" >
@@ -1323,14 +1602,27 @@
                             <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" action="#{manejadorCat.actualizar()}" value="Actualizar">
                                 <p:ajax process="tprestacionDetalle"  update="@form" oncomplete="PF('tprestacionDialog').hide();"/>
                             </h:commandButton>
-                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('tprestacionDialog').hide()" />
+                            <!--                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('tprestacionDialog').hide()" />-->
+                            <h:link value="Cancelar" outcome="catalogos" class="btn-sm btn-primary" style="color: #ffffff"/>                           
                             <!--<p:messages id="mensaje" />-->
                         </div>
                     </f:facet>
                 </p:panelGrid>
             </p:dialog>
 
+        <!-- **** DIALOGO ELIMINAR TIPO DE PRESTACION    **** -->
+            <p:confirmDialog message="¿Está seguro que desea eliminar el registro seleccionado?" widgetVar="eliminarPrestacionDialog" id="eliminarPrestacionDialog" header="Confirmación para Eliminar Registro">
+                <p:commandButton value="Si" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+                                 action="#{manejadorCat.eliminar()}"
+                                 process="@this"
+                                 update="cat-prestacion"
+                                 oncomplete="PF('eliminarPrestacionDialog').hide();">
+                </p:commandButton>
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" onclick="PF('eliminarPrestacionDialog').hide();"/>
+            </p:confirmDialog>
 
+
+            
             <!-- **** DIALOGO TIPO DE SANGRE **** -->
             <p:dialog header="Edición de Tipo de Sangre" widgetVar="tsangreDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" class="modal-open" >
                 <p:panelGrid id="tsangreDetalle" columns="2" rendered="#{not empty manejadorCat.tiposangreSeleccionado}" class="table info">
@@ -1348,13 +1640,27 @@
                             <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" action="#{manejadorCat.actualizar()}" value="Actualizar">
                                 <p:ajax process="tsangreDetalle"  update="@form" oncomplete="PF('tsangreDialog').hide();"/>
                             </h:commandButton>
-                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('tsangreDialog').hide()" />
+                            <!--                            <h:commandButton class="btn-sm btn-primary" style="font-size: 12px" value="Cancelar" onclick="PF('tsangreDialog').hide()" />-->
+                            <h:link value="Cancelar" outcome="catalogos" class="btn-sm btn-primary" style="color: #ffffff"/>                            
                             <!--<p:messages id="mensaje" />-->
                         </div>
                     </f:facet>
                 </p:panelGrid>
             </p:dialog>
 
+     <!-- **** DIALOGO ELIMINAR TIPO DE SANGRE    **** -->
+            <p:confirmDialog message="¿Está seguro que desea eliminar el registro seleccionado?" widgetVar="eliminarTsangreDialog" id="eliminarTsangreDialog" header="Confirmación para Eliminar Registro">
+                <p:commandButton value="Si" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+                                 action="#{manejadorCat.eliminar()}"
+                                 process="@this"
+                                 update="cat-tipo-sangre"
+                                 oncomplete="PF('eliminarTsangreDialog').hide();">
+                </p:commandButton>
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" onclick="PF('eliminarTsangreDialog').hide();"/>
+            </p:confirmDialog>
+
+
+            
 
         </h:form>
 

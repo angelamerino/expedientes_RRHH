@@ -1,6 +1,29 @@
 package sv.gob.cultura.rrhh.manejadores;
 
+import com.lowagie.text.BadElementException;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Element;
+import com.lowagie.text.Font;
+import com.lowagie.text.FontFactory;
+import com.lowagie.text.Image;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.Phrase;
+import com.lowagie.text.pdf.PdfPageEventHelper;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.Rectangle;
+import com.lowagie.text.pdf.PdfTemplate;
+import com.lowagie.text.pdf.PdfWriter;
+import com.lowagie.text.ExceptionConverter;
+import com.lowagie.text.Header;
+import com.lowagie.text.HeaderFooter;
+import com.lowagie.text.pdf.ColumnText;
+
+import java.awt.Color;
 import java.io.*;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.text.SimpleDateFormat;
@@ -12,7 +35,17 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import javax.jws.soap.SOAPBinding.Style;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.GroupLayout;
+import static javax.swing.text.StyleConstants.FontFamily;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
 import sv.gob.cultura.rrhh.entidades.*;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
@@ -119,6 +152,7 @@ public class manejadorGestionEmpleado implements Serializable {
 // *****************************************************************************
 //********************** GET DE ENTERPRICE JAVA BEAN ***************************
 //******************************************************************************
+
     public EmpleadosFacade getEmpleadosFacade() {
         return empleadosFacade;
     }
@@ -448,7 +482,7 @@ public class manejadorGestionEmpleado implements Serializable {
     public void setNombreEmpleadoEditar(String nombreEmpleadoEditar) {
         this.nombreEmpleadoEditar = nombreEmpleadoEditar;
     }
-    
+
 //******************************************************************************
 // **************** LISTA DE ELEMENTOS EN TABLAS *******************************
 //******************************************************************************
@@ -513,7 +547,7 @@ public class manejadorGestionEmpleado implements Serializable {
     public List<Empleados> empleadoJefeDependencia() {
         return getEmpleadosFacade().buscarEmp(dependeciasFiltrarJefe);
     }
-    
+
     public List<Empleados> todosEmpleados() {
         return getEmpleadosFacade().findAll();
     }
@@ -522,37 +556,61 @@ public class manejadorGestionEmpleado implements Serializable {
 //*************************** FUNCIONES DE GUARDAR *****************************
 //******************************************************************************
     public String guardarEmpleado() {
-        
+
         //Seteo de datos de selecionables
-        if(this.getDepto()!=0){empleado.setDeptoNac(this.getDepto());}
-        if(this.getMuni()!=0){empleado.setMunicipioNac(this.getMuni());}
-        if(this.getDirDepto()!=0){empleado.setDeptoResidencia(this.getDirDepto());}
-        if(this.getDirMuni()!=0){empleado.setMunicipioRes(this.getDirMuni());}
-        if(this.getFechaNacEmpleado()!= new Date()){empleado.setFechaNac(this.getFechaNacEmpleado());} 
-        if(this.getEdadEmpleado()!=0){empleado.setEdadEmp(this.getEdadEmpleado());}
-        if(this.getEmpJefe()!=0){
+        if (this.getDepto() != 0) {
+            empleado.setDeptoNac(this.getDepto());
+        }
+        if (this.getMuni() != 0) {
+            empleado.setMunicipioNac(this.getMuni());
+        }
+        if (this.getDirDepto() != 0) {
+            empleado.setDeptoResidencia(this.getDirDepto());
+        }
+        if (this.getDirMuni() != 0) {
+            empleado.setMunicipioRes(this.getDirMuni());
+        }
+        if (this.getFechaNacEmpleado() != new Date()) {
+            empleado.setFechaNac(this.getFechaNacEmpleado());
+        }
+        if (this.getEdadEmpleado() != 0) {
+            empleado.setEdadEmp(this.getEdadEmpleado());
+        }
+        if (this.getEmpJefe() != 0) {
             empleado.setIdEmpleadoJefe(new Empleados(this.getEmpJefe()));
             empleado.setJefe("SI");
-        }else{empleado.setJefe("NO");}
-        if(this.getDependenciaNominal()!=0){empleado.setIdDependenciaN(new Dependencias(this.getDependenciaNominal()));}
-        if(this.getDependenciaFuncional()!=0){empleado.setIdDependenciaF(new Dependencias(this.getDependenciaFuncional()));}
+        } else {
+            empleado.setJefe("NO");
+        }
+        if (this.getDependenciaNominal() != 0) {
+            empleado.setIdDependenciaN(new Dependencias(this.getDependenciaNominal()));
+        }
+        if (this.getDependenciaFuncional() != 0) {
+            empleado.setIdDependenciaF(new Dependencias(this.getDependenciaFuncional()));
+        }
 
         //Seteo de las url de foto, curriculum y doc descriptor de puesto
-        if(this.path[0]!=null){empleado.setUrlFotoEmp(this.path[0]);}
-        if(this.path[1]!=null){empleado.setCurriculum(this.path[1]);}
-        if(this.path[2]!=null){empleado.setDocDescPuesto(this.path[2]);}        
-        
+        if (this.path[0] != null) {
+            empleado.setUrlFotoEmp(this.path[0]);
+        }
+        if (this.path[1] != null) {
+            empleado.setCurriculum(this.path[1]);
+        }
+        if (this.path[2] != null) {
+            empleado.setDocDescPuesto(this.path[2]);
+        }
+
         //Seteo de Dependencias nominal y funcional
         Dependencias depenNominal = getDependenciasFacade().find(this.getDependenciaNominal());
         Dependencias depenFuncional = getDependenciasFacade().find(this.getDependenciaFuncional());
         empleado.setIdMunicipioN(depenNominal.getIdMunicipio());
         empleado.setIdMunicipioF(depenFuncional.getIdMunicipio());
-        
+
         //Fecha de creacion y usuario id =1
         empleado.setFechaCreaEmp(new Date());
         empleado.setUserCreaEmp(1);
-        
-        getEmpleadosFacade().create(empleado);        
+
+        getEmpleadosFacade().create(empleado);
 
         empleado = new Empleados();
         restaurarSelecionables();
@@ -560,36 +618,60 @@ public class manejadorGestionEmpleado implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, message);
         return "gestion_empleados";
     }
-    
-    public String editEmpleado(){
+
+    public String editEmpleado() {
         //Seteo de datos de selecionables
-        if(this.getDepto()!=0){empleado.setDeptoNac(this.getDepto());}
-        if(this.getMuni()!=0){empleado.setMunicipioNac(this.getMuni());}
-        if(this.getDirDepto()!=0){empleado.setDeptoResidencia(this.getDirDepto());}
-        if(this.getDirMuni()!=0){empleado.setMunicipioRes(this.getDirMuni());}
-        if(this.getFechaNacEmpleado()!= new Date()){empleado.setFechaNac(this.getFechaNacEmpleado());} 
-        if(this.getEdadEmpleado()!=0){empleado.setEdadEmp(this.getEdadEmpleado());}
-        if(this.getEmpJefe()!=0){
+        if (this.getDepto() != 0) {
+            empleado.setDeptoNac(this.getDepto());
+        }
+        if (this.getMuni() != 0) {
+            empleado.setMunicipioNac(this.getMuni());
+        }
+        if (this.getDirDepto() != 0) {
+            empleado.setDeptoResidencia(this.getDirDepto());
+        }
+        if (this.getDirMuni() != 0) {
+            empleado.setMunicipioRes(this.getDirMuni());
+        }
+        if (this.getFechaNacEmpleado() != new Date()) {
+            empleado.setFechaNac(this.getFechaNacEmpleado());
+        }
+        if (this.getEdadEmpleado() != 0) {
+            empleado.setEdadEmp(this.getEdadEmpleado());
+        }
+        if (this.getEmpJefe() != 0) {
             empleado.setIdEmpleadoJefe(new Empleados(this.getEmpJefe()));
             empleado.setJefe("SI");
-        }else{empleado.setJefe("NO");}
-        if(this.getDependenciaNominal()!=0){empleado.setIdDependenciaN(new Dependencias(this.getDependenciaNominal()));}
-        if(this.getDependenciaFuncional()!=0){empleado.setIdDependenciaF(new Dependencias(this.getDependenciaFuncional()));}
+        } else {
+            empleado.setJefe("NO");
+        }
+        if (this.getDependenciaNominal() != 0) {
+            empleado.setIdDependenciaN(new Dependencias(this.getDependenciaNominal()));
+        }
+        if (this.getDependenciaFuncional() != 0) {
+            empleado.setIdDependenciaF(new Dependencias(this.getDependenciaFuncional()));
+        }
 
         //Seteo de las url de foto, curriculum y doc descriptor de puesto
-        if(this.path[0]!=null){empleado.setUrlFotoEmp(this.path[0]);}
-        if(this.path[1]!=null){empleado.setCurriculum(this.path[1]);}
-        if(this.path[2]!=null){empleado.setDocDescPuesto(this.path[2]);}               
-        
+        if (this.path[0] != null) {
+            empleado.setUrlFotoEmp(this.path[0]);
+        }
+        if (this.path[1] != null) {
+            empleado.setCurriculum(this.path[1]);
+        }
+        if (this.path[2] != null) {
+            empleado.setDocDescPuesto(this.path[2]);
+        }
+
         //Seteo de Dependencias nominal y funcional
         Dependencias depenNominal = getDependenciasFacade().find(this.getDependenciaNominal());
         Dependencias depenFuncional = getDependenciasFacade().find(this.getDependenciaFuncional());
         empleado.setIdMunicipioN(depenNominal.getIdMunicipio());
-        empleado.setIdMunicipioF(depenFuncional.getIdMunicipio());        
-        
+        empleado.setIdMunicipioF(depenFuncional.getIdMunicipio());
+
         empleado.setFechaModEmp(new Date());
         //empleado.setUserModEmp(1); ESTA COMO DATE
-        getEmpleadosFacade().edit(empleado);        
+        getEmpleadosFacade().edit(empleado);
 
         empleado = new Empleados();
         restaurarSelecionables();
@@ -598,7 +680,7 @@ public class manejadorGestionEmpleado implements Serializable {
         return "gestion_empleados";
     }
 
-    public void cambiarEstado(){
+    public void cambiarEstado() {
         Empleados emp = getEmpleadosFacade().find(this.getEmpleadoEditar());
         emp.setIdEstado(new Estados(this.getEstadoEditar()));
         emp.setFechaModEmp(new Date());
@@ -611,6 +693,7 @@ public class manejadorGestionEmpleado implements Serializable {
 // ************ FUNCIONES EXTRA QUE SE UTLIZAN LOS FORMULARIOS *****************
 //******************************************************************************
     //Devuelve edad apartir de fecha de nacimeinto
+
     public int edad(Date fecha_nac) {
 
         Date fechaNac = fecha_nac;
@@ -736,23 +819,22 @@ public class manejadorGestionEmpleado implements Serializable {
         this.graphicImage = graphicImage;
     }
 
-    
     //restaura todos los selecionables de los formularios
     public void restaurarSelecionables() {
         this.setDepto(0);
         this.setMuni(0);
         this.setDirDepto(0);
         this.setDirMuni(0);
-        this.setFechaNacEmpleado(new Date()); 
+        this.setFechaNacEmpleado(new Date());
         this.setEdadEmpleado(0);
-        this.setEmpJefe(0);      
+        this.setEmpJefe(0);
         this.setDependenciaNominal(0);
         this.setDependenciaFuncional(0);
         this.setDirNacionalFiltrarJefe(0);
         this.setDependeciasFiltrarJefe(0);
-        this.path[0]=null;
-        this.path[1]=null;
-        this.path[2]=null;
+        this.path[0] = null;
+        this.path[1] = null;
+        this.path[2] = null;
     }
 
     //setea valores en los inputs para ser editados
@@ -765,24 +847,232 @@ public class manejadorGestionEmpleado implements Serializable {
         this.setDirNacionalFuncional(dirFuncional.getIdDirNac());
         this.setDependenciaNominal(dependenciaN.getIdDependencia());
         this.setDependenciaFuncional(dependenciaF.getIdDependencia());
-        
-        if(empleado.getDeptoNac()!=null){this.setDepto(empleado.getDeptoNac());}
-        if(empleado.getMunicipioNac()!=null){this.setMuni(empleado.getMunicipioNac());}
-        if(empleado.getDeptoResidencia()!=null){this.setDirDepto(empleado.getDeptoResidencia());}
-        if(empleado.getMunicipioRes()!=null){this.setDirMuni((int) empleado.getMunicipioRes());}
-        
+
+        if (empleado.getDeptoNac() != null) {
+            this.setDepto(empleado.getDeptoNac());
+        }
+        if (empleado.getMunicipioNac() != null) {
+            this.setMuni(empleado.getMunicipioNac());
+        }
+        if (empleado.getDeptoResidencia() != null) {
+            this.setDirDepto(empleado.getDeptoResidencia());
+        }
+        if (empleado.getMunicipioRes() != null) {
+            this.setDirMuni((int) empleado.getMunicipioRes());
+        }
+
         return "editar_empleados";
     }
-    
-    public void refresh(){
+
+    public void refresh() {
         empleado = new Empleados();
         restaurarSelecionables();
     }
-    
+
     public String nuevoEmpleado() {
         empleado = new Empleados();
         restaurarSelecionables();
         return "reg_empleados";
+    }
+
+    /////agregado por Angela el 06/octubre/2015
+    ////PARA EXPORTAR ARCHIVOS A PDF
+//    public void preProcessPDF(Object document) throws IOException,
+//            BadElementException, DocumentException {
+//        Document pdf = (Document) document;
+//        ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+//        String logo = servletContext.getRealPath("") + File.separator + "resources/images"
+//                + File.separator + "logo2_peq2.png";
+//        pdf.add(Image.getInstance(logo));
+//    }
+//////////////////Agregado para header-encabezado ////////////////////////////////// 
+    /**
+     * Clase que maneja los eventos de pagina necesarios para agregar un
+     * encabezado y conteo de paginas a un documento. El encabezado, definido en
+     * onEndPage, consiste en una tabla con 3 celdas que contienen: Frase del
+     * encabezado | pagina <numero de pagina> de | total de paginas, con una
+     * linea horizontal separando el encabezado del texto
+     *
+     * Referencia: http://itextpdf.com/examples/iia.php?id=104
+     *
+     *
+     */
+//    public class Cabecera extends PdfPageEventHelper {
+//    private String encabezado;
+//    PdfTemplate total;
+//    
+//    /**
+//     * Crea el objecto PdfTemplate el cual contiene el numero total de
+//     * paginas en el documento
+//     */
+//    public void onOpenDocument(PdfWriter writer, Document document) {
+//        total = writer.getDirectContent().createTemplate(30, 16);
+//    }
+//    
+//    /**
+//     * Esta es el metodo a llamar cuando ocurra el evento <b>onEndPage</b>, es en este evento
+//     * donde crearemos el encabeazado de la pagina con los elementos indicados.
+//     */
+//    public void onEndPage(PdfWriter writer, Document document) {
+//        PdfPTable table = new PdfPTable(3);
+//        try {
+//            // Se determina el ancho y altura de la tabla
+//            table.setWidths(new int[]{24, 24, 2});
+//            table.setTotalWidth(527);
+//            table.setLockedWidth(true);
+//            table.getDefaultCell().setFixedHeight(20);
+//            
+//            // Borde de la celda
+//            table.getDefaultCell().setBorder(Rectangle.BOTTOM);
+//            
+//            table.addCell(encabezado);
+//            table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_RIGHT);
+//            
+//            table.addCell(String.format("Pagina %010d de", writer.getPageNumber()));
+//            
+//            PdfPCell cell = new PdfPCell(Image.getInstance(total));
+//            
+//            cell.setBorder(Rectangle.BOTTOM);
+//            
+//            table.addCell(cell);
+//            // Esta linea escribe la tabla como encabezado
+//            table.writeSelectedRows(0, -1, 34, 803, writer.getDirectContent());
+//        }
+//        catch(DocumentException de) {
+//            throw new ExceptionConverter(de);
+//        }
+//    }
+//    
+//    
+//    /**
+//     * Realiza el conteo de paginas al momento de cerrar el documento
+//     */
+//    public void onCloseDocument(PdfWriter writer, Document document) {
+//        ColumnText.showTextAligned(total, Element.ALIGN_LEFT, new Phrase(String.valueOf(writer.getPageNumber()-1)),2,2,0);
+//    }    
+//    
+//    // Getter and Setters
+//    
+//    public String getEncabezado() {
+//        return encabezado;
+//    }
+//    public void setEncabezado(String encabezado) {
+//        this.encabezado = encabezado;
+//    }
+//}    
+/////////////////////////////////////////////////// , String Documento
+    public void preProcessPDF(Object document) throws IOException, DocumentException {
+        final Document pdf = (Document) document;
+
+        pdf.setPageSize(PageSize.LETTER.rotate());
+        pdf.setMargins(10, 10, 10, 10); //para margenes de la página
+
+//////////////agregado para encabezado el 08/10/2015///   
+        
+///////////////////////////////////////////////////////////////
+
+        pdf.open();
+
+//		PdfPTable pdfTable = new PdfPTable(2); //para dos columnas o celdas en la tabla que se está creando
+//		pdfTable.addCell(getImage("resources/images/logo2_peq2.png"));
+        //obtenemos una instacia de un objeto PdfPTable y asignamos 1 columna
+        PdfPTable pdfTable = new PdfPTable(1);
+        PdfPCell celda = new PdfPCell(getImage("resources/images/logo2_peq2.png")); //se crea la celda con el contenido que llevará
+        celda.setBorder(Rectangle.NO_BORDER);                                       //celda creada sin bordes
+        celda.setBackgroundColor(new Color(255, 255, 45));                          //celda creada sin color
+        pdfTable.addCell(celda);
+        //agregamos las celdas
+//        pdfTable.addCell(""); //columna1
+//        pdfTable.addCell(""); //columna2
+        //pdfTable.addCell(getImage("resources/images/logo2_peq2.png"));      //contenido de la columna o celda
+
+        //EJEMPLO CON UN CELDA CON BORDE
+//        PdfPCell cellTwo = new PdfPCell(new Phrase("otra celda con rectangle box"));
+//        cellTwo.setBorder(Rectangle.BOX);
+//        pdfTable.addCell(cellTwo);
+
+        pdfTable.setWidthPercentage(15f);                                   //ancho de la tabla al 30% de la pagina
+        //pdfTable.setHorizontalAlignment(0);
+        pdfTable.setHorizontalAlignment(Element.ALIGN_RIGHT);               //alineación de la tabla a la derecha
+
+// agregamos la tabla al documento
+        pdf.add(pdfTable);
+
+        //agregado por mi
+        pdf.add(new Paragraph("RRHH - Secretaría de Cultura de la Presidencia"));
+        DateFormat formateer = new SimpleDateFormat("dd/MM/yy '-' hh:mm:ss");
+        Date currentDate = new Date();
+        String date = formateer.format(currentDate);
+        pdf.add(new Paragraph("Fecha de Generación: " + date));
+        pdf.add(new Paragraph("\n"));
+//        pdf.add(new Paragraph("Reporte por Género, Dirección Nacional, Dependencia y Ubicación", 
+//        FontFactory.getFont("garamond", //fuente
+//                        12, //tamaño
+//                        Font.BOLD, //estilo
+//                        Color.DARK_GRAY //color de la letra
+//                        )));
+//        pdf.add(new Paragraph("\n"));
+
+        Paragraph nombre_rep = new Paragraph("Reporte por Género, Dirección Nacional, Dependencia y Ubicación",
+                FontFactory.getFont("garamond", //fuente
+                        12, //tamaño
+                        Font.BOLD, //estilo
+                        //Color.DARK_GRAY //
+                        //Color.getHSBColor(0.7f, 0.9f, 0f) //color de la letra Color.getHSBColor(4, 72, 139)-- HSB (Hue, Saturation, Brightness – Matiz, Saturación, Brillo)
+                        Color.getHSBColor(0.6f, 0.9f, 0.7f)
+                ));
+        nombre_rep.setSpacingAfter(25);
+        nombre_rep.setSpacingBefore(25);
+        nombre_rep.setAlignment(Element.ALIGN_CENTER);
+//                nombre_rep.setIndentationLeft(50);
+//                nombre_rep.setIndentationRight(50);
+        pdf.add(nombre_rep);
+
+        
+
+///fin de agregado por mi  
+    }
+
+        
+    public void postProcessPDF(Object document) throws IOException, DocumentException {
+        final Document pdf = (Document) document;
+        pdf.setPageSize(PageSize.LETTER.rotate());
+
+    }
+
+    private Image getImage(String imageName) throws IOException, BadElementException {
+        final Image image = Image.getInstance(getAbsolutePath(imageName));
+        //image.scalePercent(90f);
+        image.scalePercent(100f);
+        return image;
+    }
+
+    private String getAbsolutePath(String imageName) {
+        final ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        final StringBuilder logo = new StringBuilder().append(servletContext.getRealPath(""));
+        //logo.append(File.separator).append(IMAGE_FOLDER);
+        //logo.append(File.separator).append(LOGOS_FOLDER);
+        logo.append(File.separator).append(imageName);
+        return logo.toString();
+    }
+//////////////////TERMINA CODIGO PARA EXPORTAR A PDF /////////////////////////////
+
+///////////PARA EXPORTAR ARCHIVOS A EXCEL///////////////////////////////////////
+    public void postProcessXLS(Object document) {
+        HSSFWorkbook wb = (HSSFWorkbook) document;
+        HSSFSheet sheet = wb.getSheetAt(0);
+        HSSFRow header = sheet.getRow(0);
+        HSSFCellStyle cellStyle = wb.createCellStyle();
+        HSSFFont hSSFFont = wb.createFont();
+        cellStyle.setFillForegroundColor(HSSFColor.BLUE_GREY.index);
+        //cellStyle.setFillBackgroundColor(new HSSFColor.BLACK().getIndex()); //probar esto para fondo negro
+   
+        cellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        hSSFFont.setColor(HSSFColor.RED.index);
+//        hSSFFont.setColor(HSSFColor.WHITE.index); //probar para color de fuente blanca http://datojava.blogspot.com/2014/09/reporte-excel-con-java.html
+//        for (int i = 0; i < header.getPhysicalNumberOfCells(); i++) {
+//            header.getCell(i).setCellStyle(cellStyle);
+//        }
     }
 //******************************************************************************
 // *****************************************************************************    

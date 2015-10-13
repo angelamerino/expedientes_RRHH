@@ -20,12 +20,12 @@
         </div>
 
         <div class="panel panel-info">
-            <div class="panel-heading"><strong>Editar / Eliminar Usuarios</strong></div>
+            <div class="panel-heading"><strong>Editar / Cambiar Estado a Usuarios</strong></div>
             <div class="panel-body">
 
                 <div class="table table-responsive table-bordered">
                     <f:view>
-                        <h:form prependId="false">
+                        <h:form prependId="false" id="form_listado">
                             <h:panelGroup id ="tablaUsuarios">
                                 <h:dataTable style="font-size: 14px" id="listaUsuarios" value="#{manejadorUsuarios.todosUsuarios}" var="usuario" styleClass="table table-striped table-hover">
                                     <h:column>
@@ -72,12 +72,13 @@
                                     <p:column style="font-size: 12px; text-align: center;" width="15%">
                                         <f:facet name="header">
                                             <center>
-                                                <h:outputText value="Editar/Cambiar Estado"/>
+                                                <h:outputText value="Editar  /  Cambiar Estado"/>
                                             </center>
                                         </f:facet>
                                         <center>
                                             <h:commandLink styleClass="btn-sm glyphicon glyphicon-pencil"  style="text-decoration:none;" title="Editar">
                                                 <f:setPropertyActionListener value="#{usuario}" target="#{manejadorUsuarios.usuarioSeleccionado}"/>
+                                                <f:setPropertyActionListener value="#{usuario.idDependencia.idDirNac.idDirNac}" target="#{manejadorUsuarios.dirNacionalFuncional}"/>
                                                 <p:ajax update="panelUsuarioEditar" />
                                                 <p:ajax update="tablaUsuarios"  onsuccess="PF('dlgModifUsuario').show()"/>
                                             </h:commandLink>
@@ -85,7 +86,7 @@
                                             <h:commandLink styleClass="btn-sm glyphicon glyphicon-refresh" style="text-decoration:none;" action="#{manejadorUsuarios.setNombreUsuarioEditar(usuario.nombreCompleto)}" title="Cambiar Estado">
                                                 <f:setPropertyActionListener value="#{usuario.idUsuario}" target="#{manejadorUsuarios.usuarioEditar}"/>
                                                 <f:setPropertyActionListener value="#{usuario.nombreCompleto}" target="#{manejadorUsuarios.nombreUsuarioEditar}"/>
-                                                <p:ajax update="nombreUsuario" />
+                                                <p:ajax update="nombreuser" />
                                                 <p:ajax update="listaUsuarios"  onsuccess="PF('dlgEstadoUsuario').show()"/>
                                             </h:commandLink>
 
@@ -93,6 +94,10 @@
                                     </p:column>
                                 </h:dataTable>
                             </h:panelGroup>
+                            <!-- PARA MOSTRAR MENSAJES:
+                                                        <p:growl id="growl"/>
+                                                        <p:messages autoUpdate="true"/> -->
+
                         </h:form>
                     </f:view>
                 </div>
@@ -110,7 +115,7 @@
                     <p:row>    
                         <p:column><h:outputLabel value="Estado:"/></p:column>
                         <p:column>
-                            <h:selectOneMenu styleClass="form-control" id="idEstado" value="#{manejadorUsuarios.estadoEditar}" style="width: 100%" required="true" requiredMessage="Seleccione un Estado">
+                            <h:selectOneMenu styleClass="form-control" id="idEstado" value="#{manejadorUsuarios.estadoUsuarioEditar}" style="width: 100%" required="true" requiredMessage="Seleccione un Estado">
                                 <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
                                 <f:selectItems value="#{manejadorUsuarios.todosEstadosUsuarios()}" var="estados" itemLabel="#{estados.nombreEstadoUsuario}" itemValue="#{estados.idEstadoUsuario}"/>
                             </h:selectOneMenu>
@@ -127,66 +132,125 @@
             </h:form>
         </p:dialog>
 
-        <p:dialog header="Editar Usuario" modal="true" widgetVar="dlgModifUsuario" height="auto" width="auto" resizable="false" position="center,top">
-            <h:form class="form-horizontal" prependId="false">
+        <p:dialog header="Editar Usuario" modal="true" widgetVar="dlgModifUsuario" height="auto" width="60%" resizable="false" position="center,top" styleClass="disable-scroll">
+            <h:form class="form-horizontal" prependId="false" >
                 <p:messages showSummary="true" />
                 <h:panelGroup id ="panelUsuarioEditar">
-<!--                    <div class="form-group">
-                        <h:outputLabel value="Nombre nombreUsuario:" styleClass="col-lg-4 control-label"/>
-                        <div class="col-lg-8">
-                            <h:inputText id="nombreCompleto" styleClass="form-control" value="{manejadorUsuarios.usuarioSeleccionado.nombreCompleto}" required="true" requiredMessage="Ingrese Nombre Completo"/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <h:outputLabel value="Usuario:" styleClass="col-lg-4 control-label"/>
-                        <div class="col-lg-8">
-                            <h:inputText id="nombreUsuario" styleClass="form-control" value="{manejadorUsuarios.usuarioSeleccionado.usuario}" required="true" requiredMessage="Ingrese Nombre Completo"/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <h:outputLabel value="Contraseña" styleClass="col-lg-4 control-label"/>
-                        <div class="col-lg-8">
-                            <h:inputText id="clave" styleClass="form-control" value="{manejadorUsuarios.usuarioSeleccionado.clave}" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <h:outputLabel value="Estado:" styleClass="col-lg-4 control-label"/>
-                        <div class="col-lg-8">
-                            <h:selectOneMenu styleClass="form-control" id="estadoUsuario" value="{manejadorUsuarios.usuarioSeleccionado.idEstadoUsuario.nombreEstadoUsuario}" converter="{estadoConvertidor}" style="width: 100%" required="true" requiredMessage="Selecione un Estado del Usuario">
-                                <f:selectItems value="{manejadorUsuarios.todosEstadosUsuarios()}" var="estadouser" itemLabel="{estadouser.nombreEstadoUsuario}" itemValue="{estadouser}"/>
-                            </h:selectOneMenu>
-                            <h:inputText id="estadoUsuario" value="{manejadorUsuarios.usuarioSeleccionado.idEstadoUsuario.nombreEstadoUsuario}" title="Estado del Usuario" class="form-control"/>
-                        </div>
-                    </div>-->
 
-<div class="table-responsive">
-                                            <h:panelGrid id="modiUsuario" columns="2" class="table">
-                                                <h:outputLabel value="N°:" for="idUsuario" />
-                                                <h:outputLabel id="idUsuario" value="#{manejadorUsuarios.usuarioSeleccionado.idUsuario}" title="IdUsuario" class="form-control"/>
-                                                <h:outputLabel value="Nombre Completo:" for="nombreUsuario" />
-                                                <h:inputText id="nombreUsuario" value="#{manejadorUsuarios.usuarioSeleccionado.nombreCompleto}" title="Nombre Completo" required="true" class="form-control"/>
-                                                <h:outputLabel value="Usuario:" for="usuario" />
-                                                <h:inputText id="usuario" value="#{manejadorUsuarios.usuarioSeleccionado.usuario}" title="Nombre de Usuario" required="true" class="form-control"/>
-                                                <h:outputLabel value="Estado:" for="estadoUsuario" />
-                                                <h:inputText id="estadoUsuario" value="#{manejadorUsuarios.usuarioSeleccionado.idEstadoUsuario.nombreEstadoUsuario}" title="Estado del Usuario" class="form-control"/>
-                                                <h:outputLabel value="Tipo de usuario:" for="tipoUsuario" />
-                                                <h:inputText id="tipoUsuario" value="#{manejadorUsuarios.usuarioSeleccionado.idRolUsuario.nombreRolUsuario}" title="Tipo o Rol del Usuario" class="form-control"/>
-                                                <h:outputLabel value="Fecha de Creación:" for="fechaCreaUsuario" />
-                                                <h:outputLabel id="fechaCreaUsuario" value="#{manejadorUsuarios.usuarioSeleccionado.fechaCreaUsistema}" title="Fecha de Creación del Registro" class="form-control"/>
-                                            </h:panelGrid>
-<!--                                            <p:commandButton icon="ui ui-icon-disk" value="Actualizar usuario" process="@this modiUsuario" action="{managerUsuarios.editUsuario()}" update="@this modiUsuario" oncomplete="PF('dlgModifUsuario').hide();"/>-->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">                                                                                     
+                                <div class="row">
+
+                                    <div class="form-group">
+                                        <p:outputLabel class="col-md-4 control-label" value="Nombre Completo:" for="nombreUsuario" />
+                                        <div class="col-md-8">
+                                            <p:inputText id="nombreUsuario" value="#{manejadorUsuarios.usuarioSeleccionado.nombreCompleto}" title="Nombre Completo" 
+                                                         required="true" requiredMessage="El Nombre Completo es un dato requerido." style="width: 100%; padding: 9px;">
+                                </p:inputText>
                                         </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <p:outputLabel class="col-md-4 control-label"  value="Usuario:" for="usuario" />
+                                        <div class="col-md-8">
+                                            <p:inputText id="usuario" value="#{manejadorUsuarios.usuarioSeleccionado.usuario}" title="Nombre de Usuario" 
+                                                         required="true" requiredMessage="El Usuario es un dato requerido." style="width: 100%; padding: 9px;">
+                                </p:inputText>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <p:outputLabel class="col-md-4 control-label"  value="Contraseña:" for="clave" />
+                                        <div class="col-md-8">
+                                            <p:inputText id="clave" value="#{manejadorUsuarios.usuarioSeleccionado.clave}" title="Contraseña" required="true" 
+                                            requiredMessage="La contraseña es un dato requerido." style="width: 100%; padding: 9px;">
+                                                </p:inputText>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <p:outputLabel class="col-md-4 control-label" value="Estado:" for="estadoUser"/>
+                                        <div class="col-md-8">
+                                            <!--<h:inputText id="estadoUsuario" value="{manejadorUsuarios.usuarioSeleccionado.idEstadoUsuario.nombreEstadoUsuario}" title="Estado del Usuario" class="form-control"/>-->
+                                            <p:selectOneMenu id="estadoUser" value="#{manejadorUsuarios.usuarioSeleccionado.idEstadoUsuario}" converter="#{estadoUsuariosConvertidor}" style="width:150px" 
+                                                 title="Estado del Usuario" required="true" requiredMessage="El Estado es un campo requerido.">
+                                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                                <f:selectItems value="#{manejadorUsuarios.todosEstadosUsuarios()}" var="estado" itemLabel="#{estado.nombreEstadoUsuario}" itemValue="#{estado}"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <p:outputLabel class="col-md-4 control-label" value="Tipo de usuario:" for="rolUser"/>
+                                        <div class="col-md-8">
+                                            <p:selectOneMenu id="rolUser" value="#{manejadorUsuarios.usuarioSeleccionado.idRolUsuario}" converter="#{rolUsuarioConvertidor}" style="width: 100%" required="true" requiredMessage="Selecione un Tipo de Usuario">
+                                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                                <f:selectItems value="#{manejadorUsuarios.todosRoles()}" var="rol" itemLabel="#{rol.nombreRolUsuario}" itemValue="#{rol}"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <p:outputLabel class="col-md-4 control-label" value="Dirección Nacional:" for="dirNac"/>
+                                        <div class="col-md-8">
+                                            <p:selectOneMenu id="dirNac" value="#{manejadorUsuarios.dirNacionalFuncional}" style="width:600px" 
+                                                             title="Dirección Nacional" required="true" requiredMessage="Es necesario que seleccione una Dirección Nacional.">
+                                                <f:selectItem itemLabel="Seleccionar..." noSelectionOption="true" itemValue="#{null}"/>
+                                                <f:selectItems value="#{manejadorGestionEmpleado.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
+                                                <!-- <p:ajax update="dependecia" process="@this" rendered="dependencia"/> -->
+                                                <p:ajax update="dependencia"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <p:outputLabel class="col-md-4 control-label" value="Dependencia:" for="dependencia"/>
+                                        <div class="col-md-8">
+                                            <p:selectOneMenu id="dependencia" value="#{manejadorUsuarios.usuarioSeleccionado.idDependencia}" style="width:600px"
+                                                             title="Dependencias" required="true" requiredMessage="El nombre de la Dependencia es un campo requerido."
+                                                             converter="#{dependenciasConvertidor}">
+                                            <f:selectItem itemLabel="Seleccionar..." noSelectionOption="true" itemValue="#{null}"/>
+                                                <f:selectItems value="#{manejadorUsuarios.dependenciasFiltradas()}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a}"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="form-group">
+                                        <p:outputLabel class="col-md-8 control-label" value="Fecha de creación: "/>
+                                        <p:outputLabel class="col-md-4 control-label" value="#{manejadorUsuarios.usuarioSeleccionado.fechaCreaUsistema}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm a" />
+                                        </p:outputLabel>
+                                    </div>
+                                </div><!--class="row-->
+                            </div><!--class="col-md-12-->
+                        </div> <!--class="row-->
+                    </div> <!--class="container-fluid-->
+
+
+                    <!-- <p:commandButton icon="ui ui-icon-disk" value="Actualizar usuario" process="@this modiUsuario" action="{managerUsuarios.editUsuario()}" update="@this modiUsuario" oncomplete="PF('dlgModifUsuario').hide();"/>-->
+
                     <div class="form-group">
-                        <div class="col-lg-4"></div>
-                        <div class="col-lg-8">
-                            <h:commandButton style="margin: 2px" styleClass="btn btn-info" value="Modificar" action="#{manejadorUsuarios.editarUsuario()}"/>
-                            <h:commandButton style="margin: 2px"  styleClass="btn btn-info"  value="Cancelar" onclick="PF('dlgModifUsuario').hide()">
-                                <f:ajax execute="@this" render="panelUsuarioEditar" />
-                                <p:resetInput target="panelUsuarioEditar" />
+                        <div class="col-md-6"></div>
+                        <div class="col-md-6" align="right">
+                            <h:commandButton style="margin: 2px" styleClass="btn btn-info"  value="Modificar" action="#{manejadorUsuarios.editarUsuario()}"/>
+
+                            <!--                            <p:commandButton id="editButton" value="Modificar 2" icon="ui-icon-pencil"
+                                                                                     update=":form_listado:listaUsuarios"
+                                                                                     actionListener="{manejadorUsuarios.editarUsuario()}"
+                                                                                     oncomplete="PF('dlgModifUsuario').hide()"/>-->
+
+                            <h:commandButton class="btn btn-info" style="font-size: 12px" action="#{manejadorUsuarios.cancelarUsuario()}" value="Cancelar" immediate="true">
+                                <!--<p:ajax process="panelUsuarioEditar"  update="@form" oncomplete="PF('dlgModifUsuario').hide();"/>-->
                             </h:commandButton>
+
                         </div>                    
                     </div>
-           </h:panelGroup>
+
+                </h:panelGroup>
             </h:form>
         </p:dialog>
 

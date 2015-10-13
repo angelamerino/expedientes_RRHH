@@ -9,6 +9,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import sv.gob.cultura.rrhh.entidades.EstadosUsuarios;
+import sv.gob.cultura.rrhh.entidades.UsuariosSistema;
 
 /**
  *
@@ -26,6 +27,10 @@ public class EstadosUsuariosFacade extends AbstractFacade<EstadosUsuarios> {
 
     public EstadosUsuariosFacade() {
         super(EstadosUsuarios.class);
+    }
+
+    public void edit(UsuariosSistema usuariosis) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
