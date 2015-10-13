@@ -1,13 +1,13 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://java.sun.com/jsf/html"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../resources/plantilla/plantilla.xhtml"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                template="./../resources/plantilla/plantilla.xhtml">
-<ui:define name="content"> 
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
 
+    <ui:define name="content"> 
         <style>
             .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus {
                 color: white;
@@ -21,20 +21,18 @@
         </style>
 
         <div class="page-header">
-            <h1><strong>EDITAR EMPLEADO</strong></h1>
+            <h1><strong>REGISTRO DE EMPLEADOS</strong></h1>
         </div>
 
-    <h:form class="form-horizontal" prependId="false">
-		
-       <p:messages showSummary="true" autoUpdate="true" />
+        <h:form class="form-horizontal" prependId="false">
+            <p:messages showSummary="true" autoUpdate="true" />
             <div id="rootwizard">
 
                 <ul class="nav">                  
                     <li><a href="#tab1" data-toggle="tab"><strong>Información Personal</strong></a></li>
                     <li><a href="#tab2" data-toggle="tab"><strong>Información de Contacto</strong></a></li>
-                    <li><a href="#tab3" data-toggle="tab"><strong>Experiencia Laboral</strong></a></li>
+                    <li><a href="#tab3" data-toggle="tab"><strong>Experiencia Laboral en Institución</strong></a></li>
                     <li><a href="#tab4" data-toggle="tab"><strong>Reporta a Jefe</strong></a></li>
-                    <li><a href="#tab5" data-toggle="tab"><strong>Confirmar</strong></a></li>
                 </ul>
 
 
@@ -70,88 +68,92 @@
                                                 <div class="col-md-12">
 
                                                     <div class="form-group">
-                                                        <h:outputLabel value="NR del Empleado:" styleClass="col-lg-4 control-label"/>
+                                                        <p:outputLabel for="nrEmpleado" value="NR del Empleado:" styleClass="col-lg-4 control-label"/>
                                                         <div class="col-lg-8">
-                                                            <p:inputMask styleClass="form-control"  mask="NR 9999-999999-999-9" id="nrEmpleado" value="#{manejadorGestionEmpleado.empleado.nrEmpleado}" style="width: 100%"  required="true" requiredMessage="Ingrese un NR de Empleado"/>
+                                                            <p:inputMask style="width: 100%; padding: 9px;" id="nrEmpleado" value="#{manejadorGestionEmpleado.empleado.nrEmpleado}" mask="NR 9999-999999-999-9" required="true" requiredMessage="Ingrese un NR de Empleado"/>
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
-                                                        <h:outputLabel value="Nombre según ISSS:" styleClass="col-lg-4 control-label"/>
+                                                        <p:outputLabel for="nombreIsss" value="Nombre según ISSS:" styleClass="col-lg-4 control-label"/>
                                                         <div class="col-lg-8">
-                                                            <p:inputText styleClass="form-control" id="nombreIsss" value="#{manejadorGestionEmpleado.empleado.nombreIsss}" style="width: 100%" />
+                                                            <p:inputText validatorMessage="Nombre según ISSS: Debe Ingresar solo letras" id="nombreIsss" value="#{manejadorGestionEmpleado.empleado.nombreIsss}" style="width: 100%; padding: 9px;" >
+                                                                <f:validateRegex pattern="[A-Za-z ]*"  />
+                                                            </p:inputText>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <h:outputLabel value="Nombre según NIT:" styleClass="col-lg-4 control-label"/>
+                                                        <p:outputLabel for="nombreNit" value="Nombre según NIT:" styleClass="col-lg-4 control-label"/>
                                                         <div class="col-lg-8">
-                                                            <p:inputText id="nombreNit" styleClass="form-control" value="#{manejadorGestionEmpleado.empleado.nombreNit}" style="width: 100%" />
+                                                            <p:inputText validatorMessage="Nombre según NIT: Ingrese Únicamente Letras" id="nombreNit" value="#{manejadorGestionEmpleado.empleado.nombreNit}" style="width: 100%; padding: 9px;" >
+                                                                <f:validateRegex pattern="[A-Za-z ]*"  />
+                                                            </p:inputText>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <h:outputLabel value="País de Nacimiento:" styleClass="col-lg-4 control-label"/>
+                                                        <p:outputLabel for="idPais" value="País de Nacimiento:" styleClass="col-lg-4 control-label"/>
                                                         <div class="col-lg-8">
-                                                            <h:selectOneMenu styleClass="form-control" id="idPais" value="#{manejadorGestionEmpleado.empleado.idPais}" converter="#{paisConvertidor}" style="width: 100%" required="true" requiredMessage="Selecione un País">
+                                                            <p:selectOneMenu  id="idPais" value="#{manejadorGestionEmpleado.empleado.idPais}" converter="#{paisConvertidor}" style="width: 100%" required="true" requiredMessage="Selecione un País">
                                                                 <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
                                                                 <f:selectItems value="#{manejadorGestionEmpleado.todosPaises()}" var="pais" itemLabel="#{pais.nombrePais}" itemValue="#{pais}"/>
-                                                            </h:selectOneMenu>
+                                                            </p:selectOneMenu>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <h:outputLabel value="Fecha de Nacimiento:" styleClass="col-lg-4 control-label"/>
+                                                        <p:outputLabel for="fechaNac" value="Fecha de Nacimiento:" styleClass="col-lg-4 control-label"/>
                                                         <div class="col-lg-5">
-                                                            <p:calendar  id="fechaNac" value="#{manejadorGestionEmpleado.fechaNacEmpleado}" showOn="button" locale="es" navigator="true" pattern="dd/MM/yyyy" yearRange="c-100:c+10">
+                                                            <p:calendar id="fechaNac" value="#{manejadorGestionEmpleado.fechaNacEmpleado}" locale="es" navigator="true" pattern="dd/MM/yyyy" yearRange="c-100:c+10">
                                                                 <p:ajax event="dateSelect" update="edadEmp"/>
                                                             </p:calendar>
                                                         </div>
-                                                        <h:outputLabel styleClass="col-lg-2" value="Edad:"/>
+                                                        <p:outputLabel styleClass="col-lg-2" value="Edad:"/>
                                                         <div class="col-lg-1">
                                                             <h:outputText styleClass="control-label" id="edadEmp" value="#{manejadorGestionEmpleado.edadEmpleado}" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <h:outputLabel value="Tipo Sangre:" styleClass="col-lg-4 control-label"/>
+                                                        <p:outputLabel for="idTipoSangre" value="Tipo Sangre:" styleClass="col-lg-4 control-label"/>
                                                         <div class="col-lg-8">
-                                                            <h:selectOneMenu styleClass="form-control" id="idTipoSangre" value="#{manejadorGestionEmpleado.empleado.idTipoSangre}" converter="#{tipoSangreConvertidor}" style="width: 100%" required="true" requiredMessage="Selecione un Tipo de Sangre">
+                                                            <p:selectOneMenu id="idTipoSangre" value="#{manejadorGestionEmpleado.empleado.idTipoSangre}" converter="#{tipoSangreConvertidor}" style="width: 100%" required="true" requiredMessage="Selecione un Tipo de Sangre">
                                                                 <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
                                                                 <f:selectItems value="#{manejadorGestionEmpleado.todosTipoSangre()}" var="tipoSangre" itemLabel="#{tipoSangre.nombreTipoSangre}" itemValue="#{tipoSangre}"/>
-                                                            </h:selectOneMenu>
+                                                            </p:selectOneMenu>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <h:outputLabel value="ISSS:" styleClass="col-lg-4 control-label"/>
+                                                        <p:outputLabel for="numIsss" value="ISSS:" styleClass="col-lg-4 control-label"/>
                                                         <div class="col-lg-8">
-                                                            <p:inputMask styleClass="form-control" id="numIsss" value="#{manejadorGestionEmpleado.empleado.numIsss}" mask="ISSS 999999999" style="width: 100%"  />
+                                                            <p:inputMask id="numIsss" value="#{manejadorGestionEmpleado.empleado.numIsss}" mask="ISSS 999999999" style="width: 100%; padding: 9px;"  />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <h:outputLabel value="Número Único de Previsión:" styleClass="col-lg-4 control-label"/>
+                                                        <p:outputLabel for="numNup" value="Númeor Único de Previsión:" styleClass="col-lg-4 control-label"/>
                                                         <div class="col-lg-8">
-                                                            <p:inputMask styleClass="form-control" id="numNup" value="#{manejadorGestionEmpleado.empleado.numNup}" mask="NUP 999999999999" style="width: 100%" />
+                                                            <p:inputMask id="numNup" value="#{manejadorGestionEmpleado.empleado.numNup}" mask="NUP 999999999999" style="width: 100%; padding: 9px;" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <h:outputLabel value="Institución Bancaria:" styleClass="col-lg-4 control-label"/>
+                                                        <p:outputLabel for="idBanco" value="Institución Bancaria:" styleClass="col-lg-4 control-label"/>
                                                         <div class="col-lg-8">
-                                                            <h:selectOneMenu styleClass="form-control" id="idBanco" value="#{manejadorGestionEmpleado.empleado.idBanco}" converter="#{institucionBancariaConvertidor}" style="width: 100%" required="true" requiredMessage="Seleccione una Institución Bancaria">
+                                                            <p:selectOneMenu id="idBanco" value="#{manejadorGestionEmpleado.empleado.idBanco}" converter="#{institucionBancariaConvertidor}" style="width: 100%" required="true" requiredMessage="Seleccione una Institución Bancaria">
                                                                 <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
                                                                 <f:selectItems value="#{manejadorGestionEmpleado.todosInstBancaria()}" var="instBancaria" itemLabel="#{instBancaria.nombreBanco}" itemValue="#{instBancaria}"/>
-                                                            </h:selectOneMenu>
+                                                            </p:selectOneMenu>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <h:outputLabel value="Administradora de Pensiones:" styleClass="col-lg-4 control-label"/>
+                                                        <p:outputLabel for="idAdminPension" value="Administradora de Pensiones:" styleClass="col-lg-4 control-label"/>
                                                         <div class="col-lg-8">
-                                                            <h:selectOneMenu styleClass="form-control" id="idAdminPension" value="#{manejadorGestionEmpleado.empleado.idAdminPension}" converter="#{administradorPensionesConvertidor}" style="width: 100%" required="true" requiredMessage="Seleccione una Administradora de Pensiones">
+                                                            <p:selectOneMenu id="idAdminPension" value="#{manejadorGestionEmpleado.empleado.idAdminPension}" converter="#{administradorPensionesConvertidor}" style="width: 100%" required="true" requiredMessage="Seleccione una Administradora de Pensiones">
                                                                 <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
                                                                 <f:selectItems value="#{manejadorGestionEmpleado.todosAdministradoraPensiones()}" var="adminPension" itemLabel="#{adminPension.nombreAdminPension}" itemValue="#{adminPension}"/>
-                                                            </h:selectOneMenu>
+                                                            </p:selectOneMenu>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <h:outputLabel value="Comentarios:" styleClass="col-lg-4 control-label"/>
+                                                        <p:outputLabel for="comentarios" value="Comentarios:" styleClass="col-lg-4 control-label"/>
                                                         <div class="col-lg-8">
-                                                            <p:inputTextarea styleClass="form-control" rows="5" style="width: 100%" id="comentarios" value="#{manejadorGestionEmpleado.empleado.comentarios}" queryDelay="750" minQueryLength="4" />
+                                                            <p:inputTextarea rows="5" style="width: 100%" id="comentarios" value="#{manejadorGestionEmpleado.empleado.comentarios}" queryDelay="750" minQueryLength="4" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -163,90 +165,92 @@
                                                 <div class="col-md-12">
 
                                                     <div class="form-group">
-                                                        <h:outputLabel value="Nombre Completo:" styleClass="col-lg-4 control-label"/>
+                                                        <p:outputLabel for="nombreEmpleado" value="Nombre Completo:" styleClass="col-lg-4 control-label"/>
                                                         <div class="col-lg-8">
-                                                            <p:inputText styleClass="form-control" id="nombreEmpleado" value="#{manejadorGestionEmpleado.empleado.nombreEmpleado}"  style="width: 100%" required="true" requiredMessage="Ingrese Nombre del Empleado"/>
+                                                            <p:inputText validatorMessage="Nombre Completo: Ingrese Únicamente Letras" id="nombreEmpleado" value="#{manejadorGestionEmpleado.empleado.nombreEmpleado}"  style="width: 100%; padding: 9px;" required="true" requiredMessage="Ingrese Nombre del Empleado" >
+                                                                <f:validateRegex pattern="[A-Za-z ]*"  />
+                                                            </p:inputText>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <h:outputLabel value="Estado:" styleClass="col-lg-4 control-label"/>
+                                                        <p:outputLabel for="idEstado" value="Estado:" styleClass="col-lg-4 control-label"/>
                                                         <div class="col-lg-8">
-                                                            <h:selectOneMenu styleClass="form-control" id="idEstado" value="#{manejadorGestionEmpleado.empleado.idEstado}" converter="#{estadoConvertidor}" style="width: 100%" required="true" requiredMessage="Seleccione un Estado">
+                                                            <p:selectOneMenu id="idEstado" value="#{manejadorGestionEmpleado.empleado.idEstado}" converter="#{estadoConvertidor}" style="width: 100%" required="true" requiredMessage="Seleccione un Estado">
                                                                 <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
                                                                 <f:selectItems value="#{manejadorGestionEmpleado.todosEstados()}" var="estados" itemLabel="#{estados.nombreEstado}" itemValue="#{estados}"/>
-                                                            </h:selectOneMenu>
+                                                            </p:selectOneMenu>
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
-                                                        <h:outputLabel value="Estado Civil:" styleClass="col-lg-4 control-label"/>
+                                                        <p:outputLabel for="idEstadoCivil" value="Estado Civil:" styleClass="col-lg-4 control-label"/>
                                                         <div class="col-lg-8">
-                                                            <h:selectOneMenu styleClass="form-control" id="idEstadoCivil" value="#{manejadorGestionEmpleado.empleado.idEstadoCivil}" converter="#{estadoCivilConvertidor}" style="width: 100%" required="true" requiredMessage="Seleccione un Estado Civil">
+                                                            <p:selectOneMenu id="idEstadoCivil" value="#{manejadorGestionEmpleado.empleado.idEstadoCivil}" converter="#{estadoCivilConvertidor}" style="width: 100%" required="true" requiredMessage="Seleccione un Estado Civil">
                                                                 <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
                                                                 <f:selectItems value="#{manejadorGestionEmpleado.todosEstadoCivil()}" var="estadoC" itemLabel="#{estadoC.nombreEstadoCivil}" itemValue="#{estadoC}"/>
-                                                            </h:selectOneMenu>
+                                                            </p:selectOneMenu>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <h:outputLabel value="Lugar de Nacimiento" styleClass="col-lg-4 control-label"/>
+                                                        <p:outputLabel for="munIdMunicipio" value="Lugar de Nacimiento" styleClass="col-lg-4 control-label"/>
                                                         <div class="col-lg-4">
-                                                            <h:selectOneMenu styleClass="form-control" id="munIdMunicipio" value="#{manejadorGestionEmpleado.depto}" style="width: 100%" >
+                                                            <p:selectOneMenu id="munIdMunicipio" value="#{manejadorGestionEmpleado.depto}" style="width: 100%">
                                                                 <f:selectItem itemLabel="Departamento..." noSelectionOption="true" itemValue=""/>
                                                                 <f:selectItems value="#{manejadorGestionEmpleado.todosDeptos()}" var="depto" itemLabel="#{depto.nombreDepartamento}" itemValue="#{depto.idDepartamento}"/>
                                                                 <p:ajax update="idMunicipio"/>
-                                                            </h:selectOneMenu>                                                            
+                                                            </p:selectOneMenu>                                                            
                                                         </div>
                                                         <div class="col-lg-4">
-                                                            <h:selectOneMenu styleClass="form-control" id="idMunicipio" value="#{manejadorGestionEmpleado.muni}" style="width: 100%" >
+                                                            <p:selectOneMenu id="idMunicipio" value="#{manejadorGestionEmpleado.muni}" style="width: 100%">
                                                                 <f:selectItem itemLabel="Municipio..." noSelectionOption="true" itemValue=""/>
                                                                 <f:selectItems value="#{manejadorGestionEmpleado.municipiosFiltrados()}" var="muni" itemLabel="#{muni.nombreMunicipio}" itemValue="#{muni.idMunicipio}"/>
-                                                            </h:selectOneMenu>
+                                                            </p:selectOneMenu>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <h:outputLabel value="¿Naturalizado?" styleClass="col-lg-4 control-label"/>
+                                                        <p:outputLabel for="naturalizado" value="¿Naturalizado?" styleClass="col-lg-4 control-label"/>
                                                         <div class="col-lg-3">
-                                                            <h:selectOneMenu styleClass="form-control" id="naturalizado" value="#{manejadorGestionEmpleado.empleado.naturalizado}" style="width: 100%" >  
+                                                            <p:selectOneMenu id="naturalizado" value="#{manejadorGestionEmpleado.empleado.naturalizado}" style="width: 100%">  
                                                                 <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
                                                                 <f:selectItem itemLabel="NO" itemValue="NO" />  
                                                                 <f:selectItem itemLabel="SI" itemValue="SI" />  
-                                                            </h:selectOneMenu>
+                                                            </p:selectOneMenu>
                                                         </div>
-                                                        <h:outputLabel value="Género:" styleClass="col-lg-2 control-label"/>
+                                                        <p:outputLabel for="genero" value="Género:" styleClass="col-lg-2 control-label"/>
                                                         <div class="col-lg-3">
-                                                            <h:selectOneMenu  styleClass="form-control" id="genero" value="#{manejadorGestionEmpleado.empleado.genero}" style="width: 100%" >  
+                                                            <p:selectOneMenu id="genero" value="#{manejadorGestionEmpleado.empleado.genero}" style="width: 100%">  
                                                                 <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
                                                                 <f:selectItem itemLabel="MASCULINO" itemValue="MASCULINO" />  
                                                                 <f:selectItem itemLabel="FEMENINO" itemValue="FEMENINO" />  
-                                                            </h:selectOneMenu>
+                                                            </p:selectOneMenu>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <h:outputLabel value="DUI:" styleClass="col-lg-4 control-label"/>
+                                                        <p:outputLabel for="numDui" value="DUI:" styleClass="col-lg-4 control-label"/>
                                                         <div class="col-lg-8">
-                                                            <p:inputMask mask="DUI99999999-9" styleClass="form-control" id="numDui" value="#{manejadorGestionEmpleado.empleado.numDui}" style="width: 100%" required="true" requiredMessage="Proporcione Número de DUI"/>
+                                                            <p:inputMask id="numDui" value="#{manejadorGestionEmpleado.empleado.numDui}" style="width: 100%; padding: 9px;" mask="DUI 99999999-9" required="true" requiredMessage="Proporcione Número de DUI"/>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <h:outputLabel value="NIT:" styleClass="col-lg-4 control-label"/>
+                                                        <p:outputLabel for="numNit" value="NIT:" styleClass="col-lg-4 control-label"/>
                                                         <div class="col-lg-8">
-                                                            <p:inputMask  styleClass="form-control" id="numNit" value="#{manejadorGestionEmpleado.empleado.numNit}" mask="NIT9999-999999-999-9" style="width: 100%" />
+                                                            <p:inputMask id="numNit" value="#{manejadorGestionEmpleado.empleado.numNit}" mask="NIT 9999-999999-999-9" style="width: 100%; padding: 9px;" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <h:outputLabel value="NIP:" styleClass="col-lg-4 control-label"/>
+                                                        <p:outputLabel for="numNip" value="NIP:" styleClass="col-lg-4 control-label"/>
                                                         <div class="col-lg-8">
-                                                            <p:inputText styleClass="form-control" id="numNip" value="#{manejadorGestionEmpleado.empleado.numNip}" style="width: 100%" />
+                                                            <p:inputText id="numNip" value="#{manejadorGestionEmpleado.empleado.numNip}" style="width: 100%; padding: 9px;" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <h:outputLabel value="Número de Cuenta Bancaria:" styleClass="col-lg-4 control-label"/>
+                                                        <p:outputLabel for="numCuenta" value="Número de Cuenta Bancaria:" styleClass="col-lg-4 control-label"/>
                                                         <div class="col-lg-8">
-                                                            <p:inputText styleClass="form-control" id="numCuenta" value="#{manejadorGestionEmpleado.empleado.numCuenta}" style="width: 100%" />
+                                                            <p:inputText id="numCuenta" value="#{manejadorGestionEmpleado.empleado.numCuenta}" style="width: 100%; padding: 9px;" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <h:outputLabel value="Curriculum Viate:" styleClass="col-lg-4 control-label"/>
+                                                        <p:outputLabel  value="Curriculum Viate:" styleClass="col-lg-4 control-label"/>
                                                         <div class="col-lg-4">
                                                             <p:fileUpload mode="advanced" fileUploadListener="#{manejadorGestionEmpleado.handleFileUpload}" label="Examinar..." update="curriculum" allowTypes="/(\.|\/)(gif|jpg|jpeg|gif|png|doc|pdf|docx|PNG|GIF|JPG|JPEG|DOC|PDF|DOCX)$/" auto="true">
                                                                 <f:attribute name="tipoDoc" value="2" />
@@ -272,52 +276,58 @@
                             <div class="panel-body">
                                 <div class="container-fluid">
                                     <div class="row">
+                                        <div class="col-md-1" /> 
+                                        <div class="col-md-10" >
 
-                                        <div class="col-md-6">
                                             <div class="form-group">
-                                                <h:outputLabel value="Dirección:" styleClass="col-lg-4 control-label"/>
-                                                <div class="col-lg-8">
-                                                    <p:inputTextarea styleClass="form-control" rows="4" style="width: 100%" id="direccion" value="#{manejadorGestionEmpleado.empleado.direccion}" queryDelay="750" minQueryLength="4" />
+                                                <p:outputLabel for="direccion" value="Dirección:" styleClass="col-lg-3 control-label"/>
+                                                <div class="col-lg-7">
+                                                    <p:inputTextarea rows="4" style="width: 100%;  padding: 9px;" id="direccion" value="#{manejadorGestionEmpleado.empleado.direccion}" queryDelay="750" minQueryLength="4" />
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <h:outputLabel value="Teléfono Fijo:" styleClass="col-lg-4 control-label"/>
-                                                <div class="col-lg-8">
-                                                    <p:inputMask styleClass="form-control" mask="9999-9999" id="telefonoFijo" value="#{manejadorGestionEmpleado.empleado.telefonoFijo}" style="width: 100%" />
-                                                </div>
-                                            </div>                                            
-                                        </div>
 
-                                        <div class="col-md-6">
                                             <div class="form-group">
-                                                <h:outputLabel value="Departamento/Municipio:" styleClass="col-lg-4 control-label"/>
-                                                <div class="col-lg-4">
-                                                    <h:selectOneMenu styleClass="form-control" id="depmun" value="#{manejadorGestionEmpleado.dirDepto}" style="width: 100%">
+                                                <p:outputLabel for="depmun" value="Departamento:" styleClass="col-lg-3 control-label"/>
+                                                <div class="col-lg-7">
+                                                    <p:selectOneMenu id="depmun" value="#{manejadorGestionEmpleado.dirDepto}" style="width: 100%">
                                                         <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
                                                         <f:selectItems value="#{manejadorGestionEmpleado.todosDeptos()}" var="depto" itemLabel="#{depto.nombreDepartamento}" itemValue="#{depto.idDepartamento}"/>
                                                         <p:ajax update="depmun1"/>
-                                                    </h:selectOneMenu>
-                                                </div>
-                                                <div class="col-lg-4">
-                                                    <h:selectOneMenu styleClass="form-control" id="depmun1" value="#{manejadorGestionEmpleado.dirMuni}" style="width: 100%">
+                                                    </p:selectOneMenu>
+                                                </div>                                                
+                                            </div>
+                                            <div class="form-group">
+                                                <p:outputLabel for="depmun1" value="Municipio:" styleClass="col-lg-3 control-label"/>
+                                                <div class="col-lg-7">
+                                                    <p:selectOneMenu id="depmun1" value="#{manejadorGestionEmpleado.dirMuni}" style="width: 100%">
                                                         <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
                                                         <f:selectItems value="#{manejadorGestionEmpleado.municipiosFiltradosNac()}" var="muni" itemLabel="#{muni.nombreMunicipio}" itemValue="#{muni.idMunicipio}"/>
-                                                    </h:selectOneMenu>
+                                                    </p:selectOneMenu>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <h:outputLabel value="Correo Personal:" styleClass="col-lg-4 control-label"/>
-                                                <div class="col-lg-8">
-                                                    <p:inputText styleClass="form-control" id="correoPersonal" value="#{manejadorGestionEmpleado.empleado.correoPersonal}" style="width: 100%" />
+                                                <p:outputLabel for="correoPersonal" value="Correo Personal:" styleClass="col-lg-3 control-label"/>
+                                                <div class="col-lg-7">
+                                                    <p:inputText validatorMessage="Correo Personal: Ingrese Email Válido" id="correoPersonal" value="#{manejadorGestionEmpleado.empleado.correoPersonal}" style="width: 100%; padding: 9px;" >
+                                                        <f:validateRegex pattern="^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4})*$"/>
+                                                    </p:inputText>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <h:outputLabel value="Teléfono Movil:" styleClass="col-lg-4 control-label"/>
-                                                <div class="col-lg-8">
-                                                    <p:inputMask styleClass="form-control" mask="9999-9999" id="telefonoMovil" value="#{manejadorGestionEmpleado.empleado.telefonoMovil}" style="width: 100%" />
+                                                <p:outputLabel for="telefonoMovil" value="Teléfono Movil:" styleClass="col-lg-3 control-label"/>
+                                                <div class="col-lg-3">
+                                                    <p:inputMask mask="9999-9999" id="telefonoMovil" value="#{manejadorGestionEmpleado.empleado.telefonoMovil}" style="width: 100%; padding: 9px;" />
                                                 </div>
-                                            </div>                                           
+                                            </div>
+                                            <div class="form-group">
+                                                <p:outputLabel for="telefonoFijo" value="Teléfono Fijo:" styleClass="col-lg-3 control-label"/>
+                                                <div class="col-lg-3">
+                                                    <p:inputMask mask="9999-9999" id="telefonoFijo" value="#{manejadorGestionEmpleado.empleado.telefonoFijo}" style="width: 100%; padding: 9px;" />
+                                                </div>
+                                            </div> 
+
                                         </div>
+                                        <div class="col-md-1" />
                                     </div>
                                 </div>
                             </div>
@@ -332,53 +342,99 @@
 
                                 <div class="container-fluid">
                                     <div class="row">
-                                        <div class="col-md-6"> 
+                                        <div class="col-md-6" style="border-right: 1px #DADCFF solid;">
+                                            <legend>Nominal</legend>
+
                                             <div class="form-group">
-                                                <h:outputLabel value="Cargo Nominal:" styleClass="col-lg-4 control-label"/>
+                                                <p:outputLabel for="cargoNominal" value="Cargo Nominal:" styleClass="col-lg-4 control-label"/>
                                                 <div class="col-lg-8">
-                                                    <p:inputText styleClass="form-control" id="cargoNominal" value="#{manejadorGestionEmpleado.empleado.cargoNominal}" style="width: 100%" required="true" requiredMessage="Proporcione el Cargo Nominal"/>
+                                                    <p:inputText id="cargoNominal" value="#{manejadorGestionEmpleado.empleado.cargoNominal}" style="width: 100%; padding: 9px;" required="true" requiredMessage="Proporcione el Cargo Nominal"/>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <h:outputLabel value="Dirección Nacional:" styleClass="col-lg-4 control-label"/>
+                                                <p:outputLabel for="dirNacionalNominal" value="Dirección Nacional:" styleClass="col-lg-4 control-label"/>
                                                 <div class="col-lg-8">
-                                                    <h:selectOneMenu styleClass="form-control" id="dirNacionalNominal" style="width: 100%" value="#{manejadorGestionEmpleado.dirNacionalNominal}" required="true" requiredMessage="Seleccione una Dirección Nacional">
+                                                    <p:selectOneMenu  id="dirNacionalNominal" style="width: 100%" value="#{manejadorGestionEmpleado.dirNacionalNominal}" required="true" requiredMessage="Seleccione una Dirección Nacional para cargo Nominal">
                                                         <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
                                                         <f:selectItems value="#{manejadorGestionEmpleado.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
                                                         <p:ajax update="dependeciaNominal"/>
-                                                    </h:selectOneMenu>
+                                                    </p:selectOneMenu>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <h:outputLabel value="Cargo Funcional:" styleClass="col-lg-4 control-label"/>
+                                                <p:outputLabel for="dependeciaNominal" value="Dependencia / Unidad organizativa:" styleClass="col-lg-4 control-label"/>
                                                 <div class="col-lg-8">
-                                                    <p:inputText styleClass="form-control" id="cargoFuncional" value="#{manejadorGestionEmpleado.empleado.cargoFuncional}" style="width: 100%" required="true" requiredMessage="Proporcione el Cargo Funcional"/>
+                                                    <p:selectOneMenu id="dependeciaNominal"  style="width: 100%" value="#{manejadorGestionEmpleado.dependenciaNominal}" required="true" requiredMessage="Seleccione una Dependencia para cargo Nominal">
+                                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                                        <f:selectItems value="#{manejadorGestionEmpleado.dependenciasFiltradas(2)}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
+                                                    </p:selectOneMenu>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" style="border-left: 1px #DADCFF solid;">
+                                            <legend>Funcional</legend>
+                                            <div class="form-group">
+                                                <p:outputLabel for="cargoFuncional" value="Cargo Funcional:" styleClass="col-lg-4 control-label"/>
+                                                <div class="col-lg-8">
+                                                    <p:inputText  id="cargoFuncional" value="#{manejadorGestionEmpleado.empleado.cargoFuncional}" style="width: 100%; padding: 9px;" required="true" requiredMessage="Proporcione el Cargo Funcional"/>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <h:outputLabel value="Dirección Nacional:" styleClass="col-lg-4 control-label"/>
+                                                <p:outputLabel for="dirNacionalFuncional" value="Dirección Nacional:" styleClass="col-lg-4 control-label"/>
                                                 <div class="col-lg-8">
-                                                    <h:selectOneMenu styleClass="form-control" id="dirNacionalFuncional" style="width: 100%" value="#{manejadorGestionEmpleado.dirNacionalFuncional}" required="true" requiredMessage="Seleccione una Dirección Nacional">
+                                                    <p:selectOneMenu  id="dirNacionalFuncional" style="width: 100%" value="#{manejadorGestionEmpleado.dirNacionalFuncional}" required="true" requiredMessage="Seleccione una Dirección Nacional para cargo Funcional">
                                                         <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
                                                         <f:selectItems value="#{manejadorGestionEmpleado.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
                                                         <p:ajax update="dependeciaFuncional"/>
-                                                    </h:selectOneMenu>
+                                                    </p:selectOneMenu>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <h:outputLabel value="Salario: $ " styleClass="col-lg-4 control-label"/>
+                                                <p:outputLabel for="dependeciaFuncional" value="Dependencia / Unidad organizativa:" styleClass="col-lg-4 control-label"/>
                                                 <div class="col-lg-8">
-                                                    <p:inputText styleClass="form-control" id="salarioEmp" style="width: 100%" value="#{manejadorGestionEmpleado.empleado.salarioEmp}"/>
+                                                    <p:selectOneMenu  id="dependeciaFuncional"  style="width: 100%" value="#{manejadorGestionEmpleado.dependenciaFuncional}" required="true" requiredMessage="Seleccione una Dependencia para cargo Funcional">
+                                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                                        <f:selectItems value="#{manejadorGestionEmpleado.dependenciasFiltradas(3)}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
+                                                    </p:selectOneMenu>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <div class="row" >
+                                        <div class="col-md-1" ></div>
+                                        <div class="col-md-8" >
+                                            <div class="form-group">
+                                                <p:outputLabel for="correoInstitucional" value="Correo Institucional" styleClass="col-lg-5 control-label"/>
+                                                <div class="col-lg-7">
+                                                    <p:inputText  validatorMessage="Correo Institucional: Ingrese Email Válido" id="correoInstitucional" style="width: 100%; padding: 9px;" value="#{manejadorGestionEmpleado.empleado.correoInstitucional}" >
+                                                        <f:validateRegex pattern="^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4})*$"/>
+                                                    </p:inputText>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <h:outputLabel value="Fecha Ingreso al Sector Público:" styleClass="col-lg-4 control-label"/>
-                                                <div class="col-lg-8">
-                                                    <p:calendar id="fechaIngresopublico" value="#{manejadorGestionEmpleado.empleado.fechaIngresoPublico}" showOn="button" locale="es" navigator="true" pattern="dd/MM/yyyy" yearRange="c-100:c+10" />
+                                                <p:outputLabel for="Salario" value="Salario: $ " styleClass="col-lg-5 control-label"/>
+                                                <div class="col-lg-7">
+                                                    <p:inputText  id="Salario" style="width: 100%; padding: 9px;" value="#{manejadorGestionEmpleado.empleado.salarioEmp}" required="true" requiredMessage="Ingrese Salario" >
+                                                        <f:validateDoubleRange minimum="0.01" maximum="999999.99"  />
+                                                    </p:inputText>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <h:outputLabel value="Documeneto Descriptor de Puesto:" styleClass="col-lg-4 control-label"/>
+                                                <p:outputLabel for="fechaIngresopublico" value="Fecha Ingreso al Sector Público:" styleClass="col-lg-5 control-label"/>
+                                                <div class="col-lg-7">
+                                                    <p:calendar id="fechaIngresopublico" value="#{manejadorGestionEmpleado.empleado.fechaIngresoPublico}" locale="es" navigator="true" pattern="dd/MM/yyyy" yearRange="c-100:c+10" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <p:outputLabel for="fechaIngresoinstitu" value="Fecha Ingreso a la Institución:" styleClass="col-lg-5 control-label"/>
+                                                <div class="col-lg-7">
+                                                    <p:calendar id="fechaIngresoinstitu" value="#{manejadorGestionEmpleado.empleado.fechaIngresoInsti}" locale="es" navigator="true" pattern="dd/MM/yyyy" yearRange="c-100:c+10" />
+                                                </div>
+                                            </div>  
+                                            <div class="form-group">
+                                                <p:outputLabel value="Documeneto Descriptor de Puesto:" styleClass="col-lg-5 control-label"/>
                                                 <div class="col-lg-4">
                                                     <p:fileUpload mode="advanced" fileUploadListener="#{manejadorGestionEmpleado.handleFileUpload}" label="Examinar..." update="docDescPuesto" allowTypes="/(\.|\/)(gif|jpg|jpeg|gif|png|doc|pdf|doxc|PNG|GIF|JPG|JPEG|DOC|PDF|DOXC)$/" auto="true">
                                                         <f:attribute name="tipoDoc" value="3" />
@@ -390,54 +446,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <div class="col-lg-8">
-                                                    <br />
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <h:outputLabel value="Dependencia / Unidad organizativa:" styleClass="col-lg-4 control-label"/>
-                                                <div class="col-lg-8">
-                                                    <h:selectOneMenu styleClass="form-control" id="dependeciaNominal"  style="width: 100%" value="#{manejadorGestionEmpleado.dependenciaNominal}" required="true" requiredMessage="Seleccione una Dependencia">
-                                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
-                                                        <f:selectItems value="#{manejadorGestionEmpleado.dependenciasFiltradas(2)}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
-
-                                                    </h:selectOneMenu>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-lg-8">
-                                                    <br /><br />
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <h:outputLabel value="Dependencia / Unidad organizativa:" styleClass="col-lg-4 control-label"/>
-                                                <div class="col-lg-8">
-                                                    <h:selectOneMenu styleClass="form-control" id="dependeciaFuncional"  style="width: 100%" value="#{manejadorGestionEmpleado.dependenciaFuncional}" required="true" requiredMessage="Seleccione una Dependencia">
-                                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
-                                                        <f:selectItems value="#{manejadorGestionEmpleado.dependenciasFiltradas(3)}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
-
-                                                    </h:selectOneMenu>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <h:outputLabel value="CorreoInstitucional:" styleClass="col-lg-4 control-label"/>
-                                                <div class="col-lg-8">
-                                                    <p:inputText styleClass="form-control" id="correoInstitucional" style="width: 100%" value="#{manejadorGestionEmpleado.empleado.correoInstitucional}"/>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <h:outputLabel value="Fecha Ingreso a la Institución:" styleClass="col-lg-4 control-label"/>
-                                                <div class="col-lg-8">
-                                                    <p:calendar id="fechaIngresoinstitu" value="#{manejadorGestionEmpleado.empleado.fechaIngresoInsti}" showOn="button" locale="es" navigator="true" pattern="dd/MM/yyyy" yearRange="c-100:c+10" />
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-lg-8">
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <div class="col-md-2" ></div>
                                     </div>
                                 </div>
 
@@ -453,95 +462,60 @@
 
                                 <div class="container-fluid">
                                     <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <h:outputLabel value="¿Reporta a Jefe?" styleClass="col-lg-4 control-label"/>
-                                                <div class="col-lg-8">
-                                                    <input class="btn btn-info" type="button" id="mostrarocultar" value="NO"/>
-                                                </div>
-                                            </div>
-                                            <div id="oculto1"  class="form-group hidden">
-                                                <h:outputLabel value="Dirección Nacional:" styleClass="col-lg-4 control-label"/>
-                                                <div class="col-lg-8">
-                                                    <h:selectOneMenu  styleClass="form-control" id="dirNacionalFiltrarJefe" style="width: 100%" value="#{manejadorGestionEmpleado.dirNacionalFiltrarJefe}">
+                                            <div id="ocultar"  class="form-group">
+                                                <p:outputLabel for="sino" value="Reporta a Jefe:" styleClass="col-lg-4 control-label"/>
+                                                <div class="col-lg-5">
+                                                    <p:selectOneMenu  id="sino" style="width: 100%" value="#{manejadorGestionEmpleado.opcionsion}">
                                                         <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
-                                                        <f:selectItems value="#{manejadorGestionEmpleado.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
-                                                        <p:ajax update="dependeciaFiltrarJefe"/>
-                                                    </h:selectOneMenu>
+                                                        <f:selectItem itemLabel="SI reporta a jefe" itemValue="1"/>
+                                                        <f:selectItem itemLabel="NO reporta a jefe" itemValue="2"/>
+                                                        <p:ajax update="ocultarsino"/>
+                                                    </p:selectOneMenu>
                                                 </div>
                                             </div>
-                                            <div id="oculto3" class="form-group hidden">
-                                                <h:outputLabel value="Empleado:" styleClass="col-lg-4 control-label"/>
-                                                <div class="col-lg-8">
-                                                    <h:selectOneMenu styleClass="form-control" id="idEmpleadoJefe" style="width: 100%" value="#{manejadorGestionEmpleado.empJefe}" >
-                                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
-                                                        <f:selectItems value="#{manejadorGestionEmpleado.empleadoJefeDependencia()}" var="emple" itemLabel="#{emple.nombreEmpleado}" itemValue="#{emple.idEmpleado}"/>
-                                                    </h:selectOneMenu>
+                                            <h:panelGroup id="ocultarsino" >
+                                                <div class="form-group">
+                                                    <p:outputLabel for="dirNacionalFiltrarJefe" value="Dirección Nacional:" styleClass="col-lg-4 control-label"/>
+                                                    <div class="col-lg-5">
+                                                        <p:selectOneMenu disabled="#{!(manejadorGestionEmpleado.opcionsion eq 1)}" id="dirNacionalFiltrarJefe" style="width: 100%" value="#{manejadorGestionEmpleado.dirNacionalFiltrarJefe}">
+                                                            <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                                            <f:selectItems value="#{manejadorGestionEmpleado.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
+                                                            <p:ajax update="dependeciaFiltrarJefe"/>
+                                                        </p:selectOneMenu>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-lg-8">
+                                                <div class="form-group">
+                                                    <p:outputLabel for="dependeciaFiltrarJefe" value="Dependencia / Unidad organizativa:" styleClass="col-lg-4 control-label"/>
+                                                    <div class="col-lg-5">
+                                                        <p:selectOneMenu disabled="#{!(manejadorGestionEmpleado.opcionsion eq 1)}" id="dependeciaFiltrarJefe"  style="width: 100%" value="#{manejadorGestionEmpleado.dependeciasFiltrarJefe}">
+                                                            <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                                            <f:selectItems value="#{manejadorGestionEmpleado.dependenciasFiltradas(1)}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
+                                                            <p:ajax update="idEmpleadoJefe"/>
+                                                        </p:selectOneMenu>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <div class="col-lg-8">
-                                                    <br />
+                                                <div class="form-group">
+                                                    <p:outputLabel for="idEmpleadoJefe" value="Empleado:" styleClass="col-lg-4 control-label"/>
+                                                    <div class="col-lg-5">
+                                                        <p:selectOneMenu disabled="#{!(manejadorGestionEmpleado.opcionsion eq 1)}" id="idEmpleadoJefe" style="width: 100%" value="#{manejadorGestionEmpleado.empJefe}" >
+                                                            <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                                            <f:selectItems value="#{manejadorGestionEmpleado.empleadoJefeDependencia()}" var="emple" itemLabel="#{emple.nombreEmpleado}" itemValue="#{emple.idEmpleado}"/>
+                                                        </p:selectOneMenu>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div id="oculto2" class="form-group hidden">
-                                                <h:outputLabel value="Dependencia / Unidad organizativa:" styleClass="col-lg-4 control-label"/>
-                                                <div class="col-lg-8">
-                                                    <h:selectOneMenu styleClass="form-control" id="dependeciaFiltrarJefe"  style="width: 100%" value="#{manejadorGestionEmpleado.dependeciasFiltrarJefe}">
-                                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
-                                                        <f:selectItems value="#{manejadorGestionEmpleado.dependenciasFiltradas(1)}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
-                                                        <p:ajax update="idEmpleadoJefe"/>
-                                                    </h:selectOneMenu>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-lg-8">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-lg-8">
-                                                </div>
-                                            </div>
-                                        </div>
+                                            </h:panelGroup>
                                     </div>
                                 </div>
+                                <h:commandLink styleClass="btn btn-info pull-right" value="Modificar toda Información" action="#{manejadorGestionEmpleado.editEmpleado()}"/>
                             </div>
                         </div>
                     </div>
-
-                    <!--CONFIRMAR-->
-                    <div class="tab-pane" id="tab5">
-                        <div class="panel panel-info">
-                            <div class="panel-heading text-center"><strong>Confirmar</strong></div>
-                            <div class="panel-body">
-
-                                <div class="container-fluid">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                        </div>
-                                        <div class="col-md-6">
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <h:commandLink styleClass="btn btn-info" value="Guardar" action="#{manejadorGestionEmpleado.editEmpleado()}"/>
-
-                            </div>
-                        </div>
-                    </div>
-
 
                     <div style="float:right">
-                        <input type='button' class='btn btn-info button-next' name='next' value='Siguiente' />
+                        <input type='button' class='btn btn-primary button-next' name='next' value='Siguiente' />
                     </div>
                     <div style="float:left">
-                        <input type='button' class='btn btn-info button-previous' name='previous' value='Regresar' />
+                        <input type='button' class='btn btn-primary button-previous' name='previous' value='Regresar' />
                     </div>
                     <div class="clearfix"></div>
 
@@ -553,23 +527,8 @@
         <script>
             $(document).ready(function () {
                 $('#rootwizard').bootstrapWizard({'nextSelector': '.button-next', 'previousSelector': '.button-previous', 'tabClass': 'nav nav-tabs nav-justified'});
-
-                
-
-                $("#mostrarocultar").click(function () {
-                   
-                    $("#oculto1, #oculto2, #oculto3").toggleClass('hidden show');
-                    if ($("#mostrarocultar").prop('value') === 'SI') {
-                        $("#mostrarocultar").prop('value', 'NO');
-                    } else {
-                        $("#mostrarocultar").prop('value', 'SI');
-                    }
-                });
             });
         </script>
     </ui:define>
-        
-<!--  {manejadorGestionEmpleado.refresh()} -->
-        
 
 </ui:composition>

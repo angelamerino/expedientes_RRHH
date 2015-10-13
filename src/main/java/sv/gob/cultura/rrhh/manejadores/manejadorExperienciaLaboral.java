@@ -187,7 +187,7 @@ public class manejadorExperienciaLaboral implements Serializable {
             getExperienciaLaboralFacade().create(experienciaLaboral);
             experienciaLaboral = new ExperienciaLaboral();
             this.setFechaDesde(new Date());
-            
+
             RequestContext.getCurrentInstance().execute("PF('publico').hide()");
             RequestContext.getCurrentInstance().update("tabla1");
 
@@ -211,7 +211,7 @@ public class manejadorExperienciaLaboral implements Serializable {
             getExperienciaLaboralFacade().create(experienciaLaboral);
             experienciaLaboral = new ExperienciaLaboral();
             this.setFechaDesde(new Date());
-            
+
             RequestContext.getCurrentInstance().execute("PF('privado').hide()");
             RequestContext.getCurrentInstance().update("tabla2");
 
@@ -233,7 +233,7 @@ public class manejadorExperienciaLaboral implements Serializable {
             getExperienciaLaboralFacade().edit(experienciaLaboral);
             experienciaLaboral = new ExperienciaLaboral();
             this.setFechaDesde(new Date());
-            
+
             RequestContext.getCurrentInstance().execute("PF('privadoEdit').hide()");
             RequestContext.getCurrentInstance().execute("PF('publicoEdit').hide()");
             RequestContext.getCurrentInstance().update("tabla1");
@@ -256,6 +256,10 @@ public class manejadorExperienciaLaboral implements Serializable {
             getExperienciaLaboralFacade().remove(experienciaLaboral);
             experienciaLaboral = new ExperienciaLaboral();
             this.setFechaDesde(new Date());
+            RequestContext.getCurrentInstance().execute("PF('confirmation').hide()");
+            RequestContext.getCurrentInstance().execute("PF('confirmation1').hide()");
+            RequestContext.getCurrentInstance().update("tabla1");
+            RequestContext.getCurrentInstance().update("tabla2");
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Eliminado", "Registro Eliminado");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return null;

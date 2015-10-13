@@ -243,6 +243,8 @@ public class manejadorDependientesFamilia implements Serializable {
         try {
             getFamiliaDependientesEmpFacade().remove(familiaDependientesEmp);
             familiaDependientesEmp = new FamiliaDependientesEmp();
+            RequestContext.getCurrentInstance().execute("PF('confirmation').hide()");
+            RequestContext.getCurrentInstance().update("tabla");
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Eliminado", "Registro Eliminado");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return null;

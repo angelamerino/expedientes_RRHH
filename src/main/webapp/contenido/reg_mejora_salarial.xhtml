@@ -66,10 +66,10 @@
 
                     <div class="col-md-4">
                         <h:form prependId="false" >
-                            <h:outputLabel value="NR del Empleado:" styleClass="control-label col-md-12"/>
+                            <p:outputLabel for="nr" value="NR del Empleado:" styleClass="control-label col-md-12"/>
                             <div class="form-group">
                                 <div class="col-md-8">
-                                    <p:inputMask styleClass="form-control" value="#{manejadorAumentoMejoraSalarial.NR}" mask="NR 9999-999999-999-9"/>
+                                    <p:inputMask id="nr" style="width: 100%; padding: 9px;" value="#{manejadorAumentoMejoraSalarial.NR}" mask="NR 9999-999999-999-9"/>
                                 </div>
                                 <div class="col-md-4">
                                     <h:commandButton  class="btn btn-info" actionListener="#{manejadorAumentoMejoraSalarial.buscarNR}" value="Buscar" />
@@ -98,48 +98,48 @@
                         <h:form prependId="false" class="form-horizontal">
                             
                             <div class="form-group">
-                                <h:outputLabel value="Empleado:" styleClass="col-lg-4 control-label"/>
+                                <p:outputLabel for="empleado" value="Empleado:" styleClass="col-lg-4 control-label"/>
                                 <div class="col-lg-7">
                                     <h:outputText styleClass="form-control" id="empleado" value="#{manejadorAumentoMejoraSalarial.nombreEmp}" />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <h:outputLabel value="Salario Actual: $" styleClass="col-lg-4 control-label"/>
+                                <p:outputLabel for="salarioActualHsalarial" value="Salario Actual: $" styleClass="col-lg-4 control-label"/>
                                 <div class="col-lg-7">
                                     <h:outputText styleClass="form-control" id="salarioActualHsalarial" value="#{manejadorAumentoMejoraSalarial.salarioActual}" />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <h:outputLabel value="Tipo de Mejora Salarial:" styleClass="col-lg-4 control-label"/>
+                                <p:outputLabel for="idMejoraSal" value="Tipo de Mejora Salarial:" styleClass="col-lg-4 control-label"/>
                                 <div class="col-lg-7">
-                                    <h:selectOneMenu styleClass="form-control" id="idMejoraSal" value="#{manejadorAumentoMejoraSalarial.historialSalarial.idMejoraSal}" converter="#{tipoMejoraSalarialConvertidor}" required="true" requiredMessage="Seleccione un Tipo de Mejora Salarial">
+                                    <p:selectOneMenu id="idMejoraSal" style="width: 100%;" value="#{manejadorAumentoMejoraSalarial.historialSalarial.idMejoraSal}" converter="#{tipoMejoraSalarialConvertidor}" required="true" requiredMessage="Seleccione un Tipo de Mejora Salarial">
                                         <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
                                         <f:selectItems value="#{manejadorAumentoMejoraSalarial.todosTiposMejora()}" var="tipoMejora" itemLabel="#{tipoMejora.nombreMejoraSal}" itemValue="#{tipoMejora}"/>
-                                    </h:selectOneMenu>
+                                    </p:selectOneMenu>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <h:outputLabel value="Porcentaje de Aplicacón:" styleClass="col-lg-4 control-label"/>
+                                <p:outputLabel for="porcentajeHsalarial" value="Porcentaje de Aplicacón:" styleClass="col-lg-4 control-label"/>
                                 <div class="col-lg-6">
-                                    <h:inputText validatorMessage="Porcentaje Debe estar entre 0.01 y 100" styleClass="form-control" id="porcentajeHsalarial" value="#{manejadorAumentoMejoraSalarial.porcentaje}" required="true" requiredMessage="Ingrese porcentaje de Aplicación">
+                                    <p:inputText style="width: 100%; padding: 9px;" validatorMessage="Porcentaje Debe estar entre 0.01 y 100"  id="porcentajeHsalarial" value="#{manejadorAumentoMejoraSalarial.porcentaje}" required="true" requiredMessage="Ingrese porcentaje de Aplicación">
                                         <f:validateDoubleRange minimum="0.01" maximum="100.00" />
                                         <f:ajax render="nuevoSalarioHsalarial" />
-                                    </h:inputText>
+                                    </p:inputText>
                                 </div>
-                                <h:outputLabel value="%" styleClass="col-lg-1 control-label"/>
+                                <p:outputLabel value="%" styleClass="col-lg-1 control-label"/>
                             </div>
 
                             <div class="form-group">
-                                <h:outputLabel value="Nuevo Salario: $" styleClass="col-lg-4 control-label"/>
+                                <p:outputLabel for="nuevoSalarioHsalarial" value="Nuevo Salario: $" styleClass="col-lg-4 control-label"/>
                                 <div class="col-lg-7">
                                     <h:outputText styleClass="form-control" id="nuevoSalarioHsalarial" value="#{manejadorAumentoMejoraSalarial.salarioNuevo}" />
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <h:outputLabel value="Fecha de Aplicacón:" styleClass="col-lg-4 control-label"/>
+                                <p:outputLabel for="fechaHsalarial" value="Fecha de Aplicacón:" styleClass="col-lg-4 control-label"/>
                                 <div class="col-lg-7">
-                                    <p:calendar pattern="dd/MM/yyyy" locale="es" id="fechaHsalarial" showOn="button" value="#{manejadorAumentoMejoraSalarial.historialSalarial.fechaHsalarial}" required="true" requiredMessage="Ingrese Fecha de Aplicación" />
+                                    <p:calendar pattern="dd/MM/yyyy" locale="es" id="fechaHsalarial" value="#{manejadorAumentoMejoraSalarial.historialSalarial.fechaHsalarial}" required="true" requiredMessage="Ingrese Fecha de Aplicación" />
                                 </div>
                             </div>
                             <br />

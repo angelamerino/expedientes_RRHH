@@ -122,7 +122,7 @@
             </h:form>
         </p:confirmDialog>
 
-        <p:dialog header="Editar Mejora Salarial" widgetVar="mejoraEditar" closable="false" modal="true" height="auto" width="600px" resizable="false" position="center,top">
+        <p:dialog header="Editar Mejora Salarial" widgetVar="mejoraEditar" closable="false" modal="true" height="auto" width="60%" resizable="false" position="center,top" draggable="false" styleClass="disable-scroll">
             <div class="row">
                 <h:form prependId="false" class="form-horizontal">
                     <h:panelGroup id ="panelEditar">
@@ -139,23 +139,23 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <h:outputLabel value="Tipo de Mejora Salarial:" styleClass="col-lg-4 control-label"/>
+                            <p:outputLabel for="idMejoraSal" value="Tipo de Mejora Salarial:" styleClass="col-lg-4 control-label"/>
                             <div class="col-lg-7">
-                                <h:selectOneMenu styleClass="form-control" id="idMejoraSal" value="#{manejadorAumentoMejoraSalarial.historialSalarial.idMejoraSal}" converter="#{tipoMejoraSalarialConvertidor}" required="true" requiredMessage="Seleccione un Tipo de Mejora Salarial">
+                                <p:selectOneMenu style="width: 100%;" id="idMejoraSal" value="#{manejadorAumentoMejoraSalarial.historialSalarial.idMejoraSal}" converter="#{tipoMejoraSalarialConvertidor}" required="true" requiredMessage="Seleccione un Tipo de Mejora Salarial">
                                     <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
                                     <f:selectItems value="#{manejadorAumentoMejoraSalarial.todosTiposMejora()}" var="tipoMejora" itemLabel="#{tipoMejora.nombreMejoraSal}" itemValue="#{tipoMejora}"/>
-                                </h:selectOneMenu>
+                                </p:selectOneMenu>
                             </div>
                         </div>
                         <div class="form-group">
-                            <h:outputLabel value="Porcentaje de Aplicacón:" styleClass="col-lg-4 control-label"/>
+                            <p:outputLabel for="porcentajeHsalarial" value="Porcentaje de Aplicacón:" styleClass="col-lg-4 control-label"/>
                             <div class="col-lg-6">
-                                <h:inputText validatorMessage="Porcentaje Debe estar entre 0.01 y 100" styleClass="form-control" id="porcentajeHsalarial" value="#{manejadorAumentoMejoraSalarial.porcentajeEditar}" required="true" requiredMessage="Ingrese porcentaje de Aplicación">
+                                <p:inputText validatorMessage="Porcentaje Debe estar entre 0.01 y 100" style="width: 100%; padding: 9px;" id="porcentajeHsalarial" value="#{manejadorAumentoMejoraSalarial.porcentajeEditar}" required="true" requiredMessage="Ingrese porcentaje de Aplicación">
                                     <f:validateDoubleRange minimum="0.01" maximum="100.00" />
                                     <f:ajax render="nuevoSalarioHsalarial" />
-                                </h:inputText>
+                                </p:inputText>
                             </div>
-                            <h:outputLabel value="%" styleClass="col-lg-1 control-label"/>
+                            <p:outputLabel value="%" styleClass="col-lg-1 control-label"/>
                         </div>
 
                         <div class="form-group">
@@ -168,14 +168,16 @@
                         <div class="form-group">
                             <h:outputLabel value="Fecha de Aplicacón:" styleClass="col-lg-4 control-label"/>
                             <div class="col-lg-7">
-                                <p:calendar pattern="dd/MM/yyyy" locale="es" id="fechaHsalarial" showOn="button" value="#{manejadorAumentoMejoraSalarial.historialSalarial.fechaHsalarial}" required="true" requiredMessage="Ingrese Fecha de Aplicación" />
+                                <p:calendar pattern="dd/MM/yyyy" locale="es" id="fechaHsalarial" value="#{manejadorAumentoMejoraSalarial.historialSalarial.fechaHsalarial}" required="true" requiredMessage="Ingrese Fecha de Aplicación" />
                             </div>
                         </div>
                         <br />
                         <div class="form-group">
                             <div class="col-lg-4"></div>
                             <div class="col-lg-8">
-                                <h:commandLink style="margin: 2px; color: white" styleClass="btn btn-info" value="Modificar" action="#{manejadorAumentoMejoraSalarial.editarMejoraSalarial()}" />
+                                <h:commandLink style="margin: 2px; color: white" styleClass="btn btn-info" value="Modificar" action="#{manejadorAumentoMejoraSalarial.editarMejoraSalarial()}" >
+                                    <f:ajax execute="panelEditar" render="panelEditar" />
+                                </h:commandLink>
                                 <h:commandLink style="margin: 2px; color: white" styleClass="btn btn-info" value="Cancelar" action="#{manejadorAumentoMejoraSalarial.cancelarEditarMejora()}" immediate="true"/>
                             </div>
                         </div>

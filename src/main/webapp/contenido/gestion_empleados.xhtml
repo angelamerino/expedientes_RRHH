@@ -83,8 +83,9 @@
 
                                         <h:commandLink styleClass="btn-sm glyphicon glyphicon-refresh" style="text-decoration:none;" action="#{manejadorGestionEmpleado.setNombreEmpleadoEditar(item.nombreEmpleado)}" title="Cambiar Estado">
                                             <f:setPropertyActionListener value="#{item.idEmpleado}" target="#{manejadorGestionEmpleado.empleadoEditar}"/>
+                                            <f:setPropertyActionListener value="#{item.idEstado.idEstado}" target="#{manejadorGestionEmpleado.estadoEditar}"/>
                                             <f:setPropertyActionListener value="#{item.nombreEmpleado}" target="#{manejadorGestionEmpleado.nombreEmpleadoEditar}"/>
-                                            <p:ajax update="nombre4" />
+                                            <p:ajax update="panelEstado" />
                                             <p:ajax update="empleadoList"  onsuccess="PF('estadoEditar').show()"/>
                                         </h:commandLink>
                                     </center>
@@ -104,9 +105,9 @@
                         <p:column><h:outputText styleClass="form-control" id="nombre4" value="#{manejadorGestionEmpleado.nombreEmpleadoEditar}" style="width: 100%"/></p:column>
                     </p:row>
                     <p:row>    
-                        <p:column><h:outputLabel value="Estado:"/></p:column>
+                        <p:column><p:outputLabel for="idEstado" value="Estado:"/></p:column>
                         <p:column>
-                            <p:selectOneMenu styleClass="form-control" id="idEstado" value="#{manejadorGestionEmpleado.estadoEditar}" style="width: 100%" required="true" requiredMessage="Seleccione un Estado">
+                            <p:selectOneMenu id="idEstado" value="#{manejadorGestionEmpleado.estadoEditar}" style="width: 100%" required="true" requiredMessage="Seleccione un Estado">
                                 <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
                                 <f:selectItems value="#{manejadorGestionEmpleado.todosEstados()}" var="estados" itemLabel="#{estados.nombreEstado}" itemValue="#{estados.idEstado}"/>
                             </p:selectOneMenu>
@@ -115,7 +116,9 @@
 
                 </p:panelGrid>
                 <br />
-                <h:commandButton style="margin: 2px" styleClass="btn btn-info" value="Guardar" action="#{manejadorGestionEmpleado.cambiarEstado()}"/>
+                <h:commandButton style="margin: 2px" styleClass="btn btn-info" value="Guardar" action="#{manejadorGestionEmpleado.cambiarEstado()}" >
+                    <f:ajax execute="panelEstado" render="panelEstado" />
+                </h:commandButton>
                 <h:commandButton style="margin: 2px"  styleClass="btn btn-info"  value="Cancelar" onclick="PF('estadoEditar').hide()">
                     <f:ajax execute="@this" render="panelEstado" />
                     <p:resetInput target="panelEstado" />
@@ -131,13 +134,12 @@
                             "orderable": false,
                             "targets": 0
                         },
-                    {
+                        {
                             "searchable": false,
                             "orderable": false,
                             "targets": 5
                         }],
                     "order": [[1, 'asc']],
-                    
                     "oLanguage": {
                         "sProcessing": "Procesando...",
                         "sLengthMenu": "Mostrar _MENU_ registros",

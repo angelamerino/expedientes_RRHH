@@ -240,14 +240,18 @@
 
         <p:confirmDialog  message="Desea Eliminar Experiencia de Empleado" header="Confirmación"  closable="false" severity="info" widgetVar="confirmation">
             <h:form prependId="false" class="form-horizontal">
-                <h:commandLink value="Aceptar" actionListener="#{manejadorExperienciaLaboral.eliminar()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true" />
+                <h:commandLink value="Aceptar" actionListener="#{manejadorExperienciaLaboral.eliminar()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true" >
+                    <f:ajax rendered="tabla1" execute="confirmation" />
+                </h:commandLink>
                 <h:commandLink value="Cancelar" actionListener="#{manejadorExperienciaLaboral.cancelar()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true"/>
             </h:form>
         </p:confirmDialog>
 
         <p:confirmDialog  message="Desea Eliminar Experiencia de Empleado" header="Confirmación"  closable="false" severity="info" widgetVar="confirmation1">
             <h:form prependId="false" class="form-horizontal">
-                <h:commandLink value="Aceptar" actionListener="#{manejadorExperienciaLaboral.eliminar()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true" />
+                <h:commandLink value="Aceptar" actionListener="#{manejadorExperienciaLaboral.eliminar()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true" >
+                    <f:ajax rendered="tabla2" execute="confirmation1" />
+                </h:commandLink>
                 <h:commandLink value="Cancelar" actionListener="#{manejadorExperienciaLaboral.cancelar()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true"/>
             </h:form>
         </p:confirmDialog>

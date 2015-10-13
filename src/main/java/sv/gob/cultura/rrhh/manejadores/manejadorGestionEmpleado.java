@@ -46,6 +46,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.primefaces.context.RequestContext;
 import sv.gob.cultura.rrhh.entidades.*;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
@@ -149,6 +150,7 @@ public class manejadorGestionEmpleado implements Serializable {
     private int estadoEditar;                                   // id de estado empleado
     private int empleadoEditar;                                 // id empleado a editar
     private String nombreEmpleadoEditar;                        // nombre de empleado a editar
+    private int opcionsion = 0;
 // *****************************************************************************
 //********************** GET DE ENTERPRICE JAVA BEAN ***************************
 //******************************************************************************
@@ -483,9 +485,17 @@ public class manejadorGestionEmpleado implements Serializable {
         this.nombreEmpleadoEditar = nombreEmpleadoEditar;
     }
 
+    public int getOpcionsion() {
+        return opcionsion;
+    }
+
+    public void setOpcionsion(int opcionsion) {
+        this.opcionsion = opcionsion;
+    }
 //******************************************************************************
 // **************** LISTA DE ELEMENTOS EN TABLAS *******************************
 //******************************************************************************
+
     public List<Estados> todosEstados() {
         return getEstadosFacade().findAll();
     }
@@ -556,138 +566,151 @@ public class manejadorGestionEmpleado implements Serializable {
 //*************************** FUNCIONES DE GUARDAR *****************************
 //******************************************************************************
     public String guardarEmpleado() {
+        try {
 
-        //Seteo de datos de selecionables
-        if (this.getDepto() != 0) {
-            empleado.setDeptoNac(this.getDepto());
-        }
-        if (this.getMuni() != 0) {
-            empleado.setMunicipioNac(this.getMuni());
-        }
-        if (this.getDirDepto() != 0) {
-            empleado.setDeptoResidencia(this.getDirDepto());
-        }
-        if (this.getDirMuni() != 0) {
-            empleado.setMunicipioRes(this.getDirMuni());
-        }
-        if (this.getFechaNacEmpleado() != new Date()) {
-            empleado.setFechaNac(this.getFechaNacEmpleado());
-        }
-        if (this.getEdadEmpleado() != 0) {
-            empleado.setEdadEmp(this.getEdadEmpleado());
-        }
-        if (this.getEmpJefe() != 0) {
-            empleado.setIdEmpleadoJefe(new Empleados(this.getEmpJefe()));
-            empleado.setJefe("SI");
-        } else {
-            empleado.setJefe("NO");
-        }
-        if (this.getDependenciaNominal() != 0) {
-            empleado.setIdDependenciaN(new Dependencias(this.getDependenciaNominal()));
-        }
-        if (this.getDependenciaFuncional() != 0) {
-            empleado.setIdDependenciaF(new Dependencias(this.getDependenciaFuncional()));
-        }
+            //Seteo de datos de selecionables
+            if (this.getDepto() != 0) {
+                empleado.setDeptoNac(this.getDepto());
+            }
+            if (this.getMuni() != 0) {
+                empleado.setMunicipioNac(this.getMuni());
+            }
+            if (this.getDirDepto() != 0) {
+                empleado.setDeptoResidencia(this.getDirDepto());
+            }
+            if (this.getDirMuni() != 0) {
+                empleado.setMunicipioRes(this.getDirMuni());
+            }
+            if (this.getFechaNacEmpleado() != new Date()) {
+                empleado.setFechaNac(this.getFechaNacEmpleado());
+            }
+            if (this.getEdadEmpleado() != 0) {
+                empleado.setEdadEmp(this.getEdadEmpleado());
+            }
+            if (this.getEmpJefe() != 0) {
+                empleado.setIdEmpleadoJefe(new Empleados(this.getEmpJefe()));
+                empleado.setJefe("SI");
+            } else {
+                empleado.setJefe("NO");
+            }
+            if (this.getDependenciaNominal() != 0) {
+                empleado.setIdDependenciaN(new Dependencias(this.getDependenciaNominal()));
+            }
+            if (this.getDependenciaFuncional() != 0) {
+                empleado.setIdDependenciaF(new Dependencias(this.getDependenciaFuncional()));
+            }
 
-        //Seteo de las url de foto, curriculum y doc descriptor de puesto
-        if (this.path[0] != null) {
-            empleado.setUrlFotoEmp(this.path[0]);
+            //Seteo de las url de foto, curriculum y doc descriptor de puesto
+            if (this.path[0] != null) {
+                empleado.setUrlFotoEmp(this.path[0]);
+            }
+            if (this.path[1] != null) {
+                empleado.setCurriculum(this.path[1]);
+            }
+            if (this.path[2] != null) {
+                empleado.setDocDescPuesto(this.path[2]);
+            }
+
+            //Seteo de Dependencias nominal y funcional
+            Dependencias depenNominal = getDependenciasFacade().find(this.getDependenciaNominal());
+            Dependencias depenFuncional = getDependenciasFacade().find(this.getDependenciaFuncional());
+            empleado.setIdMunicipioN(depenNominal.getIdMunicipio());
+            empleado.setIdMunicipioF(depenFuncional.getIdMunicipio());
+
+            //Fecha de creacion y usuario id =1
+            empleado.setFechaCreaEmp(new Date());
+            empleado.setUserCreaEmp(1);
+
+            getEmpleadosFacade().create(empleado);
+
+            empleado = new Empleados();
+            restaurarSelecionables();
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Ingresado", "Registro Ingresado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return "gestion_empleados";
+        } catch (Exception e) {
+            return "reg_empleados";
         }
-        if (this.path[1] != null) {
-            empleado.setCurriculum(this.path[1]);
-        }
-        if (this.path[2] != null) {
-            empleado.setDocDescPuesto(this.path[2]);
-        }
-
-        //Seteo de Dependencias nominal y funcional
-        Dependencias depenNominal = getDependenciasFacade().find(this.getDependenciaNominal());
-        Dependencias depenFuncional = getDependenciasFacade().find(this.getDependenciaFuncional());
-        empleado.setIdMunicipioN(depenNominal.getIdMunicipio());
-        empleado.setIdMunicipioF(depenFuncional.getIdMunicipio());
-
-        //Fecha de creacion y usuario id =1
-        empleado.setFechaCreaEmp(new Date());
-        empleado.setUserCreaEmp(1);
-
-        getEmpleadosFacade().create(empleado);
-
-        empleado = new Empleados();
-        restaurarSelecionables();
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Ingresado", "Registro Ingresado");
-        FacesContext.getCurrentInstance().addMessage(null, message);
-        return "gestion_empleados";
     }
 
     public String editEmpleado() {
-        //Seteo de datos de selecionables
-        if (this.getDepto() != 0) {
-            empleado.setDeptoNac(this.getDepto());
-        }
-        if (this.getMuni() != 0) {
-            empleado.setMunicipioNac(this.getMuni());
-        }
-        if (this.getDirDepto() != 0) {
-            empleado.setDeptoResidencia(this.getDirDepto());
-        }
-        if (this.getDirMuni() != 0) {
-            empleado.setMunicipioRes(this.getDirMuni());
-        }
-        if (this.getFechaNacEmpleado() != new Date()) {
-            empleado.setFechaNac(this.getFechaNacEmpleado());
-        }
-        if (this.getEdadEmpleado() != 0) {
-            empleado.setEdadEmp(this.getEdadEmpleado());
-        }
-        if (this.getEmpJefe() != 0) {
-            empleado.setIdEmpleadoJefe(new Empleados(this.getEmpJefe()));
-            empleado.setJefe("SI");
-        } else {
-            empleado.setJefe("NO");
-        }
-        if (this.getDependenciaNominal() != 0) {
-            empleado.setIdDependenciaN(new Dependencias(this.getDependenciaNominal()));
-        }
-        if (this.getDependenciaFuncional() != 0) {
-            empleado.setIdDependenciaF(new Dependencias(this.getDependenciaFuncional()));
-        }
+        try {
+            //Seteo de datos de selecionables
+            if (this.getDepto() != 0) {
+                empleado.setDeptoNac(this.getDepto());
+            }
+            if (this.getMuni() != 0) {
+                empleado.setMunicipioNac(this.getMuni());
+            }
+            if (this.getDirDepto() != 0) {
+                empleado.setDeptoResidencia(this.getDirDepto());
+            }
+            if (this.getDirMuni() != 0) {
+                empleado.setMunicipioRes(this.getDirMuni());
+            }
+            if (this.getFechaNacEmpleado() != new Date()) {
+                empleado.setFechaNac(this.getFechaNacEmpleado());
+            }
+            if (this.getEdadEmpleado() != 0) {
+                empleado.setEdadEmp(this.getEdadEmpleado());
+            }
+            if (this.getEmpJefe() != 0) {
+                empleado.setIdEmpleadoJefe(new Empleados(this.getEmpJefe()));
+                empleado.setJefe("SI");
+            } else {
+                empleado.setJefe("NO");
+            }
+            if (this.getDependenciaNominal() != 0) {
+                empleado.setIdDependenciaN(new Dependencias(this.getDependenciaNominal()));
+            }
+            if (this.getDependenciaFuncional() != 0) {
+                empleado.setIdDependenciaF(new Dependencias(this.getDependenciaFuncional()));
+            }
 
-        //Seteo de las url de foto, curriculum y doc descriptor de puesto
-        if (this.path[0] != null) {
-            empleado.setUrlFotoEmp(this.path[0]);
-        }
-        if (this.path[1] != null) {
-            empleado.setCurriculum(this.path[1]);
-        }
-        if (this.path[2] != null) {
-            empleado.setDocDescPuesto(this.path[2]);
-        }
+            //Seteo de las url de foto, curriculum y doc descriptor de puesto
+            if (this.path[0] != null) {
+                empleado.setUrlFotoEmp(this.path[0]);
+            }
+            if (this.path[1] != null) {
+                empleado.setCurriculum(this.path[1]);
+            }
+            if (this.path[2] != null) {
+                empleado.setDocDescPuesto(this.path[2]);
+            }
 
-        //Seteo de Dependencias nominal y funcional
-        Dependencias depenNominal = getDependenciasFacade().find(this.getDependenciaNominal());
-        Dependencias depenFuncional = getDependenciasFacade().find(this.getDependenciaFuncional());
-        empleado.setIdMunicipioN(depenNominal.getIdMunicipio());
-        empleado.setIdMunicipioF(depenFuncional.getIdMunicipio());
+            //Seteo de Dependencias nominal y funcional
+            Dependencias depenNominal = getDependenciasFacade().find(this.getDependenciaNominal());
+            Dependencias depenFuncional = getDependenciasFacade().find(this.getDependenciaFuncional());
+            empleado.setIdMunicipioN(depenNominal.getIdMunicipio());
+            empleado.setIdMunicipioF(depenFuncional.getIdMunicipio());
 
-        empleado.setFechaModEmp(new Date());
-        //empleado.setUserModEmp(1); ESTA COMO DATE
-        getEmpleadosFacade().edit(empleado);
+            empleado.setFechaModEmp(new Date());
+            //empleado.setUserModEmp(1); ESTA COMO DATE
+            getEmpleadosFacade().edit(empleado);
 
-        empleado = new Empleados();
-        restaurarSelecionables();
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Modificado", "Registro Modificado");
-        FacesContext.getCurrentInstance().addMessage(null, message);
-        return "gestion_empleados";
+            empleado = new Empleados();
+            restaurarSelecionables();
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Modificado", "Registro Modificado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return "gestion_empleados";
+        } catch (Exception e) {
+            return "gestion_empleados";
+        }
     }
 
     public void cambiarEstado() {
-        Empleados emp = getEmpleadosFacade().find(this.getEmpleadoEditar());
-        emp.setIdEstado(new Estados(this.getEstadoEditar()));
-        emp.setFechaModEmp(new Date());
-        //emp.setUserModEmp(1);  ESTA COMO FECHA
-        getEmpleadosFacade().edit(emp);
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Modificado", "Registro Modificado");
-        FacesContext.getCurrentInstance().addMessage(null, message);
+        try {
+            Empleados emp = getEmpleadosFacade().find(this.getEmpleadoEditar());
+            emp.setIdEstado(new Estados(this.getEstadoEditar()));
+            emp.setFechaModEmp(new Date());
+            emp.setUserModEmp(1);
+            getEmpleadosFacade().edit(emp);
+            RequestContext.getCurrentInstance().execute("PF('estadoEditar').hide()");
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Modificado", "Registro Modificado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        } catch (Exception e) {
+
+        }
     }
 // *****************************************************************************
 // ************ FUNCIONES EXTRA QUE SE UTLIZAN LOS FORMULARIOS *****************
@@ -832,6 +855,7 @@ public class manejadorGestionEmpleado implements Serializable {
         this.setDependenciaFuncional(0);
         this.setDirNacionalFiltrarJefe(0);
         this.setDependeciasFiltrarJefe(0);
+        this.setOpcionsion(0);
         this.path[0] = null;
         this.path[1] = null;
         this.path[2] = null;
@@ -847,6 +871,19 @@ public class manejadorGestionEmpleado implements Serializable {
         this.setDirNacionalFuncional(dirFuncional.getIdDirNac());
         this.setDependenciaNominal(dependenciaN.getIdDependencia());
         this.setDependenciaFuncional(dependenciaF.getIdDependencia());
+
+        String a = empleado.getJefe();
+        if (a.equals("SI")) {
+            Integer idEmp = empleado.getIdEmpleadoJefe().getIdEmpleado();
+            Empleados emp = getEmpleadosFacade().find(idEmp);
+
+            this.setOpcionsion(1);
+            this.setEmpJefe(emp.getIdEmpleado());
+            this.setDependeciasFiltrarJefe(emp.getIdDependenciaF().getIdDependencia());
+            this.setDirNacionalFiltrarJefe(emp.getIdDependenciaF().getIdDirNac().getIdDirNac());
+        } else {
+            this.setOpcionsion(2);
+        }
 
         if (empleado.getDeptoNac() != null) {
             this.setDepto(empleado.getDeptoNac());
@@ -874,6 +911,8 @@ public class manejadorGestionEmpleado implements Serializable {
         restaurarSelecionables();
         return "reg_empleados";
     }
+//******************************************************************************
+// *****************************************************************************
 
     /////agregado por Angela el 06/octubre/2015
     ////PARA EXPORTAR ARCHIVOS A PDF
@@ -968,9 +1007,7 @@ public class manejadorGestionEmpleado implements Serializable {
         pdf.setMargins(10, 10, 10, 10); //para margenes de la página
 
 //////////////agregado para encabezado el 08/10/2015///   
-        
 ///////////////////////////////////////////////////////////////
-
         pdf.open();
 
 //		PdfPTable pdfTable = new PdfPTable(2); //para dos columnas o celdas en la tabla que se está creando
@@ -990,7 +1027,6 @@ public class manejadorGestionEmpleado implements Serializable {
 //        PdfPCell cellTwo = new PdfPCell(new Phrase("otra celda con rectangle box"));
 //        cellTwo.setBorder(Rectangle.BOX);
 //        pdfTable.addCell(cellTwo);
-
         pdfTable.setWidthPercentage(15f);                                   //ancho de la tabla al 30% de la pagina
         //pdfTable.setHorizontalAlignment(0);
         pdfTable.setHorizontalAlignment(Element.ALIGN_RIGHT);               //alineación de la tabla a la derecha
@@ -1028,12 +1064,9 @@ public class manejadorGestionEmpleado implements Serializable {
 //                nombre_rep.setIndentationRight(50);
         pdf.add(nombre_rep);
 
-        
-
 ///fin de agregado por mi  
     }
 
-        
     public void postProcessPDF(Object document) throws IOException, DocumentException {
         final Document pdf = (Document) document;
         pdf.setPageSize(PageSize.LETTER.rotate());
@@ -1066,7 +1099,7 @@ public class manejadorGestionEmpleado implements Serializable {
         HSSFFont hSSFFont = wb.createFont();
         cellStyle.setFillForegroundColor(HSSFColor.BLUE_GREY.index);
         //cellStyle.setFillBackgroundColor(new HSSFColor.BLACK().getIndex()); //probar esto para fondo negro
-   
+
         cellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
         hSSFFont.setColor(HSSFColor.RED.index);
 //        hSSFFont.setColor(HSSFColor.WHITE.index); //probar para color de fuente blanca http://datojava.blogspot.com/2014/09/reporte-excel-con-java.html

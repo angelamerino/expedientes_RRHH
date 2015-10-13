@@ -543,8 +543,8 @@ public class manejadorMovimientosEmp implements Serializable {
             this.setAntiguoCargo(emp.getCargoFuncional());
 
             //Llenado de Campos para edición
-            this.setNombreEmp(movEmp.getIdEmpleado().getNombreEmpleado());
-            this.setDirNacinal(movEmp.getDepIdDependencia().getIdDirNac().getIdDirNac());
+//            this.setNombreEmp(movEmp.getIdEmpleado().getNombreEmpleado());
+            this.setDirNacinal(movEmp.getIdDependencia().getIdDirNac().getIdDirNac());
             this.setDependencia(movEmp.getIdDependencia().getIdDependencia());
             this.setNuevoCargo(movEmp.getNuevoCargoMov());
             this.setFechaTralado(movEmp.getFechaMov());
@@ -555,12 +555,15 @@ public class manejadorMovimientosEmp implements Serializable {
             //Solo existen 3 tipos de movimeintos
             switch (m.getIdTipoMov()) {
                 case 1: // TRASLADO
+                    RequestContext.getCurrentInstance().update("panelTrasladoEditar");
                     RequestContext.getCurrentInstance().execute("PF('trasladoEditar').show()");
                     break;
                 case 2: // ASCENSO
+                    RequestContext.getCurrentInstance().update("panelAscensoEditar");
                     RequestContext.getCurrentInstance().execute("PF('ascensoEditar').show()");
                     break;
                 case 3: // TRASLADO TEMPORAL
+                    RequestContext.getCurrentInstance().update("panelTemEditar");
                     RequestContext.getCurrentInstance().execute("PF('temEditar').show()");
                     break;
 

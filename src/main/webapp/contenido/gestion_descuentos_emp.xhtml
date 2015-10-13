@@ -90,8 +90,8 @@
 
         <p:confirmDialog  message="Desea Eliminar Descuento de Empleado" header="Confirmación"  closable="false" severity="info" widgetVar="confirmation">
             <h:form prependId="false" class="form-horizontal">
-                <h:commandLink value="Aceptar" actionListener="#{manejadorDescuentosEmp.eliminarDescuento()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true" />
-                <h:commandLink value="Cancelar" actionListener="#{manejadorDescuentosEmp.cancelarEditar()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true"/>
+                <h:commandLink value="Aceptar" actionListener="#{manejadorDescuentosEmp.eliminarDescuento()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info"  immediate="true"/>
+                <h:commandLink value="Cancelar" actionListener="#{manejadorDescuentosEmp.cancelar()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true"/>
             </h:form>
         </p:confirmDialog>
 

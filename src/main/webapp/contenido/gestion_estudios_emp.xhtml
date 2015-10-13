@@ -299,21 +299,27 @@
 
         <p:confirmDialog  message="Desea Eliminar Formación de Empleado" header="Confirmación"  closable="false" severity="info" widgetVar="confirmation1">
             <h:form prependId="false" class="form-horizontal">
-                <h:commandLink value="Aceptar" actionListener="#{manejadorEstudiosEmpleados.eliminarEstudio()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true" />
+                <h:commandLink value="Aceptar" actionListener="#{manejadorEstudiosEmpleados.eliminarEstudio()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" >
+                    <f:ajax rendered="tabla1" execute="confirmation1" />
+                </h:commandLink>
                 <h:commandLink value="Cancelar" actionListener="#{manejadorEstudiosEmpleados.cancelar()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true"/>
             </h:form>
         </p:confirmDialog>
 
         <p:confirmDialog  message="Desea Eliminar Formación de Empleado" header="Confirmación"  closable="false" severity="info" widgetVar="confirmation2">
             <h:form prependId="false" class="form-horizontal">
-                <h:commandLink value="Aceptar" actionListener="#{manejadorEstudiosEmpleados.eliminarEstudio()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true" />
+                <h:commandLink value="Aceptar" actionListener="#{manejadorEstudiosEmpleados.eliminarEstudio()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true" >
+                    <f:ajax rendered="tabla2" execute="confirmation2" />
+                </h:commandLink>
                 <h:commandLink value="Cancelar" actionListener="#{manejadorEstudiosEmpleados.cancelar()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true"/>
             </h:form>
         </p:confirmDialog>
 
         <p:confirmDialog  message="Desea Eliminar Idiomas de Empleado" header="Confirmación"  closable="false" severity="info" widgetVar="confirmation3">
             <h:form prependId="false" class="form-horizontal">
-                <h:commandLink value="Aceptar" actionListener="#{manejadorEstudiosEmpleados.eliminarIdioma()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true" />
+                <h:commandLink value="Aceptar" actionListener="#{manejadorEstudiosEmpleados.eliminarIdioma()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true" >
+                     <f:ajax rendered="tabla3" execute="confirmation3" />
+                </h:commandLink>
                 <h:commandLink value="Cancelar" actionListener="#{manejadorEstudiosEmpleados.cancelar()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true"/>
             </h:form>
         </p:confirmDialog>

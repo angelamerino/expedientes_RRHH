@@ -635,10 +635,10 @@ public class manejadorEstudiosEmpleados implements Serializable {
                 idiomasCaracteristicasPK = new IdiomasCaracteristicasPK();
                 idiomasCaracteristicas = new IdiomasCaracteristicas();
                 imagenDocumento = new ImgDoc();
-                
+
                 this.setIdCaracteristicaIdioma(0);
                 this.setInstIdioma(null);
-                
+
                 RequestContext.getCurrentInstance().execute("PF('carac').hide()");
                 RequestContext.getCurrentInstance().update("tabla4");
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Ingresado", "Registro Ingresado");
@@ -663,6 +663,10 @@ public class manejadorEstudiosEmpleados implements Serializable {
             getEmpleadosFacade().edit(emp);
             getEstudiosEmpFacade().remove(estudiosEmp);
             estudiosEmp = new EstudiosEmp();
+            RequestContext.getCurrentInstance().update("tabla1");
+            RequestContext.getCurrentInstance().update("tabla2");
+            RequestContext.getCurrentInstance().execute("PF('confirmation1').hide()");
+            RequestContext.getCurrentInstance().execute("PF('confirmation2').hide()");
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Eliminado", "Registro Eliminado");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return null;
@@ -713,6 +717,8 @@ public class manejadorEstudiosEmpleados implements Serializable {
             empIdioma.setIdiomasList(IdiomasIngresados);
             getEmpleadosFacade().edit(empIdioma);
             idiomas = new Idiomas();
+            RequestContext.getCurrentInstance().execute("PF('confirmation3').hide()");
+            RequestContext.getCurrentInstance().update("tabla3");
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Eliminado", "Registro Eliminado");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return null;

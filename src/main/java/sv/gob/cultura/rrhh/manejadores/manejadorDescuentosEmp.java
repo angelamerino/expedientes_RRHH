@@ -14,6 +14,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import org.primefaces.context.RequestContext;
 import sv.gob.cultura.rrhh.entidades.Dependencias;
 import sv.gob.cultura.rrhh.entidades.DescuentosEmp;
 import sv.gob.cultura.rrhh.entidades.DirNacional;

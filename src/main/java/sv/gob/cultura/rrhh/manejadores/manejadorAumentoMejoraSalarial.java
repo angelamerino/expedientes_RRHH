@@ -74,6 +74,7 @@ public class manejadorAumentoMejoraSalarial implements Serializable {
     private double salarioNuevoEditar;              //Salario Nuevo en Mejora salarial Editar
     private double salarioActual;                   //Salario Actual en Mejora salarial
     private double salarioNuevo;                    //Nuevo salario en Mejora salarial
+    private double salMin;
 
 //********************** GET DE ENTERPRICE JAVA BEAN ***************************
 //******************************************************************************
@@ -247,6 +248,14 @@ public class manejadorAumentoMejoraSalarial implements Serializable {
         this.NR = NR;
     }
 
+    public double getSalMin() {
+        return salMin;
+    }
+
+    public void setSalMin(double salMin) {
+        this.salMin = salMin;
+    }
+
 // **************** LISTA DE ELEMENTOS EN TABLAS *******************************
 //******************************************************************************
     public List<DirNacional> todosDirNacional() {
@@ -280,195 +289,206 @@ public class manejadorAumentoMejoraSalarial implements Serializable {
 //******************************************************************************
 
     public String guardarMejoraSalarial() {
-        if (this.getEmpleadoSelecionado() == 0) { //verifica si se seleccino un empleado
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Seleccione un Empleado", "Seleccione un Empleado"));
-            return null;
-        } else {
-
-            //Guarda los datos del formulario Setea los valores que no se guardan directamente
-            historialSalarial.setIdEmpleado(new Empleados(this.getEmpleadoSelecionado()));
-            historialSalarial.setSalarioActualHsalarial(this.getSalarioActual());
-            historialSalarial.setNuevoSalarioHsalarial(this.getSalarioNuevo());
-            historialSalarial.setPorcentajeHsalarial(this.getPorcentaje());
-            historialSalarial.setTipoHistorial(1); //TIPO 1 = MEJORA SALARIAL
-            historialSalarial.setUserCreaHsal(1);
-            historialSalarial.setFechaCreaHsal(new Date());
-
-            getHistorialSalarialFacade().create(historialSalarial);
-
-            Empleados emp = getEmpleadosFacade().find(this.getEmpleadoSelecionado());
-            emp.setSalarioEmp(this.getSalarioNuevo());
-            emp.setUserModEmp(1);
-            emp.setFechaModEmp(new Date());
-            getEmpleadosFacade().edit(emp);
-
-            //VERIFICACION SI EXISTE OTRA MEJORA
-            List<HistorialSalarial> histo = getHistorialSalarialFacade().buscarHistorialEmpleado(this.getEmpleadoSelecionado());
-            if (histo == null) {
-                historialSalarial.setVerificacionHistorial(1);  //UNICO RESULTADO
-                getHistorialSalarialFacade().edit(historialSalarial);
+        try {
+            if (this.getEmpleadoSelecionado() == 0) { //verifica si se seleccino un empleado
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Seleccione un Empleado", "Seleccione un Empleado"));
+                return null;
             } else {
+
+                //Guarda los datos del formulario Setea los valores que no se guardan directamente
+                historialSalarial.setIdEmpleado(new Empleados(this.getEmpleadoSelecionado()));
+                historialSalarial.setSalarioActualHsalarial(this.getSalarioActual());
+                historialSalarial.setNuevoSalarioHsalarial(this.getSalarioNuevo());
+                historialSalarial.setPorcentajeHsalarial(this.getPorcentaje());
+                historialSalarial.setTipoHistorial(1); //TIPO 1 = MEJORA SALARIAL
+                historialSalarial.setUserCreaHsal(1);
+                historialSalarial.setFechaCreaHsal(new Date());
+
+                getHistorialSalarialFacade().create(historialSalarial);
+
+                Empleados emp = getEmpleadosFacade().find(this.getEmpleadoSelecionado());
+                emp.setSalarioEmp(this.getSalarioNuevo());
+                emp.setUserModEmp(1);
+                emp.setFechaModEmp(new Date());
+                getEmpleadosFacade().edit(emp);
+
+                //VERIFICACION SI EXISTE OTRA MEJORA
+                List<HistorialSalarial> histo = getHistorialSalarialFacade().buscarHistorialEmpleado(this.getEmpleadoSelecionado());
+                if (histo == null) {
+                    historialSalarial.setVerificacionHistorial(1);  //UNICO RESULTADO
+                    getHistorialSalarialFacade().edit(historialSalarial);
+                } else {
                 //HAY MAS REGISTROS PARA EL EMPLEADO
 
-                //VERIFICACION = 2 NO SE PODRAN ELIMINAR
-                Iterator<HistorialSalarial> itearador = histo.iterator();
-                while (itearador.hasNext()) {
-                    HistorialSalarial historial = itearador.next();
-                    historial.setVerificacionHistorial(2);
-                    getHistorialSalarialFacade().edit(historial);
+                    //VERIFICACION = 2 NO SE PODRAN ELIMINAR
+                    Iterator<HistorialSalarial> itearador = histo.iterator();
+                    while (itearador.hasNext()) {
+                        HistorialSalarial historial = itearador.next();
+                        historial.setVerificacionHistorial(2);
+                        getHistorialSalarialFacade().edit(historial);
+                    }
+
+                    historialSalarial.setVerificacionHistorial(1); // VERIFICACION PARA ELIMINAR AL ULTIMO
+                    getHistorialSalarialFacade().edit(historialSalarial);
                 }
 
-                historialSalarial.setVerificacionHistorial(1); // VERIFICACION PARA ELIMINAR AL ULTIMO
-                getHistorialSalarialFacade().edit(historialSalarial);
+                historialSalarial = new HistorialSalarial();
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Ingresado", "Registro Ingresado");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+                return "gestion_mejora_salarial";
             }
-
-            historialSalarial = new HistorialSalarial();
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Ingresado", "Registro Ingresado");
-            FacesContext.getCurrentInstance().addMessage(null, message);
+        } catch (Exception e) {
             return "gestion_mejora_salarial";
         }
     }
 
     public String editarMejoraSalarial() {
+        try {
+            //Se utiliza salario actual para editar y no alterar mejora de sueldo ya ingresado
+            //Guarda los datos del formulario Setea los valores que no se guardan directamente
+            //historialSalarial.setIdEmpleado(new Empleados(this.getEmpleadoSelecionado()));
+            historialSalarial.setSalarioActualHsalarial(this.getSalarioAnteriorEditar());
+            historialSalarial.setNuevoSalarioHsalarial(this.getSalarioNuevoEditar());
+            historialSalarial.setPorcentajeHsalarial(this.getPorcentajeEditar());
+            historialSalarial.setUserModHsal(1);
+            historialSalarial.setFechaModHsal(new Date());
 
-        //Se utiliza salario actual para editar y no alterar mejora de sueldo ya ingresado
-        //Guarda los datos del formulario Setea los valores que no se guardan directamente
-        //historialSalarial.setIdEmpleado(new Empleados(this.getEmpleadoSelecionado()));
-        historialSalarial.setSalarioActualHsalarial(this.getSalarioAnteriorEditar());
-        historialSalarial.setNuevoSalarioHsalarial(this.getSalarioNuevoEditar());
-        historialSalarial.setPorcentajeHsalarial(this.getPorcentajeEditar());
-        historialSalarial.setUserModHsal(1);
-        historialSalarial.setFechaModHsal(new Date());
+            getHistorialSalarialFacade().edit(historialSalarial);
+            historialSalarial = new HistorialSalarial();
 
-        getHistorialSalarialFacade().edit(historialSalarial);
-        historialSalarial = new HistorialSalarial();
+            Empleados emp = getEmpleadosFacade().find(this.getEmpleadoSelecionado());
+            emp.setSalarioEmp(this.getSalarioNuevoEditar());
+            emp.setUserModEmp(1);
+            emp.setFechaModEmp(new Date());
+            getEmpleadosFacade().edit(emp);
 
-        Empleados emp = getEmpleadosFacade().find(this.getEmpleadoSelecionado());
-        emp.setSalarioEmp(this.getSalarioNuevoEditar());
-        emp.setUserModEmp(1);
-        emp.setFechaModEmp(new Date());
-        getEmpleadosFacade().edit(emp);
-
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Modificado", "Registro Modificado");
-        FacesContext.getCurrentInstance().addMessage(null, message);
-        return "gestion_mejora_salarial";
-
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Modificado", "Registro Modificado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return "gestion_mejora_salarial";
+        } catch (Exception e) {
+            return "gestion_mejora_salarial";
+        }
     }
 
     public String guardarAumentoSalarial() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        //Rango de sueldo min y max
-        double min = historialSalarial.getSalMin();
-        System.out.println(min);
-        double max = historialSalarial.getSalMax();
-        System.out.println(max);
-
-        //Guarda los datos del formulario Setea los valores que no se guardan directamente
-        historialSalarial.setPorcentajeHsalarial(this.getPorcentajeAumento());
-        historialSalarial.setTipoHistorial(2); //TIPO 1 = AUMENTO SALARIAL
-        historialSalarial.setUserCreaHsal(1);
-        historialSalarial.setFechaCreaHsal(new Date());
-
-        //Validacion para que se pueda eliminar unicamente el ultimo
-        List<HistorialSalarial> anterioresAumentos = todosHistorialSalarialAumento();
-        if (anterioresAumentos == null) {
-            historialSalarial.setVerificacionHistorial(3); //Aumento 3 = se puede eliminar
-        } else {
-            //VERIFICACION = 4 NO SE PODRAN ELIMINAR
-            Iterator<HistorialSalarial> itearador = anterioresAumentos.iterator();
-            while (itearador.hasNext()) {
-                HistorialSalarial historial = itearador.next();
-                historial.setVerificacionHistorial(4);
-                getHistorialSalarialFacade().edit(historial);
-            }
-
-            historialSalarial.setVerificacionHistorial(3); // VERIFICACION PARA ELIMINAR AL ULTIMO
-        }
-
-        //Para validar fechas y no se haga aumento el mismo dia
-        //Se podra aumentar solo si la fecha de aplicacion del nuevo aumento es posterior a la
-        // a la fecha del nuevo ingreso
-        String fechastring = sdf.format(historialSalarial.getFechaCreaHsal());
-        Date fechaActualHistorial = new Date();
-
         try {
-            fechaActualHistorial = sdf.parse(fechastring);
-        } catch (ParseException ex) {
-        }
+            historialSalarial.setSalMin(this.getSalMin());
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            //Rango de sueldo min y max
+            double min = historialSalarial.getSalMin();
+            System.out.println(min);
+            double max = historialSalarial.getSalMax();
+            System.out.println(max);
 
-        getHistorialSalarialFacade().create(historialSalarial);
+            //Guarda los datos del formulario Setea los valores que no se guardan directamente
+            historialSalarial.setPorcentajeHsalarial(this.getPorcentajeAumento());
+            historialSalarial.setTipoHistorial(2); //TIPO 1 = AUMENTO SALARIAL
+            historialSalarial.setUserCreaHsal(1);
+            historialSalarial.setFechaCreaHsal(new Date());
 
-        List<Empleados> empAumento = getEmpleadosFacade().findAll();
-        Iterator<Empleados> iteradorEmpleados = empAumento.iterator();
-
-        while (iteradorEmpleados.hasNext()) {
-            boolean verificaFecha;
-            Empleados emp = iteradorEmpleados.next();
-            Double salarioEmp = emp.getSalarioEmp();
-            Date fechaUltimoAu = emp.getFechaUltimoAumento();
-            Date fechaUltimo = new Date();
-
-            if (fechaUltimoAu == null) {
-                verificaFecha = true;
+            //Validacion para que se pueda eliminar unicamente el ultimo
+            List<HistorialSalarial> anterioresAumentos = todosHistorialSalarialAumento();
+            if (anterioresAumentos == null) {
+                historialSalarial.setVerificacionHistorial(3); //Aumento 3 = se puede eliminar
             } else {
-
-                String fechastring2 = sdf.format(fechaUltimoAu);
-
-                try {
-                    fechaUltimo = sdf.parse(fechastring2);
-                } catch (ParseException ex) {
+                //VERIFICACION = 4 NO SE PODRAN ELIMINAR
+                Iterator<HistorialSalarial> itearador = anterioresAumentos.iterator();
+                while (itearador.hasNext()) {
+                    HistorialSalarial historial = itearador.next();
+                    historial.setVerificacionHistorial(4);
+                    getHistorialSalarialFacade().edit(historial);
                 }
 
-                if (fechaUltimo.before(fechaActualHistorial)) {
-                    //"La Fecha 1 es menor ";
+                historialSalarial.setVerificacionHistorial(3); // VERIFICACION PARA ELIMINAR AL ULTIMO
+            }
+
+            //Para validar fechas y no se haga aumento el mismo dia
+            //Se podra aumentar solo si la fecha de aplicacion del nuevo aumento es posterior a la
+            // a la fecha del nuevo ingreso
+            String fechastring = sdf.format(historialSalarial.getFechaCreaHsal());
+            Date fechaActualHistorial = new Date();
+
+            try {
+                fechaActualHistorial = sdf.parse(fechastring);
+            } catch (ParseException ex) {
+            }
+
+            getHistorialSalarialFacade().create(historialSalarial);
+
+            List<Empleados> empAumento = getEmpleadosFacade().findAll();
+            Iterator<Empleados> iteradorEmpleados = empAumento.iterator();
+
+            while (iteradorEmpleados.hasNext()) {
+                boolean verificaFecha;
+                Empleados emp = iteradorEmpleados.next();
+                Double salarioEmp = emp.getSalarioEmp();
+                Date fechaUltimoAu = emp.getFechaUltimoAumento();
+                Date fechaUltimo = new Date();
+
+                if (fechaUltimoAu == null) {
                     verificaFecha = true;
                 } else {
-                    if (fechaActualHistorial.before(fechaUltimo)) {
-                        //"La Fecha 1 es Mayor ";
-                        verificaFecha = false;
+
+                    String fechastring2 = sdf.format(fechaUltimoAu);
+
+                    try {
+                        fechaUltimo = sdf.parse(fechastring2);
+                    } catch (ParseException ex) {
+                    }
+
+                    if (fechaUltimo.before(fechaActualHistorial)) {
+                        //"La Fecha 1 es menor ";
+                        verificaFecha = true;
                     } else {
-                        //"Las Fechas Son iguales ";
-                        verificaFecha = false;
+                        if (fechaActualHistorial.before(fechaUltimo)) {
+                            //"La Fecha 1 es Mayor ";
+                            verificaFecha = false;
+                        } else {
+                            //"Las Fechas Son iguales ";
+                            verificaFecha = false;
+                        }
                     }
                 }
+
+                if (salarioEmp >= min && salarioEmp <= max && verificaFecha) {
+                    Double porAum = this.getPorcentajeAumento() / 100.00;           //System.out.println(porAum);
+                    Double salNue = salarioEmp * porAum;                            //System.out.println(salNue);
+                    Double salTot = salNue + salarioEmp;                            //System.out.println(salTot);
+                    Double realSa = Math.rint(salTot * 100) / 100;                  //System.out.println(realSa);    
+
+                    emp.setSalarioHistorialAumento(emp.getSalarioEmp());
+                    emp.setSalarioEmp(realSa);
+                    emp.setIdHistorialSalarial(historialSalarial.getIdHsalarial());
+                    emp.setFechaUltimoAumento(new Date());
+                    getEmpleadosFacade().edit(emp);
+                }
+
             }
 
-            if (salarioEmp >= min && salarioEmp <= max && verificaFecha) {
-                Double porAum = this.getPorcentajeAumento() / 100.00;           //System.out.println(porAum);
-                Double salNue = salarioEmp * porAum;                            //System.out.println(salNue);
-                Double salTot = salNue + salarioEmp;                            //System.out.println(salTot);
-                Double realSa = Math.rint(salTot * 100) / 100;                  //System.out.println(realSa);    
+            historialSalarial = new HistorialSalarial();
 
-                emp.setSalarioHistorialAumento(emp.getSalarioEmp());
-                emp.setSalarioEmp(realSa);
-                emp.setIdHistorialSalarial(historialSalarial.getIdHsalarial());
-                emp.setFechaUltimoAumento(new Date());
-                getEmpleadosFacade().edit(emp);
-            }
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro ingresado", "Registro ingresado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
 
+            return "gestion_aumento_salarial";
+        } catch (Exception e) {
+            return "gestion_aumento_salarial";
         }
-
-        historialSalarial = new HistorialSalarial();
-        
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro ingresado", "Registro ingresado");
-        FacesContext.getCurrentInstance().addMessage(null, message);
-        
-        return "gestion_aumento_salarial";
     }
 
     public String editarAumentoSalarial() {
+        try {
+            //Regresa a sueldo anterior descontanto el aumento en % que se habia realizado
+            //Con el fin de que no se haga un nuevo aumento sobre el aumento ingresado con anteriodidad
+            List<Empleados> empAumentoRegresar = getEmpleadosFacade().findAll();
+            Iterator<Empleados> iteradorEmpleadosRegresar = empAumentoRegresar.iterator();
+            while (iteradorEmpleadosRegresar.hasNext()) {
+                Empleados empRegreso = iteradorEmpleadosRegresar.next();
+                Integer idHistorial = empRegreso.getIdHistorialSalarial();
 
-        //Regresa a sueldo anterior descontanto el aumento en % que se habia realizado
-        //Con el fin de que no se haga un nuevo aumento sobre el aumento ingresado con anteriodidad
-        List<Empleados> empAumentoRegresar = getEmpleadosFacade().findAll();
-        Iterator<Empleados> iteradorEmpleadosRegresar = empAumentoRegresar.iterator();
-        while (iteradorEmpleadosRegresar.hasNext()) {
-            Empleados empRegreso = iteradorEmpleadosRegresar.next();
-            Integer idHistorial = empRegreso.getIdHistorialSalarial();
+                Double salarioEmp = empRegreso.getSalarioHistorialAumento();                        //System.out.println(salarioEmp);
 
-            Double salarioEmp = empRegreso.getSalarioHistorialAumento();                        //System.out.println(salarioEmp);
-
-            if (Objects.equals(historialSalarial.getIdHsalarial(), idHistorial)) {
+                if (Objects.equals(historialSalarial.getIdHsalarial(), idHistorial)) {
 //                Double porAum = this.getPorcentajeAumentoEditar() / 100.00;             //System.out.println(porAum);
 //                Double salNue = salarioEmp * porAum;                            //System.out.println(salNue);
 //                Double salTot = salarioEmp - salNue;                            //System.out.println(salTot);
@@ -476,39 +496,42 @@ public class manejadorAumentoMejoraSalarial implements Serializable {
 //                empRegreso.setSalarioEmp(realSa);
 //                empRegreso.setUserModEmp(1); //USUARIO MODIFICA
 //                empRegreso.setFechaModEmp(new Date());
-                empRegreso.setSalarioEmp(salarioEmp);
-                getEmpleadosFacade().edit(empRegreso);
+                    empRegreso.setSalarioEmp(salarioEmp);
+                    getEmpleadosFacade().edit(empRegreso);
+                }
             }
-        }
 
-        //Guarda los datos del formulario Setea los valores que no se guardan directamente
-        historialSalarial.setPorcentajeHsalarial(this.getPorcentajeAumento());
-        historialSalarial.setUserModHsal(1);
-        historialSalarial.setFechaModHsal(new Date());
+            //Guarda los datos del formulario Setea los valores que no se guardan directamente
+            historialSalarial.setPorcentajeHsalarial(this.getPorcentajeAumento());
+            historialSalarial.setUserModHsal(1);
+            historialSalarial.setFechaModHsal(new Date());
 
-        //Reingresa nuevos salarios a todos los empleados con el nuevo porcentaje editado
-        List<Empleados> empAumento = getEmpleadosFacade().findAll();
-        Iterator<Empleados> iteradorEmpleados = empAumento.iterator();
-        while (iteradorEmpleados.hasNext()) {
-            Empleados emp = iteradorEmpleados.next();
-            Integer idHistorial = emp.getIdHistorialSalarial();
-            if (Objects.equals(historialSalarial.getIdHsalarial(), idHistorial)) {
-                Double salarioEmp = emp.getSalarioEmp();                        //System.out.println(salarioEmp);
-                Double porAum = this.getPorcentajeAumento() / 100.00;           //System.out.println(porAum);
-                Double salNue = salarioEmp * porAum;                            //System.out.println(salNue);
-                Double salTot = salNue + salarioEmp;                            //System.out.println(salTot);
-                Double realSa = Math.rint(salTot * 100) / 100;                  //System.out.println(realSa);    
-                emp.setSalarioHistorialAumento(emp.getSalarioEmp());
-                emp.setSalarioEmp(realSa);
-                getEmpleadosFacade().edit(emp);
+            //Reingresa nuevos salarios a todos los empleados con el nuevo porcentaje editado
+            List<Empleados> empAumento = getEmpleadosFacade().findAll();
+            Iterator<Empleados> iteradorEmpleados = empAumento.iterator();
+            while (iteradorEmpleados.hasNext()) {
+                Empleados emp = iteradorEmpleados.next();
+                Integer idHistorial = emp.getIdHistorialSalarial();
+                if (Objects.equals(historialSalarial.getIdHsalarial(), idHistorial)) {
+                    Double salarioEmp = emp.getSalarioEmp();                        //System.out.println(salarioEmp);
+                    Double porAum = this.getPorcentajeAumento() / 100.00;           //System.out.println(porAum);
+                    Double salNue = salarioEmp * porAum;                            //System.out.println(salNue);
+                    Double salTot = salNue + salarioEmp;                            //System.out.println(salTot);
+                    Double realSa = Math.rint(salTot * 100) / 100;                  //System.out.println(realSa);    
+                    emp.setSalarioHistorialAumento(emp.getSalarioEmp());
+                    emp.setSalarioEmp(realSa);
+                    getEmpleadosFacade().edit(emp);
+                }
             }
-        }
 
-        getHistorialSalarialFacade().edit(historialSalarial);
-        historialSalarial = new HistorialSalarial();
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Modificado", "Registro Modificado");
-        FacesContext.getCurrentInstance().addMessage(null, message);
-        return "gestion_aumento_salarial";
+            getHistorialSalarialFacade().edit(historialSalarial);
+            historialSalarial = new HistorialSalarial();
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Modificado", "Registro Modificado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return "gestion_aumento_salarial";
+        } catch (Exception e) {
+            return "gestion_aumento_salarial";
+        }
     }
 
     public void buscarNR(ActionEvent event) {
@@ -548,46 +571,50 @@ public class manejadorAumentoMejoraSalarial implements Serializable {
     public String nuevoAumento() {
         return "reg_aumento_salarial";
     }
-    
-    public void mejoraSeleccionada(HistorialSalarial mejoraSal){
+
+    public void mejoraSeleccionada(HistorialSalarial mejoraSal) {
         historialSalarial = mejoraSal;
     }
 
     public String eliminarMejora() {
-        Integer verifacarELiminar = historialSalarial.getVerificacionHistorial();
-        if (verifacarELiminar == 1) {
+        try {
+            Integer verifacarELiminar = historialSalarial.getVerificacionHistorial();
+            if (verifacarELiminar == 1) {
 
-            //ELIMINA HISTORIAL
-            getHistorialSalarialFacade().remove(historialSalarial);
+                //ELIMINA HISTORIAL
+                getHistorialSalarialFacade().remove(historialSalarial);
 
-            //CAMBIA LA VERIFICACION DEL ULTIMO REGISSTRO QUE QUEDO DE ESE EMPLEADO
-            List<HistorialSalarial> histo = getHistorialSalarialFacade().buscarHistorialEmpleado(historialSalarial.getIdEmpleado().getIdEmpleado());
-            int ultimo = histo.size();
+                //CAMBIA LA VERIFICACION DEL ULTIMO REGISSTRO QUE QUEDO DE ESE EMPLEADO
+                List<HistorialSalarial> histo = getHistorialSalarialFacade().buscarHistorialEmpleado(historialSalarial.getIdEmpleado().getIdEmpleado());
+                int ultimo = histo.size();
 
-            if (ultimo > 0) {
-                HistorialSalarial ultimoHistorial = histo.get(ultimo - 1);
-                ultimoHistorial.setVerificacionHistorial(1); // SE PODRA ELINAR EL ULTIMO
-                getHistorialSalarialFacade().edit(ultimoHistorial);
+                if (ultimo > 0) {
+                    HistorialSalarial ultimoHistorial = histo.get(ultimo - 1);
+                    ultimoHistorial.setVerificacionHistorial(1); // SE PODRA ELINAR EL ULTIMO
+                    getHistorialSalarialFacade().edit(ultimoHistorial);
+                }
+
+                //REGRESA ESTADO ANTERIOR
+                Empleados emp = getEmpleadosFacade().find(historialSalarial.getIdEmpleado().getIdEmpleado());
+                emp.setSalarioEmp(historialSalarial.getSalarioActualHsalarial());
+                emp.setUserModEmp(1);
+                emp.setFechaModEmp(new Date());
+                getEmpleadosFacade().edit(emp);
+
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Eliminado", "Registro Eliminado");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+
+            } else {
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "No se puele eliminar, porque existe un registro mas reciente", "No se puele eliminar, porque existe un registro mas reciente");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+
+                System.out.println("NO SE PUEDE ELIMAR PORQUE HAY REGISTROS POSTERIORES");
             }
-
-            //REGRESA ESTADO ANTERIOR
-            Empleados emp = getEmpleadosFacade().find(historialSalarial.getIdEmpleado().getIdEmpleado());
-            emp.setSalarioEmp(historialSalarial.getSalarioActualHsalarial());
-            emp.setUserModEmp(1);
-            emp.setFechaModEmp(new Date());
-            getEmpleadosFacade().edit(emp);
-
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Eliminado", "Registro Eliminado");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-
-        } else {
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "No se puele eliminar, porque existe un registro mas reciente", "No se puele eliminar, porque existe un registro mas reciente");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-
-            System.out.println("NO SE PUEDE ELIMAR PORQUE HAY REGISTROS POSTERIORES");
+            historialSalarial = new HistorialSalarial();
+            return "gestion_mejora_salarial";
+        } catch (Exception e) {
+            return "gestion_mejora_salarial";
         }
-        historialSalarial = new HistorialSalarial();
-        return "gestion_mejora_salarial";
     }
 
     public void eliminar(HistorialSalarial mejoraSal) {
@@ -595,48 +622,52 @@ public class manejadorAumentoMejoraSalarial implements Serializable {
     }
 
     public String eliminarAumento() {
-        Integer verifacarELiminar = historialSalarial.getVerificacionHistorial();
+        try {
+            Integer verifacarELiminar = historialSalarial.getVerificacionHistorial();
 
-        if (verifacarELiminar == 3) {
+            if (verifacarELiminar == 3) {
 
-            //ELIMINA HISTORIAL
-            getHistorialSalarialFacade().remove(historialSalarial);
+                //ELIMINA HISTORIAL
+                getHistorialSalarialFacade().remove(historialSalarial);
 
-            //CAMBIA LA VERIFICACION DEL ULTIMO REGISSTRO QUE QUEDO DE ESE EMPLEADO
-            List<HistorialSalarial> histo = todosHistorialSalarialAumento();
-            int ultimo = histo.size();
+                //CAMBIA LA VERIFICACION DEL ULTIMO REGISSTRO QUE QUEDO DE ESE EMPLEADO
+                List<HistorialSalarial> histo = todosHistorialSalarialAumento();
+                int ultimo = histo.size();
 
-            if (ultimo > 0) {
-                HistorialSalarial ultimoHistorial = histo.get(ultimo - 1);
-                ultimoHistorial.setVerificacionHistorial(3); // SE PODRA ELINAR EL ULTIMO
-                getHistorialSalarialFacade().edit(ultimoHistorial);
-            }
-
-            //REGRESA ESTADO ANTERIOR
-            List<Empleados> empAumentoRegresar = getEmpleadosFacade().findAll();
-            Iterator<Empleados> iteradorEmpleadosRegresar = empAumentoRegresar.iterator();
-            while (iteradorEmpleadosRegresar.hasNext()) {
-                Empleados empRegreso = iteradorEmpleadosRegresar.next();
-                Integer idHistorial = empRegreso.getIdHistorialSalarial();
-                Date fechaUltimo = historialSalarial.getFechaCreaHsal();
-                Double salarioEmp = empRegreso.getSalarioHistorialAumento();
-
-                if (Objects.equals(historialSalarial.getIdHsalarial(), idHistorial)) {
-                    empRegreso.setSalarioEmp(salarioEmp);
-                    empRegreso.setFechaUltimoAumento(fechaUltimo);
-                    getEmpleadosFacade().edit(empRegreso);
+                if (ultimo > 0) {
+                    HistorialSalarial ultimoHistorial = histo.get(ultimo - 1);
+                    ultimoHistorial.setVerificacionHistorial(3); // SE PODRA ELINAR EL ULTIMO
+                    getHistorialSalarialFacade().edit(ultimoHistorial);
                 }
+
+                //REGRESA ESTADO ANTERIOR
+                List<Empleados> empAumentoRegresar = getEmpleadosFacade().findAll();
+                Iterator<Empleados> iteradorEmpleadosRegresar = empAumentoRegresar.iterator();
+                while (iteradorEmpleadosRegresar.hasNext()) {
+                    Empleados empRegreso = iteradorEmpleadosRegresar.next();
+                    Integer idHistorial = empRegreso.getIdHistorialSalarial();
+                    Date fechaUltimo = historialSalarial.getFechaCreaHsal();
+                    Double salarioEmp = empRegreso.getSalarioHistorialAumento();
+
+                    if (Objects.equals(historialSalarial.getIdHsalarial(), idHistorial)) {
+                        empRegreso.setSalarioEmp(salarioEmp);
+                        empRegreso.setFechaUltimoAumento(fechaUltimo);
+                        getEmpleadosFacade().edit(empRegreso);
+                    }
+                }
+
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Eliminado", "Registro Eliminado");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+
+            } else {
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "No se puele eliminar, porque exíste un registro más reciente", "No se puele eliminar, porque exíste un registro más reciente");
+                FacesContext.getCurrentInstance().addMessage(null, message);
             }
-
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Eliminado", "Registro Eliminado");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-
-        } else {
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "No se puele eliminar, porque exíste un registro más reciente", "No se puele eliminar, porque exíste un registro más reciente");
-            FacesContext.getCurrentInstance().addMessage(null, message);
+            historialSalarial = new HistorialSalarial();
+            return "gestion_aumento_salarial";
+        } catch (Exception e) {
+            return "gestion_aumento_salarial";
         }
-        historialSalarial = new HistorialSalarial();
-        return "gestion_aumento_salarial";
     }
 
     public manejadorAumentoMejoraSalarial() {

@@ -234,6 +234,8 @@ public class manejadorContactosEmergencia implements Serializable {
         try {
             getContactoEmergenciaEmpFacade().remove(contactoEmergenciaEmp);
             contactoEmergenciaEmp = new ContactoEmergenciaEmp();
+            RequestContext.getCurrentInstance().execute("PF('confirmation').hide()");
+            RequestContext.getCurrentInstance().update("tabla");
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Eliminado", "Registro Eliminado");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return null;
