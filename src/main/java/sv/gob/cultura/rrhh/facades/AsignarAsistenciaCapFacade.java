@@ -34,6 +34,10 @@ public class AsignarAsistenciaCapFacade extends AbstractFacade<AsignarAsistencia
         return getEntityManager().createNamedQuery("AsignarAsistenciaCap.findByidCap").setParameter("idCap", idCapacitacion).getResultList();
     }
     
+    public List<AsignarAsistenciaCap> repCapacitacionesEmp(int idEmpleado){
+        return getEntityManager().createNamedQuery("AsignarAsistenciaCap.findByidEmpleado").setParameter("idEmpleado", idEmpleado).getResultList();
+    }
+    
     public AsignarAsistenciaCap asignaidCapEmpleado(int emp){
         try {
             return (AsignarAsistenciaCap) getEntityManager().createNamedQuery("AsignarAsistenciaCap.findByidEmpleado").setParameter("idEmpleado", emp).getSingleResult();

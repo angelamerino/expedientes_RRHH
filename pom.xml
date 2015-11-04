@@ -108,43 +108,60 @@
             <groupId>org.primefaces.themes</groupId>  
             <artifactId>all-themes</artifactId>  
             <version>1.0.10</version>  
-        </dependency> 
-        
-       <dependency>
+        </dependency>        
+        <dependency>
+            <groupId>org.primefaces.extensions</groupId>
+            <artifactId>primefaces-extensions</artifactId>
+            <version>3.2.0</version>
+        </dependency>        
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>5.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>1.8.2</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-digester</groupId>
+            <artifactId>commons-digester</artifactId>
+            <version>2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+        <dependency>
             <groupId>com.lowagie</groupId>
             <artifactId>itext</artifactId>
-            <version>2.1.0</version>
-    </dependency>
+            <version>2.1.7</version>
+        </dependency>
  
-        
-          <dependency>
-        <groupId>org.apache.poi</groupId>
-        <artifactId>poi</artifactId>
-        <version>3.11</version>
-    </dependency>
-        
-    <dependency>
-        <groupId>org.apache.poi</groupId>
-        <artifactId>poi-ooxml</artifactId>
-        <version>3.9</version>
-    </dependency>
- 
-    <dependency>
-        <groupId>org.apache.xmlbeans</groupId>
-        <artifactId>xmlbeans</artifactId>
-        <version>2.6.0</version>
-    </dependency>
- 
-    <dependency>
-        <groupId>dom4j</groupId>
-        <artifactId>dom4j</artifactId>
-        <version>1.6.1</version>
-    </dependency>
-           
+        <dependency>
+            <groupId>com.keypoint</groupId>
+            <artifactId>png-encoder</artifactId>
+            <version>1.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.7</version>
+        </dependency>     
     </dependencies>
     
-     
-
     <build>
         <plugins>
             <plugin>

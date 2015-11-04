@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rep_emp_prestacion" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" uuid="2187379f-69e8-4452-b8c6-65ec66385fd8">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="id_prestacion" class="java.lang.Integer"/>
+	<parameter name="path" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+     tipo_prestacion."nombre_tipo_prestacion" AS tipo_prestacion_nombre_tipo_prestacion,
+     prestacion."costo_prestacion" AS prestacion_costo_prestacion,
+     emp_prestacion."id_prestacion" AS emp_prestacion_id_prestacion,
+     empleados."nombre_empleado" AS empleados_nombre_empleado,
+     dependencias."nombre_dependencia" AS dependencias_nombre_dependencia,
+     dir_nacional."nombre_dir_nac" AS dir_nacional_nombre_dir_nac
+FROM
+     "public"."tipo_prestacion" tipo_prestacion INNER JOIN "public"."prestacion" prestacion ON tipo_prestacion."id_tipo_prestacion" = prestacion."id_tipo_prestacion"
+     INNER JOIN "public"."emp_prestacion" emp_prestacion ON prestacion."id_prestacion" = emp_prestacion."id_prestacion"
+     INNER JOIN "public"."empleados" empleados ON emp_prestacion."id_empleado" = empleados."id_empleado"
+     INNER JOIN "public"."dependencias" dependencias ON empleados."id_dependencia_n" = dependencias."id_dependencia"
+     AND dependencias."id_dependencia" = empleados."id_dependencia_f"
+     INNER JOIN "public"."dir_nacional" dir_nacional ON dependencias."id_dir_nac" = dir_nacional."id_dir_nac"
+WHERE emp_prestacion."id_prestacion" = $P{id_prestacion}]]>
+	</queryString>
+	<field name="tipo_prestacion_nombre_tipo_prestacion" class="java.lang.String"/>
+	<field name="prestacion_costo_prestacion" class="java.lang.Double"/>
+	<field name="emp_prestacion_id_prestacion" class="java.lang.Integer"/>
+	<field name="empleados_nombre_empleado" class="java.lang.String"/>
+	<field name="dependencias_nombre_dependencia" class="java.lang.String"/>
+	<field name="dir_nacional_nombre_dir_nac" class="java.lang.String"/>
+	<background>
+		<band height="792" splitType="Stretch">
+			<image scaleImage="FillFrame">
+				<reportElement x="-20" y="0" width="613" height="20" uuid="3eaa14d5-1cb7-4b2f-8086-6a5a2856bd07"/>
+				<imageExpression><![CDATA[$P{path}.concat( "encabezado_pie.png" )]]></imageExpression>
+			</image>
+			<image scaleImage="FillFrame">
+				<reportElement x="-20" y="772" width="613" height="20" uuid="c58b8a9c-ef8e-45a1-97d0-9834bacc8aae"/>
+				<imageExpression><![CDATA[$P{path}.concat( "encabezado_pie.png" )]]></imageExpression>
+			</image>
+		</band>
+	</background>
+	<title>
+		<band height="209" splitType="Stretch">
+			<image scaleImage="RetainShape">
+				<reportElement x="25" y="30" width="228" height="139" uuid="526ccdb1-2996-4521-87d1-a0cac719680a"/>
+				<imageExpression><![CDATA[$P{path}.concat( "logo_rep.png" )]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement mode="Opaque" x="25" y="180" width="522" height="29" forecolor="#2A4A6A" backcolor="#DCE2FC" uuid="f0caf3de-7abf-4b1f-bd42-642978ab0fb7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE DE EMPLEADOS POR TIPO DE PRESTACIÓN]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="68" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="25" y="25" width="522" height="25" backcolor="#F3F7FC" uuid="e29975be-13c4-4342-997f-46415803179a"/>
+				<textField>
+					<reportElement x="86" y="3" width="191" height="20" uuid="ffa5d8de-1f25-4e83-8782-cbfd257bd663"/>
+					<textElement verticalAlignment="Middle">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{tipo_prestacion_nombre_tipo_prestacion}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="469" y="3" width="50" height="20" uuid="2cf5fcde-18ba-4b88-a0f3-e383d46d728e"/>
+					<textElement verticalAlignment="Middle">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{prestacion_costo_prestacion}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="3" y="3" width="83" height="20" uuid="74753e8d-d8dc-44fd-99e6-ea68ec1b249d"/>
+					<textElement verticalAlignment="Middle">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Prestación:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="336" y="3" width="133" height="20" uuid="ebb8a803-d89a-4d89-9e6b-cd1efcc09eea"/>
+					<textElement verticalAlignment="Middle">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Costo de Prestación $]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="28" y="0" width="170" height="20" uuid="02932c5d-181b-409e-837f-4d9a0940456b"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Empleado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="203" y="0" width="170" height="20" uuid="bb4c43c9-7a30-4045-907f-8ab059af6e6f"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dirección Nacional]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="377" y="0" width="170" height="20" uuid="9478bf01-b7ec-4757-a141-b8c4439355ad"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dependencia / Unidad Organizativa]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="37" splitType="Stretch">
+			<textField>
+				<reportElement x="28" y="1" width="170" height="35" uuid="d0869b59-80e5-4932-a92a-f755a42aa758"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{empleados_nombre_empleado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="203" y="1" width="170" height="35" uuid="0bbd3e23-3ff2-41c8-b168-e5f025f2c0ae"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{dir_nacional_nombre_dir_nac}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="377" y="1" width="170" height="35" uuid="7ee562d9-2637-409f-99e1-ddbdabdd8222"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{dependencias_nombre_dependencia}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="25" y="0" width="522" height="1" forecolor="#CCCCCC" uuid="d6cfda93-bdd0-46e1-88db-556d11ee386d"/>
+			</line>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="76" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="56" y="34" width="100" height="20" uuid="712c6d57-0df4-498b-9c89-2d20ce2d72b6"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField pattern="h.mm.ss a">
+				<reportElement x="156" y="34" width="100" height="20" uuid="1d2c373a-f530-4dbe-8f55-67a38183bf6e"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="424" y="34" width="80" height="20" uuid="dca15ebc-c784-4207-9081-6b0e51729ec0"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="504" y="34" width="40" height="20" uuid="02b1923f-a90c-4155-acf6-88aed5c07500"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

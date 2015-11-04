@@ -1,18 +1,58 @@
 package sv.gob.cultura.rrhh.manejadores;
 
+import com.lowagie.text.BadElementException;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Element;
+import com.lowagie.text.Font;
+import com.lowagie.text.FontFactory;
+import com.lowagie.text.HeaderFooter;
+import com.lowagie.text.Image;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.Phrase;
+import com.lowagie.text.pdf.BaseFont;
+import java.awt.Color;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExporter;
+import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.export.JRHtmlExporter;
+import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import org.apache.log4j.PropertyConfigurator;
 import org.primefaces.context.RequestContext;
 import sv.gob.cultura.rrhh.entidades.Anio;
 import sv.gob.cultura.rrhh.entidades.AsignarAsistenciaCap;
@@ -77,6 +117,8 @@ public class manejadorCapacitaciones implements Serializable {
     private Date horaFinal;
     private int horas;
     private int minutos;
+    private String NR;
+    private int capacitacionAsisReporte;        // id de capacion para reporte asistencia a capacitaciones
 //********************** GET DE ENTERPRICE JAVA BEAN ***************************
 //******************************************************************************
 
@@ -266,6 +308,22 @@ public class manejadorCapacitaciones implements Serializable {
         this.minutos = minutos;
     }
 
+    public String getNR() {
+        return NR;
+    }
+
+    public void setNR(String NR) {
+        this.NR = NR;
+    }
+
+    public int getCapacitacionAsisReporte() {
+        return capacitacionAsisReporte;
+    }
+
+    public void setCapacitacionAsisReporte(int capacitacionAsisReporte) {
+        this.capacitacionAsisReporte = capacitacionAsisReporte;
+    }
+
 // **************** LISTA DE ELEMENTOS EN TABLAS *******************************
 //******************************************************************************
     public List<Anio> todosAnios() {
@@ -334,6 +392,14 @@ public class manejadorCapacitaciones implements Serializable {
         return getAsignarAsistenciaCapFacade().findAll();
     }
 
+    public List<AsignarAsistenciaCap> reporteCapacitacionesEmp() {
+        return getAsignarAsistenciaCapFacade().repCapacitacionesEmp(this.getEmpleadoSelecionado());
+    }
+
+    public List<AsignarAsistenciaCap> reporteAsistenciaCapacitaciones() {
+        return getAsignarAsistenciaCapFacade().todasAsignaidCap(this.getCapacitacionAsisReporte());
+    }
+
     public List<AsignarAsistenciaCap> empleadoAsignacionesCap() {
         List<AsignarAsistenciaCap> asigCapList = getAsignarAsistenciaCapFacade().todasAsignaidCap(getIdCapAsig());
         ArrayList<AsignarAsistenciaCap> emp = new ArrayList<AsignarAsistenciaCap>();
@@ -346,9 +412,9 @@ public class manejadorCapacitaciones implements Serializable {
         }
         return emp;
     }
+
 //********************************* FUNCIONES **********************************
 //******************************************************************************
-
     public String guardarCapacitacion() {
         try {
             capacitaciones.setFechaCreaCap(new Date());
@@ -573,4 +639,180 @@ public class manejadorCapacitaciones implements Serializable {
         cal.setTime(date);
         return cal;
     }
+
+    //*******************************************************************************
+    public void preProcessPDF(Object document) throws IOException, DocumentException {
+
+        final Document pdf = (Document) document;
+        pdf.setPageSize(PageSize.LETTER);
+        pdf.setMargins(10, 10, 10, 10); //para margenes de la página
+
+        // Fuente
+        BaseFont bf_helv = BaseFont.createFont(BaseFont.HELVETICA, "Cp1252", false);
+
+        // Encabezado
+//        HeaderFooter header = new HeaderFooter(new Phrase("Encabezado", new Font(bf_helv)), false);
+//        header.setBorder(Rectangle.NO_BORDER);
+//        header.setAlignment(Element.ALIGN_CENTER);
+//        pdf.setHeader(header);  
+        // Pie de pagina
+        HeaderFooter footer = new HeaderFooter(new Phrase("Página: ", new Font(bf_helv)), true);
+        // footer.setBorder(Rectangle.);
+        footer.setAlignment(Element.ALIGN_CENTER);
+        pdf.setFooter(footer);
+
+        // Se abre documento para agregar elementos
+        pdf.open();
+
+        //banner del documento
+        Image imagen = getImage("resources/images/bannerTop1.png");
+        imagen.scalePercent(70); //Escala
+        imagen.setAlignment(Element.ALIGN_CENTER);
+        pdf.add(imagen);
+
+        //agregado por mi
+//        pdf.add(new Paragraph("RRHH - Secretaría de Cultura de la Presidencia"));
+//        DateFormat formateer = new SimpleDateFormat("dd/MM/yy '-' hh:mm:ss");
+//        Date currentDate = new Date();
+//        String date = formateer.format(currentDate);
+//        pdf.add(new Paragraph("Fecha de Generación: " + date));
+//        pdf.add(new Paragraph("\n"));
+        Paragraph nombre_rep = new Paragraph("Reporte Capacitaciones por Empleado",
+                FontFactory.getFont("garamond", //fuente
+                        12, //tamaño
+                        Font.BOLD, //estilo
+                        //Color.DARK_GRAY //
+                        //Color.getHSBColor(0.7f, 0.9f, 0f) //color de la letra Color.getHSBColor(4, 72, 139)-- HSB (Hue, Saturation, Brightness – Matiz, Saturación, Brillo)
+                        Color.getHSBColor(0.6f, 0.9f, 0.7f)
+                ));
+        nombre_rep.setSpacingAfter(25);
+        nombre_rep.setSpacingBefore(25);
+        nombre_rep.setAlignment(Element.ALIGN_CENTER);
+        pdf.add(nombre_rep);
+    }
+
+    private Image getImage(String imageName) throws IOException, BadElementException {
+        final Image image = Image.getInstance(getAbsolutePath(imageName));
+        image.scalePercent(100f);
+        return image;
+    }
+
+    private String getAbsolutePath(String imageName) {
+        final ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        final StringBuilder logo = new StringBuilder().append(servletContext.getRealPath(""));
+        logo.append(File.separator).append(imageName);
+        return logo.toString();
+    }
+
+    public void buscarNR(ActionEvent event) {
+        // busca empleado por nr
+        Empleados emp = getEmpleadosFacade().buscarEmpNR(this.getNR());
+        if (emp == null) {
+            this.setNombreEmp("");
+            this.setEmpleadoSelecionado(0);
+        } else {
+            this.setEmpleadoSelecionado(emp.getIdEmpleado());
+            this.setNombreEmp(emp.getNombreEmpleado());
+        }
+    }
+
+    /*
+     ******************************** REPORTES **********************************
+     ******************************
+     */
+    public void rep_cap_emp() throws JRException, IOException, SQLException {
+        if (this.getEmpleadoSelecionado() != 0) {
+            // Configuraciones en el log4j.properties para evitar un waring en netbeans (no necesario)
+            String log4jConfPath = getAbsolutePath("reportes\\log4j.properties");
+            PropertyConfigurator.configure(log4jConfPath);
+
+            // Hacemos una conexion a la base de datos (No encontre otra forma de hacerlo)
+            Connection baseDatos = java.sql.DriverManager.getConnection("jdbc:postgresql://localhost:5432/bd_rrhh", "postgres", "root123");
+
+            // Path reales de los archivos de jasper y jrxml
+            String jasper = getAbsolutePath("reportes\\rep_capacitaciones_emp.jasper");
+            String rutaJrxml = getAbsolutePath("reportes\\rep_capacitaciones_emp.jrxml");
+            String path = getAbsolutePath("resources\\images\\");
+            System.out.println(path);
+            //Compila el jrxml para obtener jasper (No es necesario)
+            JasperCompileManager.compileReport(rutaJrxml);
+
+            //parametros que enviamos al report
+            Map parametros = new HashMap();
+            parametros.put("id_empleado", this.getEmpleadoSelecionado());
+            parametros.put("path", path);
+
+            // Cargamos Archivo jasper ya compilado
+            File fichero = new File(jasper);
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(fichero);
+
+            // creamos objeto de tipo JasperPrint para llenar el jasper con datos, se pasan parametros
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, baseDatos);
+
+            //Para desgargar pdf
+            HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+            response.addHeader("Content-disposition", "attachment; filename=Reporte_Capacitaciones_Por_Empleado.pdf");
+            try (ServletOutputStream stream = response.getOutputStream()) {
+                JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+
+                stream.flush();
+            }
+            FacesContext.getCurrentInstance().responseComplete();
+        } else {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ingrese NR Empleado", "Ingrese NR Empleado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+    }
+
+    public void generarReporte() throws net.sf.jasperreports.engine.JRException, FileNotFoundException, IOException, SQLException {
+        if (this.getCapacitacionAsisReporte() != 0) {
+            // Hacemos una conexion a la base de datos (No encontre otra forma de hacerlo)
+            Connection baseDatos = java.sql.DriverManager.getConnection("jdbc:postgresql://localhost:5432/bd_rrhh", "postgres", "root123");
+
+            // Configuraciones en el log4j.properties para evitar un waring en netbeans (no necesario)
+            String log4jConfPath = getAbsolutePath("reportes\\log4j.properties");
+            PropertyConfigurator.configure(log4jConfPath);
+
+            // Parametros Iniciales
+            InputStream inputStream = null;
+            String rutaJrxml = getAbsolutePath("reportes\\rep_asitencia_capacitacion.jrxml");
+            String path = getAbsolutePath("resources\\images\\");
+
+            // Carga el archivo Jrxml
+            inputStream = new FileInputStream(rutaJrxml);
+
+            // Cargamos Parametros que se enviaran
+            Map parametros = new HashMap();
+            parametros.put("id_capacitacion", this.getCapacitacionAsisReporte());
+            parametros.put("path", path);
+
+            // Compila y llena el reporte con datos
+            JasperDesign jasperDesign = JRXmlLoader.load(inputStream);
+            JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, baseDatos);
+
+            // Exportamos el informe a HTML
+//            HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+//            response.setContentType("text/html");
+//            JRExporter exporter = null;
+//            exporter = new JRHtmlExporter();
+//            exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+//            exporter.setParameter(JRExporterParameter.OUTPUT_WRITER, response.getWriter());
+//            exporter.setParameter(JRHtmlExporterParameter.IMAGES_URI, FacesContext.getCurrentInstance() + "/image?image=");
+//            exporter.exportReport();
+            
+            //Para desgargar pdf
+            HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+            response.addHeader("Content-disposition", "attachment; filename=Reporte_Asistencia_Capacitacion.pdf");
+            try (ServletOutputStream stream = response.getOutputStream()) {
+                JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+                stream.flush();
+            }
+            FacesContext.getCurrentInstance().responseComplete();
+        } else {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Seleccione una Capacitación", "Seleccione una Capacitación");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+    }
+
 }

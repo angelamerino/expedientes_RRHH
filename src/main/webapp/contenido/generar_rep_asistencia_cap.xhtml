@@ -1,0 +1,123 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../resources/plantilla/plantilla.xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <div class="page-header">
+            <h1><strong>REPORTE ASISTENCIA A CAPACITACIONES POR GÉNERO, UNIDAD ORGANIZATIVA Y DIRECCIÓN NACIONAL</strong></h1>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading"><strong>Seleccionar parámetros para generación de reporte</strong></div>
+            <div class="panel-body">
+                <div class="container-fluid">
+                    <f:view>
+                        <h:form prependId="false" class="form-horizontal">
+                            <p:growl id="growl" showDetail="false"  autoUpdate="true" life="10000" />
+                            <div class="pull-left col-md-6">
+                                <h:panelGroup>
+                                    <div class="form-group">
+                                        <p:outputLabel for="idCap" value="Seleccione Capacitación" styleClass="col-lg-6 control-label"/>
+                                        <div class="col-lg-6">
+                                            <p:selectOneMenu id="idCap" style="width: 100%;" value="#{manejadorCapacitaciones.capacitacionAsisReporte}" required="true" requiredMessage="Seleccione capacitación">
+                                                <f:selectItem itemLabel="Seleccione uno..." itemValue="#{0}"/>
+                                                <f:selectItems value="#{manejadorCapacitaciones.todasCapacitaciones()}" var="cap" itemLabel="#{cap.temaCap}" itemValue="#{cap.idCap}"/>
+                                                <f:ajax render="listaAsisCap" />
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <p:commandLink id="xls" ajax="false" styleClass="pull-right">  
+                                    <h:graphicImage value="#{pageContext.contextPath}/resources/images/excel_icon_peq.png" />  
+
+                                    <pe:exporter 
+                                        type="xlsx" 
+                                        target="listaAsisCap" 
+                                        fileName="Reporte_Asistencia_Capacitaciones"                                         
+                                        orientation="Portrait"                                                   
+
+                                        facetBackground="#CCE5FF" 
+                                        facetFontSize="12" 
+                                        facetFontColor="#3399ff" 
+                                        facetFontStyle="BOLD"
+
+                                        cellFontColor="#202020" 
+                                        cellFontSize="11" 
+                                        cellFontStyle="NORMAL"
+
+                                        encoding="ISO-8859-1" />
+                                </p:commandLink> 
+
+
+
+                                <p:commandLink id="pdf" ajax="false" styleClass="pull-right" action="#{manejadorCapacitaciones.generarReporte()}">  
+                                    <h:graphicImage value="#{pageContext.contextPath}/resources/images/pdf_icon_peq.jpg" />   
+                                </p:commandLink> 
+
+
+
+                            </div>
+                            <div class="clearfix" ></div>
+                            <br/>
+
+                            <p:dataTable value="#{manejadorCapacitaciones.reporteAsistenciaCapacitaciones()}" var="item"
+                                         styleClass="table table-striped table-hover" 
+                                         id="listaAsisCap"
+                                         widgetVar="listaAsisCap"
+                                         emptyMessage="" 
+                                         rows="10"
+                                         paginator="true"
+                                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         rowsPerPageTemplate="5,10,15"
+                                         paginatorPosition="bottom">
+
+                                <p:column filterBy="#{item.idEmpleado.nombreEmpleado}" filterMatchMode="contains" style="width:30%;  font-size: 12px; text-align: center;">
+                                    <f:facet name="header" >
+                                        <h:outputText value="Nombre"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.idEmpleado.nombreEmpleado}"/>
+                                </p:column>
+                                <p:column filterBy="#{item.idEmpleado.genero}" filterMatchMode="contains" style="width:30%;  font-size: 12px; text-align: center;">
+                                    <f:facet name="header" >
+                                        <h:outputText value="Género"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.idEmpleado.genero}"/>
+                                </p:column>
+                                <p:column filterBy="#{item.idEmpleado.idDependenciaF.idDirNac.nombreDirNac}" filterMatchMode="contains" style="width:30%; font-size: 12px; text-align: center;">
+                                    <f:facet name="header" >
+                                        <h:outputText value="Unidad Organizativa"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.idEmpleado.idDependenciaF.idDirNac.nombreDirNac}"/>
+                                </p:column>
+                                <p:column filterBy="#{item.idEmpleado.idDependenciaF.nombreDependencia}" filterMatchMode="contains" style="width:20%; font-size: 12px; text-align: center;">
+                                    <f:facet name="header" >
+                                        <h:outputText value="Dependencia"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.idEmpleado.idDependenciaF.nombreDependencia}" style="text-align: center;"/>
+                                </p:column>
+                                <p:column filterBy="#{item.capAsistida}" filterMatchMode="contains" style="width:20%; font-size: 12px; text-align: center; ">
+                                    <f:facet name="header" >
+                                        <h:outputText value="Asistió a Capacitación"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.capAsistida == 'true' ? 'Si' : 'No'}" style="text-align: center;" />
+                                </p:column>
+
+                            </p:dataTable>
+                        </h:form>
+                    </f:view>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>

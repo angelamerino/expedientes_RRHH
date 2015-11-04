@@ -5,11 +5,20 @@
  */
 package sv.gob.cultura.rrhh.manejadores;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -17,6 +26,17 @@ import javax.faces.context.Flash;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import org.apache.log4j.PropertyConfigurator;
 import org.primefaces.context.RequestContext;
 import sv.gob.cultura.rrhh.entidades.Anio;
 import sv.gob.cultura.rrhh.entidades.Dependencias;
@@ -85,6 +105,7 @@ public class manejadorPrestaciones implements Serializable {
     private int idPresGestion;                  // id prestacion para editar y adicionar productos
     private String nombreEmp;                   // nombre de empleado selecionado
     private String NR;                          // NR empleado para busqueda
+    private double totalPrestacion;
 
 //********************** GET DE ENTERPRICE JAVA BEAN ***************************
 //******************************************************************************
@@ -270,6 +291,15 @@ public class manejadorPrestaciones implements Serializable {
         this.NR = NR;
     }
 
+    public double getTotalPrestacion() {
+        return totalPrestacion;
+    }
+
+    public void setTotalPrestacion(double totalPrestacion) {
+        this.totalPrestacion = totalPrestacion;
+    }
+
+    
 // **************** LISTA DE ELEMENTOS EN TABLAS *******************************
 //******************************************************************************
     public List<TipoPrestacion> todosTipoPrestacion() {
@@ -306,6 +336,21 @@ public class manejadorPrestaciones implements Serializable {
 
     public List<ProductoPrestacion> productosPrestacion() {
         return getProductoPrestacionFacade().buscarProdIdPrestacion(this.getIdPrestacionSelecionada());
+    }
+
+    public List<ProductoPrestacion> productosPrestacionReporte() {
+        this.totalPrestacion = 0.0;
+        List<ProductoPrestacion> lista = getProductoPrestacionFacade().buscarProdIdPrestacion(this.getIdPrestacionSelecionada());
+
+        Iterator<ProductoPrestacion> listaIterador = lista.iterator();
+        while (listaIterador.hasNext()) {
+            ProductoPrestacion elemento = listaIterador.next();
+            double tot = elemento.getProducto().getCostoUnit() * elemento.getCantidad();
+            this.totalPrestacion = this.totalPrestacion + tot;
+            
+        }
+
+        return lista;
     }
 
     public List<DirNacional> todosDirNacional() {
@@ -448,16 +493,15 @@ public class manejadorPrestaciones implements Serializable {
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Ingresado", "Registro Ingresado");
                 FacesContext.getCurrentInstance().addMessage(null, message);
             }
-            
+
             this.setProducPrestacion(0);
             this.setCantidad(0);
-            
+
             RequestContext.getCurrentInstance().update("tablaProdPres");
             RequestContext.getCurrentInstance().execute("PF('addProductoPres').hide()");
 
             productoPrestacionPK = new ProductoPrestacionPK();
             productoPrestacion = new ProductoPrestacion();
-
 
         } catch (Exception e) {
         }
@@ -531,7 +575,7 @@ public class manejadorPrestaciones implements Serializable {
             this.setIdPrestacionAsirnar(0);
             RequestContext.getCurrentInstance().execute("PF('asigPrestaciones').hide()");
             tabla();
-           // return null;
+            // return null;
         } catch (Exception e) {
             this.setIdPrestacionAsirnar(0);
             //return null;
@@ -568,6 +612,9 @@ public class manejadorPrestaciones implements Serializable {
                 FacesContext.getCurrentInstance().addMessage(null, message);
                 RequestContext.getCurrentInstance().execute("PF('nuevoEmp').hide()");
                 RequestContext.getCurrentInstance().update("tabla");
+                this.setEmpleadoSelecionado(0);
+                this.setDireccionNacional(0);
+                this.setDependecia(0);
             }
         } catch (Exception e) {
 
@@ -647,11 +694,10 @@ public class manejadorPrestaciones implements Serializable {
             RequestContext.getCurrentInstance().execute("PF('asigPrestaciones').show()");
         }
     }
-    
-    public void tabla(){
+
+    public void tabla() {
         RequestContext.getCurrentInstance().update("tabla");
     }
-
 
     public void buscarNR(ActionEvent event) {
         Empleados emp = getEmpleadosFacade().buscarEmpNR(this.getNR());
@@ -680,10 +726,63 @@ public class manejadorPrestaciones implements Serializable {
 
     public manejadorPrestaciones() {
     }
-    
-    //Mostrar Mensajes en la siguiente peticion!
+
+    // Mostrar Mensajes en la siguiente peticion!
     public static Flash flashScope() {
         return (FacesContext.getCurrentInstance().getExternalContext().getFlash());
+    }
+
+    // Obtine el path absoluto no importa de donde sea ejecutada la aplicación
+    private String getAbsolutePath(String imageName) {
+        final ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        final StringBuilder logo = new StringBuilder().append(servletContext.getRealPath(""));
+        logo.append(File.separator).append(imageName);
+        return logo.toString();
+    }
+
+    /*
+     ******************************** REPORTES **********************************
+     ******************************
+     */
+    public void generarReporte() throws net.sf.jasperreports.engine.JRException, FileNotFoundException, IOException, SQLException {
+        if (this.getIdPresGestion() != 0) {
+            // Hacemos una conexion a la base de datos (No encontre otra forma de hacerlo)
+            Connection baseDatos = java.sql.DriverManager.getConnection("jdbc:postgresql://localhost:5432/bd_rrhh", "postgres", "root123");
+
+            // Configuraciones en el log4j.properties para evitar un waring en netbeans (no necesario)
+            String log4jConfPath = getAbsolutePath("reportes\\log4j.properties");
+            PropertyConfigurator.configure(log4jConfPath);
+
+            // Parametros Iniciales
+            InputStream inputStream = null;
+            String rutaJrxml = getAbsolutePath("reportes\\rep_emp_prestacion.jrxml");
+            String path = getAbsolutePath("resources\\images\\");
+
+            // Carga el archivo Jrxml
+            inputStream = new FileInputStream(rutaJrxml);
+
+            // Cargamos Parametros que se enviaran
+            Map parametros = new HashMap();
+            parametros.put("id_prestacion", this.getIdPresGestion());
+            parametros.put("path", path);
+
+            // Compila y llena el reporte con datos
+            JasperDesign jasperDesign = JRXmlLoader.load(inputStream);
+            JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, baseDatos);
+
+            //Para desgargar pdf
+            HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+            response.addHeader("Content-disposition", "attachment; filename=Reporte_Empeados_Prestacion.pdf");
+            try (ServletOutputStream stream = response.getOutputStream()) {
+                JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+                stream.flush();
+            }
+            FacesContext.getCurrentInstance().responseComplete();
+        } else {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Seleccione una Prestación", "Seleccione una Prestación");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
     }
 
 }

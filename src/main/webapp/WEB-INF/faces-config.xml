@@ -265,6 +265,30 @@
             <redirect/>
         </navigation-case>
         
+         <navigation-case>
+            <from-outcome>rep_capacitaciones_emp</from-outcome>
+            <to-view-id>/contenido/generar_rep_capacitaciones_emp.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        
+         <navigation-case>
+            <from-outcome>rep_asistencia_cap</from-outcome>
+            <to-view-id>/contenido/generar_rep_asistencia_cap.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>rep_emp_prestacion</from-outcome>
+            <to-view-id>/contenido/generar_rep_emp_prestacion.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>rep_costo_pres_emp</from-outcome>
+            <to-view-id>/contenido/generar_rep_costo_pres_emp.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        
         <navigation-case>
             <from-outcome>ayuda</from-outcome>
             <to-view-id>/contenido/ayuda.xhtml</to-view-id>
