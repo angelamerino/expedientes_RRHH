@@ -32,4 +32,13 @@ public class FamiliaDependientesEmpFacade extends AbstractFacade<FamiliaDependie
     public List<FamiliaDependientesEmp> buscarDependientes(int idEmpleado){
         return getEntityManager().createNamedQuery("FamiliaDependientesEmp.findByIdEmpleado").setParameter("idEmpleado", idEmpleado).getResultList();
     }
+    
+    public List<FamiliaDependientesEmp> buscarHijosEmpEdad(int idParentesco, int edadMin, int edadMax){
+        return getEntityManager().createNamedQuery("FamiliaDependientesEmp.findByEdadMinEdadMax").setParameter("idParentesco", idParentesco).setParameter("edadMin", edadMin).setParameter("edadMax", edadMax).getResultList();
+    }
+    
+    public List<FamiliaDependientesEmp> buscarPadresFamilia(int idParentesco){
+        return getEntityManager().createNamedQuery("FamiliaDependientesEmp.findByIdParentesco").setParameter("idParentesco", idParentesco).getResultList();
+    }
+
 }

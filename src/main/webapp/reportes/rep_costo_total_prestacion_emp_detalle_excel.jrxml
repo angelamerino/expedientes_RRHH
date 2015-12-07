@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rep_costo_total_prestacion_emp_detalle" pageWidth="376" pageHeight="200" orientation="Landscape" columnWidth="376" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="963b4305-21f5-40f4-9f03-4827791d47b7">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.columns" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.rows" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.wrap.text" value="false"/>
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.white.page.background" value="false"/>
+	<parameter name="id_prestacion" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     producto_prestacion."cantidad" AS producto_prestacion_cantidad,
+     prestacion."costo_prestacion" AS prestacion_costo_prestacion,
+     producto."nombre_prod" AS producto_nombre_prod,
+     producto_prestacion."id_prestacion" AS producto_prestacion_id_prestacion,
+     producto."costo_unit" AS producto_costo_unit
+FROM
+     "public"."producto" producto INNER JOIN "public"."producto_prestacion" producto_prestacion ON producto."id_producto" = producto_prestacion."id_producto"
+     INNER JOIN "public"."prestacion" prestacion ON producto_prestacion."id_prestacion" = prestacion."id_prestacion"
+WHERE producto_prestacion."id_prestacion" = $P{id_prestacion}]]>
+	</queryString>
+	<field name="producto_prestacion_cantidad" class="java.lang.Integer"/>
+	<field name="prestacion_costo_prestacion" class="java.lang.Double"/>
+	<field name="producto_nombre_prod" class="java.lang.String"/>
+	<field name="producto_prestacion_id_prestacion" class="java.lang.Integer"/>
+	<field name="producto_costo_unit" class="java.lang.Double"/>
+	<columnHeader>
+		<band height="23" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="17" y="0" width="124" height="23" backcolor="#E5E5E5" uuid="684eab96-26f2-4af1-8d45-1b08873b303b"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Producto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="141" y="0" width="95" height="23" backcolor="#E5E5E5" uuid="f8de49dd-56af-4de3-a741-7e834f83127c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Costo Unitario]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="236" y="0" width="63" height="23" backcolor="#E5E5E5" uuid="c39c54e7-ff36-42b4-a6c3-945e65f0b8c7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cantidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="299" y="0" width="77" height="23" backcolor="#E5E5E5" uuid="c4896a9a-4429-406a-b044-56737f76e2b0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Costo Total]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField pattern="$ ##,#00.00">
+				<reportElement x="141" y="0" width="95" height="20" uuid="3e9b81a8-b064-4f04-94de-2321e59d6623"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{producto_costo_unit}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="236" y="0" width="63" height="20" uuid="f7ebc39d-5958-4d42-a9c1-3e886bfb93d4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{producto_prestacion_cantidad}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$ ##,#00.00">
+				<reportElement x="299" y="0" width="77" height="20" uuid="a4c8775e-2512-48bb-85ac-09b72ab320f9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{producto_prestacion_cantidad} * $F{producto_costo_unit}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="17" y="0" width="124" height="20" uuid="b7ff42ce-e9b0-4998-affa-c841333eb954"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{producto_nombre_prod}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="17" height="20" uuid="28f1afd8-e561-407d-b74d-b3bd3a706d3b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="22">
+			<textField pattern="$ ##,#00.00">
+				<reportElement x="299" y="0" width="77" height="22" uuid="a4cd04c5-7eac-4cb6-a16a-dddab0d6c0e3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{prestacion_costo_prestacion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="299" height="22" uuid="918c8ad3-8ab1-4cb0-acc5-82f1adb0483f"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Prestacion]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

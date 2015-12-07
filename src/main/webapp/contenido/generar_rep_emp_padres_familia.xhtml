@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../resources/plantilla/plantilla.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+
+        <div class="page-header">
+            <h1><strong>REPORTE EMPLEADOS PADRES/MADRES DE FAMILIA</strong></h1>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading"><strong>Seleccionar parámetros para generación de reporte</strong></div>
+            <div class="panel-body">
+                <div class="container-fluid">
+                    <f:view>
+                        <h:form>
+                            <div class="col-md-6 pull-right">
+                                <p:commandLink ajax="false" styleClass="pull-right">  
+                                    <h:graphicImage value="#{pageContext.contextPath}/resources/images/excel_icon_peq.png" />  
+
+                                    <pe:exporter 
+                                        type="xlsx" 
+                                        target="padresMadres" 
+                                        fileName="Reporte_Padres_Madres_Familia"                                         
+                                        orientation="Portrait"                                                   
+
+                                        facetBackground="#CCE5FF" 
+                                        facetFontSize="12" 
+                                        facetFontColor="#3399ff" 
+                                        facetFontStyle="BOLD"
+
+                                        cellFontColor="#202020" 
+                                        cellFontSize="11" 
+                                        cellFontStyle="NORMAL"
+
+                                        encoding="ISO-8859-1" />
+                                </p:commandLink> 
+
+                                <p:commandLink ajax="false" id="pdf" styleClass="pull-right" actionListener="#{manejadorDependientesFamilia.repEmpleadosPadresMadresFamilia(actionEvent)}">  
+                                    <h:graphicImage value="#{pageContext.contextPath}/resources/images/pdf_icon_peq.jpg" />  
+                                </p:commandLink> 
+
+                            </div>
+                            <div class="clearfix" ></div>
+                            <br/>
+
+                            <p:dataTable id="padresMadres" value="#{manejadorDependientesFamilia.repPadresMadresFamilia()}" var="item"
+                                         styleClass="table table-striped table-hover" 
+                                         widgetVar="padresMadres"
+                                         emptyMessage="" 
+                                         rows="10"
+                                         paginator="true"
+                                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         rowsPerPageTemplate="5,10,15"
+                                         paginatorPosition="bottom">
+                                <p:column style="font-size: 12px;" filterBy="#{item.nombreEmpleado}" filterMatchMode="contains" >
+                                    <f:facet name="header">
+                                        <h:outputText value="Empleado"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.nombreEmpleado}"/>
+                                </p:column>
+                                <p:column style="width:20%; font-size: 12px; text-align: center; " filterBy="#{item.genero == 'FEMENINO' ? 'Madre' : 'Padre'}" filterMatchMode="contains">
+                                    <f:facet name="header">
+                                        <h:outputText value="Padre/Madre"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.genero == 'FEMENINO' ? 'Madre' : 'Padre'}"/>
+                                </p:column>
+                                <p:column style="font-size: 12px;" filterBy="#{item.idDependenciaF.idDirNac.nombreDirNac}" filterMatchMode="contains">
+                                    <f:facet name="header">
+                                        <h:outputText value="Direccion Nacional"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.idDependenciaF.idDirNac.nombreDirNac}"/>
+                                </p:column>
+                                <p:column style="font-size: 12px;" filterBy="#{item.idDependenciaF.nombreDependencia}" filterMatchMode="contains">
+                                    <f:facet name="header">
+                                        <h:outputText value="Dependencia / Unidad Organizativa"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.idDependenciaF.nombreDependencia}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </h:form>
+                    </f:view>
+
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

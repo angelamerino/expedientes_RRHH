@@ -290,6 +290,18 @@
         </navigation-case>
         
         <navigation-case>
+            <from-outcome>rep_hijos_emp_edad</from-outcome>
+            <to-view-id>/contenido/generar_rep_hijos_emp_edad.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>rep_emp_padres_familia</from-outcome>
+            <to-view-id>/contenido/generar_rep_emp_padres_familia.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        
+        <navigation-case>
             <from-outcome>ayuda</from-outcome>
             <to-view-id>/contenido/ayuda.xhtml</to-view-id>
             <redirect/>

@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rep_asistencia_capacitacion" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" uuid="21fe3a15-88cf-4ac6-b63a-9fc5adfb9547">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="240"/>
 	<parameter name="id_capacitacion" class="java.lang.Integer"/>
 	<parameter name="path" class="java.lang.String"/>
 	<queryString>
@@ -93,37 +93,37 @@ ORDER BY empleados_genero, asignar_asistencia_cap_cap_asistida DESC]]>
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="24" splitType="Stretch">
+		<band height="22" splitType="Stretch">
 			<staticText>
-				<reportElement x="22" y="0" width="170" height="20" uuid="89d39673-714d-442f-9ffe-22967b91ac38"/>
+				<reportElement x="35" y="0" width="170" height="20" uuid="89d39673-714d-442f-9ffe-22967b91ac38"/>
 				<textElement verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Empleado]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="192" y="0" width="90" height="20" uuid="f8232b46-4a18-4e23-b0bd-a15c96e25825"/>
+				<reportElement x="205" y="0" width="90" height="20" uuid="f8232b46-4a18-4e23-b0bd-a15c96e25825"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Género]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="463" y="0" width="170" height="20" uuid="a06978bf-0ff2-4eff-9757-1f6200ef6640"/>
+				<reportElement x="476" y="0" width="170" height="20" uuid="a06978bf-0ff2-4eff-9757-1f6200ef6640"/>
 				<textElement verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Dependencia / Unidad Organizativa]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="282" y="0" width="181" height="20" uuid="f7d95959-611a-4601-bc55-21b06893bbfb"/>
+				<reportElement x="295" y="0" width="181" height="20" uuid="f7d95959-611a-4601-bc55-21b06893bbfb"/>
 				<textElement verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Dirección Nacional]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="633" y="0" width="90" height="20" uuid="0d521f8e-87e9-4009-ae42-952492d784c7"/>
+				<reportElement x="646" y="0" width="90" height="20" uuid="0d521f8e-87e9-4009-ae42-952492d784c7"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
@@ -132,32 +132,40 @@ ORDER BY empleados_genero, asignar_asistencia_cap_cap_asistida DESC]]>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="37" splitType="Stretch">
+		<band height="40" splitType="Stretch">
 			<textField>
-				<reportElement x="20" y="0" width="170" height="37" uuid="0b73c7a4-74ba-4780-bbbe-8b008a3080f6"/>
+				<reportElement x="33" y="1" width="170" height="37" uuid="0b73c7a4-74ba-4780-bbbe-8b008a3080f6"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{empleados_nombre_empleado}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="190" y="0" width="90" height="37" uuid="49b87741-c1e4-44ca-af8b-14e649c1c11a"/>
+				<reportElement x="203" y="1" width="90" height="37" uuid="49b87741-c1e4-44ca-af8b-14e649c1c11a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{empleados_genero}.equals( "FEMENINO" ) ? "Femenino":"Masciulino"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="463" y="0" width="170" height="37" uuid="faa2acec-fd1e-4ef3-94d7-d69ef2451524"/>
+				<reportElement x="476" y="1" width="170" height="37" uuid="faa2acec-fd1e-4ef3-94d7-d69ef2451524"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{dependencias_nombre_dependencia}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="280" y="0" width="183" height="37" uuid="1ef222a9-11a9-479b-aa33-99014656dd73"/>
+				<reportElement x="293" y="1" width="183" height="37" uuid="1ef222a9-11a9-479b-aa33-99014656dd73"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{dir_nacional_nombre_dir_nac}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="633" y="0" width="90" height="37" uuid="2d61e709-f44e-40ea-bb50-ee94902a471b"/>
+				<reportElement x="646" y="1" width="90" height="37" uuid="2d61e709-f44e-40ea-bb50-ee94902a471b"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{asignar_asistencia_cap_cap_asistida}.equals(Boolean.TRUE) ? "Si":"No"]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="8" y="1" width="20" height="37" uuid="af5dc067-80f1-4b31-b756-a49a409bcd21"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="8" y="0" width="728" height="1" forecolor="#999999" uuid="28a6e602-da33-45e8-9a6c-d162773fb1c3"/>
+			</line>
 		</band>
 	</detail>
 	<pageFooter>

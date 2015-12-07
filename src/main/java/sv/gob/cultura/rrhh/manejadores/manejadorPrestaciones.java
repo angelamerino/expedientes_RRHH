@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -29,12 +30,16 @@ import javax.faces.view.ViewScoped;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import org.apache.log4j.PropertyConfigurator;
 import org.primefaces.context.RequestContext;
@@ -82,6 +87,8 @@ public class manejadorPrestaciones implements Serializable {
     private DependenciasFacade dependenciasFacade;
     @EJB
     private ProductoPrestacionFacade productoPrestacionFacade;
+    @Resource(mappedName = "RRHH")
+    DataSource datasource;
 
 //*********************** OBJETOS DE LOS ENTIDADES *****************************
 //******************************************************************************    
@@ -106,9 +113,11 @@ public class manejadorPrestaciones implements Serializable {
     private String nombreEmp;                   // nombre de empleado selecionado
     private String NR;                          // NR empleado para busqueda
     private double totalPrestacion;
-
+    private double totalPrestacionPorEmpleado;
+    private double montoVale;
 //********************** GET DE ENTERPRICE JAVA BEAN ***************************
 //******************************************************************************
+
     public ProductoFacade getProductoFacade() {
         return productoFacade;
     }
@@ -299,7 +308,24 @@ public class manejadorPrestaciones implements Serializable {
         this.totalPrestacion = totalPrestacion;
     }
 
+    public double getTotalPrestacionPorEmpleado() {
+        return totalPrestacionPorEmpleado;
+    }
+
+    public void setTotalPrestacionPorEmpleado(double totalPrestacionPorEmpleado) {
+        this.totalPrestacionPorEmpleado = totalPrestacionPorEmpleado;
+    }
+
+    public double getMontoVale() {
+        return montoVale;
+    }
+
+    public void setMontoVale(double montoVale) {
+        this.montoVale = montoVale;
+    }
     
+    
+
 // **************** LISTA DE ELEMENTOS EN TABLAS *******************************
 //******************************************************************************
     public List<TipoPrestacion> todosTipoPrestacion() {
@@ -334,6 +360,25 @@ public class manejadorPrestaciones implements Serializable {
 
     }
 
+    public List<Prestacion> todasPrestacionesEmpleadoRep() {
+        Empleados emp = getEmpleadosFacade().find(getEmpleadoSelecionado());
+        this.totalPrestacionPorEmpleado = 0.0;
+        if (emp == null) {
+            return null;
+        } else {
+            List<Prestacion> a = emp.getPrestacionList();
+            Iterator<Prestacion> listaIterador = a.iterator();
+            while (listaIterador.hasNext()) {
+                Prestacion elemento = listaIterador.next();
+                double tot = elemento.getCostoPrestacion();
+                this.totalPrestacionPorEmpleado = this.totalPrestacionPorEmpleado + tot;
+
+            }
+            return emp.getPrestacionList();
+        }
+
+    }
+
     public List<ProductoPrestacion> productosPrestacion() {
         return getProductoPrestacionFacade().buscarProdIdPrestacion(this.getIdPrestacionSelecionada());
     }
@@ -347,7 +392,7 @@ public class manejadorPrestaciones implements Serializable {
             ProductoPrestacion elemento = listaIterador.next();
             double tot = elemento.getProducto().getCostoUnit() * elemento.getCantidad();
             this.totalPrestacion = this.totalPrestacion + tot;
-            
+
         }
 
         return lista;
@@ -413,18 +458,26 @@ public class manejadorPrestaciones implements Serializable {
 
     public String eliminarPrestacion() {
         try {
-            //Elimina productos de la prestacion para eliminar en cascada
-            List<ProductoPrestacion> todosProducPres = productosPrestacion();
-            //Elimina cada uno de los productos
-            Iterator<ProductoPrestacion> nombreIterator = todosProducPres.iterator();
-            while (nombreIterator.hasNext()) {
-                ProductoPrestacion elemento = nombreIterator.next();
-                getProductoPrestacionFacade().remove(elemento);
-            }
+            List<Empleados> a = prestacion.getEmpleadosList();
+            boolean asignacion = a.isEmpty();
 
-            getPrestacionFacade().remove(prestacion);
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Eliminado", "Registro Eliminado");
-            FacesContext.getCurrentInstance().addMessage(null, message);
+            if (asignacion == true) {
+                //Elimina productos de la prestacion para eliminar en cascada
+                List<ProductoPrestacion> todosProducPres = productosPrestacion();
+                //Elimina cada uno de los productos
+                Iterator<ProductoPrestacion> nombreIterator = todosProducPres.iterator();
+                while (nombreIterator.hasNext()) {
+                    ProductoPrestacion elemento = nombreIterator.next();
+                    getProductoPrestacionFacade().remove(elemento);
+                }
+
+                getPrestacionFacade().remove(prestacion);
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Eliminado", "Registro Eliminado");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            } else {
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Prestacion No Eliminada: Ya ha sido asignada a empleados", "Prestacion No Eliminada: Ya ha sido asignada a empleados");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            }
 
             prestacion = new Prestacion();
 
@@ -699,6 +752,10 @@ public class manejadorPrestaciones implements Serializable {
         RequestContext.getCurrentInstance().update("tabla");
     }
 
+    public void tablarep() {
+        RequestContext.getCurrentInstance().update("prestacionesrep");
+    }
+
     public void buscarNR(ActionEvent event) {
         Empleados emp = getEmpleadosFacade().buscarEmpNR(this.getNR());
         if (emp == null) {
@@ -783,6 +840,131 @@ public class manejadorPrestaciones implements Serializable {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Seleccione una Prestación", "Seleccione una Prestación");
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
+    }
+
+    public void repCostoTotPrestacionesEmp() throws net.sf.jasperreports.engine.JRException, FileNotFoundException, IOException, SQLException {
+        if (this.getEmpleadoSelecionado() != 0) {
+            // Hacemos una conexion a la base de datos (No encontre otra forma de hacerlo)
+            Connection baseDatos = java.sql.DriverManager.getConnection("jdbc:postgresql://localhost:5432/bd_rrhh", "postgres", "root123");
+
+            // Configuraciones en el log4j.properties para evitar un waring en netbeans (no necesario)
+            String log4jConfPath = getAbsolutePath("reportes\\log4j.properties");
+            PropertyConfigurator.configure(log4jConfPath);
+
+            // Parametros Iniciales
+            InputStream inputStream = null;
+            String rutaJrxml = getAbsolutePath("reportes\\rep_costo_total_prestacion_emp.jrxml");
+            String path = getAbsolutePath("resources\\images\\");
+            String pathRep = getAbsolutePath("reportes\\");
+
+            // Carga el archivo Jrxml
+            inputStream = new FileInputStream(rutaJrxml);
+
+            // Cargamos Parametros que se enviaran
+            Map parametros = new HashMap();
+            parametros.put("id_empleado", this.getEmpleadoSelecionado());
+            parametros.put("total", this.totalPrestacionPorEmpleado);
+            parametros.put("pathRep", pathRep);
+            parametros.put("path", path);
+
+            // Compila y llena el reporte con datos
+            JasperDesign jasperDesign = JRXmlLoader.load(inputStream);
+            JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, baseDatos);
+
+            //Para desgargar pdf
+            HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+            response.setContentType("application/pdf");
+            response.addHeader("Content-disposition", "attachment; filename=Reporte_CostoTotal_Prestacion_Empleado.pdf");
+            try (ServletOutputStream stream = response.getOutputStream()) {
+                JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+                stream.flush();
+            }
+            FacesContext.getCurrentInstance().responseComplete();
+
+        } else {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Seleccione un Empleado", "Seleccione un Empleado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+    }
+
+    public void repCostoTotPrestacionesEmpExcel(ActionEvent actionEvent) throws JRException, IOException, SQLException {
+       if(this.getEmpleadoSelecionado() != 0){
+            // Hacemos una conexion a la base de datos (No encontre otra forma de hacerlo)
+        Connection baseDatos = java.sql.DriverManager.getConnection("jdbc:postgresql://localhost:5432/bd_rrhh", "postgres", "root123");
+
+        // Configuraciones en el log4j.properties para evitar un waring en netbeans (no necesario)
+        String log4jConfPath = getAbsolutePath("reportes\\log4j.properties");
+        PropertyConfigurator.configure(log4jConfPath);
+
+        // Parametros Iniciales
+        InputStream inputStream = null;
+        String rutaJrxml = getAbsolutePath("reportes\\rep_costo_total_prestacion_emp_excel.jrxml");
+        String path = getAbsolutePath("resources\\images\\");
+        String pathRep = getAbsolutePath("reportes\\");
+
+        // Carga el archivo Jrxml
+        inputStream = new FileInputStream(rutaJrxml);
+
+        // Cargamos Parametros que se enviaran
+        Map parametros = new HashMap();
+        parametros.put("id_empleado", this.getEmpleadoSelecionado());
+        parametros.put("total", this.totalPrestacionPorEmpleado);
+        parametros.put("pathRep", pathRep);
+        parametros.put("path", path);
+
+        // Compila y llena el reporte con datos
+        JasperDesign jasperDesign = JRXmlLoader.load(inputStream);
+        JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, baseDatos);
+
+        HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        httpServletResponse.addHeader("Content-disposition", "attachment; filename=report.xlsx");
+        ServletOutputStream servletOutputStream = httpServletResponse.getOutputStream();
+        JRXlsxExporter docxExporter = new JRXlsxExporter();
+        docxExporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+        docxExporter.setParameter(JRExporterParameter.OUTPUT_STREAM, servletOutputStream);
+        docxExporter.exportReport();
+        FacesContext.getCurrentInstance().responseComplete();
+       }else{
+           FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Seleccione un Empleado", "Seleccione un Empleado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+       }
+    }
+    
+    public void repVales(ActionEvent actionEvent) throws JRException, IOException, SQLException {
+        // Configuraciones en el log4j.properties para evitar un waring en netbeans (no necesario)
+        String log4jConfPath = getAbsolutePath("reportes\\log4j.properties");
+        PropertyConfigurator.configure(log4jConfPath);
+
+        // Parametros Iniciales
+        InputStream inputStream = null;
+        String rutaJrxml = getAbsolutePath("reportes\\rep_vales_emp.jrxml");
+        String path = getAbsolutePath("resources\\images\\");
+
+        // Carga el archivo Jrxml
+        inputStream = new FileInputStream(rutaJrxml);
+
+        // Cargamos Parametros que se enviaran
+        Map parametros = new HashMap();
+        parametros.put("montoVale", this.getMontoVale());
+        parametros.put("path", path);
+
+        // Compila y llena el reporte con datos
+        JasperDesign jasperDesign = JRXmlLoader.load(inputStream);
+        JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, datasource.getConnection());
+
+        //Para desgargar pdf
+        HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        response.setContentType("application/pdf");
+        response.addHeader("Content-disposition", "attachment; filename=Reporte_Hijos_Empeados_Edad.pdf");
+        try (ServletOutputStream stream = response.getOutputStream()) {
+            JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+            stream.flush();
+        }
+        FacesContext.getCurrentInstance().responseComplete();
+
     }
 
 }

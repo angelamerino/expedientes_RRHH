@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rep_emp_padres_familia" printOrder="Horizontal" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" uuid="4e85e003-5057-457f-aeb5-7608156e897a">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<subDataset name="dataset1" uuid="6835c06e-008c-4306-a887-f312024a704e"/>
+	<parameter name="path" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT DISTINCT 
+     parentesco."nombre_parentesco" AS parentesco_nombre_parentesco,
+     dependencias."nombre_dependencia" AS dependencias_nombre_dependencia,
+     dir_nacional."nombre_dir_nac" AS dir_nacional_nombre_dir_nac,
+     empleados."nombre_empleado" AS empleados_nombre_empleado,
+     empleados."genero" AS empleados_genero,
+     familia_dependientes_emp."id_empleado" AS familia_dependientes_emp_id_empleado
+FROM
+     "public"."empleados" empleados INNER JOIN "public"."familia_dependientes_emp" familia_dependientes_emp ON empleados."id_empleado" = familia_dependientes_emp."id_empleado"
+     INNER JOIN "public"."dependencias" dependencias ON empleados."id_dependencia_n" = dependencias."id_dependencia"
+     AND dependencias."id_dependencia" = empleados."id_dependencia_f"
+     INNER JOIN "public"."dir_nacional" dir_nacional ON dependencias."id_dir_nac" = dir_nacional."id_dir_nac"
+     INNER JOIN "public"."parentesco" parentesco ON familia_dependientes_emp."id_parentesco" = parentesco."id_parentesco"
+WHERE parentesco."id_parentesco" = 2]]>
+	</queryString>
+	<field name="parentesco_nombre_parentesco" class="java.lang.String"/>
+	<field name="dependencias_nombre_dependencia" class="java.lang.String"/>
+	<field name="dir_nacional_nombre_dir_nac" class="java.lang.String"/>
+	<field name="empleados_nombre_empleado" class="java.lang.String"/>
+	<field name="empleados_genero" class="java.lang.String"/>
+	<field name="familia_dependientes_emp_id_empleado" class="java.lang.Integer"/>
+	<background>
+		<band height="612" splitType="Stretch">
+			<image scaleImage="FillFrame">
+				<reportElement x="-22" y="0" width="796" height="20" uuid="0dccc003-85f4-4cf2-a260-d571809315cb"/>
+				<imageExpression><![CDATA[$P{path}.concat( "encabezado_pie.png" )]]></imageExpression>
+			</image>
+			<image scaleImage="FillFrame">
+				<reportElement x="-22" y="592" width="796" height="20" uuid="b33fe2cf-ba84-4c2f-8e4f-9c3ea1c0b7c7"/>
+				<imageExpression><![CDATA[$P{path}.concat( "encabezado_pie.png" )]]></imageExpression>
+			</image>
+		</band>
+	</background>
+	<title>
+		<band height="172" splitType="Stretch">
+			<image scaleImage="RetainShape">
+				<reportElement x="544" y="23" width="210" height="120" uuid="9a3e55ad-863a-4b05-9978-c855d4dd69b3"/>
+				<imageExpression><![CDATA[$P{path}.concat( "logo_rep.png" )]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement mode="Opaque" x="152" y="143" width="450" height="27" forecolor="#2A4A6A" backcolor="#DCE2FC" uuid="e72ff770-b9eb-43ac-9f07-3a5a5e16cafc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE DE EMPLEADOS PADRES DE FAMILIA]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="41"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="68" y="0" width="184" height="20" uuid="3b0c330b-2922-465e-ab7a-2c794975e040"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Empleado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="328" y="0" width="199" height="20" uuid="7afd4fdb-5c94-460b-99e0-3e9463368ce8"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dependencia / Unidad Oragnizativa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="528" y="0" width="199" height="20" uuid="4968ab13-900c-4b6d-814a-6bc54f187e47"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dirección Nacional]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="252" y="0" width="74" height="20" uuid="68cce980-92cc-465a-a58e-d63fa801d4c9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Padre/Madre]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="33" splitType="Stretch">
+			<textField>
+				<reportElement x="67" y="1" width="184" height="30" uuid="8befd9e6-4f1f-40f3-a719-2f251ab0fcfe"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{empleados_nombre_empleado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="326" y="1" width="199" height="30" uuid="af9fb6b2-e8dc-4907-8542-c03acb1916ad"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{dependencias_nombre_dependencia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="527" y="1" width="199" height="30" uuid="782f1220-757d-4c9b-9e65-9c81db20c0aa"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{dir_nacional_nombre_dir_nac}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="33" y="1" width="20" height="30" uuid="94ea4a49-28f8-4452-9a41-981034954b8f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="33" y="0" width="694" height="1" forecolor="#999999" uuid="0e058bd9-2336-4909-841d-e57d2c8a9554"/>
+			</line>
+			<textField>
+				<reportElement x="252" y="1" width="75" height="30" uuid="0da52dca-e30c-44df-80e9-d15dca44c985"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{empleados_genero}.equals( "FEMENINO" ) ? "Madre":"Padre"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="70" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="67" y="34" width="100" height="20" uuid="ba5a5e2e-951c-407b-b0ca-c979cdd1917b"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField pattern="h.mm.ss a">
+				<reportElement x="167" y="34" width="100" height="20" uuid="a5b45112-ee26-43f5-bb6b-230cc34a93ed"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="607" y="34" width="80" height="20" uuid="9b87f88d-b9d9-44b4-9c1e-5c4327067986"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="687" y="34" width="40" height="20" uuid="f9d0083b-e5e8-49d1-aeca-48a3db8990cf"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

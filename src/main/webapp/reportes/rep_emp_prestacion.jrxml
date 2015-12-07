@@ -93,21 +93,21 @@ WHERE emp_prestacion."id_prestacion" = $P{id_prestacion}]]>
 	<columnHeader>
 		<band height="20" splitType="Stretch">
 			<staticText>
-				<reportElement x="28" y="0" width="170" height="20" uuid="02932c5d-181b-409e-837f-4d9a0940456b"/>
+				<reportElement x="33" y="0" width="170" height="20" uuid="02932c5d-181b-409e-837f-4d9a0940456b"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Empleado]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="203" y="0" width="170" height="20" uuid="bb4c43c9-7a30-4045-907f-8ab059af6e6f"/>
+				<reportElement x="208" y="0" width="170" height="20" uuid="bb4c43c9-7a30-4045-907f-8ab059af6e6f"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Dirección Nacional]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="377" y="0" width="170" height="20" uuid="9478bf01-b7ec-4757-a141-b8c4439355ad"/>
+				<reportElement x="382" y="0" width="170" height="20" uuid="9478bf01-b7ec-4757-a141-b8c4439355ad"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
@@ -118,23 +118,28 @@ WHERE emp_prestacion."id_prestacion" = $P{id_prestacion}]]>
 	<detail>
 		<band height="37" splitType="Stretch">
 			<textField>
-				<reportElement x="28" y="1" width="170" height="35" uuid="d0869b59-80e5-4932-a92a-f755a42aa758"/>
+				<reportElement x="33" y="1" width="170" height="35" uuid="d0869b59-80e5-4932-a92a-f755a42aa758"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{empleados_nombre_empleado}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="203" y="1" width="170" height="35" uuid="0bbd3e23-3ff2-41c8-b168-e5f025f2c0ae"/>
+				<reportElement x="208" y="1" width="170" height="35" uuid="0bbd3e23-3ff2-41c8-b168-e5f025f2c0ae"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{dir_nacional_nombre_dir_nac}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="377" y="1" width="170" height="35" uuid="7ee562d9-2637-409f-99e1-ddbdabdd8222"/>
+				<reportElement x="382" y="1" width="170" height="35" uuid="7ee562d9-2637-409f-99e1-ddbdabdd8222"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{dependencias_nombre_dependencia}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="25" y="0" width="522" height="1" forecolor="#CCCCCC" uuid="d6cfda93-bdd0-46e1-88db-556d11ee386d"/>
+				<reportElement x="8" y="0" width="539" height="1" forecolor="#CCCCCC" uuid="d6cfda93-bdd0-46e1-88db-556d11ee386d"/>
 			</line>
+			<textField>
+				<reportElement x="8" y="1" width="20" height="35" uuid="b9bb4011-1fca-4191-bc04-198a579725af"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<pageFooter>

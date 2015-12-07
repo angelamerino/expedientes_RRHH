@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rep_costo_total_prestacion_emp" printOrder="Horizontal" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="792" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="b1897141-fa96-409a-841d-a7579d2c3f15">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.columns" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.rows" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.wrap.text" value="false"/>
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.white.page.background" value="false"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="a613eebc-7f20-4a4c-9fa1-944d4715965b"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="id_empleado" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="total" class="java.lang.Double"/>
+	<parameter name="path" class="java.lang.String"/>
+	<parameter name="pathRep" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+     tipo_prestacion."nombre_tipo_prestacion" AS tipo_prestacion_nombre_tipo_prestacion,
+     prestacion."costo_prestacion" AS prestacion_costo_prestacion,
+     emp_prestacion."id_prestacion" AS emp_prestacion_id_prestacion,
+     emp_prestacion."id_empleado" AS emp_prestacion_id_empleado,
+     empleados."nombre_empleado" AS empleados_nombre_empleado
+FROM
+     "public"."empleados" empleados INNER JOIN "public"."emp_prestacion" emp_prestacion ON empleados."id_empleado" = emp_prestacion."id_empleado"
+     INNER JOIN "public"."prestacion" prestacion ON emp_prestacion."id_prestacion" = prestacion."id_prestacion"
+     INNER JOIN "public"."tipo_prestacion" tipo_prestacion ON prestacion."id_tipo_prestacion" = tipo_prestacion."id_tipo_prestacion"
+WHERE
+emp_prestacion."id_empleado" = $P{id_empleado}]]>
+	</queryString>
+	<field name="tipo_prestacion_nombre_tipo_prestacion" class="java.lang.String"/>
+	<field name="prestacion_costo_prestacion" class="java.lang.Double"/>
+	<field name="emp_prestacion_id_prestacion" class="java.lang.Integer"/>
+	<field name="emp_prestacion_id_empleado" class="java.lang.Integer"/>
+	<field name="empleados_nombre_empleado" class="java.lang.String"/>
+	<variable name="prestacion_costo_prestacion_1" class="java.lang.Double" resetType="Page" calculation="Sum">
+		<variableExpression><![CDATA[$F{prestacion_costo_prestacion}]]></variableExpression>
+	</variable>
+	<title>
+		<band height="27" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="792" height="27" forecolor="#2A4A6A" backcolor="#DCE2FC" uuid="2d43b7c5-7e7a-4304-b030-81e8c9e25705"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE DE COSTO TOTAL Y PRESTACIONES POR EMPLEADO]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="21" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="101" height="21" uuid="22fbc115-f87d-4af3-bb17-ca2893413506"/>
+				<textElement textAlignment="Right">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Empleado:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="101" y="0" width="691" height="21" uuid="36e3a7b5-0c18-45e6-8618-56463e974e12"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{empleados_nombre_empleado}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="22" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Transparent" x="35" y="0" width="219" height="22" backcolor="#CCFFFF" uuid="a4fce94c-6870-4d48-ae8d-d296cf5a1a02"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[NOMBRE DE LA PRESTACIÓN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="254" y="0" width="376" height="22" backcolor="#CCFFFF" uuid="3bf3a8ae-4251-42a4-a39c-4afeec740da1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[DETALLE DE PRESTACIÓN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="630" y="0" width="162" height="22" backcolor="#CCFFFF" uuid="23ddc03a-b61c-49db-8fd3-9b9fa502b0f6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[SUB TOTAL]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="201" splitType="Stretch">
+			<textField>
+				<reportElement x="35" y="0" width="219" height="201" uuid="0d9c5bb0-522d-48fc-b5f4-6968433f5afc"/>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[$F{tipo_prestacion_nombre_tipo_prestacion}]]></textFieldExpression>
+			</textField>
+			<subreport isUsingCache="false">
+				<reportElement x="254" y="0" width="376" height="201" uuid="e202da6d-9808-47e1-ad1e-b872b6930049"/>
+				<subreportParameter name="id_prestacion">
+					<subreportParameterExpression><![CDATA[$F{emp_prestacion_id_prestacion}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{pathRep} + "rep_costo_total_prestacion_emp_detalle_excel.jasper"]]></subreportExpression>
+			</subreport>
+			<textField pattern="$ ##,#00.00">
+				<reportElement x="630" y="0" width="162" height="201" uuid="ededb3ec-c25b-495b-80bc-eb11e5df60d4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{prestacion_costo_prestacion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="35" height="201" uuid="b1be16f8-0594-4baa-9c8c-50b9a759074f"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<lastPageFooter>
+		<band height="20">
+			<staticText>
+				<reportElement x="0" y="0" width="630" height="20" uuid="ed3baa51-9217-4f05-a04c-b09c84d3dcc7"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL PRESTACIONES PARA EMPLEADO]]></text>
+			</staticText>
+			<textField pattern="$ ##,#00.00" isBlankWhenNull="false">
+				<reportElement x="630" y="0" width="162" height="20" uuid="2dd03612-513b-4201-8ff0-7a5e2c508fb9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+</jasperReport>

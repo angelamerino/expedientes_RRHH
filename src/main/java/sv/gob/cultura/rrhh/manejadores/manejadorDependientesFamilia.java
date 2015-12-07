@@ -5,16 +5,42 @@
  */
 package sv.gob.cultura.rrhh.manejadores;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import org.apache.log4j.PropertyConfigurator;
 import org.primefaces.context.RequestContext;
 import sv.gob.cultura.rrhh.entidades.Dependencias;
 import sv.gob.cultura.rrhh.entidades.DirNacional;
@@ -49,6 +75,8 @@ public class manejadorDependientesFamilia implements Serializable {
     private DependenciasFacade dependenciasFacade;
     @EJB
     private DirNacionalFacade dirNacionalFacade;
+    @Resource(mappedName = "RRHH")
+    DataSource datasource;
 
 //*********************** OBJETOS DE LOS ENTIDADES ***************************** 
     FamiliaDependientesEmp familiaDependientesEmp = new FamiliaDependientesEmp();
@@ -61,8 +89,11 @@ public class manejadorDependientesFamilia implements Serializable {
     private int empleadoSelecionado;                            // id d eempleado selecinado
     private String nombreEmp;                                   // nombre de empleado selecinado
     private String NR;                                          // NR de empleado para realizar busquda
-//********************** GET DE ENTERPRICE JAVA BEAN ***************************
+    private int edadMin;
+    private int edadMax;
+    private int idParentesco;
 
+//********************** GET DE ENTERPRICE JAVA BEAN ***************************
     public FamiliaDependientesEmpFacade getFamiliaDependientesEmpFacade() {
         return familiaDependientesEmpFacade;
     }
@@ -168,6 +199,30 @@ public class manejadorDependientesFamilia implements Serializable {
         this.NR = NR;
     }
 
+    public int getEdadMin() {
+        return edadMin;
+    }
+
+    public void setEdadMin(int edadMin) {
+        this.edadMin = edadMin;
+    }
+
+    public int getEdadMax() {
+        return edadMax;
+    }
+
+    public void setEdadMax(int edadMax) {
+        this.edadMax = edadMax;
+    }
+
+    public int getIdParentesco() {
+        return idParentesco;
+    }
+
+    public void setIdParentesco(int idParentesco) {
+        this.idParentesco = idParentesco;
+    }
+
 // **************** LISTA DE ELEMENTOS EN TABLAS *******************************  
     public List<Parentesco> todosParentesco() {
         return getParentescoFacade().findAll();
@@ -187,6 +242,28 @@ public class manejadorDependientesFamilia implements Serializable {
 
     public List<Empleados> empleadoFiltrado() {
         return getEmpleadosFacade().buscarEmp(this.getDependecia());
+    }
+
+    public List<FamiliaDependientesEmp> repHijosEmpleadosEad() {
+        this.setEdadMin(0);
+        this.setEdadMax(80);
+        return getFamiliaDependientesEmpFacade().buscarHijosEmpEdad(2, this.getEdadMin(), this.getEdadMax());
+    }
+
+    public List<Empleados> repPadresMadresFamilia() {
+        List<FamiliaDependientesEmp> a = getFamiliaDependientesEmpFacade().buscarPadresFamilia(2);
+        List<Empleados> emp = new ArrayList<>();
+
+        Iterator<FamiliaDependientesEmp> nombreIterator = a.iterator();
+        while (nombreIterator.hasNext()) {
+            FamiliaDependientesEmp elemento = nombreIterator.next();
+            Empleados emple = elemento.getIdEmpleado();
+            boolean existe = emp.contains(emple);
+            if (existe == false) {
+                emp.add(emple);
+            }
+        }
+        return emp;
     }
 
 //*************************** FUNCIONES DE GUARDAR *****************************
@@ -316,5 +393,87 @@ public class manejadorDependientesFamilia implements Serializable {
             this.setEmpleadoSelecionado(emp.getIdEmpleado());
             this.setNombreEmp(emp.getNombreEmpleado());
         }
+    }
+
+    // Obtine el path absoluto no importa de donde sea ejecutada la aplicación
+    private String getAbsolutePath(String imageName) {
+        final ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        final StringBuilder logo = new StringBuilder().append(servletContext.getRealPath(""));
+        logo.append(File.separator).append(imageName);
+        return logo.toString();
+    }
+
+    /*
+     ******************************** REPORTES **********************************
+     ******************************
+     */
+    public void repEmpleadosPadresMadresFamilia(ActionEvent actionEvent) throws JRException, IOException, SQLException {
+        // Configuraciones en el log4j.properties para evitar un waring en netbeans (no necesario)
+        String log4jConfPath = getAbsolutePath("reportes\\log4j.properties");
+        PropertyConfigurator.configure(log4jConfPath);
+
+        // Parametros Iniciales
+        InputStream inputStream = null;
+        String rutaJrxml = getAbsolutePath("reportes\\rep_emp_padres_familia.jrxml");
+        String path = getAbsolutePath("resources\\images\\");
+
+        // Carga el archivo Jrxml
+        inputStream = new FileInputStream(rutaJrxml);
+
+        // Cargamos Parametros que se enviaran
+        Map parametros = new HashMap();
+        parametros.put("path", path);
+
+        // Compila y llena el reporte con datos
+        JasperDesign jasperDesign = JRXmlLoader.load(inputStream);
+        JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, datasource.getConnection());
+
+        //Para desgargar pdf
+        HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        response.setContentType("application/pdf");
+        response.addHeader("Content-disposition", "attachment; filename=Reporte_Padres_Madres_Familia.pdf");
+        try (ServletOutputStream stream = response.getOutputStream()) {
+            JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+            stream.flush();
+        }
+        FacesContext.getCurrentInstance().responseComplete();
+
+    }
+    
+    public void repHijosEmpleadosEdad(ActionEvent actionEvent) throws JRException, IOException, SQLException {
+        // Configuraciones en el log4j.properties para evitar un waring en netbeans (no necesario)
+        String log4jConfPath = getAbsolutePath("reportes\\log4j.properties");
+        PropertyConfigurator.configure(log4jConfPath);
+
+        // Parametros Iniciales
+        InputStream inputStream = null;
+        String rutaJrxml = getAbsolutePath("reportes\\rep_hijos_emp_edad.jrxml");
+        String path = getAbsolutePath("resources\\images\\");
+
+        // Carga el archivo Jrxml
+        inputStream = new FileInputStream(rutaJrxml);
+
+        // Cargamos Parametros que se enviaran
+        Map parametros = new HashMap();
+        parametros.put("edadMin", this.getEdadMin());
+        parametros.put("edadMax", this.getEdadMax());
+        parametros.put("path", path);
+
+        // Compila y llena el reporte con datos
+        JasperDesign jasperDesign = JRXmlLoader.load(inputStream);
+        JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, datasource.getConnection());
+
+        //Para desgargar pdf
+        HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        response.setContentType("application/pdf");
+        response.addHeader("Content-disposition", "attachment; filename=Reporte_Hijos_Empeados_Edad.pdf");
+        try (ServletOutputStream stream = response.getOutputStream()) {
+            JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+            stream.flush();
+        }
+        FacesContext.getCurrentInstance().responseComplete();
+
     }
 }

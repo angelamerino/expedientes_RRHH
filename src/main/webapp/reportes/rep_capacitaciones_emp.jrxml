@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rep_capacitaciones_emp" pageWidth="572" pageHeight="752" columnWidth="572" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="b0e5e1d3-db5c-4e3e-96d5-d3a23abab3aa">
-	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="96"/>
-	<property name="ireport.y" value="386"/>
+	<property name="ireport.zoom" value="1.2396694214876032"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="349"/>
 	<style name="Title" isBlankWhenNull="false" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -89,28 +89,28 @@ WHERE
 				<textFieldExpression><![CDATA[$F{empleados_nombre_empleado}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="36" y="77" width="155" height="20" uuid="f536eba3-b2f6-46c2-8884-cf6269adbfc3"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<reportElement x="44" y="77" width="155" height="20" uuid="f536eba3-b2f6-46c2-8884-cf6269adbfc3"/>
+				<textElement verticalAlignment="Middle">
 					<font fontName="Calibri" size="13" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Tema]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="192" y="77" width="147" height="20" uuid="c8063081-b3ac-42d7-baeb-3464b00bafe9"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<reportElement x="200" y="77" width="147" height="20" uuid="c8063081-b3ac-42d7-baeb-3464b00bafe9"/>
+				<textElement verticalAlignment="Middle">
 					<font fontName="Calibri" size="13" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Facililitador]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="340" y="77" width="114" height="20" uuid="93db6345-1ae0-46d1-a815-ecdf9caf4a03"/>
+				<reportElement x="348" y="77" width="114" height="20" uuid="93db6345-1ae0-46d1-a815-ecdf9caf4a03"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Calibri" size="13" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Número de Horas]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="455" y="77" width="85" height="20" uuid="4109a918-0120-41bc-a224-a0fac2a10ea7"/>
+				<reportElement x="463" y="77" width="85" height="20" uuid="4109a918-0120-41bc-a224-a0fac2a10ea7"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Calibri" size="13" isBold="true"/>
 				</textElement>
@@ -124,31 +124,36 @@ WHERE
 	<detail>
 		<band height="40" splitType="Stretch">
 			<textField>
-				<reportElement x="36" y="4" width="150" height="36" uuid="034196f6-5afe-443c-8b45-012c49a61985"/>
+				<reportElement x="44" y="4" width="150" height="36" uuid="034196f6-5afe-443c-8b45-012c49a61985"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{capacitaciones_tema_cap}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="192" y="4" width="147" height="36" uuid="a266fc54-eb0c-4d5f-9e62-4c9a043ee368"/>
+				<reportElement x="200" y="4" width="147" height="36" uuid="a266fc54-eb0c-4d5f-9e62-4c9a043ee368"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{capacitaciones_facilitador_cap}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="340" y="4" width="114" height="36" uuid="958605b9-4a7c-4e33-892e-8a128ac4d798"/>
+				<reportElement x="348" y="4" width="114" height="36" uuid="958605b9-4a7c-4e33-892e-8a128ac4d798"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{capacitaciones_num_horas_cap}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="455" y="4" width="85" height="36" uuid="1800706d-11ad-4d7f-82e3-70d8a16011dc"/>
+				<reportElement x="463" y="4" width="85" height="36" uuid="1800706d-11ad-4d7f-82e3-70d8a16011dc"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{asignar_asistencia_cap_cap_asistida}.equals(Boolean.TRUE) ? "Si":"No"]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement positionType="FixRelativeToBottom" x="36" y="0" width="504" height="1" uuid="8a903bb6-fa6b-4f4c-9aa9-18fb3a1402a6"/>
+				<reportElement positionType="FixRelativeToBottom" x="18" y="0" width="530" height="1" uuid="8a903bb6-fa6b-4f4c-9aa9-18fb3a1402a6"/>
 				<graphicElement>
 					<pen lineWidth="0.5" lineColor="#999999"/>
 				</graphicElement>
 			</line>
+			<textField>
+				<reportElement x="18" y="4" width="20" height="36" uuid="bafae2f8-679c-41a4-86ef-ddd955d0f2ad"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<pageFooter>
@@ -173,12 +178,6 @@ WHERE
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
-			<line>
-				<reportElement positionType="FixRelativeToBottom" x="36" y="1" width="504" height="1" uuid="8c82f07c-8100-46ca-824a-742a0ea4b38a"/>
-				<graphicElement>
-					<pen lineWidth="0.5" lineColor="#999999"/>
-				</graphicElement>
-			</line>
 		</band>
 	</pageFooter>
 </jasperReport>

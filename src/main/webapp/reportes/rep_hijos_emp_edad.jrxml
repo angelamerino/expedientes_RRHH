@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rep_hijos_emp_edad" printOrder="Horizontal" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" uuid="8dba53b8-90d3-4bcf-8da3-7cdcbee5194a">
+	<property name="ireport.zoom" value="1.3286707500000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="192"/>
+	<parameter name="path" class="java.lang.String"/>
+	<parameter name="edadMin" class="java.lang.Integer"/>
+	<parameter name="edadMax" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT
+     parentesco."nombre_parentesco" AS parentesco_nombre_parentesco,
+     familia_dependientes_emp."nombre_familia" AS familia_dependientes_emp_nombre_familia,
+     familia_dependientes_emp."edad_familia" AS familia_dependientes_emp_edad_familia,
+     empleados."nombre_empleado" AS empleados_nombre_empleado,
+     dependencias."nombre_dependencia" AS dependencias_nombre_dependencia,
+     dir_nacional."nombre_dir_nac" AS dir_nacional_nombre_dir_nac
+FROM
+     "public"."dependencias" dependencias INNER JOIN "public"."empleados" empleados ON dependencias."id_dependencia" = empleados."id_dependencia_n"
+     AND dependencias."id_dependencia" = empleados."id_dependencia_f"
+     INNER JOIN "public"."dir_nacional" dir_nacional ON dependencias."id_dir_nac" = dir_nacional."id_dir_nac"
+     INNER JOIN "public"."familia_dependientes_emp" familia_dependientes_emp ON empleados."id_empleado" = familia_dependientes_emp."id_empleado"
+     INNER JOIN "public"."parentesco" parentesco ON familia_dependientes_emp."id_parentesco" = parentesco."id_parentesco"
+WHERE familia_dependientes_emp."edad_familia" >= $P{edadMin} AND familia_dependientes_emp."edad_familia" <= $P{edadMax}]]>
+	</queryString>
+	<field name="parentesco_nombre_parentesco" class="java.lang.String"/>
+	<field name="familia_dependientes_emp_nombre_familia" class="java.lang.String"/>
+	<field name="familia_dependientes_emp_edad_familia" class="java.lang.Integer"/>
+	<field name="empleados_nombre_empleado" class="java.lang.String"/>
+	<field name="dependencias_nombre_dependencia" class="java.lang.String"/>
+	<field name="dir_nacional_nombre_dir_nac" class="java.lang.String"/>
+	<background>
+		<band height="612" splitType="Stretch">
+			<image scaleImage="FillFrame">
+				<reportElement x="-22" y="0" width="794" height="20" uuid="706ee0f9-0e5f-4ed7-b46b-627dd7c2492d"/>
+				<imageExpression><![CDATA[$P{path}.concat( "encabezado_pie.png" )]]></imageExpression>
+			</image>
+			<image scaleImage="FillFrame">
+				<reportElement x="-22" y="592" width="794" height="20" uuid="d8bc964a-89f7-462e-884b-e9d03e461c36"/>
+				<imageExpression><![CDATA[$P{path}.concat( "encabezado_pie.png" )]]></imageExpression>
+			</image>
+		</band>
+	</background>
+	<title>
+		<band height="192" splitType="Stretch">
+			<image scaleImage="RetainShape" hAlign="Right">
+				<reportElement x="502" y="23" width="250" height="140" uuid="f6f0b820-d6fa-4e94-9847-f89bf43307dd"/>
+				<imageExpression><![CDATA[$P{path}.concat( "logo_rep.png" )]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement mode="Opaque" x="164" y="152" width="424" height="30" forecolor="#2A4A6A" backcolor="#DCE2FC" uuid="5130c776-1ae2-4083-ae9a-2dbd6bda8f46"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE DE HIJO SE EMPLEADOS POR EDAD]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="21" splitType="Stretch">
+			<staticText>
+				<reportElement x="37" y="0" width="160" height="20" uuid="9a0400ed-f98d-4cc4-aa82-abdefacd592b"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre de Hijo/a]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="199" y="1" width="30" height="20" uuid="9c9a6e78-6a8b-4d45-b6f1-fc97c0de07e4"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Edad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="230" y="0" width="160" height="20" uuid="2e983818-f9bc-4ef3-b0b7-1805f994ff82"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre de Padre/Madre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="396" y="0" width="165" height="20" uuid="628be9c8-364c-4955-946b-a5009f9b58da"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Direccion Nacional Padre/Madre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="566" y="0" width="165" height="20" uuid="9de0da0f-6148-45af-b4fa-eb83f94ad642"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Unidad Organizativa Padre/Madre]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="31" splitType="Stretch">
+			<textField>
+				<reportElement x="37" y="0" width="160" height="30" uuid="0e4ef5fb-30ba-4e50-9d35-c64cdd581564"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{familia_dependientes_emp_nombre_familia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="12" y="0" width="20" height="30" uuid="db2f4729-aa3d-4919-b05a-ab0ab3089225"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="199" y="0" width="30" height="30" uuid="c86d4af3-8080-4122-9b0d-4b6e110dfe78"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{familia_dependientes_emp_edad_familia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="230" y="0" width="160" height="30" uuid="03ebd581-f49d-4f9e-91f9-75bf9e13914b"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{empleados_nombre_empleado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="396" y="0" width="165" height="30" uuid="aa5273e1-a481-48fb-8bbc-79d6b5c2bfb8"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dir_nacional_nombre_dir_nac}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="566" y="0" width="165" height="30" uuid="fe02f9b4-00e7-4f00-9e16-669ffd4e028a"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dependencias_nombre_dependencia}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="16" y="0" width="715" height="1" forecolor="#999999" uuid="545bb7ce-6979-4453-8268-c61750f0939c"/>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="17" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="70" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="60" y="34" width="100" height="20" uuid="d95db8e5-0987-40da-8d37-541200798de1"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField pattern="h.mm.ss a">
+				<reportElement x="160" y="34" width="100" height="20" uuid="c60639fa-0828-4963-a72e-97e0e7d8d6d7"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="588" y="34" width="80" height="20" uuid="d610c8ee-10d1-408c-bdbc-4e0b2da18d05"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="668" y="34" width="40" height="20" uuid="b5443fb3-aeb2-4745-a732-97d7d801b774"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
