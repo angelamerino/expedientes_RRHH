@@ -20,6 +20,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -40,6 +41,9 @@ import javax.persistence.TemporalType;
     //@NamedQuery(name = "AsignarAsistenciaCap.findByFechaModAisgAsis", query = "SELECT a FROM AsignarAsistenciaCap a WHERE a.fechaModAisgAsis = :fechaModAisgAsis")
 })
 public class AsignarAsistenciaCap implements Serializable {
+    @Size(max = 1024)
+    @Column(name = "justificacion")
+    private String justificacion;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -169,6 +173,14 @@ public class AsignarAsistenciaCap implements Serializable {
     @Override
     public String toString() {
         return "sv.gob.cultura.rrhh.entidades.AsignarAsistenciaCap[ idAsigAsis=" + idAsigAsis + " ]";
+    }
+
+    public String getJustificacion() {
+        return justificacion;
+    }
+
+    public void setJustificacion(String justificacion) {
+        this.justificacion = justificacion;
     }
     
 }

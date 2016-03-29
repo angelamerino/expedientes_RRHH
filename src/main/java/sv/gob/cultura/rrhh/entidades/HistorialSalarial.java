@@ -46,18 +46,21 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "HistorialSalarial.findByUserModHsal", query = "SELECT h FROM HistorialSalarial h WHERE h.userModHsal = :userModHsal"),
     @NamedQuery(name = "HistorialSalarial.findByFechaModHsal", query = "SELECT h FROM HistorialSalarial h WHERE h.fechaModHsal = :fechaModHsal")})
 public class HistorialSalarial implements Serializable {
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "salario_actual_hsalarial")
+    private Double salarioActualHsalarial;
+    @Column(name = "nuevo_salario_hsalarial")
+    private Double nuevoSalarioHsalarial;
+    @Column(name = "sal_min")
+    private Double salMin;
+    @Column(name = "sal_max")
+    private Double salMax;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id_hsalarial")
     private Integer idHsalarial;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "salario_actual_hsalarial")
-    private double salarioActualHsalarial;
-    @Column(name = "nuevo_salario_hsalarial")
-    private double nuevoSalarioHsalarial;
     @Column(name = "porcentaje_hsalarial")
     private double porcentajeHsalarial;
     @Basic(optional = false)
@@ -74,10 +77,6 @@ public class HistorialSalarial implements Serializable {
     private Integer tipoHistorial;
     @Column(name = "verificacion_historial")
     private Integer verificacionHistorial;
-    @Column(name = "sal_min")
-    private double salMin;
-    @Column(name = "sal_max")
-    private double salMax;
     @Column(name = "fecha_crea_hsal")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreaHsal;
@@ -269,6 +268,26 @@ public class HistorialSalarial implements Serializable {
     @Override
     public String toString() {
         return "sv.gob.cultura.rrhh.entidades.HistorialSalarial[ idHsalarial=" + idHsalarial + " ]";
+    }
+
+
+    public void setSalarioActualHsalarial(Double salarioActualHsalarial) {
+        this.salarioActualHsalarial = salarioActualHsalarial;
+    }
+
+    
+    public void setNuevoSalarioHsalarial(Double nuevoSalarioHsalarial) {
+        this.nuevoSalarioHsalarial = nuevoSalarioHsalarial;
+    }
+
+   
+    public void setSalMin(Double salMin) {
+        this.salMin = salMin;
+    }
+
+    
+    public void setSalMax(Double salMax) {
+        this.salMax = salMax;
     }
     
 }

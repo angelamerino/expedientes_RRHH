@@ -43,6 +43,9 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "FamiliaDependientesEmp.findByIdEmpleado", query = "SELECT f FROM FamiliaDependientesEmp f WHERE f.idEmpleado.idEmpleado = :idEmpleado"),
     @NamedQuery(name = "FamiliaDependientesEmp.findByFechaModFam", query = "SELECT f FROM FamiliaDependientesEmp f WHERE f.fechaModFam = :fechaModFam")})
 public class FamiliaDependientesEmp implements Serializable {
+    @Size(max = 100)
+    @Column(name = "genero_fam")
+    private String generoFam;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -191,6 +194,14 @@ public class FamiliaDependientesEmp implements Serializable {
     @Override
     public String toString() {
         return "sv.gob.cultura.rrhh.entidades.FamiliaDependientesEmp[ idFamilia=" + idFamilia + " ]";
+    }
+
+    public String getGeneroFam() {
+        return generoFam;
+    }
+
+    public void setGeneroFam(String generoFam) {
+        this.generoFam = generoFam;
     }
     
 }

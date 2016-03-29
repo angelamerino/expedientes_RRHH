@@ -1,0 +1,199 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../resources/plantilla/plantilla.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+
+    <ui:define name="content">
+        <link href="#{request.contextPath}/resources/datatables/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
+
+
+        <div class="page-header">
+            <h1 class="pull-left"><strong>REPORTE DE EMPLEADOS POR GÉNERO</strong></h1>
+
+            <div class="clearfix" ></div>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading"><strong>Seleccionar parámetros para generación de reporte</strong></div>
+            <div class="panel-body">
+
+                <h:form>
+            <h:commandButton value="PDF" actionListener="#{manejadorGestionEmpleado2.PDF}"/>
+             <h:commandButton value="Docx" actionListener="#{manejadorGestionEmpleado2.DOCX}"/>
+              <h:commandButton value="Xlsx" actionListener="#{manejadorGestionEmpleado2.XLSX}"/>
+               <h:commandButton value="Odt" actionListener="#{manejadorGestionEmpleado2.ODT}"/>
+               <h:commandButton value="Ppt" actionListener="#{manejadorGestionEmpleado2.PPT}"/>
+        </h:form>
+                <p:dataTable style="font-size: 12px" 
+                                 id="listaEmpleados" 
+                                 value="#{manejadorGestionEmpleado2.todosEmpleados()}"
+                                 var="item" styleClass="table table-striped table-hover" 
+                                 widgetVar="listado"
+                                 rows="10" 
+                                 paginator="true"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15"
+                                 emptyMessage="" 
+                                 paginatorPosition="bottom">
+
+            <p:column style="font-size: 12px; text-align: center;">
+                            <f:facet name="header" >
+                                <h:outputText value="Nombre del Empleado"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nombreEmpleado}"/>
+                        </p:column>
+          
+                    <p:column style="font-size: 12px; text-align: center;" filterBy="#{item.idGenero.nombreGenero}" filterMatchMode="contains">
+                            <f:facet name="header" >
+                                <h:outputText value="Género"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idGenero.nombreGenero}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{item.idDependenciaF.idDirNac.nombreDirNac}" filterMatchMode="contains" style="font-size: 12px; text-align: center;" >
+                            <f:facet name="header" >
+                                <h:outputText value="Dirección Nacional"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idDependenciaF.idDirNac.nombreDirNac}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{item.idDependenciaF.nombreDependencia}" filterMatchMode="contains" style="font-size: 12px; text-align: center;">
+                            <f:facet name="header" >
+                                <h:outputText value="Unidad Organizativa/Dependencia"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idDependenciaF.nombreDependencia}"/>
+                        </p:column>
+        </p:dataTable>
+            </div>
+
+        </div>
+
+
+        <!-- **** DIALOGO CAPTURAR PARAMETRO PARA REPORTE EN PDF **** -->
+        <p:dialog header="Generar Reporte en formato PDF" widgetVar="parametrosDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" class="modal-open" width="70%" >
+            <h:form class="form-horizontal" prependId="false" >
+                <p:messages showSummary="true" />
+                <h:panelGroup id ="gridParametro">
+
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">                                                                                     
+                                <div class="row">
+
+                                    <div class="form-group">
+                                        <p:outputLabel class="col-md-4 control-label" value="Género:" for="genero"/>
+                                        <div class="col-md-8">
+                                            <p:selectOneMenu id="genero" value="#{manejadorGestionEmpleado.genero}" style="width:600px" 
+                                                             title="Género">
+                                                <f:selectItem itemLabel="Seleccionar..." noSelectionOption="true" itemValue="#{null}"/>
+                                                <f:selectItems value="#{manejadorGestionEmpleado.todosGeneros()}" var="genero1" itemLabel="#{genero1.nombreGenero}" itemValue="#{genero1.idGenero}"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <p:outputLabel class="col-md-4 control-label" value="Dirección Nacional:" for="dirNac"/>
+                                        <div class="col-md-8">
+                                            <p:selectOneMenu id="dirNac" value="#{manejadorUsuarios.dirNacionalFuncional}" style="width:600px" 
+                                                             title="Dirección Nacional" required="true" requiredMessage="Es necesario que seleccione una Dirección Nacional.">
+                                                <f:selectItem itemLabel="Seleccionar..." noSelectionOption="true" itemValue="#{null}"/>
+                                                <f:selectItems value="#{manejadorGestionEmpleado.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
+                                                <!-- <p:ajax update="dependecia" process="@this" rendered="dependencia"/> -->
+                                                <p:ajax update="dependencia"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <p:outputLabel class="col-md-4 control-label" value="Dependencia:" for="dependencia"/>
+                                        <div class="col-md-8">
+                                            <p:selectOneMenu id="dependencia" value="#{manejadorUsuarios.usuarioSeleccionado.idDependencia}" style="width:600px"
+                                                             title="Dependencias" required="true" requiredMessage="El nombre de la Dependencia es un campo requerido."
+                                                             converter="#{dependenciasConvertidor}">
+                                                <f:selectItem itemLabel="Seleccionar..." noSelectionOption="true" itemValue="#{null}"/>
+                                                <f:selectItems value="#{manejadorUsuarios.dependenciasFiltradas()}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a}"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+
+                                </div><!--class="row-->
+                            </div><!--class="col-md-12-->
+                        </div> <!--class="row-->
+                    </div> <!--class="container-fluid-->
+
+
+                    <!-- <p:commandButton icon="ui ui-icon-disk" value="Actualizar usuario" process="@this modiUsuario" action="{managerUsuarios.editUsuario()}" update="@this modiUsuario" oncomplete="PF('dlgModifUsuario').hide();"/>-->
+
+                    <div class="form-group">
+                        <div class="col-md-6"></div>
+                        <div class="col-md-6" align="right">
+                            <h:commandButton style="margin: 2px" styleClass="btn btn-info"  value="Modificar" action="#{manejadorUsuarios.editarUsuario()}"/>
+                            <h:commandButton class="btn btn-info" style="font-size: 12px" action="#{manejadorGestionEmpleado.cancelarRepGenero()}" value="Cancelar" immediate="true">
+                            </h:commandButton>
+
+                        </div>                    
+                    </div>
+
+                </h:panelGroup>
+            </h:form>
+
+        </p:dialog>
+        <!-- **** TERMINA DIALOGO **** -->
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                var t = $('#listaEmpleados1').DataTable({
+                    "columnDefs": [{
+                            "searchable": false,
+                            "orderable": false,
+                            "targets": 0
+                        },
+                        {
+                            "searchable": false,
+                            "orderable": false,
+                            "targets": 5
+                        }],
+                    "order": [[1, 'asc']],
+                    "oLanguage": {
+                        "sProcessing": "Procesando...",
+                        "sLengthMenu": "Mostrar _MENU_ registros",
+                        "sZeroRecords": "No se encontraron resultados",
+                        "sEmptyTable": "Ningún dato disponible en esta tabla",
+                        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                        "sInfoPostFix": "",
+                        "sSearch": "Buscar:",
+                        "sUrl": "",
+                        "sInfoThousands": ",",
+                        "sLoadingRecords": "Cargando...",
+                        "oPaginate": {
+                            "sFirst": "Primero",
+                            "sLast": "Último",
+                            "sNext": "Siguiente",
+                            "sPrevious": "Anterior"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                        }
+                    }
+                });
+
+                t.on('order.dt search.dt', function () {
+                    t.column(0, {search: 'applied', order: 'applied'}).nodes().each(function (cell, i) {
+                        cell.innerHTML = i + 1;
+                    });
+                }).draw();
+            });
+        </script>
+        <script src="#{request.contextPath}/resources/datatables/jquery.dataTables.min.js" type="text/javascript"></script>
+    </ui:define>
+
+</ui:composition>

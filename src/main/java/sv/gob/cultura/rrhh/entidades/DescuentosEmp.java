@@ -47,6 +47,9 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "DescuentosEmp.findByUserModDesc", query = "SELECT d FROM DescuentosEmp d WHERE d.userModDesc = :userModDesc"),
     @NamedQuery(name = "DescuentosEmp.findByFechaModDesc", query = "SELECT d FROM DescuentosEmp d WHERE d.fechaModDesc = :fechaModDesc")})
 public class DescuentosEmp implements Serializable {
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "cuota_complemento")
+    private Double cuotaComplemento;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -71,10 +74,6 @@ public class DescuentosEmp implements Serializable {
     @NotNull
     @Column(name = "cuota_mensual")
     private double cuotaMensual;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "cuota_complemento")
-    private double cuotaComplemento;
     @Column(name = "monto_total")
     private double montoTotal;
     @Basic(optional = false)
@@ -272,6 +271,11 @@ public class DescuentosEmp implements Serializable {
     @Override
     public String toString() {
         return "sv.gob.cultura.rrhh.entidades.DescuentosEmp[ idDescuentoEmp=" + idDescuentoEmp + " ]";
+    }
+
+    
+    public void setCuotaComplemento(Double cuotaComplemento) {
+        this.cuotaComplemento = cuotaComplemento;
     }
     
 }

@@ -41,6 +41,9 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "ContactoEmergenciaEmp.findByIdEmpleado", query = "SELECT c FROM ContactoEmergenciaEmp c WHERE c.idEmpleado.idEmpleado = :idEmpleado"),
     @NamedQuery(name = "ContactoEmergenciaEmp.findByFechaModContac", query = "SELECT c FROM ContactoEmergenciaEmp c WHERE c.fechaModContac = :fechaModContac")})
 public class ContactoEmergenciaEmp implements Serializable {
+    @Size(max = 1024)
+    @Column(name = "direccion_contacto")
+    private String direccionContacto;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -190,6 +193,14 @@ public class ContactoEmergenciaEmp implements Serializable {
     @Override
     public String toString() {
         return "sv.gob.cultura.rrhh.entidades.ContactoEmergenciaEmp[ idContactoEmer=" + idContactoEmer + " ]";
+    }
+
+    public String getDireccionContacto() {
+        return direccionContacto;
+    }
+
+    public void setDireccionContacto(String direccionContacto) {
+        this.direccionContacto = direccionContacto;
     }
     
 }

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rep_prueba" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" uuid="ee62bde0-d59b-4fca-a873-39fff65301ce">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="path" class="java.lang.String"/>
+	<field name="f_nombreEmpleado" class="java.lang.String"/>
+	<field name="f_genero" class="java.lang.String"/>
+	<field name="f_dir_nac" class="java.lang.String"/>
+	<field name="f_dependencia" class="java.lang.String"/>
+	<field name="f_departamento" class="java.lang.String"/>
+	<field name="f_municipio" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="190" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="23" y="136" width="701" height="54" forecolor="#2A4A6A" backcolor="#DCE2FC" uuid="897cb1cc-7d9c-4c3a-822b-03a1444fdbf5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE DE EMPLEADOS POR GÉNERO, DIRECCIÓN NACIONAL Y UNIDAD ORGANIZATIVA]]></text>
+			</staticText>
+			<image>
+				<reportElement x="582" y="12" width="170" height="96" uuid="0814b0f9-2cab-4ef4-b819-5402dd91705b"/>
+				<imageExpression><![CDATA[$P{path}.concat( "logo2_peq2.png" )]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="58" y="27" width="460" height="49" uuid="8d901752-386b-4d31-8fd3-c6f00bdb77af"/>
+				<imageExpression><![CDATA["C:\\Users\\Angela\\Documents\\NetBeansProjects\\rrhh\\src\\main\\webapp\\resources\\images\\pdf_icon.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement x="10" y="15" width="66" height="20" uuid="930e7f7c-9e68-4323-9439-6dba96d18a71"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Género:]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="264" y="41" width="163" height="20" uuid="0c861236-7382-4289-8a54-e959c3bc02ec"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dirección Nacional]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="427" y="41" width="135" height="20" uuid="33659dbc-44e7-44c6-8f6d-1c83d7c6dd3c"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dependencia / Unidad Organizativa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="174" y="41" width="90" height="20" uuid="c8aba267-22f7-4ed2-bb4b-322a319ddaad"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Género]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="41" width="174" height="20" uuid="b3184406-d4b9-4f06-a54b-cfea41dd507e"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Empleado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="562" y="41" width="95" height="20" uuid="b3b98b01-d780-4cbc-a849-7f3770d976b5"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Departamento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="657" y="41" width="95" height="20" uuid="3bc35a29-94b8-40fd-84df-f4135bfe3e19"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Municipio]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField>
+				<reportElement x="427" y="0" width="100" height="20" uuid="562deea9-a0af-41fe-a97a-456b8bb265eb"/>
+				<textFieldExpression><![CDATA[$F{f_dependencia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="652" y="0" width="100" height="20" uuid="a7247f5d-23d0-4c09-9db2-9250124b9409"/>
+				<textFieldExpression><![CDATA[$F{f_municipio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="143" height="20" uuid="f36ea168-7db0-4b91-ad7e-5c4c1813a381"/>
+				<textFieldExpression><![CDATA[$F{f_nombreEmpleado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="174" y="0" width="100" height="20" uuid="9cf58f97-d6f6-419e-9f8e-267e3a666aec"/>
+				<textFieldExpression><![CDATA[$F{f_genero}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="274" y="0" width="100" height="20" uuid="c04d85ff-b26b-477e-9170-964e16f6aa35"/>
+				<textFieldExpression><![CDATA[$F{f_dir_nac}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="552" y="0" width="100" height="20" uuid="d545306d-bd25-4751-9745-cce27ef6891c"/>
+				<textFieldExpression><![CDATA[$F{f_departamento}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField pattern="dd-MMM-yyyy">
+				<reportElement x="0" y="34" width="100" height="20" uuid="45168f09-6718-45be-a769-05506b72a3b6"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="632" y="34" width="80" height="20" uuid="5bbe78cc-e558-470d-8c36-eddafaa4a282"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="712" y="34" width="40" height="20" uuid="67d4c934-bcb2-4ffd-bf8d-d1781f56d25a"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

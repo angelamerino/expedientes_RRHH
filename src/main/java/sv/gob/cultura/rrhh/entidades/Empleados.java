@@ -78,6 +78,11 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Empleados.findByDeptoResidencia", query = "SELECT e FROM Empleados e WHERE e.deptoResidencia = :deptoResidencia")
 })
 public class Empleados implements Serializable {
+    @Column(name = "salario_historial_aumento")
+    private Double salarioHistorialAumento;
+    @JoinColumn(name = "id_genero", referencedColumnName = "id_genero")
+    @ManyToOne(optional = false)
+    private Genero idGenero;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -167,8 +172,6 @@ public class Empleados implements Serializable {
     private Double salarioEmp;
     @Column(name = "id_historial_salarial")
     private Integer idHistorialSalarial;
-    @Column(name = "salario_historial_aumento")
-    private double salarioHistorialAumento;
     @Column(name = "fecha_ultimo_aumento")
     @Temporal(TemporalType.DATE)
     private Date fechaUltimoAumento;
@@ -843,6 +846,18 @@ public class Empleados implements Serializable {
     @Override
     public String toString() {
         return "sv.gob.cultura.rrhh.entidades.Empleados[ idEmpleado=" + idEmpleado + " ]";
+    }
+
+        public void setSalarioHistorialAumento(Double salarioHistorialAumento) {
+        this.salarioHistorialAumento = salarioHistorialAumento;
+    }
+
+    public Genero getIdGenero() {
+        return idGenero;
+    }
+
+    public void setIdGenero(Genero idGenero) {
+        this.idGenero = idGenero;
     }
     
 }
