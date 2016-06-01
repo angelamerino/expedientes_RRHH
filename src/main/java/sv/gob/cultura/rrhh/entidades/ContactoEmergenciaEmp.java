@@ -35,6 +35,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "ContactoEmergenciaEmp.findByNombreContacto", query = "SELECT c FROM ContactoEmergenciaEmp c WHERE c.nombreContacto = :nombreContacto"),
     @NamedQuery(name = "ContactoEmergenciaEmp.findByTelFijoContacto", query = "SELECT c FROM ContactoEmergenciaEmp c WHERE c.telFijoContacto = :telFijoContacto"),
     @NamedQuery(name = "ContactoEmergenciaEmp.findByTelMovilContacto", query = "SELECT c FROM ContactoEmergenciaEmp c WHERE c.telMovilContacto = :telMovilContacto"),
+    //@NamedQuery(name = "ContactoEmergenciaEmp.findByDirContacto", query = "SELECT c FROM ContactoEmergenciaEmp c WHERE c.dirContacto = :dirContacto"),
     @NamedQuery(name = "ContactoEmergenciaEmp.findByUserCreaContac", query = "SELECT c FROM ContactoEmergenciaEmp c WHERE c.userCreaContac = :userCreaContac"),
     @NamedQuery(name = "ContactoEmergenciaEmp.findByFechaCreaContac", query = "SELECT c FROM ContactoEmergenciaEmp c WHERE c.fechaCreaContac = :fechaCreaContac"),
     @NamedQuery(name = "ContactoEmergenciaEmp.findByUserModContac", query = "SELECT c FROM ContactoEmergenciaEmp c WHERE c.userModContac = :userModContac"),
@@ -61,6 +62,9 @@ public class ContactoEmergenciaEmp implements Serializable {
     @Size(max = 9)
     @Column(name = "tel_movil_contacto")
     private String telMovilContacto;
+//    @Size(max = 1024)
+//    @Column(name = "dir_contacto")
+//    private String dirContacto;
     @Column(name = "user_crea_contac")
     private Integer userCreaContac;
     @Column(name = "fecha_crea_contac")
@@ -89,6 +93,14 @@ public class ContactoEmergenciaEmp implements Serializable {
         this.idContactoEmer = idContactoEmer;
         this.nombreContacto = nombreContacto;
     }
+
+//    public String getDirContacto() {
+//        return dirContacto;
+//    }
+//
+//    public void setDirContacto(String dirContacto) {
+//        this.dirContacto = dirContacto;
+//    }
 
     public Integer getIdContactoEmer() {
         return idContactoEmer;
@@ -195,12 +207,12 @@ public class ContactoEmergenciaEmp implements Serializable {
         return "sv.gob.cultura.rrhh.entidades.ContactoEmergenciaEmp[ idContactoEmer=" + idContactoEmer + " ]";
     }
 
-    public String getDireccionContacto() {
-        return direccionContacto;
-    }
-
-    public void setDireccionContacto(String direccionContacto) {
-        this.direccionContacto = direccionContacto;
-    }
-    
+//    public String getDireccionContacto() {
+//        return direccionContacto;
+//    }
+//
+//    public void setDireccionContacto(String direccionContacto) {
+//        this.direccionContacto = direccionContacto;
+//    }
+//    
 }

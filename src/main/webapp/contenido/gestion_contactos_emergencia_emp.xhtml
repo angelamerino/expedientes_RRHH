@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./../resources/plantilla/plantilla.xhtml"
+                template="../WEB-INF/templates/plantilla.xhtml"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns="http://www.w3.org/1999/xhtml"
@@ -9,244 +9,132 @@
 
     <ui:define name="content">
 
-        <div class="page-header">
-            <h1><strong>CONTACTOS DE EMERGENCIA</strong></h1>
-        </div>
-
-        <div class="panel panel-info">
-            <div class="panel-heading"><strong>Agregar/Eliminar</strong></div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h4>AGREGAR / ELIMINAR CONTACTOS DE EMERGENCIA</h4>
+            </div>
             <div class="panel-body">
-
-                <div class="row">
-                    <div class="col-md-2"></div>
-                    <div class="col-md-8">  
-                        <h2 class="text-info text-center">Buscar Empleado</h2>
-                        <div class="clearfix"></div>
-                        <br />
-                    </div>                            
-                    <div class="col-md-2"></div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-1"></div>
-
-                    <div class="col-md-5"> 
-
-                        <h:form prependId="false">
-                            <p:growl id="growl" showDetail="false"  autoUpdate="true" life="10000" />
-                            <div class="form-group">
-                                <h:outputLabel value="Dirección Nacional:"/>                                
-                                <h:selectOneMenu  class="form-control" id="dirNacionalFiltrarJefe" style="width: 100%" value="#{manejadorContactosEmergencia.direccionNacional}">
-                                    <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
-                                    <f:selectItems value="#{manejadorContactosEmergencia.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
-                                    <f:ajax render="filtrarDependencia filtrarEmpleado nombre tabla"/>
-                                </h:selectOneMenu>
-                            </div>
-
-                            <div class="form-group">
-                                <h:outputLabel value="Dependencia / Unidad organizativa:"/>
-                                <h:selectOneMenu class="form-control" id="filtrarDependencia"  style="width: 100%" value="#{manejadorContactosEmergencia.dependecia}">
-                                    <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
-                                    <f:selectItems value="#{manejadorContactosEmergencia.dependenciasFiltradas()}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
-                                    <f:ajax render="filtrarEmpleado nombre tabla"/>
-                                </h:selectOneMenu>
-                            </div>
-
-                            <div class="form-group">
-                                <h:outputLabel class="control-label" value="Empleado:"/>
-                                <h:selectOneMenu class="form-control" id="filtrarEmpleado" style="width: 100%" value="#{manejadorContactosEmergencia.empleadoSelecionado}" >
-                                    <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
-                                    <f:selectItems value="#{manejadorContactosEmergencia.empleadoFiltrado()}" var="emple" itemLabel="#{emple.nombreEmpleado}" itemValue="#{emple.idEmpleado}"/>
-                                    <f:ajax render="tabla nombre" />
-                                </h:selectOneMenu>
-                            </div>
-
-                        </h:form>
-
-                    </div>                            
-
-                    <div class="col-md-1"></div>
-
-                    <div class="col-md-4">
-                        <h:form prependId="false" >
-                            <h:panelGroup id="buscar">
-                                <p:outputLabel for="nr" value="NR del Empleado:" styleClass="control-label col-md-12"/>
-                                <div class="form-group">
-                                    <div class="col-md-8">
-                                        <p:inputMask id="nr" style="width: 100%; padding: 9px;" value="#{manejadorContactosEmergencia.NR}" mask="NR 9999-999999-999-9" />
-                                    </div>
-                                    <div class="col-md-4">
-                                        <h:commandButton  class="btn btn-info" actionListener="#{manejadorContactosEmergencia.buscarNR}" action="#{manejadorContactosEmergencia.tabla()}" value="Buscar" />
-                                    </div>
-                                </div>
-                            </h:panelGroup>
-                        </h:form>
-                    </div>
-
-                    <div class="col-md-1"></div>
-                </div>
-
-                <br /><hr /><br />
-
-                <div class="row">
-                    <div class="col-md-2"></div>
-                    <div class="col-md-8">  
-                        <h:form prependId="false">
-                            <h2 class="text-info text-center">Contactos de emergencia</h2>
-                            <h:commandButton id="agregar"  value="Agregar" class="pull-right btn btn-info" actionListener="#{manejadorContactosEmergencia.empleadoSelecionadoValido}">
-                                <f:ajax render="modalIngreso"/>
-                            </h:commandButton> 
-                            <p:outputLabel id="nombre" style="font-size: 1.2em" value="Empleado: #{manejadorContactosEmergencia.nombreEmp}" />
-                            <div class="clearfix"></div>
-                            <br />
-                        </h:form>
-                    </div>
-                    <div class="col-md-2"></div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-1"></div>
-                    <div class="col-md-10"> 
-                        <div class="table table-responsive">
-                            <f:view>
-                                <h:form prependId="false">
-                                    <p:dataTable id="tabla" value="#{manejadorContactosEmergencia.contactoEmergenciaEmpleado()}" var="item"
-                                                 emptyMessage="" 
-                                                 rows="10"
-                                                 paginator="true"
-                                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                                 rowsPerPageTemplate="5,10,15"
-                                                 widgetVar="listado"
-                                                 paginatorPosition="bottom">
-
-                                        <f:facet name="header">
-                                            <p:outputPanel style="text-align: right;">
-                                                <h:outputText value="Buscar:  " />
-                                                <p:inputText id="globalFilter" onkeyup="PF('listado').filter()" style="width:200px;"/>
-                                            </p:outputPanel>
-                                        </f:facet>
-
-                                        <p:column headerText="Nombre" filterBy="#{item.nombreContacto}" style="width:35%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
-                                            <h:outputText value="#{item.nombreContacto}"/>
-                                        </p:column>
-                                        <p:column headerText="Parentesco" filterBy="#{item.idParentesco.nombreParentesco}" style="width:15%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
-                                            <h:outputText value="#{item.idParentesco.nombreParentesco}"/>
-                                        </p:column>
-                                        <p:column headerText="Teléfono Fijo" filterBy="#{item.telFijoContacto}" style="width:15%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
-                                            <h:outputText value="#{item.telFijoContacto}"/>
-                                        </p:column>
-                                        <p:column headerText="Teléfono Móvil" filterBy="#{item.telMovilContacto}" style="width:15%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
-                                            <h:outputText value="#{item.telMovilContacto}"/>
-                                        </p:column>
-                                        <p:column headerText="Editar/Eliminar" style="text-align: center; width:20%;">
-                                            <h:commandLink styleClass="btn-sm glyphicon glyphicon-pencil" style="text-decoration:none; color: #1d9ce5;" title="Editar">
-                                                <f:setPropertyActionListener value="#{item}" target="#{manejadorContactosEmergencia.contactoEmergenciaEmp}"/>                                                        
-                                                <p:ajax update="panelEmergenciaEdit" />
-                                                <p:ajax update="tabla"  onsuccess="PF('emergenciaEdit').show()"/>
-                                            </h:commandLink>
-                                            <h:commandLink actionListener="#{manejadorContactosEmergencia.contactoEmerSeleccionado(item)}" styleClass="btn-sm glyphicon glyphicon-remove" style="text-decoration:none; color: #1d9ce5;" title="Eliminar" immediate="true">
-                                                <p:ajax update="tabla"  onsuccess="PF('confirmation').show()"/>
-                                            </h:commandLink>
-                                        </p:column>
-
-                                    </p:dataTable>
-                                </h:form>
-                            </f:view>
+                <h:form prependId="false">
+                    <p:growl autoUpdate="true" showDetail="true"/>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12">
+                            <p:dataTable id="tbl-emps" value="#{manejadorContactosEmergencia.employees()}" var="emp" rowKey="#{emp.idEmpleado}" scrollable="true" paginator="true" rows="10">
+                                <p:column filterBy="#{emp.nrEmpleado}" filterMatchMode="contains">
+                                    <f:facet name="header">
+                                        <h:outputText value="NR"/>
+                                    </f:facet>
+                                    <h:outputText value="#{emp.nrEmpleado}"/>
+                                </p:column>
+                                <p:column filterBy="#{emp.nombreEmpleado}" filterMatchMode="contains">
+                                    <f:facet name="header">
+                                        <h:outputText value="Nombre completo"/>
+                                    </f:facet>
+                                    <h:outputText value="#{emp.nombreEmpleado}"/>
+                                </p:column>
+                                <p:column filterBy="#{emp.numDui}" filterMatchMode="contains">
+                                    <f:facet name="header">
+                                        <h:outputText value="DUI"/>
+                                    </f:facet>
+                                    <h:outputText value="#{emp.numDui}"/>
+                                </p:column>
+                                <p:column filterBy="#{emp.numNit}" filterMatchMode="contains">
+                                    <f:facet name="header">
+                                        <h:outputText value="NIT"/>
+                                    </f:facet>
+                                    <h:outputText value="#{emp.numNit}"/>
+                                </p:column>
+                                <p:column filterBy="#{emp.idDependenciaF.idDirNac.nombreDirNac}" filterMatchMode="contains">
+                                    <f:facet name="header">
+                                        <h:outputText value="Dirección Nacional"/>
+                                    </f:facet>
+                                    <h:outputText value="#{emp.idDependenciaF.idDirNac.nombreDirNac}"/>
+                                </p:column>
+                                <p:column filterBy="#{emp.idDependenciaF.nombreDependencia}" filterMatchMode="contains">
+                                    <f:facet name="header">
+                                        <h:outputText value="Dependencia"/>
+                                    </f:facet>
+                                    <h:outputText value="#{emp.idDependenciaF.nombreDependencia}"/>
+                                </p:column>
+                                <p:column style="width: 100px;" styleClass="text-center">
+                                    <f:facet name="header">
+                                        <h:outputText value="Opc."/>
+                                    </f:facet>
+                                    <p:commandButton process="@this tbl-emps" update="dlg-contacts" icon="ui-icon-search" title="Ver contactos de emergencia de #{emp.nombreEmpleado}" action="#{manejadorContactosEmergencia.handleClick()}" oncomplete="PF('contactsByEmp').show();">
+                                        <f:setPropertyActionListener value="#{emp}" target="#{manejadorContactosEmergencia.selectedEmp}"/>
+                                    </p:commandButton>
+                                    <p:commandButton process="@this tbl-emps" update="dlg-new-contact" title="Nuevo contacto de emergencia de #{emp.nombreEmpleado}" icon="fa fa-plus" oncomplete="PF('newContact').show();">
+                                        <f:setPropertyActionListener value="#{emp}" target="#{manejadorContactosEmergencia.selectedEmp}"/>
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
                         </div>
                     </div>
-                    <div class="col-md-1"></div>
-                </div> 
+                    <p:dialog id="dlg-contacts" header="Gestión de contactos de emergencia" widgetVar="contactsByEmp" responsive="true" modal="true" width="50%" position="center top">
+                        <div class="alert alert-info">
+                            <p>A continuación verá listado los contactos de emergencia para el empleado: <code>#{manejadorContactosEmergencia.selectedEmp.nombreEmpleado}</code></p>
+                        </div>
+                        <p:dataTable id="tbl-contacts" value="#{manejadorContactosEmergencia.contactsList}" var="contact" rowKey="#{contact.idContactoEmer}" paginator="true" rows="10" scrollable="true">
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Nombre completo"/>
+                                </f:facet>
+                                <h:outputText value="#{contact.nombreContacto}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Teléfono"/>
+                                </f:facet>
+                                <h:outputText value="#{contact.telFijoContacto}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Celular"/>
+                                </f:facet>
+                                <h:outputText value="#{contact.telMovilContacto}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Parentesco"/>
+                                </f:facet>
+                                <h:outputText value="#{contact.idParentesco.nombreParentesco}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:dialog>
+                    <p:dialog id="dlg-new-contact" header="Nuevo contacto" widgetVar="newContact" responsive="true" modal="true" width="35%" position="center top">
+                        <h:panelGroup id="panel-new-contact">
+                            <div class="alert alert-info">
+                                <p>Ingrese la información para contacto de emergencia para el empleado: <code>#{manejadorContactosEmergencia.selectedEmp.nombreEmpleado}</code></p>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <p:outputLabel value="Nombre completo:" for="nombreContacto" />
+                                        <h:inputText id="nombreContacto" value="#{manejadorContactosEmergencia.newContact.nombreContacto}" title="NombreContacto" required="true" requiredMessage="The NombreContacto field is required." styleClass="form-control"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <p:outputLabel value="Parentesco:" for="idParentesco" />
+                                        <h:selectOneMenu id="idParentesco" value="#{manejadorContactosEmergencia.newContact.idParentesco}" required="true" requiredMessage="The IdParentesco field is required." converter="#{parentescoConvertidor}" styleClass="form-control">
+                                            <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                            <f:selectItems value="#{manejadorContactosEmergencia.allParentescos}" var="parents" itemLabel="#{parents.nombreParentesco}" itemValue="#{parents}"/>
+                                        </h:selectOneMenu>
+                                    </div>
+                                    <div class="form-group">
+                                        <p:outputLabel value="Teléfono:" for="telFijoContacto" />
+                                        <h:inputText id="telFijoContacto" value="#{manejadorContactosEmergencia.newContact.telFijoContacto}" title="TelFijoContacto" styleClass="form-control"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <p:outputLabel value="Celular:" for="telMovilContacto" />
+                                        <h:inputText id="telMovilContacto" value="#{manejadorContactosEmergencia.newContact.telMovilContacto}" title="TelMovilContacto" styleClass="form-control"/>
+                                    </div>
+                                    <p:commandButton icon="fa fa-plus" value="Guardar" process="@this panel-new-contact" update="@all" action="#{manejadorContactosEmergencia.guardarContactosEmergencia()}" oncomplete="PF('newContact').hide();"/>
+                                </div>
+                            </div>
+                        </h:panelGroup>
+                    </p:dialog>
 
-            </div>
+                </h:form>
+            </div> 
         </div>
-
-        <p:confirmDialog  message="Desea Eliminar Contacto de Empleado" header="Confirmación"  closable="false" severity="info" widgetVar="confirmation">
-            <h:form prependId="false" class="form-horizontal">
-                <h:commandLink value="Aceptar" actionListener="#{manejadorContactosEmergencia.eliminar()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" >
-                    <f:ajax execute="confirmation" render="tabla" />
-                </h:commandLink>
-                <h:commandLink value="Cancelar" actionListener="#{manejadorContactosEmergencia.cancelar()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true"/>
-            </h:form>
-        </p:confirmDialog>
-
-        <p:dialog id="modalIngreso" onHide="PF('emergencia').content.empty()" dynamic="true" header="Registro de Contactos de Emergencia" draggable="false" widgetVar="emergencia" modal="true" height="auto" width="50%" closable="false" resizable="false" position="center,top" styleClass="disable-scroll">
-            <h:form id="contactoEmer" prependId="false">                
-                <p:panelGrid id="panelEmergencia" style="width: 100%;" styleClass="noBordes">
-
-                    <p:row>
-                        <p:column><p:outputLabel for="nombreContacto1" value="Nombre:"/></p:column>
-                        <p:column>
-                            <p:inputText style="width: 100%; padding: 9px;" id="nombreContacto1" value="#{manejadorContactosEmergencia.contactoEmergenciaEmp.nombreContacto}" required="true" requiredMessage="Ingrese Nombre de Contacto" />
-                        </p:column>
-                    </p:row>
-                    <p:row>    
-                        <p:column><p:outputLabel for="idParentesco" value="Parentesco:"/></p:column>
-                        <p:column>
-                            <p:selectOneMenu style="width: 100%;" id="idParentesco" value="#{manejadorContactosEmergencia.contactoEmergenciaEmp.idParentesco}" required="true" converter="#{parentescoConvertidor}" requiredMessage="Selecvione un Parentesco">
-                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
-                                <f:selectItems value="#{manejadorContactosEmergencia.todosParentesco()}" var="parentesco" itemLabel="#{parentesco.nombreParentesco}" itemValue="#{parentesco}"/>
-                            </p:selectOneMenu>
-                        </p:column>
-                    </p:row>
-                    <p:row>
-                        <p:column><p:outputLabel for="telFijoContacto" value="Teléfono Fijo:"/></p:column>
-                        <p:column><p:inputMask style="width: 100%; padding: 9px;" mask="9999-9999" id="telFijoContacto" value="#{manejadorContactosEmergencia.contactoEmergenciaEmp.telFijoContacto}" /></p:column>
-                    </p:row>
-                    <p:row>    
-                        <p:column><p:outputLabel for="telMovilContacto" value="Teléfono Móvil:"/></p:column>
-                        <p:column><p:inputMask style="width: 100%; padding: 9px;" mask="9999-9999" id="telMovilContacto" value="#{manejadorContactosEmergencia.contactoEmergenciaEmp.telMovilContacto}" /></p:column>
-                    </p:row>
-
-                </p:panelGrid>
-                <br />
-                <h:commandButton style="margin: 2px" styleClass="btn btn-info" value="Guardar" action="#{manejadorContactosEmergencia.guardarContactosEmergencia()}" >
-                    <f:ajax execute="panelEmergencia" render="panelEmergencia" />
-                </h:commandButton>
-                <h:commandButton style="margin: 2px"  styleClass="btn btn-info" actionListener="#{manejadorContactosEmergencia.reset()}"  value="Cancelar" onclick="PF('emergencia').hide()">
-                    <f:ajax render="panelEmergencia" />
-                    <p:resetInput target="panelEmergencia" />
-                </h:commandButton>
-            </h:form>
-        </p:dialog>
-
-        <p:dialog header="Editar Contactos de Emergencia" widgetVar="emergenciaEdit" modal="true" height="auto" width="50%" draggable="false" closable="false" resizable="false" position="center,top" styleClass="disable-scroll">
-            <h:form prependId="false">                
-                <p:panelGrid id="panelEmergenciaEdit" style="width: 100%;" styleClass="noBordes">
-
-                    <p:row>
-                        <p:column><p:outputLabel for="nombreContacto" value="Nombre:"/></p:column>
-                        <p:column><p:inputText validatorMessage="Nombre: Ingrese Únicamente letras" style="width: 100%; padding: 9px;" id="nombreContacto" value="#{manejadorContactosEmergencia.contactoEmergenciaEmp.nombreContacto}" required="true" requiredMessage="Ingrese Nombre de Contacto" ><f:validateRegex pattern="[A-Za-z ]*"  /></p:inputText></p:column>
-                    </p:row>
-                    <p:row>    
-                        <p:column><p:outputLabel for="idParentescoe" value="Parentesco:"/></p:column>
-                        <p:column>
-                            <p:selectOneMenu style="width: 100%;" id="idParentescoe" value="#{manejadorContactosEmergencia.contactoEmergenciaEmp.idParentesco}" required="true" converter="#{parentescoConvertidor}" requiredMessage="Seleccione Parentesco">
-                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
-                                <f:selectItems value="#{manejadorContactosEmergencia.todosParentesco()}" var="parentesco" itemLabel="#{parentesco.nombreParentesco}" itemValue="#{parentesco}"/>
-                            </p:selectOneMenu>
-                        </p:column>
-                    </p:row>
-                    <p:row>
-                        <p:column><h:outputLabel for="telFijoContactoe" value="Teléfono Fijo:"/></p:column>
-                        <p:column><p:inputMask style="width: 100%; padding: 9px;" mask="9999-9999" id="telFijoContactoe" value="#{manejadorContactosEmergencia.contactoEmergenciaEmp.telFijoContacto}" /></p:column>
-                    </p:row>
-                    <p:row>    
-                        <p:column><h:outputLabel for="telMovilContactoe" value="Teléfono Móvil:"/></p:column>
-                        <p:column><p:inputMask style="width: 100%; padding: 9px;" mask="9999-9999" id="telMovilContactoe" value="#{manejadorContactosEmergencia.contactoEmergenciaEmp.telMovilContacto}" /></p:column>
-                    </p:row>
-
-                </p:panelGrid>
-                <br />
-                <h:commandButton style="margin: 2px" styleClass="btn btn-info" value="Modificar" action="#{manejadorContactosEmergencia.editarEmergencia()}">
-                    <f:ajax execute="panelEmergenciaEdit" render="panelEmergenciaEdit" />
-                </h:commandButton>
-                <h:commandButton style="margin: 2px"  styleClass="btn btn-info" actionListener="#{manejadorContactosEmergencia.reset()}" value="Cancelar" onclick="PF('emergenciaEdit').hide()">
-                    <f:ajax render="panelEmergenciaEdit" />
-                    <p:resetInput target="panelEmergenciaEdit" />
-                </h:commandButton>
-            </h:form>
-        </p:dialog>
-
 
     </ui:define>
 

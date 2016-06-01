@@ -1,0 +1,27 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : May 20, 2016, 10:05:32 AM
+    Author     : sic-sv
+*/
+
+body {
+    padding-bottom: 40px !important;
+    background-color: #999;
+}
+
+.ui-datatable .ui-column-filter {
+    width:100% !important;
+}
+
+.ui-wizard-step-title {
+    font-size: 1.2em !important;
+}
+
+.ui-widget-content .ui-menu-list {
+    min-width:255px !important;
+}
+    

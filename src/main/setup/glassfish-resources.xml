@@ -6,7 +6,7 @@
         <property name="portNumber" value="5432"/>
         <property name="databaseName" value="bd_rrhh"/>
         <property name="User" value="postgres"/>
-        <property name="Password" value="root123"/>
+        <property name="Password" value="fathima"/>
 <!--        <property name="Password" value="server_prueba"/>-->
         <property name="URL" value="jdbc:postgresql://localhost:5432/bd_rrhh"/>
         <property name="driverClass" value="org.postgresql.Driver"/>

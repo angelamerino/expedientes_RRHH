@@ -54,7 +54,7 @@ public class EmpleadoConvertidor implements Converter {
         if (!(value instanceof Empleados)) {
             return null;
         }
-        return String.valueOf(((Empleados) value).getNrEmpleado());
+        return String.valueOf(((Empleados) value).getIdEmpleado());
     }
     
 }
