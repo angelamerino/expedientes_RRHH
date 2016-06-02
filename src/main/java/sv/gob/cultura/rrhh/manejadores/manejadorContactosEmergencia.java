@@ -37,7 +37,7 @@ public class manejadorContactosEmergencia implements Serializable {
     @EJB
     private EmpleadosFacade empleadosFacade;
     private Empleados selectedEmp = new Empleados();
-    private ContactoEmergenciaEmp newContact = new ContactoEmergenciaEmp();
+    private ContactoEmergenciaEmp newContact = new ContactoEmergenciaEmp(), selectedContact = new ContactoEmergenciaEmp();
     private List<ContactoEmergenciaEmp> contactsList = new ArrayList<>();
 
     public manejadorContactosEmergencia() {
@@ -71,6 +71,14 @@ public class manejadorContactosEmergencia implements Serializable {
         this.newContact = newContact;
     }
 
+    public ContactoEmergenciaEmp getSelectedContact() {
+        return selectedContact;
+    }
+
+    public void setSelectedContact(ContactoEmergenciaEmp selectedContact) {
+        this.selectedContact = selectedContact;
+    }
+
     public List<ContactoEmergenciaEmp> getContactsList() {
         return contactsList;
     }
@@ -91,7 +99,7 @@ public class manejadorContactosEmergencia implements Serializable {
         return getParentescoFacade().findAll();
     }
 
-    public void handleClick() {
+    public void populateContacts() {
         contactsList = new ArrayList<>();
         contactsList = getContactoEmergenciaEmpFacade().buscarContactos(selectedEmp.getIdEmpleado());
     }
@@ -103,7 +111,8 @@ public class manejadorContactosEmergencia implements Serializable {
             newContact.setUserCreaContac(1);
             getContactoEmergenciaEmpFacade().create(newContact);
             newContact = new ContactoEmergenciaEmp();
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Ingresado", "Registro Ingresado");
+            populateContacts();
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ingreso de información", "El registro ha sido ingresado de manera exitosa.");
             FacesContext.getCurrentInstance().addMessage(null, message);
         } catch (Exception e) {
 
@@ -116,7 +125,7 @@ public class manejadorContactosEmergencia implements Serializable {
             newContact.setUserModContac(1);
             getContactoEmergenciaEmpFacade().edit(newContact);
             newContact = new ContactoEmergenciaEmp();
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Modificado", "Registro Modificado");
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Modificación de información", "El registro ha sido editado de manera exitosa.");
             FacesContext.getCurrentInstance().addMessage(null, message);
         } catch (Exception e) {
 
@@ -125,11 +134,10 @@ public class manejadorContactosEmergencia implements Serializable {
 
     public String eliminar() {
         try {
-            getContactoEmergenciaEmpFacade().remove(newContact);
-            newContact = new ContactoEmergenciaEmp();
-            RequestContext.getCurrentInstance().execute("PF('confirmation').hide()");
-            RequestContext.getCurrentInstance().update("tabla");
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Eliminado", "Registro Eliminado");
+            getContactoEmergenciaEmpFacade().remove(selectedContact);
+            selectedContact = new ContactoEmergenciaEmp();
+            populateContacts();
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Borrado de información", "El registro ha sido editado de manera exitosa.");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return null;
         } catch (Exception e) {

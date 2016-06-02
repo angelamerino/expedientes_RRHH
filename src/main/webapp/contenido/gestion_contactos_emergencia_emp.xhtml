@@ -55,16 +55,14 @@
                                     </f:facet>
                                     <h:outputText value="#{emp.idDependenciaF.nombreDependencia}"/>
                                 </p:column>
-                                <p:column style="width: 100px;" styleClass="text-center">
+                                <p:column style="width: 150px;" styleClass="text-center">
                                     <f:facet name="header">
                                         <h:outputText value="Opc."/>
                                     </f:facet>
-                                    <p:commandButton process="@this tbl-emps" update="dlg-contacts" icon="ui-icon-search" title="Ver contactos de emergencia de #{emp.nombreEmpleado}" action="#{manejadorContactosEmergencia.handleClick()}" oncomplete="PF('contactsByEmp').show();">
+                                    <p:commandButton process="@this tbl-emps" update="dlg-contacts" icon="ui-icon-search" value="Ver contactos" action="#{manejadorContactosEmergencia.populateContacts()}" oncomplete="PF('contactsByEmp').show();" styleClass="btn">
                                         <f:setPropertyActionListener value="#{emp}" target="#{manejadorContactosEmergencia.selectedEmp}"/>
                                     </p:commandButton>
-                                    <p:commandButton process="@this tbl-emps" update="dlg-new-contact" title="Nuevo contacto de emergencia de #{emp.nombreEmpleado}" icon="fa fa-plus" oncomplete="PF('newContact').show();">
-                                        <f:setPropertyActionListener value="#{emp}" target="#{manejadorContactosEmergencia.selectedEmp}"/>
-                                    </p:commandButton>
+
                                 </p:column>
                             </p:dataTable>
                         </div>
@@ -73,6 +71,9 @@
                         <div class="alert alert-info">
                             <p>A continuación verá listado los contactos de emergencia para el empleado: <code>#{manejadorContactosEmergencia.selectedEmp.nombreEmpleado}</code></p>
                         </div>
+                        <p class="text-right">
+                            <p:commandButton process="@this" update="panel-new-contact" value="Nuevo contacto" icon="fa fa-plus" oncomplete="PF('newContact').show();" styleClass="btn text-right"/>
+                        </p>
                         <p:dataTable id="tbl-contacts" value="#{manejadorContactosEmergencia.contactsList}" var="contact" rowKey="#{contact.idContactoEmer}" paginator="true" rows="10" scrollable="true">
                             <p:column>
                                 <f:facet name="header">
@@ -97,6 +98,14 @@
                                     <h:outputText value="Parentesco"/>
                                 </f:facet>
                                 <h:outputText value="#{contact.idParentesco.nombreParentesco}"/>
+                            </p:column>
+                            <p:column style="width: 50px;" styleClass="text-center">
+                                <f:facet name="header">
+                                    <h:outputText value="Opc."/>
+                                </f:facet>
+                                <p:commandButton process="@this tbl-contacts" update="tbl-contacts" icon="fa fa-times" title="Eliminar contacto" action="#{manejadorContactosEmergencia.eliminar()}" styleClass="btn">
+                                    <f:setPropertyActionListener value="#{contact}" target="#{manejadorContactosEmergencia.selectedContact}"/>
+                                </p:commandButton>
                             </p:column>
                         </p:dataTable>
                     </p:dialog>
@@ -126,7 +135,7 @@
                                         <p:outputLabel value="Celular:" for="telMovilContacto" />
                                         <h:inputText id="telMovilContacto" value="#{manejadorContactosEmergencia.newContact.telMovilContacto}" title="TelMovilContacto" styleClass="form-control"/>
                                     </div>
-                                    <p:commandButton icon="fa fa-plus" value="Guardar" process="@this panel-new-contact" update="@all" action="#{manejadorContactosEmergencia.guardarContactosEmergencia()}" oncomplete="PF('newContact').hide();"/>
+                                    <p:commandButton icon="fa fa-plus" value="Guardar" process="@this panel-new-contact" update="tbl-contacts" action="#{manejadorContactosEmergencia.guardarContactosEmergencia()}" oncomplete="PF('newContact').hide();" styleClass="btn"/>
                                 </div>
                             </div>
                         </h:panelGroup>
