@@ -18,53 +18,58 @@
                     <p:growl autoUpdate="true" showDetail="true"/>
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-12">
-                            <p:dataTable id="tbl-emps" value="#{manejadorContactosEmergencia.employees()}" var="emp" rowKey="#{emp.idEmpleado}" scrollable="true" paginator="true" rows="10">
-                                <p:column filterBy="#{emp.nrEmpleado}" filterMatchMode="contains">
-                                    <f:facet name="header">
-                                        <h:outputText value="NR"/>
-                                    </f:facet>
-                                    <h:outputText value="#{emp.nrEmpleado}"/>
-                                </p:column>
-                                <p:column filterBy="#{emp.nombreEmpleado}" filterMatchMode="contains">
-                                    <f:facet name="header">
-                                        <h:outputText value="Nombre completo"/>
-                                    </f:facet>
-                                    <h:outputText value="#{emp.nombreEmpleado}"/>
-                                </p:column>
-                                <p:column filterBy="#{emp.numDui}" filterMatchMode="contains">
-                                    <f:facet name="header">
-                                        <h:outputText value="DUI"/>
-                                    </f:facet>
-                                    <h:outputText value="#{emp.numDui}"/>
-                                </p:column>
-                                <p:column filterBy="#{emp.numNit}" filterMatchMode="contains">
-                                    <f:facet name="header">
-                                        <h:outputText value="NIT"/>
-                                    </f:facet>
-                                    <h:outputText value="#{emp.numNit}"/>
-                                </p:column>
-                                <p:column filterBy="#{emp.idDependenciaF.idDirNac.nombreDirNac}" filterMatchMode="contains">
-                                    <f:facet name="header">
-                                        <h:outputText value="Dirección Nacional"/>
-                                    </f:facet>
-                                    <h:outputText value="#{emp.idDependenciaF.idDirNac.nombreDirNac}"/>
-                                </p:column>
-                                <p:column filterBy="#{emp.idDependenciaF.nombreDependencia}" filterMatchMode="contains">
-                                    <f:facet name="header">
-                                        <h:outputText value="Dependencia"/>
-                                    </f:facet>
-                                    <h:outputText value="#{emp.idDependenciaF.nombreDependencia}"/>
-                                </p:column>
-                                <p:column style="width: 150px;" styleClass="text-center">
-                                    <f:facet name="header">
-                                        <h:outputText value="Opc."/>
-                                    </f:facet>
-                                    <p:commandButton process="@this tbl-emps" update="dlg-contacts" icon="ui-icon-search" value="Ver contactos" action="#{manejadorContactosEmergencia.populateContacts()}" oncomplete="PF('contactsByEmp').show();" styleClass="btn">
-                                        <f:setPropertyActionListener value="#{emp}" target="#{manejadorContactosEmergencia.selectedEmp}"/>
-                                    </p:commandButton>
-
-                                </p:column>
-                            </p:dataTable>
+                            <div class="form-group">
+                                <h:outputLabel value="Dirección Nacional:"/>                                
+                                <h:selectOneMenu  class="form-control" id="dirNacionalFiltrarJefe" style="width: 100%" value="#{manejadorContactosEmergencia.direccionNacional}">
+                                    <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                    <f:selectItems value="#{manejadorContactosEmergencia.allDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
+                                    <p:ajax update="filtrarDependencia @(.ui-datatable)"/>
+                                </h:selectOneMenu>
+                            </div>
+                            <div class="form-group">
+                                <h:outputLabel value="Dependencia / Unidad organizativa:"/>
+                                <h:selectOneMenu class="form-control" id="filtrarDependencia"  style="width: 100%" value="#{manejadorContactosEmergencia.dependecia}">
+                                    <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                    <f:selectItems value="#{manejadorContactosEmergencia.dependenciasFiltradas()}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
+                                    <p:ajax update="tbl-emps"/>
+                                </h:selectOneMenu>
+                            </div>
+                            <div class="form-group">
+                                <p:dataTable id="tbl-emps" value="#{manejadorContactosEmergencia.filteredEmployees()}" var="emp" rowKey="#{emp.idEmpleado}" scrollable="true" paginator="true" rows="10">
+                                    <p:column filterBy="#{emp.nombreEmpleado}" filterMatchMode="contains">
+                                        <f:facet name="header">
+                                            <h:outputText value="Nombre completo"/>
+                                        </f:facet>
+                                        <h:outputText value="#{emp.nombreEmpleado}"/>
+                                    </p:column>
+                                    <p:column filterBy="#{emp.nrEmpleado}" filterMatchMode="contains">
+                                        <f:facet name="header">
+                                            <h:outputText value="NR"/>
+                                        </f:facet>
+                                        <h:outputText value="#{emp.nrEmpleado}"/>
+                                    </p:column>
+                                    <p:column filterBy="#{emp.numDui}" filterMatchMode="contains">
+                                        <f:facet name="header">
+                                            <h:outputText value="DUI"/>
+                                        </f:facet>
+                                        <h:outputText value="#{emp.numDui}"/>
+                                    </p:column>
+                                    <p:column filterBy="#{emp.numNit}" filterMatchMode="contains">
+                                        <f:facet name="header">
+                                            <h:outputText value="NIT"/>
+                                        </f:facet>
+                                        <h:outputText value="#{emp.numNit}"/>
+                                    </p:column>
+                                    <p:column style="width: 150px;" styleClass="text-center">
+                                        <f:facet name="header">
+                                            <h:outputText value="Opc."/>
+                                        </f:facet>
+                                        <p:commandButton process="@this tbl-emps" update="dlg-contacts" icon="ui-icon-search" value="Ver detalle" action="#{manejadorContactosEmergencia.populateContacts()}" oncomplete="PF('contactsByEmp').show();">
+                                            <f:setPropertyActionListener value="#{emp}" target="#{manejadorContactosEmergencia.selectedEmp}"/>
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
                         </div>
                     </div>
                     <p:dialog id="dlg-contacts" header="Gestión de contactos de emergencia" widgetVar="contactsByEmp" responsive="true" modal="true" width="50%" position="center top">

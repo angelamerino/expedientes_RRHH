@@ -10,7 +10,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import sv.gob.cultura.rrhh.entidades.Capacitaciones;
+import sv.gob.cultura.rrhh.entities.Capacitaciones;
 
 /**
  *

@@ -17,6 +17,10 @@ body {
     width:100% !important;
 }
 
+.ui-selectonemenu .ui-selectonemenu-trigger {
+    width: 25px !important;
+}
+
 .ui-wizard-step-title {
     font-size: 1.2em !important;
 }
@@ -24,4 +28,4 @@ body {
 .ui-widget-content .ui-menu-list {
     min-width:255px !important;
 }
-    
+

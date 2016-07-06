@@ -8,7 +8,7 @@ package sv.gob.cultura.rrhh.facades;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import sv.gob.cultura.rrhh.entidades.Anio;
+import sv.gob.cultura.rrhh.entities.Anio;
 
 /**
  *

@@ -9,8 +9,8 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import sv.gob.cultura.rrhh.entidades.AdministradoraPensiones;
-import sv.gob.cultura.rrhh.manejadores.manejadorCat;
+import sv.gob.cultura.rrhh.entities.AdministradoraPensiones;
+import sv.gob.cultura.rrhh.managers.manejadorCat;
 
 /**
  *

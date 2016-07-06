@@ -8,8 +8,8 @@ package sv.gob.cultura.rrhh.facades;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import sv.gob.cultura.rrhh.entidades.Estados;
-import sv.gob.cultura.rrhh.manejadores.manejadorCat;
+import sv.gob.cultura.rrhh.entities.Estados;
+import sv.gob.cultura.rrhh.managers.manejadorCat;
 /**
  *****
  * @author Angela
