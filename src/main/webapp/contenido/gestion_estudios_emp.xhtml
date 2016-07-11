@@ -113,7 +113,7 @@
                                 <p class="text-right">
                                     <p:commandButton process="@this" update="panel-new-lang" value="Nuevo idioma" icon="fa fa-plus" oncomplete="PF('dlgNewLang').show();"/>
                                 </p>
-                                <p:dataTable value="#{managerStudies.allCaracteristicasByIdEmp()}" var="language">
+                                <p:dataTable id="tbl-langs" value="#{managerStudies.allCaracteristicasByIdEmp()}" var="language">
                                     <p:column>
                                         <f:facet name="header">
                                             <h:outputText value="Idioma"/>
@@ -167,28 +167,31 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <h:outputLabel value="Idioma:" for="idiomas" />
-                                        <h:selectOneMenu id="idiomas" value="#{managerStudies.newLang.idiomas}" title="Idiomas" required="true" requiredMessage="The Idiomas field is required." styleClass="form-control" converter="#{idiomasConvertidor}">
+                                        <h:selectOneMenu id="idiomas" value="#{managerStudies.idIdioma}" title="Idiomas" required="true" requiredMessage="The Idiomas field is required." styleClass="form-control">
                                             <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
-                                            <f:selectItems value="#{managerStudies.allIdiomas()}" var="idioma" itemLabel="#{idioma.nombreIdioma}" itemValue="#{idioma}"/>
+                                            <f:selectItems value="#{managerStudies.allIdiomas()}" var="idioma" itemLabel="#{idioma.nombreIdioma}" itemValue="#{idioma.idIdioma}"/>
                                         </h:selectOneMenu>
                                     </div>
                                     <div class="form-group">
                                         <h:outputLabel value="Característica:" for="caracteristicasIdioma" />
-                                        <h:selectOneMenu id="caracteristicasIdioma" value="#{managerStudies.newLang.caracteristicasIdioma}" title="CaracteristicasIdioma" required="true" requiredMessage="The CaracteristicasIdioma field is required." styleClass="form-control" converter="#{caracteristicasIdiomaConvertidor}">
+                                        <h:selectOneMenu id="caracteristicasIdioma" value="#{managerStudies.idCaracteristica}" title="CaracteristicasIdioma" required="true" requiredMessage="The CaracteristicasIdioma field is required." styleClass="form-control">
                                             <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
-                                            <f:selectItems value="#{managerStudies.allCaracteristicasIdioma()}" var="caractIdiom" itemLabel="#{caractIdiom.caracteristicaIdioma}" itemValue="#{caractIdiom}"/>
+                                            <f:selectItems value="#{managerStudies.allCaracteristicasIdioma()}" var="caractIdiom" itemLabel="#{caractIdiom.caracteristicaIdioma}" itemValue="#{caractIdiom.idCaractIdioma}"/>
                                         </h:selectOneMenu>
                                     </div>
                                     <div class="form-group">
                                         <h:outputLabel value="Nivel:" for="idNivel" />
-                                        <h:selectOneMenu id="idNivel" value="#{managerStudies.newLang.idNivel}" title="IdNivel" styleClass="form-control" converter="#{nivelIdiomaConvertidor}">
+                                        <h:selectOneMenu id="idNivel" value="#{managerStudies.idNivel}" title="IdNivel" styleClass="form-control">
                                             <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
-                                            <f:selectItems value="#{managerStudies.allNiveles()}" var="nivel" itemLabel="#{nivel.nombreNivel}" itemValue="#{nivel}"/>
+                                            <f:selectItems value="#{managerStudies.allNiveles()}" var="nivel" itemLabel="#{nivel.nombreNivel}" itemValue="#{nivel.idNivel}"/>
                                         </h:selectOneMenu>
                                     </div>
                                     <div class="form-group">
                                         <h:outputLabel value="Institución:" for="institucionIdioma" />
                                         <h:inputText id="institucionIdioma" value="#{managerStudies.newLang.institucionIdioma}" title="InstitucionIdioma" styleClass="form-control"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <p:commandButton icon="fa fa-plus" value="Guardar"  action="#{managerStudies.saveLanguage()}" process="@this panel-new-lang" update="panel-new-lang tabview-estudios:tbl-langs"/>
                                     </div>
                                 </div>
                             </div>
