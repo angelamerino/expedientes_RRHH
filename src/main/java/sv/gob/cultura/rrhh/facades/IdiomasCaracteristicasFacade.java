@@ -17,6 +17,7 @@ import sv.gob.cultura.rrhh.entities.IdiomasCaracteristicas;
  */
 @Stateless
 public class IdiomasCaracteristicasFacade extends AbstractFacade<IdiomasCaracteristicas> {
+
     @PersistenceContext(unitName = "rrhhPU")
     private EntityManager em;
 
@@ -28,9 +29,8 @@ public class IdiomasCaracteristicasFacade extends AbstractFacade<IdiomasCaracter
     public IdiomasCaracteristicasFacade() {
         super(IdiomasCaracteristicas.class);
     }
-    //IdiomasCaracteristicas.findByIdIdioma
-    
-    public List<IdiomasCaracteristicas> buscarIdiomasId(int idIdioma, int idEmpleado){
-        return getEntityManager().createNamedQuery("IdiomasCaracteristicas.findByIdIdiomaIdEmpleado").setParameter("idIdioma", idIdioma).setParameter("idEmpleado", idEmpleado).getResultList();
+
+    public List<IdiomasCaracteristicas> findAllByEmpId(int idEmpleado) {
+        return getEntityManager().createNamedQuery("IdiomasCaracteristicas.findAllByEmpId").setParameter("idEmpleado", idEmpleado).getResultList();
     }
 }

@@ -13,10 +13,11 @@ import javax.validation.constraints.NotNull;
 
 /**
  *
- * @author Angela
+ * @author sic-sv
  */
 @Embeddable
 public class IdiomasCaracteristicasPK implements Serializable {
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "id_caract_idioma")
@@ -25,13 +26,18 @@ public class IdiomasCaracteristicasPK implements Serializable {
     @NotNull
     @Column(name = "id_idioma")
     private int idIdioma;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "id_empleado")
+    private int idEmpleado;
 
     public IdiomasCaracteristicasPK() {
     }
 
-    public IdiomasCaracteristicasPK(int idCaractIdioma, int idIdioma) {
+    public IdiomasCaracteristicasPK(int idCaractIdioma, int idIdioma, int idEmpleado) {
         this.idCaractIdioma = idCaractIdioma;
         this.idIdioma = idIdioma;
+        this.idEmpleado = idEmpleado;
     }
 
     public int getIdCaractIdioma() {
@@ -50,11 +56,20 @@ public class IdiomasCaracteristicasPK implements Serializable {
         this.idIdioma = idIdioma;
     }
 
+    public int getIdEmpleado() {
+        return idEmpleado;
+    }
+
+    public void setIdEmpleado(int idEmpleado) {
+        this.idEmpleado = idEmpleado;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (int) idCaractIdioma;
         hash += (int) idIdioma;
+        hash += (int) idEmpleado;
         return hash;
     }
 
@@ -71,12 +86,15 @@ public class IdiomasCaracteristicasPK implements Serializable {
         if (this.idIdioma != other.idIdioma) {
             return false;
         }
+        if (this.idEmpleado != other.idEmpleado) {
+            return false;
+        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.entidades.IdiomasCaracteristicasPK[ idCaractIdioma=" + idCaractIdioma + ", idIdioma=" + idIdioma + " ]";
+        return "sv.gob.cultura.rrhh.entities.IdiomasCaracteristicasPK[ idCaractIdioma=" + idCaractIdioma + ", idIdioma=" + idIdioma + ", idEmpleado=" + idEmpleado + " ]";
     }
     
 }

@@ -18,34 +18,33 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author Angela
+ * @author sic-sv
  */
 @Entity
 @Table(name = "idiomas_caracteristicas")
 @NamedQueries({
     @NamedQuery(name = "IdiomasCaracteristicas.findAll", query = "SELECT i FROM IdiomasCaracteristicas i"),
-    @NamedQuery(name = "IdiomasCaracteristicas.findByIdCaractIdioma", query = "SELECT i FROM IdiomasCaracteristicas i WHERE i.idiomasCaracteristicasPK.idCaractIdioma = :idCaractIdioma"),
-    @NamedQuery(name = "IdiomasCaracteristicas.findByIdIdioma", query = "SELECT i FROM IdiomasCaracteristicas i WHERE i.idiomasCaracteristicasPK.idIdioma = :idIdioma"),
-    @NamedQuery(name = "IdiomasCaracteristicas.findByIdIdiomaIdEmpleado", query = "SELECT i FROM IdiomasCaracteristicas i WHERE i.idiomasCaracteristicasPK.idIdioma = :idIdioma AND i.idEmpleado = :idEmpleado"),
-    @NamedQuery(name = "IdiomasCaracteristicas.findByInstitucionIdioma", query = "SELECT i FROM IdiomasCaracteristicas i WHERE i.institucionIdioma = :institucionIdioma")})
+    @NamedQuery(name = "IdiomasCaracteristicas.findAllByEmpId", query = "SELECT i FROM IdiomasCaracteristicas i WHERE i.idiomasCaracteristicasPK.idEmpleado = :idEmpleado ORDER BY i.idiomas.nombreIdioma ASC")})
 public class IdiomasCaracteristicas implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected IdiomasCaracteristicasPK idiomasCaracteristicasPK;
     @Size(max = 1024)
     @Column(name = "institucion_idioma")
     private String institucionIdioma;
-    @Column(name = "id_empleado")
-    private Integer idEmpleado;
-    @JoinColumn(name = "id_nivel", referencedColumnName = "id_nivel")
-    @ManyToOne
-    private Nivel idNivel;
-    @JoinColumn(name = "id_idioma", referencedColumnName = "id_idioma", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private Idiomas idiomas;
     @JoinColumn(name = "id_caract_idioma", referencedColumnName = "id_caract_idioma", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private CaracteristicasIdioma caracteristicasIdioma;
+    @JoinColumn(name = "id_idioma", referencedColumnName = "id_idioma", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private Idiomas idiomas;
+    @JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private Empleados empleados;
+    @JoinColumn(name = "id_nivel", referencedColumnName = "id_nivel")
+    @ManyToOne
+    private Nivel idNivel;
 
     public IdiomasCaracteristicas() {
     }
@@ -54,8 +53,8 @@ public class IdiomasCaracteristicas implements Serializable {
         this.idiomasCaracteristicasPK = idiomasCaracteristicasPK;
     }
 
-    public IdiomasCaracteristicas(int idCaractIdioma, int idIdioma) {
-        this.idiomasCaracteristicasPK = new IdiomasCaracteristicasPK(idCaractIdioma, idIdioma);
+    public IdiomasCaracteristicas(int idCaractIdioma, int idIdioma, int idEmpleado) {
+        this.idiomasCaracteristicasPK = new IdiomasCaracteristicasPK(idCaractIdioma, idIdioma, idEmpleado);
     }
 
     public IdiomasCaracteristicasPK getIdiomasCaracteristicasPK() {
@@ -72,39 +71,6 @@ public class IdiomasCaracteristicas implements Serializable {
 
     public void setInstitucionIdioma(String institucionIdioma) {
         this.institucionIdioma = institucionIdioma;
-    }
-
-    public Nivel getIdNivel() {
-        return idNivel;
-    }
-
-    public void setIdNivel(Nivel idNivel) {
-        this.idNivel = idNivel;
-    }
-
-    public Idiomas getIdiomas() {
-        return idiomas;
-    }
-
-    public void setIdiomas(Idiomas idiomas) {
-        this.idiomas = idiomas;
-    }
-
-    public Integer getIdEmpleado() {
-        return idEmpleado;
-    }
-
-    public void setIdEmpleado(Integer idEmpleado) {
-        this.idEmpleado = idEmpleado;
-    }
-
-    
-    public CaracteristicasIdioma getCaracteristicasIdioma() {
-        return caracteristicasIdioma;
-    }
-
-    public void setCaracteristicasIdioma(CaracteristicasIdioma caracteristicasIdioma) {
-        this.caracteristicasIdioma = caracteristicasIdioma;
     }
 
     @Override
@@ -129,9 +95,39 @@ public class IdiomasCaracteristicas implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.cultura.rrhh.entidades.IdiomasCaracteristicas[ idiomasCaracteristicasPK=" + idiomasCaracteristicasPK + " ]";
+        return "sv.gob.cultura.rrhh.entities.IdiomasCaracteristicas[ idiomasCaracteristicasPK=" + idiomasCaracteristicasPK + " ]";
     }
 
-   
-    
+    public Empleados getEmpleados() {
+        return empleados;
+    }
+
+    public void setEmpleados(Empleados empleados) {
+        this.empleados = empleados;
+    }
+
+    public Idiomas getIdiomas() {
+        return idiomas;
+    }
+
+    public void setIdiomas(Idiomas idiomas) {
+        this.idiomas = idiomas;
+    }
+
+    public CaracteristicasIdioma getCaracteristicasIdioma() {
+        return caracteristicasIdioma;
+    }
+
+    public void setCaracteristicasIdioma(CaracteristicasIdioma caracteristicasIdioma) {
+        this.caracteristicasIdioma = caracteristicasIdioma;
+    }
+
+    public Nivel getIdNivel() {
+        return idNivel;
+    }
+
+    public void setIdNivel(Nivel idNivel) {
+        this.idNivel = idNivel;
+    }
+
 }

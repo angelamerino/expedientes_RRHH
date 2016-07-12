@@ -33,6 +33,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Idiomas.findByIdIdioma", query = "SELECT i FROM Idiomas i WHERE i.idIdioma = :idIdioma"),
     @NamedQuery(name = "Idiomas.findByNombreIdioma", query = "SELECT i FROM Idiomas i WHERE i.nombreIdioma = :nombreIdioma")})
 public class Idiomas implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,8 +45,6 @@ public class Idiomas implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "nombre_idioma")
     private String nombreIdioma;
-    @ManyToMany(mappedBy = "idiomasList")
-    private List<Empleados> empleadosList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idiomas")
     private List<IdiomasCaracteristicas> idiomasCaracteristicasList;
 
@@ -60,15 +59,14 @@ public class Idiomas implements Serializable {
         this.idIdioma = idIdioma;
         this.nombreIdioma = nombreIdioma;
     }
-    
-    public Idiomas(String nombreIdioma){
+
+    public Idiomas(String nombreIdioma) {
         this.nombreIdioma = nombreIdioma;
     }
 
 //    public Idiomas(String nuevo_item) {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 //    }
-
     public Integer getIdIdioma() {
         return idIdioma;
     }
@@ -83,14 +81,6 @@ public class Idiomas implements Serializable {
 
     public void setNombreIdioma(String nombreIdioma) {
         this.nombreIdioma = nombreIdioma;
-    }
-
-    public List<Empleados> getEmpleadosList() {
-        return empleadosList;
-    }
-
-    public void setEmpleadosList(List<Empleados> empleadosList) {
-        this.empleadosList = empleadosList;
     }
 
     public List<IdiomasCaracteristicas> getIdiomasCaracteristicasList() {
@@ -125,5 +115,5 @@ public class Idiomas implements Serializable {
     public String toString() {
         return "sv.gob.cultura.rrhh.entidades.Idiomas[ idIdioma=" + idIdioma + " ]";
     }
-    
+
 }

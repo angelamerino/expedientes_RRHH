@@ -80,7 +80,7 @@
                                 <p class="text-right">
                                     <p:commandButton process="@this" update="panel-new-study" value="Nuevo estudio" icon="fa fa-plus" oncomplete="PF('dlgNewStudy').show();"/>
                                 </p>
-                                <p:dataTable id="tbl-estudios-formales" value="#{managerStudies.allFormalStudiesByEmp()}" var="estudioF" rowKey="#{estudioF.idEstudio}" paginator="true" rows="10" scrollable="true">
+                                <p:dataTable id="tbl-estudios-formales" value="#{managerStudies.selectedEmp.estudiosEmpList}" var="estudioF" rowKey="#{estudioF.idEstudio}" paginator="true" rows="10" scrollable="true">
                                     <p:column headerText="Descripción" filterBy="#{estudioF.idProfOficio.nombreProfOficio}" filterMatchMode="contains" >
                                         <h:outputText value="#{estudioF.idProfOficio.nombreProfOficio}"/>
                                     </p:column>
@@ -113,22 +113,24 @@
                                 <p class="text-right">
                                     <p:commandButton process="@this" update="panel-new-lang" value="Nuevo idioma" icon="fa fa-plus" oncomplete="PF('dlgNewLang').show();"/>
                                 </p>
-                                <p:dataTable id="tbl-langs" value="#{managerStudies.allCaracteristicasByIdEmp()}" var="language">
+                                <p:dataTable id="tbl-langs" value="#{managerStudies.selectedEmp.idiomasCaracteristicasList}" var="idiomaCaract">
                                     <p:column>
                                         <f:facet name="header">
                                             <h:outputText value="Idioma"/>
                                         </f:facet>
-                                        <h:outputText value="#{language.nombreIdioma}"/>
+                                        <h:outputText value="#{idiomaCaract.idiomas.nombreIdioma}"/>
                                     </p:column>
                                     <p:column>
                                         <f:facet name="header">
-                                            <h:outputText value="Característica y nivel"/>
+                                            <h:outputText value="Caracteristica"/>
                                         </f:facet>
-                                        <ul class="list-group">
-                                            <ui:repeat value="#{language.idiomasCaracteristicasList}" var="caract">
-                                                <li class="list-group-item">#{caract.caracteristicasIdioma.caracteristicaIdioma}: #{caract.idNivel.nombreNivel}</li>
-                                            </ui:repeat>
-                                        </ul>
+                                        <h:outputText value="#{idiomaCaract.caracteristicasIdioma.caracteristicaIdioma}"/>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Nivel"/>
+                                        </f:facet>
+                                        <h:outputText value="#{idiomaCaract.idNivel.nombreNivel}"/>
                                     </p:column>
                                 </p:dataTable>
                             </p:tab>

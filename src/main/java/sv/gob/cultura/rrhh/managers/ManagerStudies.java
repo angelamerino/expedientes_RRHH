@@ -6,6 +6,7 @@
 package sv.gob.cultura.rrhh.managers;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -209,10 +210,6 @@ public class ManagerStudies implements Serializable {
         this.selectedEmp = selectedEmp;
     }
 
-    public List<EstudiosEmp> allFormalStudiesByEmp() {
-        return selectedEmp.getEstudiosEmpList();
-    }
-
     public List<DirNacional> allDirNacionales() {
         return getDirNacionalFacade().findAll();
     }
@@ -223,10 +220,6 @@ public class ManagerStudies implements Serializable {
 
     public List<Empleados> filteredEmployees() {
         return getEmpleadosFacade().buscarEmp(dependecia);
-    }
-
-    public List<Idiomas> allCaracteristicasByIdEmp() {
-        return selectedEmp.getIdiomasList();
     }
 
     public List<Nivel> allNiveles() {
@@ -273,14 +266,18 @@ public class ManagerStudies implements Serializable {
 
     public void saveLanguage() {
         try {
-            newLang.setIdiomasCaracteristicasPK(new IdiomasCaracteristicasPK(idCaracteristica, idIdioma));
+            newLang.setIdiomasCaracteristicasPK(new IdiomasCaracteristicasPK(idCaracteristica, idIdioma, selectedEmp.getIdEmpleado()));
             newLang.setIdNivel(new Nivel(idNivel));
-            newLang.setIdEmpleado(selectedEmp.getIdEmpleado());
 //            Logger.getLogger(getClass().getName()).log(Level.INFO, "Objecto Idioma: {0}", newLang);
             getIdiomasCaracteristicasFacade().create(newLang);
             newLang = new IdiomasCaracteristicas();
+            resetIdiomaOptions();
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.INFO, "Error: {0}", e.toString());
         }
+    }
+
+    public void resetIdiomaOptions() {
+        idCaracteristica = idIdioma = idNivel = 0;
     }
 }

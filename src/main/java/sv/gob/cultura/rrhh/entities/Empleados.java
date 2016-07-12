@@ -27,6 +27,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -78,11 +79,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Empleados.findByDeptoResidencia", query = "SELECT e FROM Empleados e WHERE e.deptoResidencia = :deptoResidencia")
 })
 public class Empleados implements Serializable {
-    @Column(name = "salario_historial_aumento")
-    private Double salarioHistorialAumento;
-    @JoinColumn(name = "id_genero", referencedColumnName = "id_genero")
-    @ManyToOne(optional = false)
-    private Genero idGenero;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -208,16 +205,13 @@ public class Empleados implements Serializable {
     private Integer deptoNac;
     @Column(name = "depto_residencia")
     private Integer deptoResidencia;
+    @Column(name = "salario_historial_aumento")
+    private Double salarioHistorialAumento;
     @JoinTable(name = "emp_prestacion", joinColumns = {
         @JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")}, inverseJoinColumns = {
         @JoinColumn(name = "id_prestacion", referencedColumnName = "id_prestacion")})
     @ManyToMany
     private List<Prestacion> prestacionList;
-    @JoinTable(name = "emp_idiomas", joinColumns = {
-        @JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")}, inverseJoinColumns = {
-        @JoinColumn(name = "id_idioma", referencedColumnName = "id_idioma")})
-    @ManyToMany
-    private List<Idiomas> idiomasList;
     @JoinTable(name = "emp_estudios", joinColumns = {
         @JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")}, inverseJoinColumns = {
         @JoinColumn(name = "id_estudio", referencedColumnName = "id_estudio")})
@@ -278,6 +272,11 @@ public class Empleados implements Serializable {
     private AdministradoraPensiones idAdminPension;
     @OneToMany(mappedBy = "idEmpleado")
     private List<Reconocimientos> reconocimientosList;
+    @JoinColumn(name = "id_genero", referencedColumnName = "id_genero")
+    @ManyToOne(optional = false)
+    private Genero idGenero;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "empleados")
+    private List<IdiomasCaracteristicas> idiomasCaracteristicasList;
 
     public Empleados() {
     }
@@ -607,14 +606,6 @@ public class Empleados implements Serializable {
         this.prestacionList = prestacionList;
     }
 
-    public List<Idiomas> getIdiomasList() {
-        return idiomasList;
-    }
-
-    public void setIdiomasList(List<Idiomas> idiomasList) {
-        this.idiomasList = idiomasList;
-    }
-
     public List<EstudiosEmp> getEstudiosEmpList() {
         return estudiosEmpList;
     }
@@ -848,7 +839,7 @@ public class Empleados implements Serializable {
         return "sv.gob.cultura.rrhh.entidades.Empleados[ idEmpleado=" + idEmpleado + " ]";
     }
 
-        public void setSalarioHistorialAumento(Double salarioHistorialAumento) {
+    public void setSalarioHistorialAumento(Double salarioHistorialAumento) {
         this.salarioHistorialAumento = salarioHistorialAumento;
     }
 
@@ -859,5 +850,14 @@ public class Empleados implements Serializable {
     public void setIdGenero(Genero idGenero) {
         this.idGenero = idGenero;
     }
-    
+
+    @XmlTransient
+    public List<IdiomasCaracteristicas> getIdiomasCaracteristicasList() {
+        return idiomasCaracteristicasList;
+    }
+
+    public void setIdiomasCaracteristicasList(List<IdiomasCaracteristicas> idiomasCaracteristicasList) {
+        this.idiomasCaracteristicasList = idiomasCaracteristicasList;
+    }
+
 }
