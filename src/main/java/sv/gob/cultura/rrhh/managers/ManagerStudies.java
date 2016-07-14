@@ -6,11 +6,8 @@
 package sv.gob.cultura.rrhh.managers;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -69,7 +66,6 @@ public class ManagerStudies implements Serializable {
     private Empleados selectedEmp = new Empleados();
     private int direccionNacional;
     private int dependecia;
-    private int idIdioma, idCaracteristica, idNivel;
 
     public ManagerStudies() {
     }
@@ -178,30 +174,6 @@ public class ManagerStudies implements Serializable {
         this.dependecia = dependecia;
     }
 
-    public int getIdIdioma() {
-        return idIdioma;
-    }
-
-    public void setIdIdioma(int idIdioma) {
-        this.idIdioma = idIdioma;
-    }
-
-    public int getIdCaracteristica() {
-        return idCaracteristica;
-    }
-
-    public void setIdCaracteristica(int idCaracteristica) {
-        this.idCaracteristica = idCaracteristica;
-    }
-
-    public int getIdNivel() {
-        return idNivel;
-    }
-
-    public void setIdNivel(int idNivel) {
-        this.idNivel = idNivel;
-    }
-
     public Empleados getSelectedEmp() {
         return selectedEmp;
     }
@@ -232,6 +204,14 @@ public class ManagerStudies implements Serializable {
 
     public List<CaracteristicasIdioma> allCaracteristicasIdioma() {
         return getCaracteristicasIdiomaFacade().findAll();
+    }
+
+    public List<IdiomasCaracteristicas> fetchIdiomaCaracts() {
+        if (selectedEmp.getIdEmpleado() != null) {
+            return getIdiomasCaracteristicasFacade().findAllByEmpId(selectedEmp.getIdEmpleado());
+        } else {
+            return null;
+        }
     }
 
     public void saveStudy() {
@@ -265,19 +245,36 @@ public class ManagerStudies implements Serializable {
     }
 
     public void saveLanguage() {
+//            Logger.getLogger(getClass().getName()).log(Level.INFO, "Objecto Idioma: {0}", newLang);
+        int idCaracteristica = 0, idIdioma = 0;
+        idCaracteristica = newLang.getCaracteristicasIdioma().getIdCaractIdioma();
+        idIdioma = newLang.getIdiomas().getIdIdioma();
         try {
             newLang.setIdiomasCaracteristicasPK(new IdiomasCaracteristicasPK(idCaracteristica, idIdioma, selectedEmp.getIdEmpleado()));
-            newLang.setIdNivel(new Nivel(idNivel));
-//            Logger.getLogger(getClass().getName()).log(Level.INFO, "Objecto Idioma: {0}", newLang);
             getIdiomasCaracteristicasFacade().create(newLang);
             newLang = new IdiomasCaracteristicas();
-            resetIdiomaOptions();
         } catch (Exception e) {
-            Logger.getLogger(getClass().getName()).log(Level.INFO, "Error: {0}", e.toString());
         }
     }
 
-    public void resetIdiomaOptions() {
-        idCaracteristica = idIdioma = idNivel = 0;
+    public void editLanguage() {
+//            Logger.getLogger(getClass().getName()).log(Level.INFO, "Objecto Idioma: {0}", newLang);
+        int idCaracteristica = 0, idIdioma = 0;
+        idCaracteristica = selectedLang.getCaracteristicasIdioma().getIdCaractIdioma();
+        idIdioma = selectedLang.getIdiomas().getIdIdioma();
+        try {
+            selectedLang.setIdiomasCaracteristicasPK(new IdiomasCaracteristicasPK(idCaracteristica, idIdioma, selectedEmp.getIdEmpleado()));
+            getIdiomasCaracteristicasFacade().edit(selectedLang);
+        } catch (Exception e) {
+        }
     }
+
+    public void removeLanguage() {
+        try {
+            getIdiomasCaracteristicasFacade().remove(selectedLang);
+            selectedLang = new IdiomasCaracteristicas();
+        } catch (Exception e) {
+        }
+    }
+
 }
