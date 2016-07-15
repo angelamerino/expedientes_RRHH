@@ -137,7 +137,7 @@ public class manejadorContactosEmergencia implements Serializable {
         contactsList = getContactoEmergenciaEmpFacade().buscarContactos(selectedEmp.getIdEmpleado());
     }
 
-    public void guardarContactosEmergencia() {
+    public void guardarContactoEmergencia() {
         try {
             newContact.setIdEmpleado(selectedEmp);
             newContact.setFechaCreaContac(new Date());
@@ -152,7 +152,7 @@ public class manejadorContactosEmergencia implements Serializable {
         }
     }
 
-    public void editarEmergencia() {
+    public void editarContactoEmergencia() {
         try {
             newContact.setFechaModContac(new Date());
             newContact.setUserModContac(1);

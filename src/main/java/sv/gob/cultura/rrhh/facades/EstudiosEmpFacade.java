@@ -30,7 +30,7 @@ public class EstudiosEmpFacade extends AbstractFacade<EstudiosEmp> {
         super(EstudiosEmp.class);
     }
 
-    public List<EstudiosEmp> buscarEstudioEmpId(int idEstudioEmp) {
+    public List<EstudiosEmp> findByEmpId(int idEstudioEmp) {
         return getEntityManager().createNamedQuery("EstudiosEmp.findByIdEstudio").setParameter("idEstudio", idEstudioEmp).getResultList();
     }
 
