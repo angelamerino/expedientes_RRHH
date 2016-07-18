@@ -79,13 +79,14 @@ public class EstudiosEmp implements Serializable {
     @Column(name = "fecha_mod_estudios")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaModEstudios;
-    @ManyToMany(mappedBy = "estudiosEmpList")
-    private List<Empleados> empleadosList;
     @OneToMany(mappedBy = "idEstudio")
     private List<ImgDoc> imgDocList;
     @JoinColumn(name = "id_prof_oficio", referencedColumnName = "id_prof_oficio")
     @ManyToOne
     private ProfOficios idProfOficio;
+    @JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")
+    @ManyToOne(optional = false)
+    private Empleados idEmpleado;
 
     public EstudiosEmp() {
     }
@@ -173,14 +174,6 @@ public class EstudiosEmp implements Serializable {
         this.fechaModEstudios = fechaModEstudios;
     }
 
-    public List<Empleados> getEmpleadosList() {
-        return empleadosList;
-    }
-
-    public void setEmpleadosList(List<Empleados> empleadosList) {
-        this.empleadosList = empleadosList;
-    }
-
     public List<ImgDoc> getImgDocList() {
         return imgDocList;
     }
@@ -195,6 +188,14 @@ public class EstudiosEmp implements Serializable {
 
     public void setIdProfOficio(ProfOficios idProfOficio) {
         this.idProfOficio = idProfOficio;
+    }
+
+    public Empleados getIdEmpleado() {
+        return idEmpleado;
+    }
+
+    public void setIdEmpleado(Empleados idEmpleado) {
+        this.idEmpleado = idEmpleado;
     }
 
     @Override

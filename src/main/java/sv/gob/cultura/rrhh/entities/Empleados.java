@@ -212,11 +212,6 @@ public class Empleados implements Serializable {
         @JoinColumn(name = "id_prestacion", referencedColumnName = "id_prestacion")})
     @ManyToMany
     private List<Prestacion> prestacionList;
-    @JoinTable(name = "emp_estudios", joinColumns = {
-        @JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")}, inverseJoinColumns = {
-        @JoinColumn(name = "id_estudio", referencedColumnName = "id_estudio")})
-    @ManyToMany
-    private List<EstudiosEmp> estudiosEmpList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpleado")
     private List<HistorialSalarial> historialSalarialList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpleado")
@@ -277,6 +272,8 @@ public class Empleados implements Serializable {
     private Genero idGenero;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "empleados")
     private List<IdiomasCaracteristicas> idiomasCaracteristicasList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpleado")
+    private List<EstudiosEmp> estudiosEmpList;
 
     public Empleados() {
     }
@@ -606,14 +603,6 @@ public class Empleados implements Serializable {
         this.prestacionList = prestacionList;
     }
 
-    public List<EstudiosEmp> getEstudiosEmpList() {
-        return estudiosEmpList;
-    }
-
-    public void setEstudiosEmpList(List<EstudiosEmp> estudiosEmpList) {
-        this.estudiosEmpList = estudiosEmpList;
-    }
-
     public List<HistorialSalarial> getHistorialSalarialList() {
         return historialSalarialList;
     }
@@ -814,6 +803,36 @@ public class Empleados implements Serializable {
         this.reconocimientosList = reconocimientosList;
     }
 
+    public void setSalarioHistorialAumento(Double salarioHistorialAumento) {
+        this.salarioHistorialAumento = salarioHistorialAumento;
+    }
+
+    public Genero getIdGenero() {
+        return idGenero;
+    }
+
+    public void setIdGenero(Genero idGenero) {
+        this.idGenero = idGenero;
+    }
+
+    @XmlTransient
+    public List<IdiomasCaracteristicas> getIdiomasCaracteristicasList() {
+        return idiomasCaracteristicasList;
+    }
+
+    public void setIdiomasCaracteristicasList(List<IdiomasCaracteristicas> idiomasCaracteristicasList) {
+        this.idiomasCaracteristicasList = idiomasCaracteristicasList;
+    }
+
+    @XmlTransient
+    public List<EstudiosEmp> getEstudiosEmpList() {
+        return estudiosEmpList;
+    }
+
+    public void setEstudiosEmpList(List<EstudiosEmp> estudiosEmpList) {
+        this.estudiosEmpList = estudiosEmpList;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -837,27 +856,6 @@ public class Empleados implements Serializable {
     @Override
     public String toString() {
         return "sv.gob.cultura.rrhh.entidades.Empleados[ idEmpleado=" + idEmpleado + " ]";
-    }
-
-    public void setSalarioHistorialAumento(Double salarioHistorialAumento) {
-        this.salarioHistorialAumento = salarioHistorialAumento;
-    }
-
-    public Genero getIdGenero() {
-        return idGenero;
-    }
-
-    public void setIdGenero(Genero idGenero) {
-        this.idGenero = idGenero;
-    }
-
-    @XmlTransient
-    public List<IdiomasCaracteristicas> getIdiomasCaracteristicasList() {
-        return idiomasCaracteristicasList;
-    }
-
-    public void setIdiomasCaracteristicasList(List<IdiomasCaracteristicas> idiomasCaracteristicasList) {
-        this.idiomasCaracteristicasList = idiomasCaracteristicasList;
     }
 
 }

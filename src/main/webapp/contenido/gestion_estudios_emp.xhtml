@@ -160,7 +160,35 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div class="form-group"></div>
+                                    <div class="form-group">
+                                        <h:outputLabel value="Oficio:" for="idProfOficio" />
+                                        <h:selectOneMenu id="idProfOficio" value="#{managerStudies.newStudy.idProfOficio}" title="IdProfOficio" converter="#{profOficioConvertidor}" class="form-control">
+                                            <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                            <f:selectItems value="#{managerStudies.fetchOficios()}" var="oficio" itemLabel="#{oficio.nombreProfOficio}" itemValue="#{oficio}" />
+                                        </h:selectOneMenu>
+                                    </div>
+                                    <div class="form-group">
+                                        <h:outputLabel value="Descripción:" for="descripcionNoFormal" />
+                                        <h:inputText id="descripcionNoFormal" value="#{managerStudies.newStudy.descripcionNoFormal}" title="DescripcionNoFormal" class="form-control"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <h:outputLabel value="Tipo estudio:" for="tipoEstudio" />
+                                        <h:selectOneMenu id="tipoEstudio" value="#{managerStudies.newStudy.tipoEstudio}" title="TipoEstudio" required="true" requiredMessage="The TipoEstudio field is required." class="form-control">
+                                            <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                            <f:selectItem itemLabel="Formal" itemValue="FORMAL"/>
+                                            <f:selectItem itemLabel="No Formal" itemValue="NO FORMAL"/>
+                                        </h:selectOneMenu>
+                                    </div>
+                                    <div class="form-group">
+                                        <h:outputLabel value="Institución:" for="institucionEstudio" />
+                                        <h:inputText id="institucionEstudio" value="#{managerStudies.newStudy.institucionEstudio}" title="InstitucionEstudio" required="true" requiredMessage="The InstitucionEstudio field is required." class="form-control"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <h:outputLabel value="Año:" for="anioEstudio" />
+                                        <h:inputText id="anioEstudio" value="#{managerStudies.newStudy.anioEstudio}" title="AnioEstudio" required="true" requiredMessage="The AnioEstudio field is required." class="form-control">
+                                            <f:convertDateTime pattern="yyyy" />
+                                        </h:inputText>
+                                    </div>
                                 </div>
                             </div>
                         </h:panelGroup>

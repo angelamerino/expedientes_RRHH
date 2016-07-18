@@ -47,7 +47,7 @@ public class ProfOficioConvertidor implements Converter{
                 ProfOficios profOficios = getProfOficiosFacade().find(id);
                 return profOficios;
             } catch (Exception e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de conversión", "No es una profecion u oficio válido"));
+                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de conversión", "No es una profesión u oficio válido"));
             }
         }
     }
