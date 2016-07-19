@@ -64,7 +64,7 @@ public class ManagerStudies implements Serializable {
     @EJB
     private DirNacionalFacade dirNacionalFacade;
 
-    private EstudiosEmp newStudy = new EstudiosEmp(), selectedStudy = new EstudiosEmp();
+    private EstudiosEmp newEstudio = new EstudiosEmp(), selectedEstudio = new EstudiosEmp();
     private IdiomasCaracteristicas newLang = new IdiomasCaracteristicas(), selectedLang = new IdiomasCaracteristicas();
     private ImgDoc newAttachment = new ImgDoc();
     private Empleados selectedEmp = new Empleados();
@@ -126,21 +126,22 @@ public class ManagerStudies implements Serializable {
         return profOficiosFacade;
     }
 
-    public EstudiosEmp getNewStudy() {
-        return newStudy;
+    public EstudiosEmp getNewEstudio() {
+        return newEstudio;
     }
 
-    public void setNewStudy(EstudiosEmp newStudy) {
-        this.newStudy = newStudy;
+    public void setNewEstudio(EstudiosEmp newEstudio) {
+        this.newEstudio = newEstudio;
     }
 
-    public void setSelectedStudy(EstudiosEmp selectedStudy) {
-        this.selectedStudy = selectedStudy;
+    public EstudiosEmp getSelectedEstudio() {
+        return selectedEstudio;
     }
 
-    public EstudiosEmp getSelectedStudy() {
-        return selectedStudy;
+    public void setSelectedEstudio(EstudiosEmp selectedEstudio) {
+        this.selectedEstudio = selectedEstudio;
     }
+
 
     public IdiomasCaracteristicas getNewLang() {
         return newLang;
@@ -236,17 +237,23 @@ public class ManagerStudies implements Serializable {
 
     public void saveStudy() {
         try {
-
+            newEstudio.setFechaCreaEstudios(new Date());
+            newEstudio.setIdEmpleado(selectedEmp);
+            newEstudio.setUserCreaEstudios(1);
+            getEstudiosEmpFacade().create(newEstudio);
+            newEstudio = new EstudiosEmp();
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Creado", "Registro Creado correctamente");
+            FacesContext.getCurrentInstance().addMessage(null, message);
         } catch (Exception e) {
         }
     }
 
     public void editStudy() {
         try {
-            selectedStudy.setFechaModEstudios(new Date());
-            selectedStudy.setUserModEstudios(1);
-            getEstudiosEmpFacade().edit(selectedStudy);
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Modificado", "Registro Modificado");
+            selectedEstudio.setFechaModEstudios(new Date());
+            selectedEstudio.setUserModEstudios(1);
+            getEstudiosEmpFacade().edit(selectedEstudio);
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Modificado", "Registro Modificado correctamente");
             FacesContext.getCurrentInstance().addMessage(null, message);
         } catch (Exception e) {
 
@@ -255,10 +262,10 @@ public class ManagerStudies implements Serializable {
 
     public void removeStudy() {
         try {
-            selectedEmp.getEstudiosEmpList().remove(selectedStudy);
+            selectedEmp.getEstudiosEmpList().remove(selectedEstudio);
             getEmpleadosFacade().edit(selectedEmp);
-            selectedStudy = new EstudiosEmp();
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Eliminado", "Registro Eliminado");
+            selectedEstudio = new EstudiosEmp();
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Eliminado", "Registro Eliminado correctamente");
             FacesContext.getCurrentInstance().addMessage(null, message);
         } catch (Exception e) {
         }
@@ -273,6 +280,8 @@ public class ManagerStudies implements Serializable {
             newLang.setIdiomasCaracteristicasPK(new IdiomasCaracteristicasPK(idCaracteristica, idIdioma, selectedEmp.getIdEmpleado()));
             getIdiomasCaracteristicasFacade().create(newLang);
             newLang = new IdiomasCaracteristicas();
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Creado", "Registro Creado correctamente");
+            FacesContext.getCurrentInstance().addMessage(null, message);
         } catch (Exception e) {
         }
     }
@@ -285,6 +294,8 @@ public class ManagerStudies implements Serializable {
         try {
             selectedLang.setIdiomasCaracteristicasPK(new IdiomasCaracteristicasPK(idCaracteristica, idIdioma, selectedEmp.getIdEmpleado()));
             getIdiomasCaracteristicasFacade().edit(selectedLang);
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Modificado", "Registro Modificado correctamente");
+            FacesContext.getCurrentInstance().addMessage(null, message);
         } catch (Exception e) {
         }
     }
@@ -293,6 +304,8 @@ public class ManagerStudies implements Serializable {
         try {
             getIdiomasCaracteristicasFacade().remove(selectedLang);
             selectedLang = new IdiomasCaracteristicas();
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Eliminado", "Registro Eliminado correctamente");
+            FacesContext.getCurrentInstance().addMessage(null, message);
         } catch (Exception e) {
         }
     }

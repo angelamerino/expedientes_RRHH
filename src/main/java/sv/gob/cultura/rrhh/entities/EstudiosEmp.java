@@ -15,7 +15,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -41,8 +40,8 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "EstudiosEmp.findByUserCreaEstudios", query = "SELECT e FROM EstudiosEmp e WHERE e.userCreaEstudios = :userCreaEstudios"),
     @NamedQuery(name = "EstudiosEmp.findByFechaCreaEstudios", query = "SELECT e FROM EstudiosEmp e WHERE e.fechaCreaEstudios = :fechaCreaEstudios"),
     @NamedQuery(name = "EstudiosEmp.findByUserModEstudios", query = "SELECT e FROM EstudiosEmp e WHERE e.userModEstudios = :userModEstudios"),
-    //@NamedQuery(name = "EstudiosEmp.findByTipoEmp", query = "SELECT e FROM EstudiosEmp e WHERE e.tipoEstudio = :tipoEstudio AND e. = :idEmpleado"),
-    @NamedQuery(name = "EstudiosEmp.findByFechaModEstudios", query = "SELECT e FROM EstudiosEmp e WHERE e.fechaModEstudios = :fechaModEstudios")})
+    @NamedQuery(name = "EstudiosEmp.findByFechaModEstudios", query = "SELECT e FROM EstudiosEmp e WHERE e.fechaModEstudios = :fechaModEstudios"),
+    @NamedQuery(name = "EstudiosEmp.findByEmpId", query = "SELECT e FROM EstudiosEmp e WHERE e.idEmpleado.idEmpleado = :idEmpleado")})
 public class EstudiosEmp implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -19,19 +19,19 @@
                         <div class="ui-grid-col-12">
                             <div class="form-group">
                                 <h:outputLabel value="Dirección Nacional:"/>
-                                <p:selectOneMenu id="dirNacionalFiltrarJefe" style="width: 100%" value="#{managerStudies.direccionNacional}">
+                                <h:selectOneMenu id="dirNacionalFiltrarJefe" value="#{managerStudies.direccionNacional}" class="form-control">
                                     <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
                                     <f:selectItems value="#{managerStudies.allDirNacionales()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
                                     <f:ajax render="filtrarDependencia"/>
-                                </p:selectOneMenu>
+                                </h:selectOneMenu>
                             </div>
                             <div class="form-group">
                                 <h:outputLabel value="Dependencia / Unidad organizativa:"/>
-                                <p:selectOneMenu id="filtrarDependencia"  style="width: 100%" value="#{managerStudies.dependecia}">
+                                <h:selectOneMenu id="filtrarDependencia" value="#{managerStudies.dependecia}" class="form-control">
                                     <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
                                     <f:selectItems value="#{managerStudies.filteredDependencias()}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
                                     <f:ajax render="tbl-emps"/>
-                                </p:selectOneMenu>
+                                </h:selectOneMenu>
                             </div>
                             <div class="form-group">
                                 <!--Table empleados-->
@@ -64,7 +64,7 @@
                                         <f:facet name="header">
                                             <h:outputText value="Opc."/>
                                         </f:facet>
-                                        <p:commandButton process="@this tbl-emps" update="tabview-estudios" icon="ui-icon-search" value="Ver detalle" oncomplete="PF('dlgStudies').show();">
+                                        <p:commandButton process="@this tbl-emps" update="tabview-estudios" icon="ui-icon-search" value="Ver detalle" oncomplete="PF('dlgStudiesLang').show();">
                                             <f:setPropertyActionListener value="#{emp}" target="#{managerStudies.selectedEmp}"/>
                                         </p:commandButton>
                                     </p:column>
@@ -72,7 +72,7 @@
                             </div>
                         </div>
                     </div>
-                    <p:dialog header="Estudios e idiomas" modal="true" widgetVar="dlgStudies" position="center top" responsive="true" width="60%">
+                    <p:dialog header="Estudios e idiomas" modal="true" widgetVar="dlgStudiesLang" position="center top" responsive="true" width="60%">
                         <p:tabView id="tabview-estudios">
                             <p:tab title="Formación">
                                 <div class="alert alert-info">
@@ -82,9 +82,12 @@
                                     <p:commandButton process="@this" update="panel-new-study" value="Nuevo estudio" icon="fa fa-plus" oncomplete="PF('dlgNewStudy').show();"/>
                                 </p>
                                 <!--Table estudios formales-->
-                                <p:dataTable id="tbl-estudios-formales" value="#{managerStudies.selectedEmp.estudiosEmpList}" var="estudioF" rowKey="#{estudioF.idEstudio}" paginator="true" rows="10" scrollable="true">
-                                    <p:column headerText="Descripción" filterBy="#{estudioF.idProfOficio.nombreProfOficio}" filterMatchMode="contains" >
+                                <p:dataTable id="tbl-estudios" value="#{managerStudies.fetchEstudios()}" var="estudioF" rowKey="#{estudioF.idEstudio}" paginator="true" rows="10" scrollable="true">
+                                    <p:column headerText="Profesión / Oficio" filterBy="#{estudioF.idProfOficio.nombreProfOficio}" filterMatchMode="contains" >
                                         <h:outputText value="#{estudioF.idProfOficio.nombreProfOficio}"/>
+                                    </p:column>
+                                    <p:column headerText="Descripción" filterBy="#{estudioF.descripcionNoFormal}" filterMatchMode="contains" >
+                                        <h:outputText value="#{estudioF.descripcionNoFormal}"/>
                                     </p:column>
                                     <p:column headerText="Institución" filterBy="#{estudioF.institucionEstudio}" filterMatchMode="contains" >
                                         <h:outputText value="#{estudioF.institucionEstudio}"/>
@@ -97,12 +100,12 @@
                                     <p:column headerText="Tipo" filterBy="#{estudioF.tipoEstudio}" filterMatchMode="contains">
                                         <h:outputText value="#{estudioF.tipoEstudio}"/>
                                     </p:column>
-                                    <p:column headerText="Opc." style="width:150px; text-align: center;">
+                                    <p:column headerText="Opc." style="width:100px; text-align: center;">
                                         <p:commandButton icon="fa fa-pencil" title="Editar" process="@this" update="panel-edit-study"  onsuccess="PF('dlgEditStudy').show()">
-                                            <f:setPropertyActionListener value="#{estudioF}" target="#{managerStudies.selectedStudy}"/> 
+                                            <f:setPropertyActionListener value="#{estudioF}" target="#{managerStudies.selectedEstudio}"/> 
                                         </p:commandButton>
-                                        <p:commandButton icon="fa fa-close" title="Eliminar" process="@this" update="tbl-estudios-formales" action="#{managerStudies.removeStudy()}">
-                                            <f:setPropertyActionListener value="#{estudioF}" target="#{managerStudies.selectedStudy}"/> 
+                                        <p:commandButton icon="fa fa-close" title="Eliminar" process="@this" update="tbl-estudios" action="#{managerStudies.removeStudy()}">
+                                            <f:setPropertyActionListener value="#{estudioF}" target="#{managerStudies.selectedEstudio}"/> 
                                         </p:commandButton>
                                     </p:column>
                                 </p:dataTable>
@@ -162,18 +165,18 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <h:outputLabel value="Oficio:" for="idProfOficio" />
-                                        <h:selectOneMenu id="idProfOficio" value="#{managerStudies.newStudy.idProfOficio}" title="IdProfOficio" converter="#{profOficioConvertidor}" class="form-control">
+                                        <h:selectOneMenu id="idProfOficio" value="#{managerStudies.newEstudio.idProfOficio}" title="IdProfOficio" converter="#{profOficioConvertidor}" class="form-control">
                                             <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
                                             <f:selectItems value="#{managerStudies.fetchOficios()}" var="oficio" itemLabel="#{oficio.nombreProfOficio}" itemValue="#{oficio}" />
                                         </h:selectOneMenu>
                                     </div>
                                     <div class="form-group">
                                         <h:outputLabel value="Descripción:" for="descripcionNoFormal" />
-                                        <h:inputText id="descripcionNoFormal" value="#{managerStudies.newStudy.descripcionNoFormal}" title="DescripcionNoFormal" class="form-control"/>
+                                        <h:inputText id="descripcionNoFormal" value="#{managerStudies.newEstudio.descripcionNoFormal}" title="DescripcionNoFormal" class="form-control"/>
                                     </div>
                                     <div class="form-group">
                                         <h:outputLabel value="Tipo estudio:" for="tipoEstudio" />
-                                        <h:selectOneMenu id="tipoEstudio" value="#{managerStudies.newStudy.tipoEstudio}" title="TipoEstudio" required="true" requiredMessage="The TipoEstudio field is required." class="form-control">
+                                        <h:selectOneMenu id="tipoEstudio" value="#{managerStudies.newEstudio.tipoEstudio}" title="TipoEstudio" required="true" requiredMessage="The TipoEstudio field is required." class="form-control">
                                             <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
                                             <f:selectItem itemLabel="Formal" itemValue="FORMAL"/>
                                             <f:selectItem itemLabel="No Formal" itemValue="NO FORMAL"/>
@@ -181,13 +184,16 @@
                                     </div>
                                     <div class="form-group">
                                         <h:outputLabel value="Institución:" for="institucionEstudio" />
-                                        <h:inputText id="institucionEstudio" value="#{managerStudies.newStudy.institucionEstudio}" title="InstitucionEstudio" required="true" requiredMessage="The InstitucionEstudio field is required." class="form-control"/>
+                                        <h:inputText id="institucionEstudio" value="#{managerStudies.newEstudio.institucionEstudio}" title="InstitucionEstudio" required="true" requiredMessage="The InstitucionEstudio field is required." class="form-control"/>
                                     </div>
                                     <div class="form-group">
                                         <h:outputLabel value="Año:" for="anioEstudio" />
-                                        <h:inputText id="anioEstudio" value="#{managerStudies.newStudy.anioEstudio}" title="AnioEstudio" required="true" requiredMessage="The AnioEstudio field is required." class="form-control">
+                                        <h:inputText id="anioEstudio" value="#{managerStudies.newEstudio.anioEstudio}" title="AnioEstudio" required="true" requiredMessage="The AnioEstudio field is required." class="form-control">
                                             <f:convertDateTime pattern="yyyy" />
                                         </h:inputText>
+                                    </div>
+                                    <div class="form-group">
+                                        <p:commandButton icon="fa fa-plus" value="Guardar"  action="#{managerStudies.saveStudy()}" process="@this panel-new-study" update="panel-new-study tabview-estudios:tbl-estudios tbl-emps" oncomplete="PF('dlgNewStudy').hide();"/>
                                     </div>
                                 </div>
                             </div>
@@ -200,7 +206,40 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div class="form-group"></div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <h:outputLabel value="Oficio:" for="idProfOficioEdit" />
+                                            <h:selectOneMenu id="idProfOficioEdit" value="#{managerStudies.selectedEstudio.idProfOficio}" title="IdProfOficio" converter="#{profOficioConvertidor}" class="form-control">
+                                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                                <f:selectItems value="#{managerStudies.fetchOficios()}" var="oficio" itemLabel="#{oficio.nombreProfOficio}" itemValue="#{oficio}" />
+                                            </h:selectOneMenu>
+                                        </div>
+                                        <div class="form-group">
+                                            <h:outputLabel value="Descripción:" for="descripcionNoFormalEdit" />
+                                            <h:inputText id="descripcionNoFormalEdit" value="#{managerStudies.selectedEstudio.descripcionNoFormal}" title="DescripcionNoFormal" class="form-control"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <h:outputLabel value="Tipo estudio:" for="tipoEstudioEdit" />
+                                            <h:selectOneMenu id="tipoEstudioEdit" value="#{managerStudies.selectedEstudio.tipoEstudio}" title="TipoEstudio" required="true" requiredMessage="The TipoEstudio field is required." class="form-control">
+                                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                                <f:selectItem itemLabel="Formal" itemValue="FORMAL"/>
+                                                <f:selectItem itemLabel="No Formal" itemValue="NO FORMAL"/>
+                                            </h:selectOneMenu>
+                                        </div>
+                                        <div class="form-group">
+                                            <h:outputLabel value="Institución:" for="institucionEstudioEdit" />
+                                            <h:inputText id="institucionEstudioEdit" value="#{managerStudies.selectedEstudio.institucionEstudio}" title="InstitucionEstudio" required="true" requiredMessage="The InstitucionEstudio field is required." class="form-control"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <h:outputLabel value="Año:" for="anioEstudioEdit" />
+                                            <h:inputText id="anioEstudioEdit" value="#{managerStudies.selectedEstudio.anioEstudio}" title="AnioEstudio" required="true" requiredMessage="The AnioEstudio field is required." class="form-control">
+                                                <f:convertDateTime pattern="yyyy" />
+                                            </h:inputText>
+                                        </div>
+                                        <div class="form-group">
+                                            <p:commandButton icon="fa fa-plus" value="Guardar"  action="#{managerStudies.editStudy()}" process="@this panel-edit-study" update="panel-edit-study tabview-estudios:tbl-estudios tbl-emps" oncomplete="PF('dlgEditStudy').hide();"/>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </h:panelGroup>
