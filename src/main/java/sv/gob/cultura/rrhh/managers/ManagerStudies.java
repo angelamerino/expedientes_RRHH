@@ -262,8 +262,7 @@ public class ManagerStudies implements Serializable {
 
     public void removeStudy() {
         try {
-            selectedEmp.getEstudiosEmpList().remove(selectedEstudio);
-            getEmpleadosFacade().edit(selectedEmp);
+            getEstudiosEmpFacade().remove(selectedEstudio);
             selectedEstudio = new EstudiosEmp();
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Eliminado", "Registro Eliminado correctamente");
             FacesContext.getCurrentInstance().addMessage(null, message);
