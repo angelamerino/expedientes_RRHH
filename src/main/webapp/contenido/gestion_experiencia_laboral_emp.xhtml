@@ -17,7 +17,22 @@
                     <p:growl autoUpdate="true" showDetail="true"/>
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-12">
-
+                            <div class="form-group">
+                                <h:outputLabel value="Dirección Nacional:"/>
+                                <h:selectOneMenu class="form-control" id="dirNacionalFiltrarJefe" style="width: 100%" value="#{manejadorExperienciaLaboral.direccionNacional}">
+                                    <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                    <f:selectItems value="#{manejadorExperienciaLaboral.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
+                                    <f:ajax render="filtrarDependencia filtrarEmpleado nombre1 nombre2 tabla1 tabla2"/>
+                                </h:selectOneMenu>
+                            </div>
+                            <div class="form-group">
+                                <h:outputLabel value="Dependencia / Unidad organizativa:"/> 
+                                <h:selectOneMenu class="form-control" id="filtrarDependencia"  style="width: 100%" value="#{manejadorExperienciaLaboral.dependecia}">
+                                    <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                    <f:selectItems value="#{manejadorExperienciaLaboral.dependenciasFiltradas()}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
+                                    <f:ajax render="filtrarEmpleado nombre1 nombre2 tabla1 tabla2"/>
+                                </h:selectOneMenu>
+                            </div>
                         </div>
                     </div>
                 </h:form>
@@ -48,23 +63,9 @@
 
                         <h:form prependId="false">
                             <p:growl id="growl" showDetail="false"  autoUpdate="true" life="10000" />
-                            <div class="form-group">
-                                <h:outputLabel value="Dirección Nacional:"/>
-                                <h:selectOneMenu class="form-control" id="dirNacionalFiltrarJefe" style="width: 100%" value="#{manejadorExperienciaLaboral.direccionNacional}">
-                                    <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
-                                    <f:selectItems value="#{manejadorExperienciaLaboral.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
-                                    <f:ajax render="filtrarDependencia filtrarEmpleado nombre1 nombre2 tabla1 tabla2"/>
-                                </h:selectOneMenu>
-                            </div>
+                            
 
-                            <div class="form-group">
-                                <h:outputLabel value="Dependencia / Unidad organizativa:"/> 
-                                <h:selectOneMenu class="form-control" id="filtrarDependencia"  style="width: 100%" value="#{manejadorExperienciaLaboral.dependecia}">
-                                    <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
-                                    <f:selectItems value="#{manejadorExperienciaLaboral.dependenciasFiltradas()}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
-                                    <f:ajax render="filtrarEmpleado nombre1 nombre2 tabla1 tabla2"/>
-                                </h:selectOneMenu>
-                            </div>
+                            
 
                             <div class="form-group">
                                 <h:outputLabel value="Empleado:"/>
