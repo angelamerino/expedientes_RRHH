@@ -33,14 +33,47 @@
                                     <f:ajax render="filtrarEmpleado nombre1 nombre2 tabla1 tabla2"/>
                                 </h:selectOneMenu>
                             </div>
+                            <div class="form-group">
+                                <!--Table empleados-->
+                                <p:dataTable id="tbl-emps" value="#{manejadorExperienciaLaboral.empleadoFiltrado}" var="emp" rowKey="#{emp.idEmpleado}" scrollable="true" paginator="true" rows="10">
+                                    <p:column filterBy="#{emp.nombreEmpleado}" filterMatchMode="contains">
+                                        <f:facet name="header">
+                                            <h:outputText value="Nombre completo"/>
+                                        </f:facet>
+                                        <h:outputText value="#{emp.nombreEmpleado}"/>
+                                    </p:column>
+                                    <p:column filterBy="#{emp.nrEmpleado}" filterMatchMode="contains">
+                                        <f:facet name="header">
+                                            <h:outputText value="NR"/>
+                                        </f:facet>
+                                        <h:outputText value="#{emp.nrEmpleado}"/>
+                                    </p:column>
+                                    <p:column filterBy="#{emp.numDui}" filterMatchMode="contains">
+                                        <f:facet name="header">
+                                            <h:outputText value="DUI"/>
+                                        </f:facet>
+                                        <h:outputText value="#{emp.numDui}"/>
+                                    </p:column>
+                                    <p:column filterBy="#{emp.numNit}" filterMatchMode="contains">
+                                        <f:facet name="header">
+                                            <h:outputText value="NIT"/>
+                                        </f:facet>
+                                        <h:outputText value="#{emp.numNit}"/>
+                                    </p:column>
+                                    <p:column style="width: 150px;" styleClass="text-center">
+                                        <f:facet name="header">
+                                            <h:outputText value="Opc."/>
+                                        </f:facet>
+                                        <p:commandButton process="@this tbl-emps" update="tabview-estudios" icon="ui-icon-search" value="Ver detalle" oncomplete="PF('dlgStudiesLang').show();">
+                                            <f:setPropertyActionListener value="#{emp}" target="#{managerStudies.selectedEmp}"/>
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
                         </div>
                     </div>
                 </h:form>
             </div>
-        </div>
-
-        <div class="page-header">
-            <h1><strong>EXPERIENCIA LABORAL</strong></h1>
         </div>
 
         <div class="panel panel-info">

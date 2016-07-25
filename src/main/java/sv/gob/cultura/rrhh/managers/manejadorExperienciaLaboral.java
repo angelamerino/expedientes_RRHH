@@ -34,9 +34,7 @@ public class manejadorExperienciaLaboral implements Serializable {
 
     public manejadorExperienciaLaboral() {
     }
-//******************************************************************************
-// ************** LLAMADA A LOS ENTERPRICE JAVA BEANS **************************
-//******************************************************************************
+
     @EJB
     private ExperienciaLaboralFacade experienciaLaboralFacade;
     @EJB
@@ -45,22 +43,14 @@ public class manejadorExperienciaLaboral implements Serializable {
     private DependenciasFacade dependenciasFacade;
     @EJB
     private DirNacionalFacade dirNacionalFacade;
-//******************************************************************************
-//*********************** OBJETOS DE LOS ENTIDADES *****************************
-//******************************************************************************    
-    ExperienciaLaboral experienciaLaboral = new ExperienciaLaboral();
-//******************************************************************************
-//****** VARIABLES QUE CONTRENDRAN ID´S O STRING DE FORMULARIOS ****************
-//******************************************************************************
+    private ExperienciaLaboral experienciaLaboral = new ExperienciaLaboral();
+    private Empleados selectedEmp = new Empleados();
     private int direccionNacional;          // id direccion nacional para filtrar dependencias
     private int dependecia;                 // id dependencia para filtrar empleado
     private int empleadoSelecionado;        // id de empleado selecionado
     private String nombreEmp;               // nombre de empleado seleccionado
     private String NR;                      // NR de empleado para realizar busqueda
     private Date fechaDesde;
-// *****************************************************************************
-//********************** GET DE ENTERPRICE JAVA BEAN ***************************
-//******************************************************************************
 
     public ExperienciaLaboralFacade getExperienciaLaboralFacade() {
         return experienciaLaboralFacade;
@@ -78,15 +68,20 @@ public class manejadorExperienciaLaboral implements Serializable {
         return dirNacionalFacade;
     }
 
-// *****************************************************************************
-//******************* GET y SET DE OBJETOS DE ENTIDADES ************************
-//******************************************************************************
     public ExperienciaLaboral getExperienciaLaboral() {
         return experienciaLaboral;
     }
 
     public void setExperienciaLaboral(ExperienciaLaboral experienciaLaboral) {
         this.experienciaLaboral = experienciaLaboral;
+    }
+
+    public Empleados getSelectedEmp() {
+        return selectedEmp;
+    }
+
+    public void setSelectedEmp(Empleados selectedEmp) {
+        this.selectedEmp = selectedEmp;
     }
 
     public int getDireccionNacional() {
