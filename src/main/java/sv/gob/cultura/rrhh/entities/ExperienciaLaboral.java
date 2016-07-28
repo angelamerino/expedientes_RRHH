@@ -37,11 +37,13 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "ExperienciaLaboral.findByFechaDesdeExpLab", query = "SELECT e FROM ExperienciaLaboral e WHERE e.fechaDesdeExpLab = :fechaDesdeExpLab"),
     @NamedQuery(name = "ExperienciaLaboral.findByFechaHastaExpLab", query = "SELECT e FROM ExperienciaLaboral e WHERE e.fechaHastaExpLab = :fechaHastaExpLab"),
     @NamedQuery(name = "ExperienciaLaboral.findBySectorExpLab", query = "SELECT e FROM ExperienciaLaboral e WHERE e.sectorExpLab = :sectorExpLab AND e.idEmpleado.idEmpleado = :idEmpleado"),
+    @NamedQuery(name = "ExperienciaLaboral.findByEmpId", query = "SELECT e FROM ExperienciaLaboral e WHERE e.idEmpleado.idEmpleado = :idEmpleado"),
     @NamedQuery(name = "ExperienciaLaboral.findByUserCreaExp", query = "SELECT e FROM ExperienciaLaboral e WHERE e.userCreaExp = :userCreaExp"),
     @NamedQuery(name = "ExperienciaLaboral.findByFechaCreaExp", query = "SELECT e FROM ExperienciaLaboral e WHERE e.fechaCreaExp = :fechaCreaExp"),
     @NamedQuery(name = "ExperienciaLaboral.findByUserModExp", query = "SELECT e FROM ExperienciaLaboral e WHERE e.userModExp = :userModExp"),
     @NamedQuery(name = "ExperienciaLaboral.findByFechaModExp", query = "SELECT e FROM ExperienciaLaboral e WHERE e.fechaModExp = :fechaModExp")})
 public class ExperienciaLaboral implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -215,5 +217,5 @@ public class ExperienciaLaboral implements Serializable {
     public String toString() {
         return "sv.gob.cultura.rrhh.entidades.ExperienciaLaboral[ idExpLab=" + idExpLab + " ]";
     }
-    
+
 }

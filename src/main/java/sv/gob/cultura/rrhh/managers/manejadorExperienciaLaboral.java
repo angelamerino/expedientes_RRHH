@@ -11,10 +11,8 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
-import org.primefaces.context.RequestContext;
 import sv.gob.cultura.rrhh.entities.Dependencias;
 import sv.gob.cultura.rrhh.entities.DirNacional;
 import sv.gob.cultura.rrhh.entities.Empleados;
@@ -43,11 +41,10 @@ public class manejadorExperienciaLaboral implements Serializable {
     private DependenciasFacade dependenciasFacade;
     @EJB
     private DirNacionalFacade dirNacionalFacade;
-    private ExperienciaLaboral experienciaLaboral = new ExperienciaLaboral();
+    private ExperienciaLaboral newExpLab = new ExperienciaLaboral(), selectedExpLab = new ExperienciaLaboral();
     private Empleados selectedEmp = new Empleados();
     private int direccionNacional;          // id direccion nacional para filtrar dependencias
     private int dependecia;                 // id dependencia para filtrar empleado
-    private int empleadoSelecionado;        // id de empleado selecionado
     private String nombreEmp;               // nombre de empleado seleccionado
     private String NR;                      // NR de empleado para realizar busqueda
     private Date fechaDesde;
@@ -68,12 +65,20 @@ public class manejadorExperienciaLaboral implements Serializable {
         return dirNacionalFacade;
     }
 
-    public ExperienciaLaboral getExperienciaLaboral() {
-        return experienciaLaboral;
+    public ExperienciaLaboral getNewExpLab() {
+        return newExpLab;
     }
 
-    public void setExperienciaLaboral(ExperienciaLaboral experienciaLaboral) {
-        this.experienciaLaboral = experienciaLaboral;
+    public void setNewExpLab(ExperienciaLaboral newExpLab) {
+        this.newExpLab = newExpLab;
+    }
+
+    public ExperienciaLaboral getSelectedExpLab() {
+        return selectedExpLab;
+    }
+
+    public void setSelectedExpLab(ExperienciaLaboral selectedExpLab) {
+        this.selectedExpLab = selectedExpLab;
     }
 
     public Empleados getSelectedEmp() {
@@ -90,9 +95,6 @@ public class manejadorExperienciaLaboral implements Serializable {
 
     public void setDireccionNacional(int direccionNacional) {
         this.direccionNacional = direccionNacional;
-        this.setNombreEmp("");
-        this.setDependecia(0);
-        this.setEmpleadoSelecionado(0);
     }
 
     public int getDependecia() {
@@ -101,22 +103,6 @@ public class manejadorExperienciaLaboral implements Serializable {
 
     public void setDependecia(int dependecia) {
         this.dependecia = dependecia;
-        this.setNombreEmp("");
-        this.setEmpleadoSelecionado(0);
-    }
-
-    public int getEmpleadoSelecionado() {
-        return empleadoSelecionado;
-    }
-
-    public void setEmpleadoSelecionado(int empleadoSelecionado) {
-        this.empleadoSelecionado = empleadoSelecionado;
-        Empleados emp = getEmpleadosFacade().find(getEmpleadoSelecionado());
-        if (emp == null) {
-            this.setNombreEmp("");
-        } else {
-            this.setNombreEmp(emp.getNombreEmpleado());
-        }
     }
 
     public String getNombreEmp() {
@@ -143,17 +129,6 @@ public class manejadorExperienciaLaboral implements Serializable {
         this.fechaDesde = fechaDesde;
     }
 
-//******************************************************************************
-// **************** LISTA DE ELEMENTOS EN TABLAS *******************************
-//******************************************************************************
-    public List<ExperienciaLaboral> experienciaLaboralPublico() {
-        return getExperienciaLaboralFacade().experienciaLaboralSector("Público", this.getEmpleadoSelecionado());
-    }
-
-    public List<ExperienciaLaboral> experienciaLaboralPrivado() {
-        return getExperienciaLaboralFacade().experienciaLaboralSector("Privado", this.getEmpleadoSelecionado());
-    }
-
     public List<DirNacional> todosDirNacional() {
         return getDirNacionalFacade().findAll();
     }
@@ -162,78 +137,41 @@ public class manejadorExperienciaLaboral implements Serializable {
         return getDependenciasFacade().buscarDependencias(this.getDireccionNacional());
     }
 
-    public List<Empleados> empleadoFiltrado() {
+    public List<Empleados> fetchEmpleadosFiltrado() {
         return getEmpleadosFacade().buscarEmp(this.getDependecia());
     }
-//******************************************************************************
-//*************************** FUNCIONES DE GUARDAR *****************************
-//******************************************************************************
 
-    public void guardarExpLaboralPublico() {
-        try {
-            experienciaLaboral.setIdEmpleado(new Empleados(this.getEmpleadoSelecionado()));
-            experienciaLaboral.setSectorExpLab("Público");
-            experienciaLaboral.setFechaDesdeExpLab(this.getFechaDesde());
-
-            //Fehca de creacion y usuario=1
-            experienciaLaboral.setFechaCreaExp(new Date());
-            experienciaLaboral.setUserCreaExp(1);
-
-            getExperienciaLaboralFacade().create(experienciaLaboral);
-            experienciaLaboral = new ExperienciaLaboral();
-            this.setFechaDesde(new Date());
-
-            RequestContext.getCurrentInstance().execute("PF('publico').hide()");
-            RequestContext.getCurrentInstance().update("tabla1");
-
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Ingresado", "Registro Ingresado");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-        } catch (Exception e) {
-
+    public List<ExperienciaLaboral> fetchExpLaboralesByEmp() {
+        if (selectedEmp.getIdEmpleado() != null) {
+            return getExperienciaLaboralFacade().findByEmpId(selectedEmp.getIdEmpleado());
+        } else {
+            return null;
         }
     }
 
-    public void guardarExpLaboralPrivado() {
+    public void saveExpLaboral() {
         try {
-            experienciaLaboral.setIdEmpleado(new Empleados(this.getEmpleadoSelecionado()));
-            experienciaLaboral.setSectorExpLab("Privado");
-            experienciaLaboral.setFechaDesdeExpLab(this.getFechaDesde());
-
-            //Fehca de creacion y usuario=1
-            experienciaLaboral.setFechaCreaExp(new Date());
-            experienciaLaboral.setUserCreaExp(1);
-
-            getExperienciaLaboralFacade().create(experienciaLaboral);
-            experienciaLaboral = new ExperienciaLaboral();
-            this.setFechaDesde(new Date());
-
-            RequestContext.getCurrentInstance().execute("PF('privado').hide()");
-            RequestContext.getCurrentInstance().update("tabla2");
-
+            newExpLab.setIdEmpleado(selectedEmp);
+            newExpLab.setFechaCreaExp(new Date());
+            //Temporal assigment
+            newExpLab.setUserCreaExp(1);
+            getExperienciaLaboralFacade().create(newExpLab);
+            newExpLab = new ExperienciaLaboral();
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Ingresado", "Registro Ingresado");
             FacesContext.getCurrentInstance().addMessage(null, message);
         } catch (Exception e) {
 
         }
-
     }
 
     public void editarExpLaboral() {
         try {
-            //Fehca de creacion y usuario=1
-            experienciaLaboral.setFechaModExp(new Date());
-            experienciaLaboral.setUserModExp(1);
-            experienciaLaboral.setFechaDesdeExpLab(this.getFechaDesde());
-
-            getExperienciaLaboralFacade().edit(experienciaLaboral);
-            experienciaLaboral = new ExperienciaLaboral();
+            newExpLab.setFechaModExp(new Date());
+            newExpLab.setUserModExp(1);
+            newExpLab.setFechaDesdeExpLab(this.getFechaDesde());
+            getExperienciaLaboralFacade().edit(newExpLab);
+            newExpLab = new ExperienciaLaboral();
             this.setFechaDesde(new Date());
-
-            RequestContext.getCurrentInstance().execute("PF('privadoEdit').hide()");
-            RequestContext.getCurrentInstance().execute("PF('publicoEdit').hide()");
-            RequestContext.getCurrentInstance().update("tabla1");
-            RequestContext.getCurrentInstance().update("tabla2");
-
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Modificado", "Registro Modificado");
             FacesContext.getCurrentInstance().addMessage(null, message);
         } catch (Exception e) {
@@ -242,19 +180,11 @@ public class manejadorExperienciaLaboral implements Serializable {
 
     }
 
-    public void experienciaLaboralSeleccionada(ExperienciaLaboral experiencia) {
-        experienciaLaboral = experiencia;
-    }
-
     public String eliminar() {
         try {
-            getExperienciaLaboralFacade().remove(experienciaLaboral);
-            experienciaLaboral = new ExperienciaLaboral();
+            getExperienciaLaboralFacade().remove(newExpLab);
+            newExpLab = new ExperienciaLaboral();
             this.setFechaDesde(new Date());
-            RequestContext.getCurrentInstance().execute("PF('confirmation').hide()");
-            RequestContext.getCurrentInstance().execute("PF('confirmation1').hide()");
-            RequestContext.getCurrentInstance().update("tabla1");
-            RequestContext.getCurrentInstance().update("tabla2");
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Eliminado", "Registro Eliminado");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return null;
@@ -265,45 +195,6 @@ public class manejadorExperienciaLaboral implements Serializable {
 
     public String cancelar() {
         return null;
-    }
-
-    public void empleadoSelecionadoValidoP(ActionEvent event) {
-        // verifica que se seleciono un empleado o que se busco un empleado
-        if (this.getEmpleadoSelecionado() == 0) {
-            experienciaLaboral = new ExperienciaLaboral();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe Buscar un Empleado", "Debe Buscar un Empleado"));
-        } else {
-            RequestContext.getCurrentInstance().execute("PF('publico').show()");
-        }
-    }
-
-    public void empleadoSelecionadoValidoPP(ActionEvent event) {
-        // verifica que se seleciono un empleado o que se busco un empleado
-        if (this.getEmpleadoSelecionado() == 0) {
-            experienciaLaboral = new ExperienciaLaboral();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe Buscar un Empleado", "Debe Buscar un Empleado"));
-        } else {
-            RequestContext.getCurrentInstance().execute("PF('privado').show()");
-        }
-    }
-
-    public void tabla() {//Actualiza tabla y nombre de empleado
-        RequestContext.getCurrentInstance().update("nombre1");
-        RequestContext.getCurrentInstance().update("nombre2");
-        RequestContext.getCurrentInstance().update("tabla1");
-        RequestContext.getCurrentInstance().update("tabla2");
-    }
-
-    public void buscarNR(ActionEvent event) {
-        // busca empleado por nr
-        Empleados emp = getEmpleadosFacade().buscarEmpNR(this.getNR());
-        if (emp == null) {
-            this.setNombreEmp("");
-            this.setEmpleadoSelecionado(0);
-        } else {
-            this.setEmpleadoSelecionado(emp.getIdEmpleado());
-            this.setNombreEmp(emp.getNombreEmpleado());
-        }
     }
 
 }

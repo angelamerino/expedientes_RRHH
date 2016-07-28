@@ -17,6 +17,7 @@ import sv.gob.cultura.rrhh.entities.ExperienciaLaboral;
  */
 @Stateless
 public class ExperienciaLaboralFacade extends AbstractFacade<ExperienciaLaboral> {
+
     @PersistenceContext(unitName = "rrhhPU")
     private EntityManager em;
 
@@ -28,9 +29,8 @@ public class ExperienciaLaboralFacade extends AbstractFacade<ExperienciaLaboral>
     public ExperienciaLaboralFacade() {
         super(ExperienciaLaboral.class);
     }
-    
-    public List<ExperienciaLaboral> experienciaLaboralSector(String sector, int idEmpleado) {
-        return getEntityManager().createNamedQuery("ExperienciaLaboral.findBySectorExpLab").setParameter("sectorExpLab", sector).setParameter("idEmpleado", idEmpleado).getResultList();
-    }
 
+    public List<ExperienciaLaboral> findByEmpId(int idEmpleado) {
+        return getEntityManager().createNamedQuery("ExperienciaLaboral.findByEmpId").setParameter("idEmpleado", idEmpleado).getResultList();
+    }
 }
