@@ -164,14 +164,11 @@ public class manejadorExperienciaLaboral implements Serializable {
         }
     }
 
-    public void editarExpLaboral() {
+    public void editExpLaboral() {
         try {
-            newExpLab.setFechaModExp(new Date());
-            newExpLab.setUserModExp(1);
-            newExpLab.setFechaDesdeExpLab(this.getFechaDesde());
-            getExperienciaLaboralFacade().edit(newExpLab);
-            newExpLab = new ExperienciaLaboral();
-            this.setFechaDesde(new Date());
+            selectedExpLab.setFechaModExp(new Date());
+            selectedExpLab.setUserModExp(1);
+            getExperienciaLaboralFacade().edit(selectedExpLab);
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Modificado", "Registro Modificado");
             FacesContext.getCurrentInstance().addMessage(null, message);
         } catch (Exception e) {
@@ -180,21 +177,14 @@ public class manejadorExperienciaLaboral implements Serializable {
 
     }
 
-    public String eliminar() {
+    public void deleteExpLaboral() {
         try {
-            getExperienciaLaboralFacade().remove(newExpLab);
-            newExpLab = new ExperienciaLaboral();
-            this.setFechaDesde(new Date());
+            getExperienciaLaboralFacade().remove(selectedExpLab);
+            selectedExpLab = new ExperienciaLaboral();
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Eliminado", "Registro Eliminado");
             FacesContext.getCurrentInstance().addMessage(null, message);
-            return null;
         } catch (Exception e) {
-            return null;
         }
-    }
-
-    public String cancelar() {
-        return null;
     }
 
 }

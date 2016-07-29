@@ -18,7 +18,7 @@
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-12">
                             <div class="form-group">
-                                <h:outputLabel value="Dirección Nacional:"/>
+                                <p:outputLabel value="Dirección Nacional:"/>
                                 <h:selectOneMenu class="form-control" id="dirNacionalFiltrarJefe" style="width: 100%" value="#{manejadorExperienciaLaboral.direccionNacional}">
                                     <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
                                     <f:selectItems value="#{manejadorExperienciaLaboral.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
@@ -26,7 +26,7 @@
                                 </h:selectOneMenu>
                             </div>
                             <div class="form-group">
-                                <h:outputLabel value="Dependencia / Unidad organizativa:"/> 
+                                <p:outputLabel value="Dependencia / Unidad organizativa:"/> 
                                 <h:selectOneMenu class="form-control" id="filtrarDependencia"  style="width: 100%" value="#{manejadorExperienciaLaboral.dependecia}">
                                     <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
                                     <f:selectItems value="#{manejadorExperienciaLaboral.dependenciasFiltradas()}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
@@ -95,6 +95,22 @@
                                 </p:column>
                                 <p:column>
                                     <f:facet name="header">
+                                        <h:outputText value="Fecha inicio"/>
+                                    </f:facet>
+                                    <h:outputText value="#{exp.fechaDesdeExpLab}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Fecha fin"/>
+                                    </f:facet>
+                                    <h:outputText value="#{exp.fechaHastaExpLab}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
                                         <h:outputText value="Sector"/>
                                     </f:facet>
                                     <h:outputText value="#{exp.sectorExpLab}"/>
@@ -103,7 +119,10 @@
                                     <f:facet name="header">
                                         <h:outputText value="Opc."/>
                                     </f:facet>
-                                    <p:commandButton process="@this tbl-exps" update="panel-edit-exp-laboral" icon="ui-icon-search" value="Ver detalle" oncomplete="PF('dlgEditExpLaboral').show();">
+                                    <p:commandButton process="@this tbl-exps" update="panel-edit-exp-laboral" icon="ui-icon-pencil" title="Editar registro" oncomplete="PF('dlgEditExpLaboral').show();">
+                                        <f:setPropertyActionListener value="#{exp}" target="#{manejadorExperienciaLaboral.selectedExpLab}"/>
+                                    </p:commandButton>
+                                    <p:commandButton process="@this tbl-exps" update="tbl-exps" icon="fa fa-close" title="Borrar registro" action="#{manejadorExperienciaLaboral.deleteExpLaboral()}">
                                         <f:setPropertyActionListener value="#{exp}" target="#{manejadorExperienciaLaboral.selectedExpLab}"/>
                                     </p:commandButton>
                                 </p:column>
@@ -118,27 +137,27 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <h:outputLabel value="Institución:" for="institucionEmpresa" />
+                                        <p:outputLabel value="Institución:" for="institucionEmpresa" />
                                         <h:inputText id="institucionEmpresa" value="#{manejadorExperienciaLaboral.newExpLab.institucionEmpresa}" title="InstitucionEmpresa" required="true" requiredMessage="The InstitucionEmpresa field is required." class="form-control"/>
                                     </div>
                                     <div class="form-group">
-                                        <h:outputLabel value="Cargo:" for="cargoExpLab" />
+                                        <p:outputLabel value="Cargo:" for="cargoExpLab" />
                                         <h:inputText id="cargoExpLab" value="#{manejadorExperienciaLaboral.newExpLab.cargoExpLab}" title="CargoExpLab" required="true" requiredMessage="The CargoExpLab field is required." class="form-control"/>
                                     </div>
                                     <div class="form-group">
-                                        <h:outputLabel value="Fecha inicio:" for="fechaDesdeExpLab" />
+                                        <p:outputLabel value="Fecha inicio (dd/mm/aaaa):" for="fechaDesdeExpLab" />
                                         <h:inputText id="fechaDesdeExpLab" value="#{manejadorExperienciaLaboral.newExpLab.fechaDesdeExpLab}" title="FechaDesdeExpLab" required="true" requiredMessage="The FechaDesdeExpLab field is required." class="form-control">
                                             <f:convertDateTime pattern="dd/MM/yyyy" />
                                         </h:inputText>
                                     </div>
                                     <div class="form-group">
-                                        <h:outputLabel value="Fecha fin:" for="fechaHastaExpLab" />
+                                        <p:outputLabel value="Fecha fin (dd/mm/aaaa):" for="fechaHastaExpLab" />
                                         <h:inputText id="fechaHastaExpLab" value="#{manejadorExperienciaLaboral.newExpLab.fechaHastaExpLab}" title="FechaHastaExpLab" required="true" requiredMessage="The FechaHastaExpLab field is required." class="form-control">
                                             <f:convertDateTime pattern="dd/MM/yyyy" />
                                         </h:inputText>
                                     </div>
                                     <div class="form-group">
-                                        <h:outputLabel value="Sector:" for="sectorExpLab" />
+                                        <p:outputLabel value="Sector:" for="sectorExpLab" />
                                         <h:selectOneMenu class="form-control" id="sectorExpLab" value="#{manejadorExperienciaLaboral.newExpLab.sectorExpLab}" title="SectorExpLab" required="true" requiredMessage="The SectorExpLab field is required.">
                                             <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
                                             <f:selectItem itemLabel="PUBLICO" itemValue="PUBLICO"/>
@@ -146,7 +165,7 @@
                                         </h:selectOneMenu>
                                     </div>
                                     <div class="form-group">
-                                        <p:commandButton icon="ui-icon-disk" value="Guardar" process="@this panel-new-exp-laboral" action="#{manejadorExperienciaLaboral.saveExpLaboral()}" update="panel-new-exp-laboral" oncomplete="PF('dlgNewExpLaboral').hide();"/>
+                                        <p:commandButton icon="ui-icon-disk" value="Guardar" process="@this panel-new-exp-laboral" action="#{manejadorExperienciaLaboral.saveExpLaboral()}" update="panel-new-exp-laboral tbl-exps" oncomplete="PF('dlgNewExpLaboral').hide();"/>
                                     </div>
                                 </div>
                             </div>
@@ -160,6 +179,35 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
+                                        <h:outputLabel value="Institución:" for="institucionEmpresaEdit" />
+                                        <h:inputText id="institucionEmpresaEdit" value="#{manejadorExperienciaLaboral.selectedExpLab.institucionEmpresa}" title="InstitucionEmpresa" required="true" requiredMessage="The InstitucionEmpresa field is required." class="form-control"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <h:outputLabel value="Cargo:" for="cargoExpLabEdit" />
+                                        <h:inputText id="cargoExpLabEdit" value="#{manejadorExperienciaLaboral.selectedExpLab.cargoExpLab}" title="CargoExpLab" required="true" requiredMessage="The CargoExpLab field is required." class="form-control"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <h:outputLabel value="Fecha inicio:" for="fechaDesdeExpLabEdit" />
+                                        <h:inputText id="fechaDesdeExpLabEdit" value="#{manejadorExperienciaLaboral.selectedExpLab.fechaDesdeExpLab}" title="FechaDesdeExpLab" required="true" requiredMessage="The FechaDesdeExpLab field is required." class="form-control">
+                                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                                        </h:inputText>
+                                    </div>
+                                    <div class="form-group">
+                                        <h:outputLabel value="Fecha fin:" for="fechaHastaExpLabEdit" />
+                                        <h:inputText id="fechaHastaExpLabEdit" value="#{manejadorExperienciaLaboral.selectedExpLab.fechaHastaExpLab}" title="FechaHastaExpLab" required="true" requiredMessage="The FechaHastaExpLab field is required." class="form-control">
+                                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                                        </h:inputText>
+                                    </div>
+                                    <div class="form-group">
+                                        <p:outputLabel value="Sector:" for="sectorExpLabEdit" />
+                                        <h:selectOneMenu class="form-control" id="sectorExpLabEdit" value="#{manejadorExperienciaLaboral.selectedExpLab.sectorExpLab}" title="SectorExpLab" required="true" requiredMessage="The SectorExpLab field is required.">
+                                            <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                            <f:selectItem itemLabel="PUBLICO" itemValue="PUBLICO"/>
+                                            <f:selectItem itemLabel="PRIVADO" itemValue="PRIVADO"/>
+                                        </h:selectOneMenu>
+                                    </div>
+                                    <div class="form-group">
+                                        <p:commandButton icon="ui-icon-pencil" value="Editar" process="@this panel-edit-exp-laboral" action="#{manejadorExperienciaLaboral.editExpLaboral()}" update="panel-edit-exp-laboral tbl-exps" oncomplete="PF('dlgEditExpLaboral').hide();"/>
                                     </div>
                                 </div>
                             </div>

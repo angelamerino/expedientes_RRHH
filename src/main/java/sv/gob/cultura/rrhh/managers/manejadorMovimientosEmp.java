@@ -38,8 +38,6 @@ import sv.gob.cultura.rrhh.facades.TipoMovFacade;
 public class manejadorMovimientosEmp implements Serializable {
 
     private static final long serialVersionUID = 1L;
-// ************** LLAMADA A LOS ENTERPRICE JAVA BEANS **************************
-//******************************************************************************
     @EJB
     private MovimientosEmpFacade movimientosEmpFacade;
     @EJB
@@ -50,13 +48,9 @@ public class manejadorMovimientosEmp implements Serializable {
     private DependenciasFacade dependenciasFacade;
     @EJB
     private DirNacionalFacade dirNacionalFacade;
-//*********************** OBJETOS DE LOS ENTIDADES *****************************
-//******************************************************************************
     private Empleados empleado = new Empleados();
     private TipoMov tipoMov = new TipoMov();
     private MovimientosEmp movimientosEmp = new MovimientosEmp();
-//****** VARIABLES QUE CONTRENDRAN ID´S O STRING DE FORMULARIOS ****************
-//******************************************************************************
     private int tipoMovimiento;                         // id tipo de movimimiento de empleado
     private int empleadoSelecionado;                    // id de empleado selecinado
     private int dirNacinal;                             // id direccion nacional para filtar dependencias
@@ -74,8 +68,6 @@ public class manejadorMovimientosEmp implements Serializable {
     private int direccionNacional;                      // id de dirección nacional para filtrar dependencias
     private int dependecia;                             // id dependencias para filtrar empleado
 
-//********************** GET DE ENTERPRICE JAVA BEAN ***************************
-//******************************************************************************
     public MovimientosEmpFacade getMovimientosEmpFacade() {
         return movimientosEmpFacade;
     }
@@ -322,7 +314,7 @@ public class manejadorMovimientosEmp implements Serializable {
         try {
             //guarda movimiento por traslado
             Empleados emp = empleadosFacade.buscarEmpNR(this.getNR());
-        // CARGO ACTUAL ***
+            // CARGO ACTUAL ***
             // NUEVO CARGO ***
 
             //Registro del Moviemiento de empleado
@@ -358,7 +350,7 @@ public class manejadorMovimientosEmp implements Serializable {
         try {
             //Guarda movimiento por Ascenso
             Empleados emp = empleadosFacade.buscarEmpNR(this.getNR());
-        // CARGO ACTUAL ***
+            // CARGO ACTUAL ***
             // NUEVO CARGO ***
 
             //Registro del Moviemiento de empleado
@@ -396,7 +388,7 @@ public class manejadorMovimientosEmp implements Serializable {
         try {
             //guarda movimiento tempralmente
             Empleados emp = empleadosFacade.buscarEmpNR(this.getNR());
-        // CARGO ACTUAL ***
+            // CARGO ACTUAL ***
             // NUEVO CARGO ***
 
             //Registro del Moviemiento de empleado
@@ -432,7 +424,7 @@ public class manejadorMovimientosEmp implements Serializable {
     public String editarMovTraslado() { //MOVIEMNTO POR TRASLADO
         try {
             Empleados emp = empleadosFacade.buscarEmpNR(this.getNR());
-        // CARGO ACTUAL ***
+            // CARGO ACTUAL ***
             // NUEVO CARGO ***
 
             //Registro del Moviemiento de empleado
@@ -465,7 +457,7 @@ public class manejadorMovimientosEmp implements Serializable {
     public String editarMovAsc() { //MOVIMIENTO POR ASCENSO
         try {
             Empleados emp = empleadosFacade.buscarEmpNR(this.getNR());
-        // CARGO ACTUAL ***
+            // CARGO ACTUAL ***
             // NUEVO CARGO ***
 
             //Registro del Moviemiento de empleado
@@ -499,7 +491,7 @@ public class manejadorMovimientosEmp implements Serializable {
     public String editarMovTemp() { //MOVIMIENTO TEMPORALMENTE
         try {
             Empleados emp = empleadosFacade.buscarEmpNR(this.getNR());
-        // CARGO ACTUAL ***
+            // CARGO ACTUAL ***
             // NUEVO CARGO ***
 
             //Registro del Moviemiento de empleado

@@ -21,15 +21,21 @@
                         <p:dataTable id="empleadoList" value="#{manejadorGestionEmpleado.todosEmpleados()}" var="emp" rowKey="#{emp.idEmpleado}" rows="10" paginator="true" rowsPerPageTemplate="10,15,25">
                             <p:column filterBy="#{emp.nombreEmpleado}" filterMatchMode="contains">
                                 <f:facet name="header">
-                                    <h:outputText value="Nombre del Empleado"/>
+                                    <h:outputText value="Nombre completo"/>
                                 </f:facet>
                                 <h:outputText value="#{emp.nombreEmpleado}"/>
                             </p:column>
-                            <p:column filterBy="#{emp.idEstado.nombreEstado}" filterMatchMode="contains" priority="3">
+                            <p:column filterBy="#{emp.nrEmpleado}" filterMatchMode="contains">
                                 <f:facet name="header">
-                                    <h:outputText value="Estado"/>
+                                    <h:outputText value="NR"/>
                                 </f:facet>
-                                <h:outputText value="#{emp.idEstado.nombreEstado}"/>
+                                <h:outputText value="#{emp.nrEmpleado}"/>
+                            </p:column>
+                            <p:column filterBy="#{emp.numDui}" filterMatchMode="contains">
+                                <f:facet name="header">
+                                    <h:outputText value="DUI"/>
+                                </f:facet>
+                                <h:outputText value="#{emp.numDui}"/>
                             </p:column>
                             <p:column filterBy="#{emp.idDependenciaF.idDirNac.nombreDirNac}" filterMatchMode="contains" priority="4">
                                 <f:facet name="header">
@@ -47,7 +53,7 @@
                                 <f:facet name="header">
                                     <h:outputText value="Editar"/>
                                 </f:facet>
-                                <p:button outcome="editar_empleados" icon="ui-icon-pencil" value="Editar">
+                                <p:button outcome="editar_empleados" icon="fa fa-pencil" value="Editar">
                                     <f:param name="id" value="#{emp.idEmpleado}"/>
                                 </p:button>
                             </p:column>
