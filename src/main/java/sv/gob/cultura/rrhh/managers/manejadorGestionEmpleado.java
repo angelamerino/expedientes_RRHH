@@ -557,7 +557,7 @@ public class manejadorGestionEmpleado implements Serializable {
         return getEmpleadosFacade().buscarEmp(dependeciasFiltrarJefe);
     }
 
-    public List<Empleados> todosEmpleados() {
+    public List<Empleados> fetchEmpleados() {
         return getEmpleadosFacade().findAll();
     }
 

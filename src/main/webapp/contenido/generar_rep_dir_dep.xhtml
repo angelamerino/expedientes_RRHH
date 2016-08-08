@@ -49,7 +49,7 @@
                                 <br></br> 
                             </div>
 
-                            <p:dataTable style="font-size: 12px" id="listaEmpleados" value="#{manejadorGestionEmpleado.todosEmpleados()}" var="item" styleClass="table table-striped table-hover" widgetVar="listaEmpleados"  rows="10" paginator="true"
+                            <p:dataTable style="font-size: 12px" id="listaEmpleados" value="#{manejadorGestionEmpleado.fetchEmpleados()}" var="item" styleClass="table table-striped table-hover" widgetVar="listaEmpleados"  rows="10" paginator="true"
                                              paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                              rowsPerPageTemplate="5,10,15">
 

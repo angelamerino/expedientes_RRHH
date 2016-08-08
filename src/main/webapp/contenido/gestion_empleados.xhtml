@@ -18,7 +18,7 @@
                 </div>
                 <div class="panel-body">
                     <div class="table table-responsive">
-                        <p:dataTable id="empleadoList" value="#{manejadorGestionEmpleado.todosEmpleados()}" var="emp" rowKey="#{emp.idEmpleado}" rows="10" paginator="true" rowsPerPageTemplate="10,15,25">
+                        <p:dataTable id="empleadoList" value="#{manejadorGestionEmpleado.fetchEmpleados()}" var="emp" rowKey="#{emp.idEmpleado}" rows="10" paginator="true" rowsPerPageTemplate="10,15,25">
                             <p:column filterBy="#{emp.nombreEmpleado}" filterMatchMode="contains">
                                 <f:facet name="header">
                                     <h:outputText value="Nombre completo"/>
@@ -45,7 +45,7 @@
                             </p:column>
                             <p:column filterBy="#{emp.idDependenciaF.nombreDependencia}" filterMatchMode="contains" priority="5">
                                 <f:facet name="header">
-                                    <h:outputText value="Unidad Organizativa/Dependencia"/>
+                                    <h:outputText value="Unidad Organ. / Depend."/>
                                 </f:facet> 
                                 <h:outputText value="#{emp.idDependenciaF.nombreDependencia}"/>
                             </p:column>

@@ -25,7 +25,7 @@
                     <f:view>
                         <h:form prependId="false">
                             <h:panelGroup id ="tabla">
-                                <h:dataTable id="listMovimientosEmp" value="#{manejadorMovimientosEmp.todosMoviemientosEmp()}" var="item" style="font-size: 14px" styleClass="table table-striped table-hover">
+                                <h:dataTable id="listMovimientosEmp" value="#{manejadorMovimientosEmp.fetchAllMovs()}" var="item" style="font-size: 14px" styleClass="table table-striped table-hover">
                                     <h:column>
 
                                     </h:column>
@@ -114,7 +114,7 @@
                     <div class="form-group">
                         <p:outputLabel for="dirNacional" value="Dirección Nacional:" styleClass="col-lg-4 control-label"/>
                         <div class="col-lg-8">
-                            <p:selectOneMenu id="dirNacional" style="width: 100%" value="#{manejadorMovimientosEmp.dirNacinal}" required="true" requiredMessage="Seleccione una Dirección Nacional">
+                            <p:selectOneMenu id="dirNacional" style="width: 100%" value="#{manejadorMovimientosEmp.dirNacional}" required="true" requiredMessage="Seleccione una Dirección Nacional">
                                 <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
                                 <f:selectItems value="#{manejadorMovimientosEmp.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
                                 <p:ajax update="depen"/>
@@ -220,7 +220,7 @@
                     <div class="form-group">
                         <p:outputLabel for="dirNacionalTemp" value="Dirección Nacional:" styleClass="col-lg-4 control-label"/>
                         <div class="col-lg-8">
-                            <p:selectOneMenu id="dirNacionalTemp" style="width: 100%" value="#{manejadorMovimientosEmp.dirNacinal}" required="true" requiredMessage="Seleccione una Dirección Nacional">
+                            <p:selectOneMenu id="dirNacionalTemp" style="width: 100%" value="#{manejadorMovimientosEmp.dirNacional}" required="true" requiredMessage="Seleccione una Dirección Nacional">
                                 <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
                                 <f:selectItems value="#{manejadorMovimientosEmp.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
                                 <p:ajax update="depenTemp"/>
