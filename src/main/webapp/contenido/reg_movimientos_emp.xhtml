@@ -19,7 +19,7 @@
                         <div class="ui-grid-col-12">
                             <h:panelGroup id="panel-selections">
                                 <div class="form-group">
-                                    <h:outputLabel value="Dirección Nacional:"/>
+                                    <p:outputLabel value="Dirección Nacional:"/>
                                     <h:selectOneMenu class="form-control" id="dirNacionalFiltrarJefe" style="width: 100%" value="#{manejadorMovimientosEmp.direccionNacional}">
                                         <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
                                         <f:selectItems value="#{manejadorMovimientosEmp.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
@@ -27,91 +27,108 @@
                                     </h:selectOneMenu>
                                 </div>
                                 <div class="form-group">
-                                    <h:outputLabel value="Dependencia / Unidad organizativa:"/>
+                                    <p:outputLabel value="Dependencia / Unidad organizativa:"/>
                                     <h:selectOneMenu class="form-control" id="filtrarDependencia"  style="width: 100%" value="#{manejadorMovimientosEmp.dependecia}">
                                         <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
                                         <f:selectItems value="#{manejadorMovimientosEmp.dependenciasFiltradas()}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
-                                        <p:ajax update="filtrarEmpleado"/>
+                                        <p:ajax update="tbl-emps"/>
                                     </h:selectOneMenu>
                                 </div>
                                 <div class="form-group">
-                                    <h:outputLabel value="Empleado:"/>
-                                    <h:selectOneMenu class="form-control" id="filtrarEmpleado" style="width: 100%" value="#{manejadorMovimientosEmp.selectedEmp}" converter="#{empleadoConvertidor}">
-                                        <f:selectItem itemLabel="Seleccione uno..."  itemValue="#{null}" noSelectionOption="true"/>
-                                        <f:selectItems value="#{manejadorMovimientosEmp.fetchEmpleadosFiltrados()}" var="emple" itemLabel="#{emple.nombreEmpleado}" itemValue="#{emple}"/>
-                                    </h:selectOneMenu>
-                                </div>
-                                <div class="form-group">
-                                    <p:commandButton icon="fa fa-plus" value="Agregar movimiento" process="@this panel-selections" update="panel-new-mov" oncomplete="PF('movimientoEmp').show();"/>
+                                    <p:dataTable id="tbl-emps" value="#{manejadorMovimientosEmp.fetchEmpleadosFiltrados()}" var="emp" rowKey="#{emp.idEmpleado}" scrollable="true" paginator="true" rows="10">
+                                        <p:column filterBy="#{emp.nombreEmpleado}" filterMatchMode="contains">
+                                            <f:facet name="header">
+                                                <h:outputText value="Nombre completo"/>
+                                            </f:facet>
+                                            <h:outputText value="#{emp.nombreEmpleado}"/>
+                                        </p:column>
+                                        <p:column filterBy="#{emp.nrEmpleado}" filterMatchMode="contains">
+                                            <f:facet name="header">
+                                                <h:outputText value="NR"/>
+                                            </f:facet>
+                                            <h:outputText value="#{emp.nrEmpleado}"/>
+                                        </p:column>
+                                        <p:column filterBy="#{emp.numDui}" filterMatchMode="contains">
+                                            <f:facet name="header">
+                                                <h:outputText value="DUI"/>
+                                            </f:facet>
+                                            <h:outputText value="#{emp.numDui}"/>
+                                        </p:column>
+                                        <p:column filterBy="#{emp.numNit}" filterMatchMode="contains">
+                                            <f:facet name="header">
+                                                <h:outputText value="NIT"/>
+                                            </f:facet>
+                                            <h:outputText value="#{emp.numNit}"/>
+                                        </p:column>
+                                        <p:column style="width: 150px;" styleClass="text-center">
+                                            <f:facet name="header">
+                                                <h:outputText value="Opc."/>
+                                            </f:facet>
+                                            <p:commandButton process="@this tbl-emps" update="panel-new-mov" icon="ui-icon-search" value="Agregar movimiento" oncomplete="PF('dlgMovEmp').show();">
+                                                <f:setPropertyActionListener value="#{emp}" target="#{manejadorMovimientosEmp.selectedEmp}"/>
+                                            </p:commandButton>
+                                        </p:column>
+                                    </p:dataTable>
                                 </div>
                             </h:panelGroup>
                         </div>
                     </div>
                 </div>
             </div>
-            <p:dialog header="Nuevo movimiento" widgetVar="movimientoEmp" responsive="true" modal="true" position="center top">
+            <p:dialog header="Nuevo movimiento" widgetVar="dlgMovEmp" responsive="true" modal="true" position="center top" style="padding: 10px;">
                 <h:panelGroup id="panel-new-mov">
-                    <p:panel header="Informaci&oacute;n del empleado" toggleable="true">
-                        <p>A continuación verá la informaci&oacute;n para el empleado: <code>#{manejadorMovimientosEmp.selectedEmp.nombreEmpleado}</code><br/>
-                            Direcci&oacute;n a la que pertenece: <code>#{manejadorMovimientosEmp.selectedEmp.idDependenciaF.idDirNac.nombreDirNac}</code><br/>
-                            Dependencia a la que pertenece: <code>#{manejadorMovimientosEmp.selectedEmp.idDependenciaF.nombreDependencia}</code><br/>
-                            Cargo actual: <code>#{manejadorMovimientosEmp.selectedEmp.cargoFuncional}</code></p>
-                    </p:panel>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <h:outputLabel value="Tipo movimiento:" for="idTipoMov" />
-                                <h:selectOneMenu id="idTipoMov" value="#{manejadorMovimientosEmp.newMovEmp.idTipoMov}" title="IdTipoMov" required="true" requiredMessage="The IdTipoMov field is required." converter="#{tipoMovimientoConverter}" class="form-control">
-                                    <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
-                                    <f:selectItems value="#{manejadorMovimientosEmp.fetchTiposMov()}" var="mov" itemLabel="#{mov.nombreMov}" itemValue="#{mov}"/>
-                                </h:selectOneMenu>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel value="Nuevo cargo:" for="nuevoCargoMov" />
-                                <h:inputText id="nuevoCargoMov" value="#{manejadorMovimientosEmp.newMovEmp.nuevoCargoMov}" title="NuevoCargoMov" required="true" requiredMessage="The NuevoCargoMov field is required." class="form-control"/>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel value="Fecha movimiento:" for="fechaMov" />
-                                <h:inputText id="fechaMov" value="#{manejadorMovimientosEmp.newMovEmp.fechaMov}" title="FechaMov" required="true" requiredMessage="The FechaMov field is required." class="form-control">
-                                    <f:convertDateTime pattern="dd/MM/yyyy" />
-                                </h:inputText>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel value="Fecha notificaci&oacute;n:" for="fechaNoti" />
-                                <h:inputText id="fechaNoti" value="#{manejadorMovimientosEmp.newMovEmp.fechaNoti}" title="FechaNoti" class="form-control">
-                                    <f:convertDateTime pattern="dd/MM/yyyy" />
-                                </h:inputText>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <h:outputLabel value="Fecha inicio temporal:" for="fechaIniTemp" />
-                                <h:inputText id="fechaIniTemp" value="#{manejadorMovimientosEmp.newMovEmp.fechaIniTemp}" title="FechaIniTemp" class="form-control">
-                                    <f:convertDateTime pattern="dd/MM/yyyy" />
-                                </h:inputText>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel value="Fecha finalizaci&oacute;n temporal:" for="fechaFinTemp" />
-                                <h:inputText id="fechaFinTemp" value="#{manejadorMovimientosEmp.newMovEmp.fechaFinTemp}" title="FechaFinTemp" class="form-control">
-                                    <f:convertDateTime pattern="dd/MM/yyyy" />
-                                </h:inputText>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel value="Nueva dirección Nacional:"/>
-                                <h:selectOneMenu class="form-control" id="dirNacMov" style="width: 100%" value="#{manejadorMovimientosEmp.direccionNacional}">
-                                    <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
-                                    <f:selectItems value="#{manejadorMovimientosEmp.todosDirNacional()}" var="dir_nac" itemLabel="#{dir_nac.nombreDirNac}" itemValue="#{dir_nac.idDirNac}"/>
-                                    <p:ajax update="idDependenciaMov"/>
-                                </h:selectOneMenu>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel value="Nueva dependencia:" for="idDependencia" />
-                                <h:selectOneMenu id="idDependenciaMov" value="#{manejadorMovimientosEmp.dependecia}" title="IdDependencia" required="true" requiredMessage="The IdDependencia field is required." class="form-control">
-                                    <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
-                                    <f:selectItems value="#{manejadorMovimientosEmp.dependenciasFiltradas()}" var="depend" itemLabel="#{depend.nombreDependencia}" itemValue="#{depend.idDependencia}"/>
-                                </h:selectOneMenu>
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <p:outputLabel value="Tipo movimiento:" for="idTipoMov" />
+                        <h:selectOneMenu id="idTipoMov" value="#{manejadorMovimientosEmp.newMovEmp.idTipoMov}" title="IdTipoMov" required="true" requiredMessage="The IdTipoMov field is required." converter="#{tipoMovimientoConverter}" class="form-control">
+                            <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                            <f:selectItems value="#{manejadorMovimientosEmp.fetchTiposMov()}" var="mov" itemLabel="#{mov.nombreMov}" itemValue="#{mov}"/>
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="form-group">
+                        <p:outputLabel value="Nuevo cargo:" for="nuevoCargoMov" />
+                        <h:inputText id="nuevoCargoMov" value="#{manejadorMovimientosEmp.newMovEmp.nuevoCargoMov}" title="NuevoCargoMov" required="true" requiredMessage="The NuevoCargoMov field is required." class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <p:outputLabel value="Fecha movimiento:" for="fechaMov" />
+                        <h:inputText id="fechaMov" value="#{manejadorMovimientosEmp.newMovEmp.fechaMov}" title="FechaMov" required="true" requiredMessage="The FechaMov field is required." class="form-control">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:inputText>
+                    </div>
+                    <div class="form-group">
+                        <p:outputLabel value="Fecha notificaci&oacute;n:" for="fechaNoti" />
+                        <h:inputText id="fechaNoti" value="#{manejadorMovimientosEmp.newMovEmp.fechaNoti}" title="FechaNoti" class="form-control">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:inputText>
+                    </div>
+                    <div class="form-group">
+                        <p:outputLabel value="Fecha inicio temporal:" for="fechaIniTemp" />
+                        <h:inputText id="fechaIniTemp" value="#{manejadorMovimientosEmp.newMovEmp.fechaIniTemp}" title="FechaIniTemp" class="form-control">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:inputText>
+                    </div>
+                    <div class="form-group">
+                        <p:outputLabel value="Fecha finalizaci&oacute;n temporal:" for="fechaFinTemp" />
+                        <h:inputText id="fechaFinTemp" value="#{manejadorMovimientosEmp.newMovEmp.fechaFinTemp}" title="FechaFinTemp" class="form-control">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:inputText>
+                    </div>
+                    <div class="form-group">
+                        <p:outputLabel value="Nueva dirección Nacional:"/>
+                        <h:selectOneMenu class="form-control" id="dirNacMov" style="width: 100%" value="#{manejadorMovimientosEmp.direccionNacional}">
+                            <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                            <f:selectItems value="#{manejadorMovimientosEmp.todosDirNacional()}" var="dir_nac" itemLabel="#{dir_nac.nombreDirNac}" itemValue="#{dir_nac.idDirNac}"/>
+                            <p:ajax update="idDependenciaMov"/>
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="form-group">
+                        <p:outputLabel value="Nueva dependencia:" />
+                        <h:selectOneMenu id="idDependenciaMov" value="#{manejadorMovimientosEmp.dependecia}" title="IdDependencia" required="true" requiredMessage="The IdDependencia field is required." class="form-control">
+                            <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                            <f:selectItems value="#{manejadorMovimientosEmp.dependenciasFiltradas()}" var="depend" itemLabel="#{depend.nombreDependencia}" itemValue="#{depend.idDependencia}"/>
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="form-group">
+                        <p:commandButton icon="fa fa-floppy-o" value="Guardar" process="@this panel-new-mov" action="#{manejadorMovimientosEmp.saveMovimiento()}" update="panel-new-mov"/>
                     </div>
                 </h:panelGroup>
             </p:dialog>
