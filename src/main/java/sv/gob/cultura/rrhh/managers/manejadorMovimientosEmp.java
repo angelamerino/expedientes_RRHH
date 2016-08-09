@@ -6,13 +6,13 @@
 package sv.gob.cultura.rrhh.managers;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
-import org.primefaces.context.RequestContext;
 import sv.gob.cultura.rrhh.entities.Dependencias;
 import sv.gob.cultura.rrhh.entities.DirNacional;
 import sv.gob.cultura.rrhh.entities.Empleados;
@@ -31,7 +31,7 @@ import sv.gob.cultura.rrhh.facades.TipoMovFacade;
 @Named(value = "manejadorMovimientosEmp")
 @ViewScoped
 public class manejadorMovimientosEmp implements Serializable {
-
+    
     private static final long serialVersionUID = 1L;
     @EJB
     private MovimientosEmpFacade movimientosEmpFacade;
@@ -48,99 +48,110 @@ public class manejadorMovimientosEmp implements Serializable {
     private int tipoMovimiento;
     private int direccionNacional;
     private int dependecia;
-
+    
     public manejadorMovimientosEmp() {
-
+        
     }
-
+    
     public MovimientosEmpFacade getMovimientosEmpFacade() {
         return movimientosEmpFacade;
     }
-
+    
     public TipoMovFacade getTipoMovFacade() {
         return tipoMovFacade;
     }
-
+    
     public EmpleadosFacade getEmpleadosFacade() {
         return empleadosFacade;
     }
-
+    
     public DependenciasFacade getDependenciasFacade() {
         return dependenciasFacade;
     }
-
+    
     public DirNacionalFacade getDirNacionalFacade() {
         return dirNacionalFacade;
     }
-
+    
     public Empleados getSelectedEmp() {
         return selectedEmp;
     }
-
+    
     public void setSelectedEmp(Empleados selectedEmp) {
         this.selectedEmp = selectedEmp;
     }
-
+    
     public MovimientosEmp getNewMovEmp() {
         return newMovEmp;
     }
-
+    
     public void setNewMovEmp(MovimientosEmp newMovEmp) {
         this.newMovEmp = newMovEmp;
     }
-
+    
     public int getTipoMovimiento() {
         return tipoMovimiento;
     }
-
+    
     public void setTipoMovimiento(int tipoMovimiento) {
         this.tipoMovimiento = tipoMovimiento;
     }
-
+    
     public int getDireccionNacional() {
         return direccionNacional;
     }
-
+    
     public void setDireccionNacional(int direccionNacional) {
         this.direccionNacional = direccionNacional;
     }
-
+    
     public int getDependecia() {
         return dependecia;
     }
-
+    
     public void setDependecia(int dependecia) {
         this.dependecia = dependecia;
     }
-
+    
     public List<TipoMov> fetchTiposMov() {
         return getTipoMovFacade().findAll();
     }
-
+    
     public List<DirNacional> todosDirNacional() {
         return getDirNacionalFacade().findAll();
     }
-
+    
     public List<Dependencias> dependenciasFiltradas() {
         return getDependenciasFacade().buscarDependencias(direccionNacional);
     }
-
+    
     public List<Empleados> fetchEmpleadosFiltrados() {
         return getEmpleadosFacade().buscarEmp(dependecia);
     }
-
+    
     public List<MovimientosEmp> fetchAllMovs() {
         return getMovimientosEmpFacade().findAll();
     }
-
+    
     public void saveMovimiento() {
         try {
-            if (selectedEmp.getIdEmpleado() == null) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Empleado no encontrado", "Empleado no encontrado"));
-            } else {
-            }
+            newMovEmp.setIdEmpleado(selectedEmp);
+            //Crea historico de cargo en objeto newMovEmp
+            newMovEmp.setCargoActualMov(selectedEmp.getCargoFuncional());
+            //Temporal using user 1
+            newMovEmp.setUserCreaMov(1);
+            newMovEmp.setFechaCreaMov(new Date());
+            newMovEmp.setDependenciaActual(selectedEmp.getIdDependenciaN().getNombreDependencia());
+            //Actualiza cargo funcional con el nuevo de objeto newMovEmp
+            selectedEmp.setCargoNominal(newMovEmp.getNuevoCargoMov());
+            selectedEmp.setIdDependenciaN(new Dependencias(dependecia));
+            //Persist on database
+            getMovimientosEmpFacade().create(newMovEmp);
+            getEmpleadosFacade().edit(selectedEmp);
+            newMovEmp = new MovimientosEmp();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Guardar movimiento", "Movimiento guardado correctamente"));
         } catch (Exception e) {
         }
     }
-
+    
 }

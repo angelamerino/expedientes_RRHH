@@ -89,25 +89,25 @@
                         <h:inputText id="nuevoCargoMov" value="#{manejadorMovimientosEmp.newMovEmp.nuevoCargoMov}" title="NuevoCargoMov" required="true" requiredMessage="The NuevoCargoMov field is required." class="form-control"/>
                     </div>
                     <div class="form-group">
-                        <p:outputLabel value="Fecha movimiento:" for="fechaMov" />
+                        <p:outputLabel value="Fecha movimiento (dd/mm/aaaa):" for="fechaMov" />
                         <h:inputText id="fechaMov" value="#{manejadorMovimientosEmp.newMovEmp.fechaMov}" title="FechaMov" required="true" requiredMessage="The FechaMov field is required." class="form-control">
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:inputText>
                     </div>
                     <div class="form-group">
-                        <p:outputLabel value="Fecha notificaci&oacute;n:" for="fechaNoti" />
+                        <p:outputLabel value="Fecha notificaci&oacute;n (dd/mm/aaaa):" for="fechaNoti" />
                         <h:inputText id="fechaNoti" value="#{manejadorMovimientosEmp.newMovEmp.fechaNoti}" title="FechaNoti" class="form-control">
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:inputText>
                     </div>
                     <div class="form-group">
-                        <p:outputLabel value="Fecha inicio temporal:" for="fechaIniTemp" />
+                        <p:outputLabel value="Fecha inicio temporal (dd/mm/aaaa):" for="fechaIniTemp" />
                         <h:inputText id="fechaIniTemp" value="#{manejadorMovimientosEmp.newMovEmp.fechaIniTemp}" title="FechaIniTemp" class="form-control">
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:inputText>
                     </div>
                     <div class="form-group">
-                        <p:outputLabel value="Fecha finalizaci&oacute;n temporal:" for="fechaFinTemp" />
+                        <p:outputLabel value="Fecha finalizaci&oacute;n temporal (dd/mm/aaaa):" for="fechaFinTemp" />
                         <h:inputText id="fechaFinTemp" value="#{manejadorMovimientosEmp.newMovEmp.fechaFinTemp}" title="FechaFinTemp" class="form-control">
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:inputText>

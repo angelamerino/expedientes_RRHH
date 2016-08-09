@@ -76,10 +76,6 @@ public class Dependencias implements Serializable {
     @JoinColumn(name = "id_dir_nac", referencedColumnName = "id_dir_nac")
     @ManyToOne(optional = false)
     private DirNacional idDirNac;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "depIdDependencia")
-    private List<MovimientosEmp> movimientosEmpList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idDependencia")
-    private List<MovimientosEmp> movimientosEmpList1;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idDependencia")
     private List<UsuariosSistema> usuariosSistemaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idDependenciaF")
@@ -177,22 +173,6 @@ public class Dependencias implements Serializable {
 
     public void setIdDirNac(DirNacional idDirNac) {
         this.idDirNac = idDirNac;
-    }
-
-    public List<MovimientosEmp> getMovimientosEmpList() {
-        return movimientosEmpList;
-    }
-
-    public void setMovimientosEmpList(List<MovimientosEmp> movimientosEmpList) {
-        this.movimientosEmpList = movimientosEmpList;
-    }
-
-    public List<MovimientosEmp> getMovimientosEmpList1() {
-        return movimientosEmpList1;
-    }
-
-    public void setMovimientosEmpList1(List<MovimientosEmp> movimientosEmpList1) {
-        this.movimientosEmpList1 = movimientosEmpList1;
     }
 
     public List<UsuariosSistema> getUsuariosSistemaList() {

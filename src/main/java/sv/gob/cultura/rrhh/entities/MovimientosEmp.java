@@ -36,7 +36,6 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "MovimientosEmp.findByIdMovEmp", query = "SELECT m FROM MovimientosEmp m WHERE m.idMovEmp = :idMovEmp"),
     @NamedQuery(name = "MovimientosEmp.findByCargoActualMov", query = "SELECT m FROM MovimientosEmp m WHERE m.cargoActualMov = :cargoActualMov"),
     @NamedQuery(name = "MovimientosEmp.findByNuevoCargoMov", query = "SELECT m FROM MovimientosEmp m WHERE m.nuevoCargoMov = :nuevoCargoMov"),
-    @NamedQuery(name = "MovimientosEmp.findByDependenciaActual", query = "SELECT m FROM MovimientosEmp m WHERE m.dependenciaActual = :dependenciaActual"),
     @NamedQuery(name = "MovimientosEmp.findByFechaMov", query = "SELECT m FROM MovimientosEmp m WHERE m.fechaMov = :fechaMov"),
     @NamedQuery(name = "MovimientosEmp.findByFechaNoti", query = "SELECT m FROM MovimientosEmp m WHERE m.fechaNoti = :fechaNoti"),
     @NamedQuery(name = "MovimientosEmp.findByFechaIniTemp", query = "SELECT m FROM MovimientosEmp m WHERE m.fechaIniTemp = :fechaIniTemp"),
@@ -46,6 +45,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "MovimientosEmp.findByUserModMov", query = "SELECT m FROM MovimientosEmp m WHERE m.userModMov = :userModMov"),
     @NamedQuery(name = "MovimientosEmp.findByFechaModMov", query = "SELECT m FROM MovimientosEmp m WHERE m.fechaModMov = :fechaModMov")})
 public class MovimientosEmp implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -95,12 +95,6 @@ public class MovimientosEmp implements Serializable {
     @JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")
     @ManyToOne(optional = false)
     private Empleados idEmpleado;
-    @JoinColumn(name = "dep_id_dependencia", referencedColumnName = "id_dependencia")
-    @ManyToOne(optional = false)
-    private Dependencias depIdDependencia;
-    @JoinColumn(name = "id_dependencia", referencedColumnName = "id_dependencia")
-    @ManyToOne(optional = false)
-    private Dependencias idDependencia;
 
     public MovimientosEmp() {
     }
@@ -235,22 +229,6 @@ public class MovimientosEmp implements Serializable {
         this.idEmpleado = idEmpleado;
     }
 
-    public Dependencias getDepIdDependencia() {
-        return depIdDependencia;
-    }
-
-    public void setDepIdDependencia(Dependencias depIdDependencia) {
-        this.depIdDependencia = depIdDependencia;
-    }
-
-    public Dependencias getIdDependencia() {
-        return idDependencia;
-    }
-
-    public void setIdDependencia(Dependencias idDependencia) {
-        this.idDependencia = idDependencia;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -275,5 +253,5 @@ public class MovimientosEmp implements Serializable {
     public String toString() {
         return "sv.gob.cultura.rrhh.entidades.MovimientosEmp[ idMovEmp=" + idMovEmp + " ]";
     }
-    
+
 }
