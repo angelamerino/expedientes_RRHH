@@ -44,7 +44,7 @@ public class manejadorMovimientosEmp implements Serializable {
     @EJB
     private DirNacionalFacade dirNacionalFacade;
     private Empleados selectedEmp = new Empleados();
-    private MovimientosEmp newMovEmp = new MovimientosEmp();
+    private MovimientosEmp newMovEmp = new MovimientosEmp(), selectedMovEmp = new MovimientosEmp();
     private int tipoMovimiento;
     private int direccionNacional;
     private int dependecia;
@@ -87,6 +87,14 @@ public class manejadorMovimientosEmp implements Serializable {
     
     public void setNewMovEmp(MovimientosEmp newMovEmp) {
         this.newMovEmp = newMovEmp;
+    }
+    
+    public MovimientosEmp getSelectedMovEmp() {
+        return selectedMovEmp;
+    }
+    
+    public void setSelectedMovEmp(MovimientosEmp selectedMovEmp) {
+        this.selectedMovEmp = selectedMovEmp;
     }
     
     public int getTipoMovimiento() {
@@ -150,6 +158,14 @@ public class manejadorMovimientosEmp implements Serializable {
             getEmpleadosFacade().edit(selectedEmp);
             newMovEmp = new MovimientosEmp();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Guardar movimiento", "Movimiento guardado correctamente"));
+        } catch (Exception e) {
+        }
+    }
+    
+    public void editMovimiento() {
+        try {
+            selectedMovEmp.setFechaModMov(new Date());
+            selectedMovEmp.setUserModMov(1);
         } catch (Exception e) {
         }
     }

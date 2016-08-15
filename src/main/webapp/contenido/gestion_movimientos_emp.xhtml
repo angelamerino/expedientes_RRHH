@@ -7,319 +7,123 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
 
+    <ui:define name="styles">
+        <style type="text/css">
+            #dirNacMov, #idDependenciaMov {
+                width: 158px !important;
+            }
+        </style>
+    </ui:define>
+
     <ui:define name="content">
-        <link href="#{request.contextPath}/resources/datatables/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
-        <div class="page-header">
-            <h1><strong>GESTIÓN DE MOVIMIENTOS DE EMPLEADOS</strong></h1>
-            <h:form prependId="false">
-                <p:growl id="growl" showDetail="false"  autoUpdate="true" life="10000" />  
-                <h:commandLink value="Nuevo Registro" styleClass="btn btn-info pull-right"  style="text-decoration:none;" action="#{manejadorMovimientosEmp.nuevoMovientoEmp()}" immediate="true" />
-            </h:form>
-            <div class="clearfix" ></div>
-        </div>
-
-        <div class="panel panel-info">
-            <div class="panel-heading"><strong>Editar/Eliminar Movientos de Empleados</strong></div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h4>GESTIÓN DE MOVIMIENTOS DE EMPLEADOS</h4>
+            </div>
             <div class="panel-body">
-                <div class="table table-responsive">
-                    <f:view>
-                        <h:form prependId="false">
-                            <h:panelGroup id ="tabla">
-                                <h:dataTable id="listMovimientosEmp" value="#{manejadorMovimientosEmp.fetchAllMovs()}" var="item" style="font-size: 14px" styleClass="table table-striped table-hover">
-                                    <h:column>
+                <h:form prependId="false">
+                    <p:growl autoUpdate="true" showDetail="true"/>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12">
+                            <div class="form-group">
 
-                                    </h:column>
-                                    <h:column>
+                            </div>
+                            <div class="form-group">
+                                <p:dataTable id="tbl-movs" value="#{manejadorMovimientosEmp.fetchAllMovs()}" var="movs" rowKey="#{movs.idMovEmp}" scrollable="true" paginator="true" rows="10">
+                                    <p:column filterBy="#{movs.idEmpleado.nombreEmpleado}" filterMatchMode="contains">
                                         <f:facet name="header">
-                                            <h:outputText value="Nombre de Empleado"/>
+                                            <h:outputText value="Empleado"/>
                                         </f:facet>
-                                        <h:outputText value="#{item.idEmpleado.nombreEmpleado}"/>
-                                    </h:column>
-                                    <h:column>
+                                        <h:outputText value="#{movs.idEmpleado.nombreEmpleado}"/>
+                                    </p:column>
+                                    <p:column styleClass="text-center" filterBy="#{movs.idTipoMov.nombreMov}" filterMatchMode="contains">
                                         <f:facet name="header">
-                                            <center>
-                                                <h:outputText value="Tipo de Movimiento"/>
-                                            </center>
+                                            <h:outputText value="Tipo movimiento"/>
                                         </f:facet>
-                                        <center>
-                                            <h:outputText value="#{item.idTipoMov.nombreMov}"/>
-                                        </center>
-                                    </h:column>
-                                    <h:column>
+                                        <h:outputText value="#{movs.idTipoMov.nombreMov}"/>
+                                    </p:column>
+                                    <p:column filterBy="#{movs.idEmpleado.idDependenciaN.nombreDependencia}" filterMatchMode="contains">
                                         <f:facet name="header">
-                                            <center>
-                                                <h:outputText value="Fecha de Movimiento"/>
-                                            </center>
+                                            <h:outputText value="Dependencia"/>
                                         </f:facet>
-                                        <center>
-                                            <h:outputText value="#{item.fechaMov}">
-                                                <f:convertDateTime pattern="dd/MM/yyyy" />
-                                            </h:outputText>
-                                        </center>
-                                    </h:column>
-
-                                    <h:column>
+                                        <h:outputText value="#{movs.idEmpleado.idDependenciaN.nombreDependencia}"/>
+                                    </p:column>
+                                    <p:column>
                                         <f:facet name="header">
-                                            <h:outputText value="Unidad Organizativa Actual"/>
+                                            <h:outputText value="Nuevo cargo"/>
                                         </f:facet>
-                                        <h:outputText value="#{item.dependenciaActual}"/>
-                                    </h:column>
-                                    <h:column>
+                                        <h:outputText value="#{movs.nuevoCargoMov}"/>
+                                    </p:column>
+                                    <p:column filterBy="#{movs.dependenciaActual}" filterMatchMode="contains">
                                         <f:facet name="header">
-                                            <h:outputText value="Unidad Organizativa Nueva"/>
+                                            <h:outputText value="Dependencia anterior"/>
                                         </f:facet>
-                                        <h:outputText value="#{item.idDependencia.nombreDependencia}"/>
-                                    </h:column>
-                                    <h:column>
+                                        <h:outputText value="#{movs.dependenciaActual}"/>
+                                    </p:column>
+                                    <p:column>
                                         <f:facet name="header">
-                                            <center>
-                                                <h:outputText value="Editar/Eliminar"/>
-                                            </center>
+                                            <h:outputText value="Cargo anterior"/>
                                         </f:facet>
-                                        <center>
-                                            <h:commandLink  styleClass="btn-sm glyphicon glyphicon-pencil" style="text-decoration:none;" title="Editar">
-                                                <p:ajax update="panelTrasladoEditar panelAscensoEditar panelTemEditar" listener="#{manejadorMovimientosEmp.editarTipoMov(item)}"/>
-                                            </h:commandLink>
-                                            <h:commandLink actionListener="#{manejadorMovimientosEmp.eliminar(item)}" styleClass="btn-sm glyphicon glyphicon-remove" style="text-decoration:none;" title="Eliminar" immediate="true">
-                                                <p:ajax update="tabla"  onsuccess="PF('confirmation').show()"/>
-                                            </h:commandLink>                                                        
-                                        </center>
-                                    </h:column>
-                                </h:dataTable>
-                            </h:panelGroup>
-                        </h:form>
-                    </f:view>
-
-                </div>
+                                        <h:outputText value="#{movs.cargoActualMov}"/>
+                                    </p:column>
+                                    <p:column styleClass="text-center">
+                                        <f:facet name="header">
+                                            <h:outputText value="Fecha Movimiento"/>
+                                        </f:facet>
+                                        <h:outputText value="#{movs.fechaMov}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column style="width: 150px;" styleClass="text-center">
+                                        <f:facet name="header">
+                                            <h:outputText value="Opc."/>
+                                        </f:facet>
+                                        <p:commandButton process="@this tbl-movs" icon="ui-icon-search" update="panel-edit-mov" value="Ver detalle" oncomplete="PF('dlgMovEmp').show();">
+                                            <f:setPropertyActionListener value="#{movs}" target="#{manejadorMovimientosEmp.selectedMovEmp}"/>
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
+                        </div>
+                    </div>
+                    <p:dialog header="Detalle de traslado" modal="true" widgetVar="dlgMovEmp" position="center top" responsive="true">
+                        <p:panelGrid id="panel-edit-mov" columns="2">
+                            <p:outputLabel value="Tipo movimiento:" for="idTipoMov" />
+                            <h:selectOneMenu id="idTipoMov" value="#{manejadorMovimientosEmp.selectedMovEmp.idTipoMov}" required="true" requiredMessage="The IdTipoMov field is required." converter="#{tipoMovimientoConverter}">
+                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                <f:selectItems value="#{manejadorMovimientosEmp.fetchTiposMov()}" var="mov" itemLabel="#{mov.nombreMov}" itemValue="#{mov}"/>
+                            </h:selectOneMenu>
+                            <p:outputLabel value="Cargo anterior:" for="cargoActualMov" />
+                            <p:inputText id="cargoActualMov" value="#{manejadorMovimientosEmp.selectedMovEmp.cargoActualMov}" title="CargoActualMov" />
+                            <p:outputLabel value="Nuevo cargo:" for="nuevoCargoMov" />
+                            <p:inputText id="nuevoCargoMov" value="#{manejadorMovimientosEmp.selectedMovEmp.nuevoCargoMov}" title="NuevoCargoMov" required="true" requiredMessage="The NuevoCargoMov field is required."/>
+                            <p:outputLabel value="Dependencia anterior:" for="dependenciaActual" />
+                            <p:inputText id="dependenciaActual" value="#{manejadorMovimientosEmp.selectedMovEmp.dependenciaActual}" title="DependenciaActual" />
+                            <p:outputLabel value="Fecha movimiento:" for="fechaMov" />
+                            <p:calendar id="fechaMov" value="#{manejadorMovimientosEmp.selectedMovEmp.fechaMov}" required="true" requiredMessage="The FechaMov field is required." pattern="dd/MM/yyyy"/>
+                            <p:outputLabel value="Fecha notificación:" for="fechaNoti" />
+                            <p:calendar id="fechaNoti" value="#{manejadorMovimientosEmp.selectedMovEmp.fechaNoti}" pattern="dd/MM/yyyy"/>
+                            <p:outputLabel value="Fecha inicio temporal:" for="fechaIniTemp" />
+                            <p:calendar id="fechaIniTemp" value="#{manejadorMovimientosEmp.selectedMovEmp.fechaIniTemp}" pattern="dd/MM/yyyy"/>
+                            <p:outputLabel value="Fecha finalización temporal:" for="fechaFinTemp" />
+                            <p:calendar id="fechaFinTemp" value="#{manejadorMovimientosEmp.selectedMovEmp.fechaFinTemp}" pattern="dd/MM/yyyy"/>
+                            <p:outputLabel value="Nueva dirección Nacional:"/>
+                            <h:selectOneMenu id="dirNacMov" value="#{manejadorMovimientosEmp.direccionNacional}">
+                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                <f:selectItems value="#{manejadorMovimientosEmp.todosDirNacional()}" var="dir_nac" itemLabel="#{dir_nac.nombreDirNac}" itemValue="#{dir_nac.idDirNac}"/>
+                                <p:ajax update="idDependenciaMov"/>
+                            </h:selectOneMenu>
+                            <p:outputLabel value="Nueva dependencia:" />
+                            <h:selectOneMenu id="idDependenciaMov" value="#{manejadorMovimientosEmp.dependecia}" title="IdDependencia">
+                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                <f:selectItems value="#{manejadorMovimientosEmp.dependenciasFiltradas()}" var="depend" itemLabel="#{depend.nombreDependencia}" itemValue="#{depend.idDependencia}"/>
+                            </h:selectOneMenu>
+                            <p:commandButton value="Editar" icon="fa fa-search" process="@this panel-edit-mov" action="#{manejadorMovimientosEmp.editMovimiento()}" update="panel-edit-mov tbl-movs"/>
+                        </p:panelGrid>
+                    </p:dialog>
+                </h:form>
             </div>
         </div>
-
-        <p:confirmDialog  message="Desea Eliminar Moviemiento de Empleado" header="Confirmación"  closable="false" severity="info" widgetVar="confirmation">
-            <h:form prependId="false" class="form-horizontal">
-                <h:commandLink value="Aceptar" actionListener="#{manejadorMovimientosEmp.eliminarMov()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true" />
-                <h:commandLink value="Cancelar" actionListener="#{manejadorMovimientosEmp.cancelarEditar()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true"/>
-            </h:form>
-        </p:confirmDialog>
-
-        <p:dialog header="Editar Información Movimiento por Traslado" widgetVar="trasladoEditar" closable="false" modal="true" height="auto" width="65%" resizable="false" position="center,top" draggable="false" styleClass="disable-scroll">
-            <h:form prependId="false" class="form-horizontal">
-                <h:panelGroup id ="panelTrasladoEditar">
-                    <div class="form-group">
-                        <p:outputLabel value="Empleado:" styleClass="col-lg-4 control-label"/>
-                        <div class="col-lg-8">
-                            <h:outputText styleClass="form-control"  value="#{manejadorMovimientosEmp.nombreEmp}"/>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <p:outputLabel for="dirNacional" value="Dirección Nacional:" styleClass="col-lg-4 control-label"/>
-                        <div class="col-lg-8">
-                            <p:selectOneMenu id="dirNacional" style="width: 100%" value="#{manejadorMovimientosEmp.dirNacional}" required="true" requiredMessage="Seleccione una Dirección Nacional">
-                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
-                                <f:selectItems value="#{manejadorMovimientosEmp.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
-                                <p:ajax update="depen"/>
-                            </p:selectOneMenu>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <p:outputLabel for="depen" value="Dependencia / Unida Organizativa:" styleClass="col-lg-4 control-label"/>
-                        <div class="col-lg-8">
-                            <p:selectOneMenu id="depen" style="width: 100%" value="#{manejadorMovimientosEmp.dependencia}" required="true" requiredMessage="Seleccione una Dependencia/Unidad Organizativa">
-                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
-                                <f:selectItems value="#{manejadorMovimientosEmp.dependenciasFiltradas()}" var="dep" itemLabel="#{dep.nombreDependencia}" itemValue="#{dep.idDependencia}"/>
-                            </p:selectOneMenu>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <p:outputLabel for="cargonuevo" value="Nuevo Cargo:" styleClass="col-lg-4 control-label"/>
-                        <div class="col-lg-8">
-                            <p:inputText style="width: 100%; padding: 9px;" id="cargonuevo" value="#{manejadorMovimientosEmp.nuevoCargo}" required="true" requiredMessage="Ingrese Nuevo Cargo"/>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <p:outputLabel for="noti" value="Fecha de Notificación:" styleClass="col-lg-4 control-label"/>
-                        <p:calendar pattern="dd/MM/yyyy" locale="es" styleClass="col-md-8" id="noti" value="#{manejadorMovimientosEmp.fechaNoti}" required="true" requiredMessage="Ingese Fecha de Notificación." >
-                            <p:ajax event="dateSelect" update="inicio" />
-                        </p:calendar>
-                    </div>
-
-                    <div class="form-group">
-                        <p:outputLabel for="inicio" value="Fecha de Traslado (A partir de):" styleClass="col-lg-4 control-label"/>
-                        <p:calendar  pattern="dd/MM/yyyy" locale="es" styleClass="col-md-8" id="inicio" mindate="#{manejadorMovimientosEmp.fechaNoti}" value="#{manejadorMovimientosEmp.fechaTralado}" required="true" requiredMessage="Ingese Fecha de Traslado." />
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-lg-4"></div>
-                        <div class="col-lg-8">
-                            <h:commandLink style="margin: 2px; color: white" styleClass="btn btn-info" value="Modificar" action="#{manejadorMovimientosEmp.editarMovTraslado()}" >
-                                <f:ajax execute="panelTrasladoEditar" render="panelTrasladoEditar" />
-                            </h:commandLink>
-                            <h:commandLink style="margin: 2px; color: white" styleClass="btn btn-info" value="Cancelar" action="#{manejadorMovimientosEmp.cancelarEditar()}" immediate="true"/>
-                        </div>
-                    </div>
-                </h:panelGroup>    
-            </h:form>
-        </p:dialog>
-
-        <p:dialog header="Editar Información Movimiento por Ascenso" widgetVar="ascensoEditar" closable="false" modal="true" height="auto" width="65%" resizable="false" position="center,top" draggable="false" styleClass="disable-scroll">
-            <h:form prependId="false" class="form-horizontal">
-                <h:panelGroup id ="panelAscensoEditar">
-
-                    <div class="form-group">
-                        <p:outputLabel value="Empleado:" styleClass="col-lg-4 control-label"/>
-                        <div class="col-lg-8">
-                            <h:outputText styleClass="form-control"  value="#{manejadorMovimientosEmp.nombreEmp}"/>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <p:outputLabel for="cargonuevoAsc" value="Nuevo Cargo:" styleClass="col-lg-4 control-label"/>
-                        <div class="col-lg-8">
-                            <p:inputText style="width: 100%; padding: 9px;" id="cargonuevoAsc" value="#{manejadorMovimientosEmp.nuevoCargo}" required="true" requiredMessage="Ingrese Nuevo Cargo"/>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <p:outputLabel for="notiAsc" value="Fecha de Notificación:" styleClass="col-lg-4 control-label"/>
-                        <p:calendar pattern="dd/MM/yyyy" locale="es" styleClass="col-md-8" id="notiAsc" value="#{manejadorMovimientosEmp.fechaNoti}" required="true" requiredMessage="Ingese Fecha de Notificación." >
-                            <p:ajax event="dateSelect" update="inicioAsc" />
-                        </p:calendar>
-                    </div>
-
-                    <div class="form-group">
-                        <p:outputLabel for="inicioAsc" value="Fecha de Traslado (Nuevo Cargo):" styleClass="col-lg-4 control-label"/>
-                        <p:calendar pattern="dd/MM/yyyy" locale="es" styleClass="col-md-8" id="inicioAsc" mindate="#{manejadorMovimientosEmp.fechaNoti}"  value="#{manejadorMovimientosEmp.fechaTralado}" required="true" requiredMessage="Ingese Fecha de Traslado (Nuevo cargo)." />
-                    </div>                
-
-                    <div class="form-group">
-                        <div class="col-lg-4"></div>
-                        <div class="col-lg-8">
-                            <h:commandLink style="margin: 2px; color: white" styleClass="btn btn-info" value="Modificar" action="#{manejadorMovimientosEmp.editarMovAsc()}" >
-                                <f:ajax execute="panelAscensoEditar" render="panelAscensoEditar" />
-                            </h:commandLink>
-                            <h:commandLink style="margin: 2px; color: white" styleClass="btn btn-info" value="Cancelar" action="#{manejadorMovimientosEmp.cancelarEditar()}" immediate="true"/>
-                        </div>
-                    </div>
-                </h:panelGroup>
-            </h:form>
-        </p:dialog>
-
-        <p:dialog header="Editar de Información Movimiento por Traslado Temporal" widgetVar="temEditar" closable="false" modal="true" height="auto" width="65%" resizable="false" position="center,top" draggable="false" styleClass="disable-scroll">
-            <h:form prependId="false" class="form-horizontal">
-                <h:panelGroup id ="panelTemEditar">
-
-                    <div class="form-group">
-                        <p:outputLabel value="Empleado:" styleClass="col-lg-4 control-label"/>
-                        <div class="col-lg-8">
-                            <h:outputText styleClass="form-control" value="#{manejadorMovimientosEmp.nombreEmp}"/>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <p:outputLabel for="dirNacionalTemp" value="Dirección Nacional:" styleClass="col-lg-4 control-label"/>
-                        <div class="col-lg-8">
-                            <p:selectOneMenu id="dirNacionalTemp" style="width: 100%" value="#{manejadorMovimientosEmp.dirNacional}" required="true" requiredMessage="Seleccione una Dirección Nacional">
-                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
-                                <f:selectItems value="#{manejadorMovimientosEmp.todosDirNacional()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
-                                <p:ajax update="depenTemp"/>
-                            </p:selectOneMenu>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <p:outputLabel for="depenTemp" value="Dependencia / Unida Organizativa:" styleClass="col-lg-4 control-label"/>
-                        <div class="col-lg-8">
-                            <p:selectOneMenu id="depenTemp" style="width: 100%" value="#{manejadorMovimientosEmp.dependencia}" required="true" requiredMessage="Seleccione una Dependencia/Unidad Organizativa.">
-                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
-                                <f:selectItems value="#{manejadorMovimientosEmp.dependenciasFiltradas()}" var="dep" itemLabel="#{dep.nombreDependencia}" itemValue="#{dep.idDependencia}"/>
-                            </p:selectOneMenu>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <p:outputLabel for="cargonuevoTemp" value="Nuevo Cargo:" styleClass="col-lg-4 control-label"/>
-                        <div class="col-lg-8">
-                            <p:inputText style="width: 100%; padding: 9px;" id="cargonuevoTemp" value="#{manejadorMovimientosEmp.nuevoCargo}" required="true" requiredMessage="Ingrese Nuevo Cargo"/>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <p:outputLabel for="trasladoTemp" value="Fecha de Traslado:" styleClass="col-lg-4 control-label"/>
-                        <p:calendar pattern="dd/MM/yyyy" locale="es" styleClass="col-md-8" id="trasladoTemp" value="#{manejadorMovimientosEmp.fechaTralado}" required="true" requiredMessage="Ingese Fecha de Traslado." >
-                            <p:ajax event="dateSelect" update="inicioTemp" />
-                        </p:calendar>
-                    </div>
-
-                    <div class="form-group">
-                        <p:outputLabel for="inicioTemp" value="Fecha Inicial" styleClass="col-lg-4 control-label"/>
-                        <p:calendar pattern="dd/MM/yyyy" locale="es" styleClass="col-md-8" id="inicioTemp" mindate="#{manejadorMovimientosEmp.fechaTralado}" value="#{manejadorMovimientosEmp.fechaInicio}" required="true" requiredMessage="Ingese Fecha Inicio de Traslado." >
-                            <p:ajax event="dateSelect" update="finalTemp" />
-                        </p:calendar>
-                    </div>
-
-                    <div class="form-group">
-                        <p:outputLabel for="finalTemp" value="Fecha Final" styleClass="col-lg-4 control-label"/>
-                        <p:calendar pattern="dd/MM/yyyy" locale="es" styleClass="col-md-8" id="finalTemp" mindate="#{manejadorMovimientosEmp.fechaInicio}" value="#{manejadorMovimientosEmp.fechaFinal}" required="true" requiredMessage="Ingese Fecha Final de Traslado." />
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-lg-4"></div>
-                        <div class="col-lg-8">
-                            <h:commandLink style="margin: 2px; color: white" styleClass="btn btn-info" value="Modificar" action="#{manejadorMovimientosEmp.editarMovTemp()}" >
-                                <f:ajax execute="panelTemEditar" render="panelTemEditar" />
-                            </h:commandLink>
-                            <h:commandLink style="margin: 2px; color: white" styleClass="btn btn-info" value="Cancelar" action="#{manejadorMovimientosEmp.cancelarEditar()}" immediate="true"/>
-                        </div>
-                    </div>
-                </h:panelGroup>
-            </h:form>
-        </p:dialog>
-
-        <script type="text/javascript">
-
-            $(document).ready(function () {
-                var t = $('#listMovimientosEmp').DataTable({
-                    "columnDefs": [{
-                            "searchable": false,
-                            "orderable": false,
-                            "targets": 0
-                        }],
-                    "order": [[1, 'asc']],
-                    "oLanguage": {
-                        "sProcessing": "Procesando...",
-                        "sLengthMenu": "Mostrar _MENU_ registros",
-                        "sZeroRecords": "No se encontraron resultados",
-                        "sEmptyTable": "Ningún dato disponible en esta tabla",
-                        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
-                        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
-                        "sInfoPostFix": "",
-                        "sSearch": "Buscar:",
-                        "sUrl": "",
-                        "sInfoThousands": ",",
-                        "sLoadingRecords": "Cargando...",
-                        "oPaginate": {
-                            "sFirst": "Primero",
-                            "sLast": "Último",
-                            "sNext": "Siguiente",
-                            "sPrevious": "Anterior"
-                        },
-                        "oAria": {
-                            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
-                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                        }
-                    }
-                });
-
-                t.on('order.dt search.dt', function () {
-                    t.column(0, {search: 'applied', order: 'applied'}).nodes().each(function (cell, i) {
-                        cell.innerHTML = i + 1;
-                    });
-                }).draw();
-            });
-        </script>
-        <script src="#{request.contextPath}/resources/datatables/jquery.dataTables.min.js" type="text/javascript"></script>
     </ui:define>
 
 </ui:composition>
