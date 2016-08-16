@@ -5,9 +5,11 @@
  */
 package sv.gob.cultura.rrhh.facades;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import sv.gob.cultura.rrhh.entities.Empleados;
 import sv.gob.cultura.rrhh.entities.MovimientosEmp;
 
 /**
@@ -16,6 +18,7 @@ import sv.gob.cultura.rrhh.entities.MovimientosEmp;
  */
 @Stateless
 public class MovimientosEmpFacade extends AbstractFacade<MovimientosEmp> {
+
     @PersistenceContext(unitName = "rrhhPU")
     private EntityManager em;
 
@@ -27,5 +30,8 @@ public class MovimientosEmpFacade extends AbstractFacade<MovimientosEmp> {
     public MovimientosEmpFacade() {
         super(MovimientosEmp.class);
     }
-    
+
+    public List<MovimientosEmp> findByIdEmp(Empleados emp) {
+        return getEntityManager().createNamedQuery("MovimientosEmp.findByIdEmp").setParameter("idEmpleado", emp).getResultList();
+    }
 }

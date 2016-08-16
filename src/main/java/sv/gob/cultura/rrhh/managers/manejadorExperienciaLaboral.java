@@ -134,11 +134,11 @@ public class manejadorExperienciaLaboral implements Serializable {
     }
 
     public List<Dependencias> dependenciasFiltradas() {
-        return getDependenciasFacade().buscarDependencias(this.getDireccionNacional());
+        return getDependenciasFacade().findByDirNac(this.getDireccionNacional());
     }
 
     public List<Empleados> fetchEmpleadosFiltrado() {
-        return getEmpleadosFacade().buscarEmp(this.getDependecia());
+        return getEmpleadosFacade().findByDependencia(this.getDependecia());
     }
 
     public List<ExperienciaLaboral> fetchExpLaboralesByEmp() {

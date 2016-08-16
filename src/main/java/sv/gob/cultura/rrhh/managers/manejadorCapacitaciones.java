@@ -351,12 +351,12 @@ public class manejadorCapacitaciones implements Serializable {
     }
 
     public List<Dependencias> dependenciasFiltradas() {
-        return getDependenciasFacade().buscarDependencias(this.getDireccionNacional());
+        return getDependenciasFacade().findByDirNac(this.getDireccionNacional());
     }
 
     public List<Empleados> empleadoFiltrado() {
         List<Empleados> empCap = empleadoCapacitaciones(); //Empleados en capacitacion
-        List<Empleados> empDep = getEmpleadosFacade().buscarEmp(this.getDependecia()); //todos los empleados de una dependecia
+        List<Empleados> empDep = getEmpleadosFacade().findByDependencia(this.getDependecia()); //todos los empleados de una dependecia
 
         //Iterator<Empleados> itearadorEmpCapacitaciones = empCap.iterator();
         Iterator<Empleados> itearadorEmpDependencias = empDep.iterator();

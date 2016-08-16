@@ -25,7 +25,7 @@
                     <f:view>
                         <h:form prependId="false">                             
                             <h:panelGroup id ="tabla">
-                                <h:dataTable id="listHistorialSalalarial" value="#{manejadorAumentoMejoraSalarial.todosHistorialSalarialMejora()}" var="item" style="font-size: 14px" styleClass="table table-striped table-hover">
+                                <h:dataTable id="listHistorialSalalarial" value="#{manejadorAumentoMejoraSalarial.fetchHistorialByEmp()}" var="item" style="font-size: 14px" styleClass="table table-striped table-hover">
                                     <h:column>
 
                                     </h:column>
@@ -91,7 +91,7 @@
                                         </f:facet>
                                         <center>
                                             <h:commandLink styleClass="btn-sm glyphicon glyphicon-pencil" style="text-decoration:none;" title="Editar">
-                                                <f:setPropertyActionListener value="#{item}" target="#{manejadorAumentoMejoraSalarial.historialSalarial}"/>
+                                                <f:setPropertyActionListener value="#{item}" target="#{manejadorAumentoMejoraSalarial.newHistSal}"/>
                                                 <f:setPropertyActionListener value="#{item.salarioActualHsalarial}" target="#{manejadorAumentoMejoraSalarial.salarioActual}"/>
                                                 <f:setPropertyActionListener value="#{item.nuevoSalarioHsalarial}" target="#{manejadorAumentoMejoraSalarial.salarioNuevo}"/>
                                                 <f:setPropertyActionListener value="#{item.nuevoSalarioHsalarial}" target="#{manejadorAumentoMejoraSalarial.salarioNuevoEditar}"/>
@@ -129,21 +129,21 @@
                         <div class="form-group">
                             <h:outputLabel value="Empleado:" styleClass="col-lg-4 control-label"/>
                             <div class="col-lg-7">
-                                <h:outputText styleClass="form-control" id="empleado" value="#{manejadorAumentoMejoraSalarial.historialSalarial.idEmpleado.nombreEmpleado}" />
+                                <h:outputText styleClass="form-control" id="empleado" value="#{manejadorAumentoMejoraSalarial.newHistSal.idEmpleado.nombreEmpleado}" />
                             </div>
                         </div>
                         <div class="form-group">
                             <h:outputLabel value="Salario Actual: $" styleClass="col-lg-4 control-label"/>
                             <div class="col-lg-7">
-                                <h:outputText styleClass="form-control" id="salarioActualHsalarial" value="#{manejadorAumentoMejoraSalarial.historialSalarial.salarioActualHsalarial}" />
+                                <h:outputText styleClass="form-control" id="salarioActualHsalarial" value="#{manejadorAumentoMejoraSalarial.newHistSal.salarioActualHsalarial}" />
                             </div>
                         </div>
                         <div class="form-group">
                             <p:outputLabel for="idMejoraSal" value="Tipo de Mejora Salarial:" styleClass="col-lg-4 control-label"/>
                             <div class="col-lg-7">
-                                <p:selectOneMenu style="width: 100%;" id="idMejoraSal" value="#{manejadorAumentoMejoraSalarial.historialSalarial.idMejoraSal}" converter="#{tipoMejoraSalarialConvertidor}" required="true" requiredMessage="Seleccione un Tipo de Mejora Salarial">
+                                <p:selectOneMenu style="width: 100%;" id="idMejoraSal" value="#{manejadorAumentoMejoraSalarial.newHistSal.idMejoraSal}" converter="#{tipoMejoraSalarialConvertidor}" required="true" requiredMessage="Seleccione un Tipo de Mejora Salarial">
                                     <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
-                                    <f:selectItems value="#{manejadorAumentoMejoraSalarial.todosTiposMejora()}" var="tipoMejora" itemLabel="#{tipoMejora.nombreMejoraSal}" itemValue="#{tipoMejora}"/>
+                                    <f:selectItems value="#{manejadorAumentoMejoraSalarial.fetchTiposMejora()}" var="tipoMejora" itemLabel="#{tipoMejora.nombreMejoraSal}" itemValue="#{tipoMejora}"/>
                                 </p:selectOneMenu>
                             </div>
                         </div>
@@ -168,7 +168,7 @@
                         <div class="form-group">
                             <h:outputLabel value="Fecha de Aplicacón:" styleClass="col-lg-4 control-label"/>
                             <div class="col-lg-7">
-                                <p:calendar pattern="dd/MM/yyyy" locale="es" id="fechaHsalarial" value="#{manejadorAumentoMejoraSalarial.historialSalarial.fechaHsalarial}" required="true" requiredMessage="Ingrese Fecha de Aplicación" />
+                                <p:calendar pattern="dd/MM/yyyy" locale="es" id="fechaHsalarial" value="#{manejadorAumentoMejoraSalarial.newHistSal.fechaHsalarial}" required="true" requiredMessage="Ingrese Fecha de Aplicación" />
                             </div>
                         </div>
                         <br />

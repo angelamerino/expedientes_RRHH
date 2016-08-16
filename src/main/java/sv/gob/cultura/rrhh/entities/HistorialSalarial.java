@@ -48,13 +48,13 @@ import javax.validation.constraints.Size;
 public class HistorialSalarial implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "salario_actual_hsalarial")
-    private Double salarioActualHsalarial;
+    private double salarioActualHsalarial;
     @Column(name = "nuevo_salario_hsalarial")
-    private Double nuevoSalarioHsalarial;
+    private double nuevoSalarioHsalarial;
     @Column(name = "sal_min")
-    private Double salMin;
+    private double salMin;
     @Column(name = "sal_max")
-    private Double salMax;
+    private double salMax;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

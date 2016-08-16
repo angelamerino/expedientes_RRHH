@@ -125,11 +125,11 @@ public class manejadorContactosEmergencia implements Serializable {
 
     public List<Dependencias> dependenciasFiltradas() {
         filteredEmployees().clear();
-        return dependenciasFacade.buscarDependencias(direccionNacional);
+        return dependenciasFacade.findByDirNac(direccionNacional);
     }
 
     public List<Empleados> filteredEmployees() {
-        return getEmpleadosFacade().buscarEmp(dependecia);
+        return getEmpleadosFacade().findByDependencia(dependecia);
     }
 
     public void populateContacts() {

@@ -39,7 +39,7 @@
                                 </div>
                                 <p:outputLabel for="max" value="Salario Máximo Aplicación: $" styleClass="col-lg-4 control-label"/>
                                 <div class="col-lg-2">
-                                    <p:inputText  style="width: 100%; padding: 9px;" validatorMessage="Salario máximo debe ser mayor a salario mínimo" id="max" value="#{manejadorAumentoMejoraSalarial.historialSalarial.salMax}" required="true" requiredMessage="Ingrese Salario Máximo de Aplicación" >
+                                    <p:inputText  style="width: 100%; padding: 9px;" validatorMessage="Salario máximo debe ser mayor a salario mínimo" id="max" value="#{manejadorAumentoMejoraSalarial.newHistSal.salMax}" required="true" requiredMessage="Ingrese Salario Máximo de Aplicación" >
                                         <f:validateDoubleRange minimum="#{manejadorAumentoMejoraSalarial.salMin + 0.01}"/>
                                     </p:inputText>
                                 </div>
@@ -47,19 +47,19 @@
                             <div class="form-group">
                                 <p:outputLabel for="fechaHsalarial" value="Fecha de Aplicación:" styleClass="col-lg-4 control-label"/>
                                 <div class="col-lg-7">
-                                    <p:calendar pattern="dd/MM/yyyy" locale="es" id="fechaHsalarial" value="#{manejadorAumentoMejoraSalarial.historialSalarial.fechaHsalarial}" required="true" requiredMessage="Ingrese Fecha de Aplicación" />
+                                    <p:calendar pattern="dd/MM/yyyy" locale="es" id="fechaHsalarial" value="#{manejadorAumentoMejoraSalarial.newHistSal.fechaHsalarial}" required="true" requiredMessage="Ingrese Fecha de Aplicación" />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <p:outputLabel for="decretoHsalarial" value="No del Decreto de Ley:" styleClass="col-lg-4 control-label"/>
                                 <div class="col-lg-8">
-                                    <p:inputText style="width: 100%; padding: 9px;" id="decretoHsalarial" value="#{manejadorAumentoMejoraSalarial.historialSalarial.numDocDecreto}" required="true" requiredMessage="Ingrese Decreto de Ley"/>
+                                    <p:inputText style="width: 100%; padding: 9px;" id="decretoHsalarial" value="#{manejadorAumentoMejoraSalarial.newHistSal.numDocDecreto}" required="true" requiredMessage="Ingrese Decreto de Ley"/>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <p:outputLabel for="subDocHsalarial" value="Subir Documento de Ley:" styleClass="col-lg-4 control-label"/>
                                 <div class="col-lg-8">
-                                    <h:outputText styleClass="form-control" id="subDocHsalarial" value="#{manejadorAumentoMejoraSalarial.historialSalarial.numDocDecreto}"/>
+                                    <h:outputText styleClass="form-control" id="subDocHsalarial" value="#{manejadorAumentoMejoraSalarial.newHistSal.numDocDecreto}"/>
                                 </div>
                             </div>
                             <br />

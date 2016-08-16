@@ -196,11 +196,11 @@ public class ManagerStudies implements Serializable {
     }
 
     public List<Dependencias> filteredDependencias() {
-        return getDependenciasFacade().buscarDependencias(direccionNacional);
+        return getDependenciasFacade().findByDirNac(direccionNacional);
     }
 
     public List<Empleados> filteredEmployees() {
-        return getEmpleadosFacade().buscarEmp(dependecia);
+        return getEmpleadosFacade().findByDependencia(dependecia);
     }
 
     public List<Nivel> allNiveles() {

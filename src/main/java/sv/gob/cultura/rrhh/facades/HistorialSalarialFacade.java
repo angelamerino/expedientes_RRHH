@@ -29,11 +29,11 @@ public class HistorialSalarialFacade extends AbstractFacade<HistorialSalarial> {
         super(HistorialSalarial.class);
     }
     
-    public List<HistorialSalarial> buscarHistorialEmpleado(int idEmp){
+    public List<HistorialSalarial> findByIdEmp(int idEmp){
         return getEntityManager().createNamedQuery("HistorialSalarial.findByIdEmpleado").setParameter("idEmpleado", idEmp).getResultList();
     }
     
-    public List<HistorialSalarial> buscarHistorialTipo(int tipo){
+    public List<HistorialSalarial> findByTipo(int tipo){
         return getEntityManager().createNamedQuery("HistorialSalarial.findByTipo").setParameter("tipoHistorial", tipo).getResultList();
     }
 }

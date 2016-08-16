@@ -80,7 +80,7 @@ public class manejadorUsuarios implements Serializable {
 
     public List<Dependencias> dependenciasFiltradas() {
 
-        return getDependenciasFacade().buscarDependencias(dirNacionalFuncional);
+        return getDependenciasFacade().findByDirNac(dirNacionalFuncional);
 
     }
 

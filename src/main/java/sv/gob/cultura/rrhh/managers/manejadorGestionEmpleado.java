@@ -543,18 +543,18 @@ public class manejadorGestionEmpleado implements Serializable {
     public List<Dependencias> dependenciasFiltradas(int filtro) {
         switch (filtro) {
             case 1:
-                return getDependenciasFacade().buscarDependencias(dirNacionalFiltrarJefe);
+                return getDependenciasFacade().findByDirNac(dirNacionalFiltrarJefe);
             case 2:
-                return getDependenciasFacade().buscarDependencias(dirNacionalNominal);
+                return getDependenciasFacade().findByDirNac(dirNacionalNominal);
             case 3:
-                return getDependenciasFacade().buscarDependencias(dirNacionalFuncional);
+                return getDependenciasFacade().findByDirNac(dirNacionalFuncional);
             default:
                 return null;
         }
     }
 
     public List<Empleados> empleadoJefeDependencia() {
-        return getEmpleadosFacade().buscarEmp(dependeciasFiltrarJefe);
+        return getEmpleadosFacade().findByDependencia(dependeciasFiltrarJefe);
     }
 
     public List<Empleados> fetchEmpleados() {

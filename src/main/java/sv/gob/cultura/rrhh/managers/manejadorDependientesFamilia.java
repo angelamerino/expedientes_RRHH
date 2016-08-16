@@ -192,11 +192,11 @@ public class manejadorDependientesFamilia implements Serializable {
 
     public List<Dependencias> dependenciasFiltradas() {
         empleadoFiltrado().clear();
-        return getDependenciasFacade().buscarDependencias(this.getDireccionNacional());
+        return getDependenciasFacade().findByDirNac(this.getDireccionNacional());
     }
 
     public List<Empleados> empleadoFiltrado() {
-        return getEmpleadosFacade().buscarEmp(this.getDependecia());
+        return getEmpleadosFacade().findByDependencia(this.getDependecia());
     }
 
     public List<FamiliaDependientesEmp> repHijosEmpleadosEad() {

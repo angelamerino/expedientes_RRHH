@@ -31,7 +31,7 @@ public class EmpleadosFacade extends AbstractFacade<Empleados> {
         super(Empleados.class);
     }
 
-    public List<Empleados> buscarEmp(int idDependencia) {
+    public List<Empleados> findByDependencia(int idDependencia) {
         return getEntityManager().createNamedQuery("Empleados.findByDependencia").setParameter("dependencia", idDependencia).getResultList();
     }
 
@@ -43,7 +43,7 @@ public class EmpleadosFacade extends AbstractFacade<Empleados> {
         }
     }
 
-    public List<Empleados> buscarEmpId(int idEmpleado) {
+    public List<Empleados> findByIdEmp(int idEmpleado) {
         return getEntityManager().createNamedQuery("Empleados.findByIdEmpleado").setParameter("idEmpleado", idEmpleado).getResultList();
     }
 
