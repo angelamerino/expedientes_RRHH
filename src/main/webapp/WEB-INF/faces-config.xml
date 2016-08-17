@@ -146,12 +146,6 @@
         </navigation-case>
         
         <navigation-case>
-            <from-outcome>reg_mejora_salarial</from-outcome>
-            <to-view-id>/contenido/reg_mejora_salarial.xhtml</to-view-id>
-            <redirect/>
-        </navigation-case>
-        
-        <navigation-case>
             <from-outcome>gestion_mejora_salarial</from-outcome>
             <to-view-id>/contenido/gestion_mejora_salarial.xhtml</to-view-id>
             <redirect/>

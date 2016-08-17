@@ -13,6 +13,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import org.primefaces.context.RequestContext;
 import sv.gob.cultura.rrhh.entities.Dependencias;
 import sv.gob.cultura.rrhh.entities.DirNacional;
 import sv.gob.cultura.rrhh.entities.Empleados;
@@ -180,5 +181,14 @@ public class manejadorMovimientosEmp implements Serializable {
         } catch (Exception e) {
         }
     }
-
+    
+    public void checkEmpSelection() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        if (selectedEmp.getIdEmpleado() != null) {
+            context.update("panel-new-mov");
+            context.execute("PF('dlgNewMovEmp').show();");
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Selección de empleado", "Debe seleccionar un empleado de la lista"));
+        }
+    }
 }
