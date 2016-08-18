@@ -46,6 +46,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "HistorialSalarial.findByUserModHsal", query = "SELECT h FROM HistorialSalarial h WHERE h.userModHsal = :userModHsal"),
     @NamedQuery(name = "HistorialSalarial.findByFechaModHsal", query = "SELECT h FROM HistorialSalarial h WHERE h.fechaModHsal = :fechaModHsal")})
 public class HistorialSalarial implements Serializable {
+
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "salario_actual_hsalarial")
     private double salarioActualHsalarial;
@@ -236,7 +237,7 @@ public class HistorialSalarial implements Serializable {
     public void setSalMax(double salMax) {
         this.salMax = salMax;
     }
-    
+
     public List<ImgDoc> getImgDocList() {
         return imgDocList;
     }
@@ -270,24 +271,4 @@ public class HistorialSalarial implements Serializable {
         return "sv.gob.cultura.rrhh.entidades.HistorialSalarial[ idHsalarial=" + idHsalarial + " ]";
     }
 
-
-    public void setSalarioActualHsalarial(Double salarioActualHsalarial) {
-        this.salarioActualHsalarial = salarioActualHsalarial;
-    }
-
-    
-    public void setNuevoSalarioHsalarial(Double nuevoSalarioHsalarial) {
-        this.nuevoSalarioHsalarial = nuevoSalarioHsalarial;
-    }
-
-   
-    public void setSalMin(Double salMin) {
-        this.salMin = salMin;
-    }
-
-    
-    public void setSalMax(Double salMax) {
-        this.salMax = salMax;
-    }
-    
 }

@@ -6,6 +6,7 @@
 package sv.gob.cultura.rrhh.managers;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -140,6 +141,17 @@ public class manejadorAumentoMejoraSalarial implements Serializable {
             context.execute("PF('dlgNewHistSal').show();");
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Selección de empleado", "Debe seleccionar un empleado de la lista"));
+        }
+    }
+
+    public void saveMejoraSalarial() {
+        try {
+            newHistSal.setFechaCreaHsal(new Date());
+            newHistSal.setUserCreaHsal(1);
+            newHistSal.setIdEmpleado(selectedEmp);
+            getHistorialSalarialFacade().create(newHistSal);
+            newHistSal = new HistorialSalarial();
+        } catch (Exception e) {
         }
     }
 }

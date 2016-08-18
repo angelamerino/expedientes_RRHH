@@ -7,6 +7,14 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
+    <ui:define name="styles">
+        <style type="text/css">
+            #panel-new-historial select{
+                width: 158px;
+            }
+        </style>
+    </ui:define>
+
     <ui:define name="content">
         <h:form prependId="false">
             <div class="panel panel-primary">
@@ -80,6 +88,11 @@
                     </div>
                     <p:dialog id="dlg-new-hist" header="Nuevo historial salarial" widgetVar="dlgNewHistSal" responsive="true" modal="true" position="center top" style="padding: 10px;">
                         <p:panelGrid id="panel-new-historial" columns="2">
+                            <p:outputLabel value="Tipo de mejora salarial:" for="idMejoraSal" />
+                            <h:selectOneMenu id="idMejoraSal" value="#{manejadorAumentoMejoraSalarial.newHistSal.idMejoraSal}" converter="#{tipoMejoraSalarialConvertidor}">
+                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                <f:selectItems value="#{manejadorAumentoMejoraSalarial.fetchTiposMejora()}" var="tipoM" itemLabel="#{tipoM.nombreMejoraSal}" itemValue="#{tipoM}"/>
+                            </h:selectOneMenu>
                             <p:outputLabel value="Salario actual:" for="salarioActualHsalarial" />
                             <p:inputText id="salarioActualHsalarial" value="#{manejadorAumentoMejoraSalarial.newHistSal.salarioActualHsalarial}" title="SalarioActualHsalarial" />
                             <p:outputLabel value="Nuevo salario:" for="nuevoSalarioHsalarial" />
@@ -88,39 +101,14 @@
                             <p:inputText id="porcentajeHsalarial" value="#{manejadorAumentoMejoraSalarial.newHistSal.porcentajeHsalarial}" title="PorcentajeHsalarial" />
                             <p:outputLabel value="Fecha aplicación:" for="fechaHsalarial" />
                             <p:calendar id="fechaHsalarial" value="#{manejadorAumentoMejoraSalarial.newHistSal.fechaHsalarial}" title="FechaHsalarial" required="true" requiredMessage="The FechaHsalarial field is required." pattern="dd/MM/yyyy" />
-                            <p:outputLabel value="NumDocDecreto:" for="numDocDecreto" />
+                            <p:outputLabel value="Numero doc. decreto:" for="numDocDecreto" />
                             <p:inputText id="numDocDecreto" value="#{manejadorAumentoMejoraSalarial.newHistSal.numDocDecreto}" title="NumDocDecreto" />
-                            <p:outputLabel value="UserCreaHsal:" for="userCreaHsal" />
-                            <p:inputText id="userCreaHsal" value="#{manejadorAumentoMejoraSalarial.newHistSal.userCreaHsal}" title="UserCreaHsal" />
-                            <p:outputLabel value="FechaCreaHsal:" for="fechaCreaHsal" />
-                            <p:inputText id="fechaCreaHsal" value="#{manejadorAumentoMejoraSalarial.newHistSal.fechaCreaHsal}" title="FechaCreaHsal" >
-                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
-                            </p:inputText>
-                            <p:outputLabel value="UserModHsal:" for="userModHsal" />
-                            <p:inputText id="userModHsal" value="#{manejadorAumentoMejoraSalarial.newHistSal.userModHsal}" title="UserModHsal" />
-                            <p:outputLabel value="FechaModHsal:" for="fechaModHsal" />
-                            <p:inputText id="fechaModHsal" value="#{manejadorAumentoMejoraSalarial.newHistSal.fechaModHsal}" title="FechaModHsal" >
-                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
-                            </p:inputText>
-                            <p:outputLabel value="IdMejoraSal:" for="idMejoraSal" />
-                            <p:selectOneMenu id="idMejoraSal" value="#{manejadorAumentoMejoraSalarial.newHistSal.idMejoraSal}" >
-                                <!-- TODO: update below reference to list of available items-->
-                                <f:selectItems value="#{fixme}"/>
-                            </p:selectOneMenu>
-                            <p:outputLabel value="IdEmpleado:" for="idEmpleado" />
-                            <p:selectOneMenu id="idEmpleado" value="#{manejadorAumentoMejoraSalarial.newHistSal.idEmpleado}" >
-                                <!-- TODO: update below reference to list of available items-->
-                                <f:selectItems value="#{fixme}"/>
-                            </p:selectOneMenu>
-                            <p:outputLabel value="TipoHistorial:" for="tipoHistorial" />
-                            <p:inputText id="tipoHistorial" value="#{manejadorAumentoMejoraSalarial.newHistSal.tipoHistorial}" title="TipoHistorial" />
-                            <p:outputLabel value="VerificacionHistorial:" for="verificacionHistorial" />
-                            <p:inputText id="verificacionHistorial" value="#{manejadorAumentoMejoraSalarial.newHistSal.verificacionHistorial}" title="VerificacionHistorial" />
-                            <p:outputLabel value="SalMin:" for="salMin" />
+                            <p:outputLabel value="Salario mínimo:" for="salMin" />
                             <p:inputText id="salMin" value="#{manejadorAumentoMejoraSalarial.newHistSal.salMin}" title="SalMin" />
-                            <p:outputLabel value="SalMax:" for="salMax" />
+                            <p:outputLabel value="Salario máximo:" for="salMax" />
                             <p:inputText id="salMax" value="#{manejadorAumentoMejoraSalarial.newHistSal.salMax}" title="SalMax" />
                         </p:panelGrid>
+                        <p:commandButton icon="fa fa-plus" value="Guardar" process="@this panel-new-historial" action="#{manejadorAumentoMejoraSalarial.saveMejoraSalarial()}" update="panel-new-historial" oncomplete="PF('dlgNewHistSal').hide();"/>
                     </p:dialog>
                     <p:dialog header="Editar historial salarial" widgetVar="dlgEditHistSal" responsive="true" modal="true" position="center top" style="padding: 10px;">
                         <p:panelGrid id="panel-edit-historial" columns="2">
