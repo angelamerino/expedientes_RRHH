@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="../../WEB-INF/templates/plantilla.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <div class="page-header">
+            <h1><strong>REGISTRO DE CAPACITACIONES</strong></h1>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading"><strong>Ingreso de Capacitaciones</strong></div>
+            <div class="panel-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-8">
+                            <h:form class="form-horizontal" prependId="false">
+                                <p:growl id="growl" showDetail="false"  autoUpdate="true" life="10000" />
+                                <div class="form-group">
+                                    <p:outputLabel for="temaCap" value="Tema de la Capacitacón:" styleClass="col-lg-4 control-label" />
+                                    <div class="col-lg-8">
+                                        <p:inputText id="temaCap" style="width: 100%; padding: 9px;" value="#{manejadorCapacitaciones.capacitaciones.temaCap}" required="true" requiredMessage="Ingrese Tema de Capacitación."/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <p:outputLabel for="facilitadorCap" value="Nombre de Facilitador:" styleClass="col-lg-4 control-label" />
+                                    <div class="col-lg-8">
+                                        <p:inputText style="width: 100%; padding: 9px;" id="facilitadorCap" value="#{manejadorCapacitaciones.capacitaciones.facilitadorCap}" required="true" requiredMessage="Ingrese Nombre de Facilitador." />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <p:outputLabel for="institucionCap" value="Institución que Proporciona el Facilitador:" styleClass="col-lg-4 control-label" />
+                                    <div class="col-lg-8">
+                                        <p:inputText  id="institucionCap" style="width: 100%; padding: 9px;" value="#{manejadorCapacitaciones.capacitaciones.institucionCap}" required="true" requiredMessage="Ingrse Institución."/>
+                                    </div>
+                                </div>                                
+                                <div class="form-group">
+                                    <p:outputLabel for="capasSelect" value="Año de la Capacitación:" styleClass="col-lg-4 control-label" />
+                                    <div class="col-lg-3">
+                                        <p:selectOneMenu id="capasSelect" value="#{manejadorCapacitaciones.anio}" style="width: 100%" required="true" requiredMessage="Seleccione un Año.">
+                                            <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                            <f:selectItems value="#{manejadorCapacitaciones.todosAnios()}" var="anio" itemLabel="#{anio.anio}" itemValue="#{anio.anio}"/>                                                    
+                                        </p:selectOneMenu>
+                                    </div>
+                                    <p:outputLabel for="numGrupo" value="Número de Grupo:" styleClass="col-lg-3 control-label" />
+                                    <div class="col-lg-2">
+                                        <p:inputText id="numGrupo" style="width: 100%; padding: 9px;" value="#{manejadorCapacitaciones.capacitaciones.numGrupo}" title="NumGrupo" required="true" requiredMessage="Ingrese Número de Grupo."/>
+                                    </div>
+                                </div>    
+                                <div class="form-group">
+                                    <p:outputLabel for="numHorasCap" value="Número de Horas para Capacitación:" styleClass="col-lg-4 control-label" />
+                                    <div class="col-lg-8">
+                                        <p:spinner validatorMessage="Horas deben ser en Enteros" style="margin-top: 10px" size="5" id="numHorasCap" value="#{manejadorCapacitaciones.capacitaciones.numHorasCap}" min="1" max="500" >
+                                            <f:validateLongRange minimum="1" maximum="500" />
+                                        </p:spinner>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-lg-4"></div>
+                                    <div class="col-lg-8">
+                                        <h:commandLink style="margin: 2px" styleClass="btn btn-info" value="Guardar" action="#{manejadorCapacitaciones.guardarCapacitacion()}"/>
+                                        <h:commandLink style="margin: 2px" styleClass="btn btn-info" value="Cancelar" action="#{manejadorCapacitaciones.cancelarCapacitacion()}" immediate="true"/>
+                                    </div>
+                                </div>
+                            </h:form>                              
+                        </div>
+                        <div class="col-md-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,330 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="../../WEB-INF/templates/plantilla.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <ui:define name="content">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h4>ESTUDIOS E IDIOMAS</h4>
+            </div>
+            <div class="panel-body">
+                <h:form prependId="false">
+                    <p:growl autoUpdate="true" showDetail="true"/>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12">
+                            <div class="form-group">
+                                <h:outputLabel value="Dirección Nacional:"/>
+                                <h:selectOneMenu id="dirNacionalFiltrarJefe" value="#{managerStudies.direccionNacional}" class="form-control">
+                                    <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                    <f:selectItems value="#{managerStudies.allDirNacionales()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
+                                    <f:ajax render="filtrarDependencia"/>
+                                </h:selectOneMenu>
+                            </div>
+                            <div class="form-group">
+                                <h:outputLabel value="Dependencia / Unidad organizativa:"/>
+                                <h:selectOneMenu id="filtrarDependencia" value="#{managerStudies.dependecia}" class="form-control">
+                                    <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                    <f:selectItems value="#{managerStudies.filteredDependencias()}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
+                                    <f:ajax render="tbl-emps"/>
+                                </h:selectOneMenu>
+                            </div>
+                            <div class="form-group">
+                                <!--Table empleados-->
+                                <p:dataTable id="tbl-emps" value="#{managerStudies.filteredEmployees()}" var="emp" rowKey="#{emp.idEmpleado}" scrollable="true" paginator="true" rows="10">
+                                    <p:column filterBy="#{emp.nombreEmpleado}" filterMatchMode="contains">
+                                        <f:facet name="header">
+                                            <h:outputText value="Nombre completo"/>
+                                        </f:facet>
+                                        <h:outputText value="#{emp.nombreEmpleado}"/>
+                                    </p:column>
+                                    <p:column filterBy="#{emp.nrEmpleado}" filterMatchMode="contains">
+                                        <f:facet name="header">
+                                            <h:outputText value="NR"/>
+                                        </f:facet>
+                                        <h:outputText value="#{emp.nrEmpleado}"/>
+                                    </p:column>
+                                    <p:column filterBy="#{emp.numDui}" filterMatchMode="contains">
+                                        <f:facet name="header">
+                                            <h:outputText value="DUI"/>
+                                        </f:facet>
+                                        <h:outputText value="#{emp.numDui}"/>
+                                    </p:column>
+                                    <p:column filterBy="#{emp.numNit}" filterMatchMode="contains">
+                                        <f:facet name="header">
+                                            <h:outputText value="NIT"/>
+                                        </f:facet>
+                                        <h:outputText value="#{emp.numNit}"/>
+                                    </p:column>
+                                    <p:column style="width: 150px;" styleClass="text-center">
+                                        <f:facet name="header">
+                                            <h:outputText value="Opc."/>
+                                        </f:facet>
+                                        <p:commandButton process="@this tbl-emps" update="tabview-estudios" icon="ui-icon-search" value="Ver detalle" oncomplete="PF('dlgStudiesLang').show();">
+                                            <f:setPropertyActionListener value="#{emp}" target="#{managerStudies.selectedEmp}"/>
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
+                        </div>
+                    </div>
+                    <p:dialog header="Estudios e idiomas" modal="true" widgetVar="dlgStudiesLang" position="center top" responsive="true" width="60%">
+                        <p:tabView id="tabview-estudios">
+                            <p:tab title="Formación">
+                                <div class="alert alert-info">
+                                    <p>A continuación verá listado los estudios para el empleado: <code>#{managerStudies.selectedEmp.nombreEmpleado}</code></p>
+                                </div>
+                                <p class="text-right">
+                                    <p:commandButton process="@this" update="panel-new-study" value="Nuevo estudio" icon="fa fa-plus" oncomplete="PF('dlgNewStudy').show();"/>
+                                </p>
+                                <!--Table estudios formales-->
+                                <p:dataTable id="tbl-estudios" value="#{managerStudies.fetchEstudios()}" var="estudioF" rowKey="#{estudioF.idEstudio}" paginator="true" rows="10" scrollable="true">
+                                    <p:column headerText="Profesión / Oficio" filterBy="#{estudioF.idProfOficio.nombreProfOficio}" filterMatchMode="contains" >
+                                        <h:outputText value="#{estudioF.idProfOficio.nombreProfOficio}"/>
+                                    </p:column>
+                                    <p:column headerText="Descripción" filterBy="#{estudioF.descripcionNoFormal}" filterMatchMode="contains" >
+                                        <h:outputText value="#{estudioF.descripcionNoFormal}"/>
+                                    </p:column>
+                                    <p:column headerText="Institución" filterBy="#{estudioF.institucionEstudio}" filterMatchMode="contains" >
+                                        <h:outputText value="#{estudioF.institucionEstudio}"/>
+                                    </p:column>
+                                    <p:column headerText="Año" filterBy="#{estudioF.anioEstudio}" filterMatchMode="contains" >
+                                        <h:outputText value="#{estudioF.anioEstudio}">
+                                            <f:convertDateTime pattern="yyyy" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="Tipo" filterBy="#{estudioF.tipoEstudio}" filterMatchMode="contains">
+                                        <h:outputText value="#{estudioF.tipoEstudio}"/>
+                                    </p:column>
+                                    <p:column headerText="Opc." style="width:100px; text-align: center;">
+                                        <p:commandButton icon="fa fa-pencil" title="Editar" process="@this" update="panel-edit-study"  onsuccess="PF('dlgEditStudy').show()">
+                                            <f:setPropertyActionListener value="#{estudioF}" target="#{managerStudies.selectedEstudio}"/> 
+                                        </p:commandButton>
+                                        <p:commandButton icon="fa fa-close" title="Eliminar" process="@this" update="tbl-estudios" action="#{managerStudies.removeStudy()}">
+                                            <f:setPropertyActionListener value="#{estudioF}" target="#{managerStudies.selectedEstudio}"/> 
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:tab>
+                            <p:tab title="Conocimientos de idioma">
+                                <div class="alert alert-info">
+                                    <p>A continuación verá listado los idiomas para el empleado: <code>#{managerStudies.selectedEmp.nombreEmpleado}</code></p>
+                                </div>
+                                <p class="text-right">
+                                    <p:commandButton process="@this" update="panel-new-lang" value="Nuevo idioma" icon="fa fa-plus" oncomplete="PF('dlgNewLang').show();"/>
+                                </p>
+                                <!--Table idiomas-->
+                                <p:dataTable id="tbl-langs" value="#{managerStudies.fetchIdiomaCaracts()}" var="idiomaCaract" scrollable="true" paginator="true" rows="10">
+                                    <p:column filterBy="#{idiomaCaract.idiomas.nombreIdioma}" filterMatchMode="contains">
+                                        <f:facet name="header">
+                                            <h:outputText value="Idioma"/>
+                                        </f:facet>
+                                        <h:outputText value="#{idiomaCaract.idiomas.nombreIdioma}"/>
+                                    </p:column>
+                                    <p:column filterBy="#{idiomaCaract.caracteristicasIdioma.caracteristicaIdioma}" filterMatchMode="contains">
+                                        <f:facet name="header">
+                                            <h:outputText value="Caracteristica"/>
+                                        </f:facet>
+                                        <h:outputText value="#{idiomaCaract.caracteristicasIdioma.caracteristicaIdioma}"/>
+                                    </p:column>
+                                    <p:column filterBy="#{idiomaCaract.idNivel.nombreNivel}" filterMatchMode="contains">
+                                        <f:facet name="header">
+                                            <h:outputText value="Nivel"/>
+                                        </f:facet>
+                                        <h:outputText value="#{idiomaCaract.idNivel.nombreNivel}"/>
+                                    </p:column>
+                                    <p:column filterBy="#{idiomaCaract.institucionIdioma}" filterMatchMode="contains">
+                                        <f:facet name="header">
+                                            <h:outputText value="Institución"/>
+                                        </f:facet>
+                                        <h:outputText value="#{idiomaCaract.institucionIdioma}"/>
+                                    </p:column>
+                                    <p:column headerText="Opc." style="width:150px; text-align: center;">
+                                        <p:commandButton icon="fa fa-pencil" title="Editar" process="@this" update="panel-edit-lang"  onsuccess="PF('dlgEditLang').show()">
+                                            <f:setPropertyActionListener value="#{idiomaCaract}" target="#{managerStudies.selectedLang}"/> 
+                                        </p:commandButton>
+                                        <p:commandButton icon="fa fa-close" title="Eliminar" process="@this" update="panel-edit-lang tbl-langs tbl-emps" action="#{managerStudies.removeLanguage()}">
+                                            <f:setPropertyActionListener value="#{idiomaCaract}" target="#{managerStudies.selectedLang}"/> 
+                                            <p:ajax update="tbl-langs"/>
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:tab>
+                        </p:tabView>
+                    </p:dialog>
+                    <p:dialog header="Nuevo estudio" widgetVar="dlgNewStudy" responsive="true" modal="true" width="35%" position="center top">
+                        <h:panelGroup id="panel-new-study">
+                            <div class="alert alert-info">
+                                <p>Ingrese la información de estudios para el empleado: <code>#{managerStudies.selectedEmp.nombreEmpleado}</code></p>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <h:outputLabel value="Oficio:" for="idProfOficio" />
+                                        <h:selectOneMenu id="idProfOficio" value="#{managerStudies.newEstudio.idProfOficio}" title="IdProfOficio" converter="#{profOficioConvertidor}" class="form-control">
+                                            <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                            <f:selectItems value="#{managerStudies.fetchOficios()}" var="oficio" itemLabel="#{oficio.nombreProfOficio}" itemValue="#{oficio}" />
+                                        </h:selectOneMenu>
+                                    </div>
+                                    <div class="form-group">
+                                        <h:outputLabel value="Descripción:" for="descripcionNoFormal" />
+                                        <h:inputText id="descripcionNoFormal" value="#{managerStudies.newEstudio.descripcionNoFormal}" title="DescripcionNoFormal" class="form-control"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <h:outputLabel value="Tipo estudio:" for="tipoEstudio" />
+                                        <h:selectOneMenu id="tipoEstudio" value="#{managerStudies.newEstudio.tipoEstudio}" title="TipoEstudio" required="true" requiredMessage="The TipoEstudio field is required." class="form-control">
+                                            <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                            <f:selectItem itemLabel="Formal" itemValue="FORMAL"/>
+                                            <f:selectItem itemLabel="No Formal" itemValue="NO FORMAL"/>
+                                        </h:selectOneMenu>
+                                    </div>
+                                    <div class="form-group">
+                                        <h:outputLabel value="Institución:" for="institucionEstudio" />
+                                        <h:inputText id="institucionEstudio" value="#{managerStudies.newEstudio.institucionEstudio}" title="InstitucionEstudio" required="true" requiredMessage="The InstitucionEstudio field is required." class="form-control"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <h:outputLabel value="Año:" for="anioEstudio" />
+                                        <h:inputText id="anioEstudio" value="#{managerStudies.newEstudio.anioEstudio}" title="AnioEstudio" required="true" requiredMessage="The AnioEstudio field is required." class="form-control">
+                                            <f:convertDateTime pattern="yyyy" />
+                                        </h:inputText>
+                                    </div>
+                                    <div class="form-group">
+                                        <p:commandButton icon="fa fa-plus" value="Guardar"  action="#{managerStudies.saveStudy()}" process="@this panel-new-study" update="panel-new-study tabview-estudios:tbl-estudios tbl-emps" oncomplete="PF('dlgNewStudy').hide();"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </h:panelGroup>
+                    </p:dialog>
+                    <p:dialog header="Editar estudio" widgetVar="dlgEditStudy" responsive="true" modal="true" width="35%" position="center top">
+                        <h:panelGroup id="panel-edit-study">
+                            <div class="alert alert-info">
+                                <p>Edite la información de estudios para el empleado: <code>#{managerStudies.selectedEmp.nombreEmpleado}</code></p>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <h:outputLabel value="Oficio:" for="idProfOficioEdit" />
+                                            <h:selectOneMenu id="idProfOficioEdit" value="#{managerStudies.selectedEstudio.idProfOficio}" title="IdProfOficio" converter="#{profOficioConvertidor}" class="form-control">
+                                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                                <f:selectItems value="#{managerStudies.fetchOficios()}" var="oficio" itemLabel="#{oficio.nombreProfOficio}" itemValue="#{oficio}" />
+                                            </h:selectOneMenu>
+                                        </div>
+                                        <div class="form-group">
+                                            <h:outputLabel value="Descripción:" for="descripcionNoFormalEdit" />
+                                            <h:inputText id="descripcionNoFormalEdit" value="#{managerStudies.selectedEstudio.descripcionNoFormal}" title="DescripcionNoFormal" class="form-control"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <h:outputLabel value="Tipo estudio:" for="tipoEstudioEdit" />
+                                            <h:selectOneMenu id="tipoEstudioEdit" value="#{managerStudies.selectedEstudio.tipoEstudio}" title="TipoEstudio" required="true" requiredMessage="The TipoEstudio field is required." class="form-control">
+                                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                                <f:selectItem itemLabel="Formal" itemValue="FORMAL"/>
+                                                <f:selectItem itemLabel="No Formal" itemValue="NO FORMAL"/>
+                                            </h:selectOneMenu>
+                                        </div>
+                                        <div class="form-group">
+                                            <h:outputLabel value="Institución:" for="institucionEstudioEdit" />
+                                            <h:inputText id="institucionEstudioEdit" value="#{managerStudies.selectedEstudio.institucionEstudio}" title="InstitucionEstudio" required="true" requiredMessage="The InstitucionEstudio field is required." class="form-control"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <h:outputLabel value="Año:" for="anioEstudioEdit" />
+                                            <h:inputText id="anioEstudioEdit" value="#{managerStudies.selectedEstudio.anioEstudio}" title="AnioEstudio" required="true" requiredMessage="The AnioEstudio field is required." class="form-control">
+                                                <f:convertDateTime pattern="yyyy" />
+                                            </h:inputText>
+                                        </div>
+                                        <div class="form-group">
+                                            <p:commandButton icon="fa fa-plus" value="Guardar"  action="#{managerStudies.editStudy()}" process="@this panel-edit-study" update="panel-edit-study tabview-estudios:tbl-estudios tbl-emps" oncomplete="PF('dlgEditStudy').hide();"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </h:panelGroup>
+                    </p:dialog>
+                    <p:dialog header="Nuevo idioma" widgetVar="dlgNewLang" responsive="true" modal="true" width="35%" position="center top">
+                        <h:panelGroup id="panel-new-lang">
+                            <div class="alert alert-info">
+                                <p>Ingrese la información para idiomas para el empleado: <code>#{managerStudies.selectedEmp.nombreEmpleado}</code></p>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <h:outputLabel value="Idioma:" for="idiomas" />
+                                        <h:selectOneMenu id="idiomas" value="#{managerStudies.newLang.idiomas}" title="Idiomas" required="true" requiredMessage="The Idiomas field is required." styleClass="form-control" converter="#{idiomasConvertidor}">
+                                            <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                            <f:selectItems value="#{managerStudies.allIdiomas()}" var="idioma" itemLabel="#{idioma.nombreIdioma}" itemValue="#{idioma}"/>
+                                        </h:selectOneMenu>
+                                    </div>
+                                    <div class="form-group">
+                                        <h:outputLabel value="Característica:" for="caracteristicasIdioma" />
+                                        <h:selectOneMenu id="caracteristicasIdioma" value="#{managerStudies.newLang.caracteristicasIdioma}" title="CaracteristicasIdioma" required="true" requiredMessage="The CaracteristicasIdioma field is required." styleClass="form-control" converter="#{caracteristicasIdiomaConvertidor}">
+                                            <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                            <f:selectItems value="#{managerStudies.allCaracteristicasIdioma()}" var="caractIdiom" itemLabel="#{caractIdiom.caracteristicaIdioma}" itemValue="#{caractIdiom}"/>
+                                        </h:selectOneMenu>
+                                    </div>
+                                    <div class="form-group">
+                                        <h:outputLabel value="Nivel:" for="idNivel" />
+                                        <h:selectOneMenu id="idNivel" value="#{managerStudies.newLang.idNivel}" title="IdNivel" styleClass="form-control" converter="#{nivelIdiomaConvertidor}">
+                                            <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                            <f:selectItems value="#{managerStudies.allNiveles()}" var="nivel" itemLabel="#{nivel.nombreNivel}" itemValue="#{nivel}"/>
+                                        </h:selectOneMenu>
+                                    </div>
+                                    <div class="form-group">
+                                        <h:outputLabel value="Institución:" for="institucionIdioma" />
+                                        <h:inputText id="institucionIdioma" value="#{managerStudies.newLang.institucionIdioma}" title="InstitucionIdioma" styleClass="form-control"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <p:commandButton icon="fa fa-plus" value="Guardar"  action="#{managerStudies.saveLanguage()}" process="@this panel-new-lang" update="panel-new-lang tabview-estudios:tbl-langs tbl-emps" oncomplete="PF('dlgNewLang').hide();"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </h:panelGroup>
+                    </p:dialog>
+                    <p:dialog header="Editar idioma" widgetVar="dlgEditLang" responsive="true" modal="true" width="35%" position="center top">
+                        <h:panelGroup id="panel-edit-lang">
+                            <div class="alert alert-info">
+                                <p>Ingrese la información para idiomas para el empleado: <code>#{managerStudies.selectedEmp.nombreEmpleado}</code></p>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <h:outputLabel value="Idioma:" for="idiomasEdit" />
+                                        <h:selectOneMenu id="idiomasEdit" value="#{managerStudies.selectedLang.idiomas}" title="Idiomas" required="true" requiredMessage="The Idiomas field is required." converter="#{idiomasConvertidor}" styleClass="form-control">
+                                            <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                            <f:selectItems value="#{managerStudies.allIdiomas()}" var="idioma" itemLabel="#{idioma.nombreIdioma}" itemValue="#{idioma}"/>
+                                        </h:selectOneMenu>
+                                    </div>
+                                    <div class="form-group">
+                                        <h:outputLabel value="Característica:" for="caracteristicasIdiomaEdit" />
+                                        <h:selectOneMenu id="caracteristicasIdiomaEdit" value="#{managerStudies.selectedLang.caracteristicasIdioma}" title="CaracteristicasIdioma" required="true" requiredMessage="The CaracteristicasIdioma field is required." converter="#{caracteristicasIdiomaConvertidor}" styleClass="form-control">
+                                            <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                            <f:selectItems value="#{managerStudies.allCaracteristicasIdioma()}" var="caractIdiom" itemLabel="#{caractIdiom.caracteristicaIdioma}" itemValue="#{caractIdiom}"/>
+                                        </h:selectOneMenu>
+                                    </div>
+                                    <div class="form-group">
+                                        <h:outputLabel value="Nivel:" for="idNivelEdit" />
+                                        <h:selectOneMenu id="idNivelEdit" value="#{managerStudies.selectedLang.idNivel}" title="IdNivel" converter="#{nivelIdiomaConvertidor}" styleClass="form-control">
+                                            <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                            <f:selectItems value="#{managerStudies.allNiveles()}" var="nivel" itemLabel="#{nivel.nombreNivel}" itemValue="#{nivel}"/>
+                                        </h:selectOneMenu>
+                                    </div>
+                                    <div class="form-group">
+                                        <h:outputLabel value="Institución:" for="institucionIdiomaEdit" />
+                                        <h:inputText id="institucionIdiomaEdit" value="#{managerStudies.selectedLang.institucionIdioma}" title="InstitucionIdioma" styleClass="form-control"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <p:commandButton icon="fa fa-pencil" value="Editar"  action="#{managerStudies.editLanguage()}" process="@this panel-edit-lang" update="panel-edit-lang tabview-estudios:tbl-langs tbl-emps" oncomplete="PF('dlgEditLang').hide();"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </h:panelGroup>
+                    </p:dialog>
+                </h:form>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>

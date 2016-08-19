@@ -10,7 +10,6 @@
             <var>msgs</var>
         </resource-bundle>
     </application>
-    
     <navigation-rule>
         <navigation-case>
             <from-outcome>inicio</from-outcome>
@@ -19,228 +18,227 @@
         </navigation-case>
         <navigation-case>
             <from-outcome>empleado</from-outcome>
-            <to-view-id>/contenido/reg_empleados.xhtml</to-view-id>
+            <to-view-id>/contenido/registro-ui/reg_empleados.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>estudios</from-outcome>
-            <to-view-id>/contenido/gestion_estudios_emp.xhtml</to-view-id>
+            <to-view-id>/contenido/gestion-ui/gestion_estudios_emp.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>contactos</from-outcome>
-            <to-view-id>/contenido/gestion_contactos_emergencia_emp.xhtml</to-view-id>
+            <to-view-id>/contenido/gestion-ui/gestion_contactos_emergencia_emp.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>dependientes</from-outcome>
-            <to-view-id>/contenido/gestion_dependientes_familia_emp.xhtml</to-view-id>
+            <to-view-id>/contenido/gestion-ui/gestion_dependientes_familia_emp.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>experiencia</from-outcome>
-            <to-view-id>/contenido/gestion_experiencia_laboral_emp.xhtml</to-view-id>
+            <to-view-id>/contenido/gestion-ui/gestion_experiencia_laboral_emp.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>gestion_empleados</from-outcome>
-            <to-view-id>/contenido/gestion_empleados.xhtml</to-view-id>
+            <to-view-id>/contenido/gestion-ui/gestion_empleados.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>editar_empleados</from-outcome>
-            <to-view-id>/contenido/gestion_editar_empleados.xhtml</to-view-id>
+            <to-view-id>/contenido/gestion-ui/gestion_editar_empleados.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>prendas_productos</from-outcome>
-            <to-view-id>/contenido/reg_prendas_productos.xhtml</to-view-id>
+            <to-view-id>/contenido/registro-ui/reg_prendas_productos.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>gestion_prendas_productos</from-outcome>
-            <to-view-id>/contenido/gestion_prendas_productos.xhtml</to-view-id>
+            <to-view-id>/contenido/gestion-ui/gestion_prendas_productos.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>prestaciones</from-outcome>
-            <to-view-id>/contenido/reg_prestaciones.xhtml</to-view-id>
+            <to-view-id>/contenido/registro-ui/reg_prestaciones.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>gestion_prestaciones</from-outcome>
-            <to-view-id>/contenido/gestion_prestaciones.xhtml</to-view-id>
+            <to-view-id>/contenido/gestion-ui/gestion_prestaciones.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>asignacion_prestaciones</from-outcome>
-            <to-view-id>/contenido/reg_asignacion_prestaciones.xhtml</to-view-id>
+            <to-view-id>/contenido/registro-ui/reg_asignacion_prestaciones.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>gestion_asignacion_prestaciones</from-outcome>
-            <to-view-id>/contenido/gestion_asignacion_prestaciones.xhtml</to-view-id>
+            <to-view-id>/contenido/gestion-ui/gestion_asignacion_prestaciones.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>capacitaciones</from-outcome>
-            <to-view-id>/contenido/reg_capacitaciones.xhtml</to-view-id>
+            <to-view-id>/contenido/registro-ui/reg_capacitaciones.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>gestion_capacitaciones</from-outcome>
-            <to-view-id>/contenido/gestion_capacitaciones.xhtml</to-view-id>
+            <to-view-id>/contenido/gestion-ui/gestion_capacitaciones.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>asignacion_capacitaciones</from-outcome>
-            <to-view-id>/contenido/reg_asignacion_capacitaciones.xhtml</to-view-id>
+            <to-view-id>/contenido/registro-ui/reg_asignacion_capacitaciones.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>gestion_asignacion_capacitaciones</from-outcome>
-            <to-view-id>/contenido/gestion_asignacion_capacitaciones.xhtml</to-view-id>
+            <to-view-id>/contenido/gestion-ui/gestion_asignacion_capacitaciones.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>asistencia_capacitaciones</from-outcome>
-            <to-view-id>/contenido/reg_asistencia_capacitaciones.xhtml</to-view-id>
+            <to-view-id>/contenido/registro-ui/reg_asistencia_capacitaciones.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>gestion_asistencia_capacitaciones</from-outcome>
-            <to-view-id>/contenido/gestion_asistencia_capacitaciones.xhtml</to-view-id>
+            <to-view-id>/contenido/gestion-ui/gestion_asistencia_capacitaciones.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>gestion_movimientos</from-outcome>
-            <to-view-id>/contenido/gestion_movimientos_emp.xhtml</to-view-id>
+            <to-view-id>/contenido/gestion-ui/gestion_movimientos_emp.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>gestion_mejora_salarial</from-outcome>
-            <to-view-id>/contenido/gestion_mejora_salarial.xhtml</to-view-id>
+            <to-view-id>/contenido/gestion-ui/gestion_mejora_salarial.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>reg_aumento_salarial</from-outcome>
-            <to-view-id>/contenido/reg_aumento_salarial.xhtml</to-view-id>
+            <to-view-id>/contenido/registro-ui/reg_aumento_salarial.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>gestion_aumento_salarial</from-outcome>
-            <to-view-id>/contenido/gestion_aumento_salarial.xhtml</to-view-id>
+            <to-view-id>/contenido/gestion-ui/gestion_aumento_salarial.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>reg_descuentos_emp</from-outcome>
-            <to-view-id>/contenido/reg_descuentos_emp.xhtml</to-view-id>
+            <to-view-id>/contenido/registro-ui/reg_descuentos_emp.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>gestion_descuentos_emp</from-outcome>
-            <to-view-id>/contenido/gestion_descuentos_emp.xhtml</to-view-id>
+            <to-view-id>/contenido/gestion-ui/gestion_descuentos_emp.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>reg_reconocimientos</from-outcome>
-            <to-view-id>/contenido/reg_reconocimientos.xhtml</to-view-id>
+            <to-view-id>/contenido/registro-ui/reg_reconocimientos.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>gestion_reconocimientos</from-outcome>
-            <to-view-id>/contenido/gestion_reconocimientos.xhtml</to-view-id>
+            <to-view-id>/contenido/gestion-ui/gestion_reconocimientos.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>reg_amonestaciones_sanciones</from-outcome>
-            <to-view-id>/contenido/reg_amonestaciones_sanciones.xhtml</to-view-id>
+            <to-view-id>/contenido/registro-ui/reg_amonestaciones_sanciones.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>gestion_amonestaciones_sanciones</from-outcome>
-            <to-view-id>/contenido/gestion_amonestaciones_sanciones.xhtml</to-view-id>
+            <to-view-id>/contenido/gestion-ui/gestion_amonestaciones_sanciones.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>evaluacion</from-outcome>
-            <to-view-id>/contenido/formulario_evalu_desempenio.xhtml</to-view-id>
+            <to-view-id>/contenido/formularios-ui/formulario_evalu_desempenio.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>acciones</from-outcome>
-            <to-view-id>/contenido/formulario_acciones_personal.xhtml</to-view-id>
+            <to-view-id>/contenido/formularios-ui/formulario_acciones_personal.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
-         <navigation-case>
+        <navigation-case>
             <from-outcome>cat_direcciones</from-outcome>
-            <to-view-id>/contenido/gestion_catalogo_direcciones_nacionales.xhtml</to-view-id>
+            <to-view-id>/contenido/gestion-ui/gestion_catalogo_direcciones_nacionales.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
-         <navigation-case>
+        <navigation-case>
             <from-outcome>cat_dependencias</from-outcome>
-            <to-view-id>/contenido/gestion_catalogo_dependencias.xhtml</to-view-id>
+            <to-view-id>/contenido/gestion-ui/gestion_catalogo_dependencias.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
-         <navigation-case>
+        <navigation-case>
             <from-outcome>cat_sanciones</from-outcome>
-            <to-view-id>/contenido/gestion_catalogo_Tipo_sancion.xhtml</to-view-id>
+            <to-view-id>/contenido/gestion-ui/gestion_catalogo_Tipo_sancion.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>catalogos</from-outcome>
-            <to-view-id>/contenido/catalogos.xhtml</to-view-id>
+            <to-view-id>/contenido/catalogos-ui/catalogos.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>reg_usuario</from-outcome>
-            <to-view-id>/contenido/reg_usuarios.xhtml</to-view-id>
+            <to-view-id>/contenido/registro-ui/reg_usuarios.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>gestion_usuario</from-outcome>
-            <to-view-id>/contenido/gestion_usuarios.xhtml</to-view-id>
+            <to-view-id>/contenido/gestion-ui/gestion_usuarios.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>rep_genero</from-outcome>
-            <to-view-id>/contenido/generar_rep_genero.xhtml</to-view-id>
+            <to-view-id>/contenido/reportes-ui/generar_rep_genero.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>rep_dir_dep</from-outcome>
-            <to-view-id>/contenido/generar_rep_dir_dep.xhtml</to-view-id>
+            <to-view-id>/contenido/reportes-ui/generar_rep_dir_dep.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
-        
-         <navigation-case>
+        <navigation-case>
             <from-outcome>rep_capacitaciones_emp</from-outcome>
-            <to-view-id>/contenido/generar_rep_capacitaciones_emp.xhtml</to-view-id>
+            <to-view-id>/contenido/reportes-ui/generar_rep_capacitaciones_emp.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
-         <navigation-case>
+        <navigation-case>
             <from-outcome>rep_asistencia_cap</from-outcome>
-            <to-view-id>/contenido/generar_rep_asistencia_cap.xhtml</to-view-id>
+            <to-view-id>/contenido/reportes-ui/generar_rep_asistencia_cap.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>rep_emp_prestacion</from-outcome>
-            <to-view-id>/contenido/generar_rep_emp_prestacion.xhtml</to-view-id>
+            <to-view-id>/contenido/reportes-ui/generar_rep_emp_prestacion.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>rep_costo_pres_emp</from-outcome>
-            <to-view-id>/contenido/generar_rep_costo_pres_emp.xhtml</to-view-id>
+            <to-view-id>/contenido/reportes-ui/generar_rep_costo_pres_emp.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>rep_hijos_emp_edad</from-outcome>
-            <to-view-id>/contenido/generar_rep_hijos_emp_edad.xhtml</to-view-id>
+            <to-view-id>/contenido/reportes-ui/generar_rep_hijos_emp_edad.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>rep_emp_padres_familia</from-outcome>
-            <to-view-id>/contenido/generar_rep_emp_padres_familia.xhtml</to-view-id>
+            <to-view-id>/contenido/reportes-ui/generar_rep_emp_padres_familia.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>

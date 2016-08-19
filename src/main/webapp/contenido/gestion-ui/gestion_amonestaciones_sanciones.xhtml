@@ -1,0 +1,223 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="../../WEB-INF/templates/plantilla.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <link href="#{request.contextPath}/resources/datatables/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
+        <div class="page-header">
+            <h1><strong>GESTIÓN DE AMONESTACIONES O SANCIONES</strong></h1>
+            <h:form prependId="false">
+                <p:growl id="growl" showDetail="false"  autoUpdate="true" life="10000" />
+                <h:commandLink value="Nuevo Registro" styleClass="btn btn-info pull-right"  style="text-decoration:none;" action="#{manejadorAmonestacionesSanciones.nuevaAmonestacionSancion()}" immediate="true" />
+            </h:form>
+            <div class="clearfix" ></div>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading"><strong>Editar / Eliminar Amonestaciones o Sanciones</strong></div>
+            <div class="panel-body">
+                <div class="container-fluid">
+
+                    <div class="table table-responsive">
+                        <f:view>
+                            <h:form prependId="false">
+                                <h:panelGroup id ="tabla">
+                                    <h:dataTable id="listSanciones" value="#{manejadorAmonestacionesSanciones.todasSanciones()}" var="item" style="font-size: 14px" styleClass="table table-striped table-hover">
+                                        <h:column>
+
+                                        </h:column>
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <center>
+                                                    <h:outputText value="Fecha"/>
+                                                </center>
+                                            </f:facet>
+                                            <center>
+                                                <h:outputText value="#{item.fechaSancion}">
+                                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                                </h:outputText>
+                                            </center>
+                                        </h:column>
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <h:outputText value="Empleado"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.idEmpleado.nombreEmpleado}"/>
+                                        </h:column>
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <center>
+                                                    <h:outputText value="Tipo de Sanción"/>
+                                                </center>
+                                            </f:facet>
+                                            <center>
+                                                <h:outputText value="#{item.idTipoSancion.nombreTipoSancion}"/>
+                                            </center>
+                                        </h:column>
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <center>
+                                                    <h:outputText value="Grado de Sanción"/>
+                                                </center>
+                                            </f:facet>
+                                            <center>
+                                                <h:outputText value="#{item.idTipoSancion.idGradoSancion.nombreGradoSancion}"/>
+                                            </center>
+                                        </h:column>
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <h:outputText value="Descripción"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.descripcionSancion}"/>
+                                        </h:column>
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <center>
+                                                    <h:outputText value="Editar/Eliminar"/>
+                                                </center>
+                                            </f:facet>
+                                            <center>
+                                                <h:commandLink styleClass="btn-sm glyphicon glyphicon-pencil" style="text-decoration:none;" title="Editar">
+                                                    <f:setPropertyActionListener value="#{item}" target="#{manejadorAmonestacionesSanciones.sanciones}"/>                                                
+                                                    <f:setPropertyActionListener value="#{item.idTipoSancion.idTipoSancion}" target="#{manejadorAmonestacionesSanciones.tipoSancion}"/>
+                                                    <f:setPropertyActionListener value="#{item.idTipoSancion.idGradoSancion.idGradoSancion}" target="#{manejadorAmonestacionesSanciones.gradoSancion}"/>
+                                                    <p:ajax update="panelEditar" />
+                                                    <p:ajax update="tabla"  onsuccess="PF('sancionEditar').show()"/>
+                                                </h:commandLink>
+                                                <h:commandLink actionListener="#{manejadorAmonestacionesSanciones.AnomestacionSancionSeleccionada(item)}" styleClass="btn-sm glyphicon glyphicon-remove" style="text-decoration:none;" title="Eliminar" immediate="true">
+                                                    <p:ajax update="tabla"  onsuccess="PF('confirmation').show()"/>
+                                                </h:commandLink>                                                        
+                                            </center>
+                                        </h:column>
+                                    </h:dataTable>
+                                </h:panelGroup>
+                            </h:form>
+                        </f:view>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        
+        <p:confirmDialog  message="Desea Eliminar Amonestación/Sanción de Empleado" header="Confirmación"  closable="false" severity="info" widgetVar="confirmation">
+            <h:form prependId="false" class="form-horizontal">
+                <h:commandLink value="Aceptar" actionListener="#{manejadorAmonestacionesSanciones.eliminarAmonestacionSancion()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true" />
+                <h:commandLink value="Cancelar" actionListener="#{manejadorAmonestacionesSanciones.cancelarEditar()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true"/>
+            </h:form>
+        </p:confirmDialog>
+
+        <p:dialog header="Editar Amonestación o Sanción" widgetVar="sancionEditar" closable="false" modal="true" height="auto" width="60%" resizable="false" position="center,top" draggable="false" styleClass="disable-scroll">
+            <div class="row">
+                <div class="col-md-12">
+                    <h:form prependId="false" class="form-horizontal">
+                        <h:panelGroup id ="panelEditar">
+                            
+                            <div class="form-group">
+                                <h:outputLabel value="Empleado:" styleClass="col-lg-3 control-label"/>
+                                <div class="col-lg-8">
+                                    <h:outputText styleClass="form-control" id="empleado" value="#{manejadorAmonestacionesSanciones.sanciones.idEmpleado.nombreEmpleado}"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <p:outputLabel for="idGradoSancion" value="Grado de Sanción:" styleClass="col-lg-3 control-label" />
+                                <div class="col-lg-8">
+                                    <p:selectOneMenu style="width: 100%;" id="idGradoSancion" value="#{manejadorAmonestacionesSanciones.gradoSancion}" required="true" requiredMessage="Seleccione Grado de Sanción">
+                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                        <f:selectItems value="#{manejadorAmonestacionesSanciones.todosGradosSancion()}" var="grado" itemLabel="#{grado.nombreGradoSancion}" itemValue="#{grado.idGradoSancion}"/>
+                                        <f:ajax render="idTipoSancion" />
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <p:outputLabel for="idTipoSancion" value="Tipo de Sanción" styleClass="col-lg-3 control-label" />
+                                <div class="col-lg-8">
+                                    <p:selectOneMenu style="width: 100%;" id="idTipoSancion" value="#{manejadorAmonestacionesSanciones.tipoSancion}" required="true" requiredMessage="Seleccione un Tipo de Sanción">
+                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                        <f:selectItems value="#{manejadorAmonestacionesSanciones.todosTipoSancionIdGradoSancion()}" var="tipo" itemLabel="#{tipo.nombreTipoSancion}" itemValue="#{tipo.idTipoSancion}"/>
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <p:outputLabel for="descripcionSancion" value="Descripción:" styleClass="col-lg-3 control-label" />
+                                <div class="col-lg-8">
+                                    <p:inputTextarea id="descripcionSancion" rows="5" style="width: 100%"  value="#{manejadorAmonestacionesSanciones.sanciones.descripcionSancion}" queryDelay="750" minQueryLength="4"  required="true" requiredMessage="Ingrese una Descripción de la Sanción" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <p:outputLabel for="fechaSancion" value="Fecha de la Sanción:" styleClass="col-lg-3 control-label" />
+                                <div class="col-lg-8">
+                                    <p:calendar id="fechaSancion" value="#{manejadorAmonestacionesSanciones.sanciones.fechaSancion}" required="true" requiredMessage="Ingrese Fecha de Sanción" locale="es" navigator="true" pattern="dd/MM/yyyy" yearRange="c-10:c+10" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-lg-3"></div>
+                                <div class="col-lg-8">
+                                    <h:commandLink style="margin: 2px; color: white" styleClass="btn btn-info" value="Modificar" action="#{manejadorAmonestacionesSanciones.editarAmonestacionSancion()}" >
+                                        <p:ajax update="panelEditar" process="panelEditar" />
+                                    </h:commandLink>
+                                    <h:commandLink style="margin: 2px; color: white" styleClass="btn btn-info" value="Cancelar" action="#{manejadorAmonestacionesSanciones.cancelar()}" immediate="true"/>
+                                </div>
+                            </div>
+                        </h:panelGroup>
+                    </h:form>
+                </div>
+            </div>
+        </p:dialog>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                var t = $('#listSanciones').DataTable({
+                    "columnDefs": [{
+                            "searchable": false,
+                            "orderable": false,
+                            "targets": 0
+                        }],
+                    "order": [[1, 'asc']],
+                    "oLanguage": {
+                        "sProcessing": "Procesando...",
+                        "sLengthMenu": "Mostrar _MENU_ registros",
+                        "sZeroRecords": "No se encontraron resultados",
+                        "sEmptyTable": "Ningún dato disponible en esta tabla",
+                        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                        "sInfoPostFix": "",
+                        "sSearch": "Buscar:",
+                        "sUrl": "",
+                        "sInfoThousands": ",",
+                        "sLoadingRecords": "Cargando...",
+                        "oPaginate": {
+                            "sFirst": "Primero",
+                            "sLast": "Último",
+                            "sNext": "Siguiente",
+                            "sPrevious": "Anterior"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                        }
+                    }
+                });
+
+                t.on('order.dt search.dt', function () {
+                    t.column(0, {search: 'applied', order: 'applied'}).nodes().each(function (cell, i) {
+                        cell.innerHTML = i + 1;
+                    });
+                }).draw();
+            });
+        </script>
+        <script src="#{request.contextPath}/resources/datatables/jquery.dataTables.min.js" type="text/javascript"></script>
+    </ui:define>
+
+</ui:composition>

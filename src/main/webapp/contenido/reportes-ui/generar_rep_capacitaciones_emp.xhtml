@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="../../WEB-INF/templates/plantilla.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <div class="page-header">
+            <h1><strong>REPORTE CAPACITACIONES POR EMPLEADO</strong></h1>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading"><strong>Seleccionar parámetros para generación de reporte</strong></div>
+            <div class="panel-body">
+                <div class="container-fluid">
+                    <f:view>
+                        <h:form prependId="false" class="form-horizontal">
+                            <p:growl id="growl" showDetail="false"  autoUpdate="true" life="10000" /> 
+                            <div class="pull-left col-md-6">
+                                <h:panelGroup>
+                                    <div>
+                                        <p:outputLabel for="nr" value="NR del Empleado:" styleClass="control-label col-md-4"/>
+                                        <div class="form-group">
+                                            <div class="col-md-5">
+                                                <p:inputMask id="nr" style="width: 100%; padding: 9px;" value="#{manejadorCapacitaciones.NR}" mask="NR 9999-999999-999-9"/>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <h:commandButton  class="btn btn-info" actionListener="#{manejadorCapacitaciones.buscarNR}" value="Buscar" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p:outputLabel for="nr" value="#{manejadorCapacitaciones.nombreEmp}" styleClass="col-md-6"/>
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <p:commandLink id="xls" ajax="false" styleClass="pull-right">  
+                                    <h:graphicImage value="#{pageContext.contextPath}/resources/images/excel_icon_peq.png" />  
+
+                                    <pe:exporter 
+                                        type="xlsx" 
+                                        target="listaEmpCap" 
+                                        fileName="Reporte_Capacitaciones_Por_Empleado"                                         
+                                        orientation="Portrait"                                                   
+
+                                        facetBackground="#CCE5FF" 
+                                        facetFontSize="12" 
+                                        facetFontColor="#3399ff" 
+                                        facetFontStyle="BOLD"
+
+                                        cellFontColor="#202020" 
+                                        cellFontSize="11" 
+                                        cellFontStyle="NORMAL"
+
+                                        encoding="ISO-8859-1" />
+                                </p:commandLink> 
+
+
+
+                                <p:commandLink ajax="false" id="pdf" styleClass="pull-right" action="#{manejadorCapacitaciones.rep_cap_emp()}">  
+                                    <h:graphicImage value="#{pageContext.contextPath}/resources/images/pdf_icon_peq.jpg" />  
+                                    
+                                      
+                                </p:commandLink> 
+
+
+
+                            </div>
+                            <div class="clearfix" ></div>
+                            <br/>
+
+                            <p:dataTable value="#{manejadorCapacitaciones.reporteCapacitacionesEmp()}" var="item"
+                                         styleClass="table table-striped table-hover" 
+                                         id="listaEmpCap"
+                                         widgetVar="listaEmpCap"
+                                         emptyMessage="" 
+                                         rows="10"
+                                         paginator="true"
+                                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         rowsPerPageTemplate="5,10,15"
+                                         paginatorPosition="bottom">
+
+                                <p:column filterBy="#{item.idCap.temaCap}" filterMatchMode="contains" style="width:30%;  font-size: 12px; text-align: center;">
+                                    <f:facet name="header" >
+                                        <h:outputText value="Tema de Capacitación"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.idCap.temaCap}"/>
+                                </p:column>
+                                <p:column filterBy="#{item.idCap.facilitadorCap}" filterMatchMode="contains" style="width:30%; font-size: 12px; text-align: center;">
+                                    <f:facet name="header" >
+                                        <h:outputText value="Facilitador"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.idCap.facilitadorCap}"/>
+                                </p:column>
+                                <p:column filterBy="#{item.idCap.numHorasCap}" filterMatchMode="contains" style="width:20%; font-size: 12px; text-align: center;">
+                                    <f:facet name="header" >
+                                        <h:outputText value="Número Horas Recibidas"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.idCap.numHorasCap}" style="text-align: center;"/>
+                                </p:column>
+                                <p:column filterBy="#{item.capAsistida}" filterMatchMode="contains" style="width:20%; font-size: 12px; text-align: center; ">
+                                    <f:facet name="header" >
+                                        <h:outputText value="Asistió a Capacitación"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.capAsistida == 'true' ? 'Si' : 'No'}" style="text-align: center;" />
+                                </p:column>
+
+                            </p:dataTable>
+                        </h:form>
+                    </f:view>
+
+                </div>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>

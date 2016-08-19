@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="../../WEB-INF/templates/plantilla.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <div class="page-header">
+            <h1><strong>REPORTE DE EMPLEADOS POR TIPO DE PRESTACIÓN</strong></h1>
+        </div>
+        <div class="panel panel-info">
+            <div class="panel-heading"><strong>Seleccionar parámetros para generación de reporte</strong></div>
+            <div class="panel-body">
+                <h:form prependId="false" class="form-horizontal">
+                    <p:growl id="growl" autoUpdate="true" life="10000" />
+                    <h:panelGroup id="busqueda">
+                        <div class="pull-left col-md-6">
+                            <div class="form-group">
+                                <p:outputLabel for="pres" value="Prestacion:" styleClass="col-lg-3 control-label"/>
+                                <div class="col-lg-8">
+                                    <p:selectOneMenu style="width: 100%;"  id="pres" value="#{manejadorPrestaciones.idPresGestion}" required="true" requiredMessage="Seleccione una prestacion">
+                                        <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="false" itemValue="#{0}"/>
+                                        <f:selectItems value="#{manejadorPrestaciones.todasPrestaciones()}" var="prest" itemLabel="#{prest.idTipoPrestacion.nombreTipoPrestacion}" itemValue="#{prest.idPrestacion}"/>
+                                        <f:ajax render="tabla" />
+                                    </p:selectOneMenu>
+                                </div>                                    
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <p:commandLink id="xls" ajax="false" styleClass="pull-right">  
+                                <h:graphicImage value="#{pageContext.contextPath}/resources/images/excel_icon_peq.png" />  
+
+                                <pe:exporter 
+                                    type="xlsx" 
+                                    target="tabla" 
+                                    fileName="Reporte_Empleados_Prestacion"                                         
+                                    orientation="Portrait"                                                   
+
+                                    facetBackground="#CCE5FF" 
+                                    facetFontSize="12" 
+                                    facetFontColor="#3399ff" 
+                                    facetFontStyle="BOLD"
+
+                                    cellFontColor="#202020" 
+                                    cellFontSize="11" 
+                                    cellFontStyle="NORMAL"
+
+                                    encoding="ISO-8859-1" />
+                            </p:commandLink> 
+
+                            <p:commandLink id="pdf" ajax="false" styleClass="pull-right" action="#{manejadorPrestaciones.generarReporte()}">  
+                                <h:graphicImage value="#{pageContext.contextPath}/resources/images/pdf_icon_peq.jpg" />   
+                            </p:commandLink> 
+
+
+
+                        </div>
+                    </h:panelGroup>
+
+                    <div class="clearfix" ></div>
+                    <br/>
+                    <h:panelGroup>
+                        <p:dataTable id ="tabla" value="#{manejadorPrestaciones.empleadoPrestaciones()}" var="item" 
+                                     emptyMessage="" 
+                                     rows="10"
+                                     paginator="true"
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15"
+                                     widgetVar="listado"
+                                     paginatorPosition="bottom">
+                           
+                            <p:column filterBy="#{item.nombreEmpleado}" filterMatchMode="contains" filterStyle="display:none">
+                                <f:facet name="header" >
+                                        <h:outputText value="Nombre del Empleado"/>
+                                    </f:facet>
+                                <h:outputText value="#{item.nombreEmpleado}"/>
+                            </p:column>
+                            <p:column filterBy="#{item.idDependenciaF.idDirNac.nombreDirNac}"  filterMatchMode="contains" filterStyle="display:none">
+                                <f:facet name="header" >
+                                        <h:outputText value="Dirección Nacional"/>
+                                    </f:facet>
+                                <h:outputText value="#{item.idDependenciaF.idDirNac.nombreDirNac}"/>
+                            </p:column>
+                            <p:column filterBy="#{item.idDependenciaF.nombreDependencia}" filterMatchMode="contains" filterStyle="display:none">
+                                <f:facet name="header" >
+                                        <h:outputText value="Unidad Organizativa/Dependencia"/>
+                                    </f:facet>
+                                <h:outputText value="#{item.idDependenciaF.nombreDependencia}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </h:panelGroup>
+
+                </h:form>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>

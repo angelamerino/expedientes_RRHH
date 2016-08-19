@@ -1,0 +1,330 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="../../WEB-INF/templates/plantilla.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+
+    <ui:define name="content">
+        <link href="#{request.contextPath}/resources/datatables/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
+        <div class="page-header">
+            <h1><strong>GESTIÓN DE CAPACITACIONES</strong></h1>
+            <h:form prependId="false">
+                <p:growl id="growl" showDetail="false"  autoUpdate="true" life="10000" />
+                <h:commandLink value="Nuevo Registro" styleClass="btn btn-info pull-right"  style="text-decoration:none;" action="#{manejadorCapacitaciones.nuevaCapacitacion()}" immediate="true" />
+            </h:form>
+            <div class="clearfix" ></div>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading"><strong>Agregar/Eliminar</strong></div>
+            <div class="panel-body">
+                <div class="table table-responsive">
+                    <f:view>
+                        <h:form prependId="false">
+                            <h:panelGroup id ="tabla">
+                                <h:dataTable id="listCapacitaciones" value="#{manejadorCapacitaciones.todasCapacitacionesPorAnioGestion()}" var="item" style="font-size: 14px" styleClass="table table-striped table-hover">
+                                    <h:column>
+
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <center>
+                                                <h:outputText value="Año"/>
+                                            </center>
+                                        </f:facet>
+                                        <center>
+                                            <h:outputText value="#{item.anioCap}">
+                                                <f:convertDateTime pattern="yyyy" />
+                                            </h:outputText>
+                                        </center>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Capacitacion"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.temaCap}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Facilitador"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.facilitadorCap}"/>
+                                    </h:column>  
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <center>
+                                                <h:outputText value="N° Grupo"/>
+                                            </center>
+                                        </f:facet>
+                                        <center>
+                                            <h:outputText value="#{item.numGrupo}"/>
+                                        </center>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <center>
+                                                <h:outputText value="Días de Capacitación"/>
+                                            </center>
+                                        </f:facet>
+                                        <center>
+                                            <h:commandLink styleClass="btn-sm glyphicon glyphicon-eye-open" style="text-decoration:none;" title="Días de Capacitación">
+                                                <f:setPropertyActionListener value="#{item}" target="#{manejadorCapacitaciones.capacitaciones}"/>
+                                                <f:setPropertyActionListener value="#{item.idCap}" target="#{manejadorCapacitaciones.idCapHorasDias}"/>
+                                                <p:ajax update="listHorasDias" />
+                                                <p:ajax update="tabla"  onsuccess="PF('diasCap').show()"/>
+                                            </h:commandLink>                                                                                                  
+                                        </center>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <center>
+                                                <h:outputText value="Editar/Eliminar"/>
+                                            </center>
+                                        </f:facet>
+                                        <center>
+                                            <h:commandLink styleClass="btn-sm glyphicon glyphicon-pencil" style="text-decoration:none;" title="Editar">
+                                                <f:setPropertyActionListener value="#{item}" target="#{manejadorCapacitaciones.capacitaciones}"/>
+                                                <f:setPropertyActionListener value="#{item.anioCap}" target="#{manejadorCapacitaciones.anioEditar}"/>
+                                                <p:ajax update="panelCapaEditar" />
+                                                <p:ajax update="tabla"  onsuccess="PF('capacitacion').show()"/>
+                                            </h:commandLink>
+                                            <h:commandLink actionListener="#{manejadorCapacitaciones.capacitacionSeleccionada(item)}" styleClass="btn-sm glyphicon glyphicon-remove" style="text-decoration:none;" title="Eliminar" immediate="true">
+                                                <p:ajax update="tabla"  onsuccess="PF('confirmation').show()"/>
+                                            </h:commandLink>                                                        
+                                        </center>
+                                    </h:column>
+                                </h:dataTable>
+                            </h:panelGroup>
+                        </h:form>
+                    </f:view>
+                </div>
+            </div>
+        </div>
+
+        <p:confirmDialog  message="Desea Eliminar Capacitación" header="Confirmación"  closable="false" severity="info" widgetVar="confirmation">
+            <h:form prependId="false" class="form-horizontal">
+                <h:commandLink value="Aceptar" actionListener="#{manejadorCapacitaciones.eliminarCapacitacion()}" action="#{manejadorCapacitaciones.cancelarCapacitacion()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" >
+                    <f:ajax execute="confirmation"/>
+                </h:commandLink>
+                <h:commandLink value="Cancelar" actionListener="#{manejadorCapacitaciones.cancelarEditar()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true"/>
+            </h:form>
+        </p:confirmDialog>
+
+        <p:dialog header="Editar Capacitación" widgetVar="capacitacion" modal="true" height="auto" width="50%" resizable="false" position="center,top" styleClass="disable-scroll" draggable="false" closable="false">
+            <h:form class="form-horizontal" prependId="false">                
+                <h:panelGroup id ="panelCapaEditar">
+                    <div class="form-group">
+                        <p:outputLabel for="temaCap" value="Tema de la Capacitacón:" styleClass="col-lg-4 control-label" />
+                        <div class="col-lg-8">
+                            <p:inputText id="temaCap" style="width:100%; padding: 9px;" value="#{manejadorCapacitaciones.capacitaciones.temaCap}" required="true" requiredMessage="Ingrese Tema de Capacitación."/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <p:outputLabel for="facilitadorCap" value="Nombre de Facilitador:" styleClass="col-lg-4 control-label" />
+                        <div class="col-lg-8">
+                            <p:inputText  style="width:100%; padding: 9px;" id="facilitadorCap" value="#{manejadorCapacitaciones.capacitaciones.facilitadorCap}" required="true" requiredMessage="Ingrese Nombre de Facilitador." />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <p:outputLabel for="institucionCap" value="Institución que Proporciona el Facilitador:" styleClass="col-lg-4 control-label" />
+                        <div class="col-lg-8">
+                            <p:inputText  id="institucionCap"  style="width:100%; padding: 9px;" value="#{manejadorCapacitaciones.capacitaciones.institucionCap}" required="true" requiredMessage="Ingrse Institución."/>
+                        </div>
+                    </div>                                
+                    <div class="form-group">
+                        <p:outputLabel value="Año de la Capacitación:" for="anio" styleClass="col-lg-4 control-label" />
+                        <div class="col-lg-3">
+                            <p:selectOneMenu id="anio"  value="#{manejadorCapacitaciones.anio}" style="width: 100%" required="true" requiredMessage="Seleccione un Año.">
+                                <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue="#{null}"/>
+                                <f:selectItems value="#{manejadorCapacitaciones.todosAnios()}" var="anio" itemLabel="#{anio.anio}" itemValue="#{anio.anio}"/>                                                    
+                            </p:selectOneMenu>
+                        </div>
+                        <p:outputLabel for="numGrupo" value="Número de Grupo:" styleClass="col-lg-3 control-label" />
+                        <div class="col-lg-2">
+                            <p:inputText  id="numGrupo"  style="width:100%; padding: 9px;" value="#{manejadorCapacitaciones.capacitaciones.numGrupo}" title="NumGrupo" required="true" requiredMessage="Ingrese Número de Grupo."/>
+                        </div>
+                    </div>    
+                    <div class="form-group">
+                        <p:outputLabel for="numHorasCap" value="Número de Horas para Capacitación:" styleClass="col-lg-4 control-label" />
+                        <div class="col-lg-8">
+                            <p:spinner style="margin-top: 10px" size="5" id="numHorasCap" value="#{manejadorCapacitaciones.capacitaciones.numHorasCap}" min="1" max="500" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-4"></div>
+                        <div class="col-lg-8">
+                            <h:commandLink style="margin: 2px; color: white;" styleClass="btn btn-info" value="Modificar" action="#{manejadorCapacitaciones.editarCapacitacion()}" >
+                                <p:ajax update="panelCapaEditar" process="panelCapaEditar" />
+                            </h:commandLink>
+                            <h:commandLink style="margin: 2px; color: white;" styleClass="btn btn-info" value="Cancelar" action="#{manejadorCapacitaciones.cancelarCapacitacion()}" immediate="true"/>
+                        </div>
+                    </div>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog header="Días de Capacitación" widgetVar="diasCap" modal="true" height="auto" width="50%" draggable="false" closable="false" resizable="false" position="center,top" styleClass="disable-scroll">
+            <h2 class="text-info text-center">Días de Capacitación</h2>
+
+            <h:form>
+                <h:commandLink style="color: white; margin: 2px;" styleClass="pull-right btn btn-info" value="Cancelar" action="#{manejadorCapacitaciones.cancelarCapacitacion()}" immediate="true"/>
+                <h:commandLink style="color: white; margin: 2px;" value="Agregar Días" class="pull-right btn btn-info" >
+                    <p:ajax update="listHorasDias"  onsuccess="PF('dias').show()"/>
+                </h:commandLink>
+            </h:form>
+            <div class="clearfix"></div>
+            <br />
+            <div class="table table-responsive">
+                <h:form prependId="false">
+                    <h:panelGroup id="listHorasDias" >
+                        <h:outputLabel value="Capacitación: #{manejadorCapacitaciones.capacitaciones.temaCap}" />
+                        <p:dataTable id="tabla1" value="#{manejadorCapacitaciones.todosHorariosCap()}" var="item"
+                                     emptyMessage="" 
+                                     rows="5"
+                                     paginator="true"
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15"
+                                     widgetVar="listado"
+                                     paginatorPosition="bottom">
+
+                            <f:facet name="header">
+                                <p:outputPanel style="text-align: right;">
+                                    <h:outputText value="Buscar:  " />
+                                    <p:inputText id="globalFilter" onkeyup="PF('listado').filter()" style="width:200px;"/>
+                                </p:outputPanel>
+                            </f:facet>
+
+                            <p:column headerText="Fecha" filterBy="#{item.fechaCap}" style="width:00%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
+                                <h:outputText value="#{item.fechaCap}">
+                                    <f:convertDateTime pattern="MM/dd/yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Hora Inicio" filterBy="#{item.horaInicioCap}" style="width:00%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
+                                <h:outputText value="#{item.horaInicioCap}">
+                                    <f:convertDateTime pattern="hh:mm a" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Hora Finalización" filterBy="#{item.horaFinCap}" style="width:00%; text-align: center;"  filterMatchMode="contains" filterStyle="display:none">
+                                <h:outputText value="#{item.horaFinCap}">
+                                    <f:convertDateTime pattern="hh:mm a" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Eliminar" style="width:00%; text-align: center;">
+                                <h:commandLink action="#{manejadorCapacitaciones.horariosCapaSelecionado(item)}" styleClass="btn-sm glyphicon glyphicon-remove" style="text-decoration:none; color: #1d9ce5;" title="Eliminar" immediate="true">
+                                    <p:ajax update="tabla1"  onsuccess="PF('confirmation1').show()"/>
+                                </h:commandLink>
+                            </p:column>
+                        </p:dataTable>
+                    </h:panelGroup>
+                </h:form>
+            </div>
+        </p:dialog>
+
+        <p:confirmDialog  message="Desea Eliminar Días de Capacitación" header="Confirmación"  closable="false" severity="info" widgetVar="confirmation1">
+            <h:form prependId="false" class="form-horizontal">
+                <h:commandLink value="Aceptar" actionListener="#{manejadorCapacitaciones.eliminarHorariosCap()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" >
+                    <f:ajax execute="confirmation1" render="tabla1" />
+                </h:commandLink>
+                <h:commandLink value="Cancelar" actionListener="#{manejadorCapacitaciones.cancelarEditar()}" style="margin: 2px; color: white" styleClass="btn-sm btn-info" immediate="true"/>
+            </h:form>
+        </p:confirmDialog>
+
+        <p:dialog header="Ingreso días de Capacitación" widgetVar="dias" modal="true" height="auto" width="30%" resizable="false" position="center,top" styleClass="disable-scroll" draggable="false" closable="false">
+            <f:view>
+                <h:form class="form-horizontal" prependId="false">
+                    <h:panelGroup id="panelHoras">                        
+                        <div class="form-group">
+                            <p:outputLabel for="fechaCap" value="Fecha:" styleClass="col-lg-5 control-label"/>
+                            <p:calendar locale="es" styleClass="col-lg-7" id="fechaCap" value="#{manejadorCapacitaciones.horariosCap.fechaCap}" required="true" requiredMessage="Ingese Fecha." />
+                        </div>
+                        <div class="form-group">
+                            <p:outputLabel for="horaInicioCap" value="Hora de Inicio:" styleClass="col-lg-5 control-label"/>
+                            <p:calendar locale="es" styleClass="col-lg-7" id="horaInicioCap" value="#{manejadorCapacitaciones.horaInicio}" pattern="hh:mm a" timeOnly="true" required="true" requiredMessage="Ingese Hora de Inicio." >
+                                <p:ajax event="dateSelect" update="horaFinCap" />
+                            </p:calendar>
+                        </div>
+                        <div class="form-group">
+                            <p:outputLabel for="horaFinCap" value="Hora de Finalización:" styleClass="col-lg-5 control-label"/>
+                            <p:calendar locale="es" styleClass="col-lg-7" id="horaFinCap" value="#{manejadorCapacitaciones.horariosCap.horaFinCap}" minHour="#{manejadorCapacitaciones.horas}" minMinute="#{manejadorCapacitaciones.minutos}" pattern="hh:mm a" timeOnly="true" required="true" requiredMessage="Ingrese Hora Finañización." />
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-5"></div>
+                            <div class="col-lg-7">
+                                <h:commandButton style="margin: 2px" styleClass="btn-sm btn-info" value="Guardar" action="#{manejadorCapacitaciones.guardarHorariosCap()}" >
+                                    <f:ajax execute="panelHoras" render="panelHoras" />
+                                </h:commandButton>
+                                <h:commandButton style="margin: 2px"  styleClass="btn-sm btn-info"  value="Cancelar" onclick="PF('dias').hide()">
+                                    <f:ajax render="panelHoras" />
+                                    <p:resetInput target="panelHoras" />
+                                </h:commandButton>
+                            </div>
+                        </div>
+                    </h:panelGroup>
+                </h:form>
+            </f:view>
+        </p:dialog>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                var t = $('#listCapacitaciones').DataTable({
+                    "columnDefs": [{
+                            "searchable": false,
+                            "orderable": false,
+                            "targets": 0
+                        },
+                        {
+                            "searchable": false,
+                            "orderable": false,
+                            "targets": 05
+                        },
+                        {
+                            "searchable": false,
+                            "orderable": false,
+                            "targets": 6
+                        }],
+                    "order": [[1, 'asc']],
+                    "oLanguage": {
+                        "sProcessing": "Procesando...",
+                        "sLengthMenu": "Mostrar _MENU_ registros",
+                        "sZeroRecords": "No se encontraron resultados",
+                        "sEmptyTable": "Ningún dato disponible en esta tabla",
+                        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                        "sInfoPostFix": "",
+                        "sSearch": "Buscar:",
+                        "sUrl": "",
+                        "sInfoThousands": ",",
+                        "sLoadingRecords": "Cargando...",
+                        "oPaginate": {
+                            "sFirst": "Primero",
+                            "sLast": "Ãšltimo",
+                            "sNext": "Siguiente",
+                            "sPrevious": "Anterior"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                        }
+                    }
+                });
+
+
+
+                t.on('order.dt search.dt', function () {
+                    t.column(0, {search: 'applied', order: 'applied'}).nodes().each(function (cell, i) {
+                        cell.innerHTML = i + 1;
+                    });
+                }).draw();
+
+
+            });
+        </script>
+        <script src="#{request.contextPath}/resources/datatables/jquery.dataTables.min.js" type="text/javascript"></script>
+    </ui:define>
+
+</ui:composition>

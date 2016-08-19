@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="../../WEB-INF/templates/plantilla.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <div class="page-header">
+            <h1><strong>REGISTRO DE AUMENTO SALARIAL</strong></h1>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading"><strong>Ingreso de Aumento Salarial</strong></div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <h:form prependId="false" class="form-horizontal">
+                            <p:growl id="growl" showDetail="false"  autoUpdate="true" life="10000" />
+                            <div class="form-group">
+                                <p:outputLabel for="porcentajeHsalarial" value="Porcentaje de Aplicación:" styleClass="col-lg-4 control-label"/>
+                                <div class="col-lg-6">
+                                    <p:inputText style="width: 100%; padding: 9px;" validatorMessage="Porcentaje debe estar entre 0.01 y 100.00"  id="porcentajeHsalarial" value="#{manejadorAumentoMejoraSalarial.porcentajeAumento}" required="true" requiredMessage="Ingrese porcentaje de Aplicación" >
+                                        <f:validateDoubleRange minimum="0.01" maximum="100.00" />
+                                    </p:inputText>
+                                </div>
+                                <p:outputLabel value="%" styleClass="col-lg-1 control-label"/>
+                            </div>
+                            <div class="form-group">
+                                <p:outputLabel for="min" value="Salario Mínimo de Aplicación: $" styleClass="col-lg-4 control-label"/>
+                                <div class="col-lg-2">
+                                    <p:inputText style="width: 100%; padding: 9px;" validatorMessage="Salario Mínimo No debe ser Cero"  id="min" value="#{manejadorAumentoMejoraSalarial.salMin}" required="true" requiredMessage="Ingrese Salario Mínimo Aplicación" >
+                                        <f:validateDoubleRange minimum="0.01"/>
+                                        <p:ajax update="max" />
+                                    </p:inputText>
+                                </div>
+                                <p:outputLabel for="max" value="Salario Máximo Aplicación: $" styleClass="col-lg-4 control-label"/>
+                                <div class="col-lg-2">
+                                    <p:inputText  style="width: 100%; padding: 9px;" validatorMessage="Salario máximo debe ser mayor a salario mínimo" id="max" value="#{manejadorAumentoMejoraSalarial.newHistSal.salMax}" required="true" requiredMessage="Ingrese Salario Máximo de Aplicación" >
+                                        <f:validateDoubleRange minimum="#{manejadorAumentoMejoraSalarial.salMin + 0.01}"/>
+                                    </p:inputText>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <p:outputLabel for="fechaHsalarial" value="Fecha de Aplicación:" styleClass="col-lg-4 control-label"/>
+                                <div class="col-lg-7">
+                                    <p:calendar pattern="dd/MM/yyyy" locale="es" id="fechaHsalarial" value="#{manejadorAumentoMejoraSalarial.newHistSal.fechaHsalarial}" required="true" requiredMessage="Ingrese Fecha de Aplicación" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <p:outputLabel for="decretoHsalarial" value="No del Decreto de Ley:" styleClass="col-lg-4 control-label"/>
+                                <div class="col-lg-8">
+                                    <p:inputText style="width: 100%; padding: 9px;" id="decretoHsalarial" value="#{manejadorAumentoMejoraSalarial.newHistSal.numDocDecreto}" required="true" requiredMessage="Ingrese Decreto de Ley"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <p:outputLabel for="subDocHsalarial" value="Subir Documento de Ley:" styleClass="col-lg-4 control-label"/>
+                                <div class="col-lg-8">
+                                    <h:outputText styleClass="form-control" id="subDocHsalarial" value="#{manejadorAumentoMejoraSalarial.newHistSal.numDocDecreto}"/>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <div class="col-lg-4"></div>
+                                <div class="col-lg-8">
+                                    <h:commandLink style="margin: 2px; color: white" styleClass="btn btn-info" value="Guardar" action="#{manejadorAumentoMejoraSalarial.guardarAumentoSalarial()}" />
+                                    <h:commandLink style="margin: 2px; color: white" styleClass="btn btn-info" value="Cancelar" action="#{manejadorAumentoMejoraSalarial.cancelarAumento()}" immediate="true"/>
+                                </div>
+                            </div>
+                        </h:form>
+                    </div>
+                    <div class="col-md-2"></div>
+                </div>
+            </div>
+        </div> 
+    </ui:define>
+
+</ui:composition>
