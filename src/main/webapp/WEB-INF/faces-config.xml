@@ -122,13 +122,8 @@
             <redirect/>
         </navigation-case>
         <navigation-case>
-            <from-outcome>reg_aumento_salarial</from-outcome>
-            <to-view-id>/contenido/registro-ui/reg_aumento_salarial.xhtml</to-view-id>
-            <redirect/>
-        </navigation-case>
-        <navigation-case>
-            <from-outcome>gestion_aumento_salarial</from-outcome>
-            <to-view-id>/contenido/gestion-ui/gestion_aumento_salarial.xhtml</to-view-id>
+            <from-outcome>registro_mejora_salarial</from-outcome>
+            <to-view-id>/contenido/registro-ui/reg_mejora_salarial.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>

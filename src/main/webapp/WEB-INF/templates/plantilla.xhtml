@@ -59,8 +59,10 @@
                                         <p:menuitem value="Gestión de empleados" outcome="gestion_empleados" />
                                     </p:submenu>
                                     <p:menuitem icon="fa fa-asterisk" value="Movimientos" outcome="gestion_movimientos"/>
-                                    <p:menuitem icon="fa fa-asterisk" value="Mejora salarial" outcome="gestion_mejora_salarial"/>
-                                    <p:menuitem icon="fa fa-asterisk" value="Gestión de aumento salarial" outcome="gestion_aumento_salarial"/>
+                                    <p:submenu label="Mejora salarial" icon="fa fa-asterisk">
+                                        <p:menuitem icon="fa fa-asterisk" value="Registro mejora salarial" outcome="registro_mejora_salarial"/>
+                                        <p:menuitem icon="fa fa-asterisk" value="Gestión de mejora salarial" outcome="gestion_mejora_salarial"/>
+                                    </p:submenu>
                                     <p:submenu label="Descuentos" icon="fa fa-asterisk">
                                         <p:menuitem value="Registro de descuentos" outcome="reg_descuentos_emp" />
                                         <p:menuitem value="Gestión de descuentos" outcome="gestion_descuentos_emp" />
@@ -164,5 +166,5 @@
     <h:outputScript name="jquery/jquery.js" library="primefaces" target="head"/>
     <script src="#{request.contextPath}/resources/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
     <ui:insert name="scripts"/>
-    
+
 </html>

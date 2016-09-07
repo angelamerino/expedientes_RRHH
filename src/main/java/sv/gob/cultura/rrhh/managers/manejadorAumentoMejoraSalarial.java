@@ -125,6 +125,10 @@ public class manejadorAumentoMejoraSalarial implements Serializable {
         return getTipoMejoraSalarialFacade().findAll();
     }
 
+    public List<HistorialSalarial> fetchHistorialesSalariales() {
+        return getHistorialSalarialFacade().findAll();
+    }
+
     public List<HistorialSalarial> fetchHistorialByEmp() {
         if (selectedEmp.getIdEmpleado() != null) {
             return getHistorialSalarialFacade().findByIdEmp(selectedEmp.getIdEmpleado());

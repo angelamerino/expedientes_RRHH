@@ -36,7 +36,6 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "HistorialSalarial.findByIdHsalarial", query = "SELECT h FROM HistorialSalarial h WHERE h.idHsalarial = :idHsalarial"),
     @NamedQuery(name = "HistorialSalarial.findByIdEmpleado", query = "SELECT h FROM HistorialSalarial h WHERE h.idEmpleado.idEmpleado = :idEmpleado"),
     @NamedQuery(name = "HistorialSalarial.findBySalarioActualHsalarial", query = "SELECT h FROM HistorialSalarial h WHERE h.salarioActualHsalarial = :salarioActualHsalarial"),
-    @NamedQuery(name = "HistorialSalarial.findByTipo", query = "SELECT h FROM HistorialSalarial h WHERE h.tipoHistorial = :tipoHistorial"),
     @NamedQuery(name = "HistorialSalarial.findByNuevoSalarioHsalarial", query = "SELECT h FROM HistorialSalarial h WHERE h.nuevoSalarioHsalarial = :nuevoSalarioHsalarial"),
     @NamedQuery(name = "HistorialSalarial.findByPorcentajeHsalarial", query = "SELECT h FROM HistorialSalarial h WHERE h.porcentajeHsalarial = :porcentajeHsalarial"),
     @NamedQuery(name = "HistorialSalarial.findByFechaHsalarial", query = "SELECT h FROM HistorialSalarial h WHERE h.fechaHsalarial = :fechaHsalarial"),
@@ -74,8 +73,6 @@ public class HistorialSalarial implements Serializable {
     private String numDocDecreto;
     @Column(name = "user_crea_hsal")
     private Integer userCreaHsal;
-    @Column(name = "tipo_historial")
-    private Integer tipoHistorial;
     @Column(name = "verificacion_historial")
     private Integer verificacionHistorial;
     @Column(name = "fecha_crea_hsal")
@@ -204,14 +201,6 @@ public class HistorialSalarial implements Serializable {
 
     public void setIdEmpleado(Empleados idEmpleado) {
         this.idEmpleado = idEmpleado;
-    }
-
-    public Integer getTipoHistorial() {
-        return tipoHistorial;
-    }
-
-    public void setTipoHistorial(Integer tipoHistorial) {
-        this.tipoHistorial = tipoHistorial;
     }
 
     public Integer getVerificacionHistorial() {
