@@ -6,6 +6,7 @@
 package sv.gob.cultura.rrhh.managers;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
@@ -46,8 +47,9 @@ public class manejadorAumentoMejoraSalarial implements Serializable {
     private DirNacionalFacade dirNacionalFacade;
     private HistorialSalarial newHistSal = new HistorialSalarial(), selectedHistSal = new HistorialSalarial();
     private Empleados selectedEmp = new Empleados();
+    private List<Empleados> selectedEmployees = new ArrayList<>();
     private int direccionNacional;
-    private int dependecia;
+    private int dependeciaIndividual, dependenciaColectivo;
 
     public HistorialSalarial getNewHistSal() {
         return newHistSal;
@@ -73,6 +75,14 @@ public class manejadorAumentoMejoraSalarial implements Serializable {
         this.selectedEmp = selectedEmp;
     }
 
+    public List<Empleados> getSelectedEmployees() {
+        return selectedEmployees;
+    }
+
+    public void setSelectedEmployees(List<Empleados> selectedEmployees) {
+        this.selectedEmployees = selectedEmployees;
+    }
+
     public int getDireccionNacional() {
         return direccionNacional;
     }
@@ -81,12 +91,20 @@ public class manejadorAumentoMejoraSalarial implements Serializable {
         this.direccionNacional = direccionNacional;
     }
 
-    public int getDependecia() {
-        return dependecia;
+    public int getDependeciaIndividual() {
+        return dependeciaIndividual;
     }
 
-    public void setDependecia(int dependecia) {
-        this.dependecia = dependecia;
+    public void setDependeciaIndividual(int dependeciaIndividual) {
+        this.dependeciaIndividual = dependeciaIndividual;
+    }
+
+    public int getDependenciaColectivo() {
+        return dependenciaColectivo;
+    }
+
+    public void setDependenciaColectivo(int dependenciaColectivo) {
+        this.dependenciaColectivo = dependenciaColectivo;
     }
 
     public HistorialSalarialFacade getHistorialSalarialFacade() {
@@ -117,8 +135,12 @@ public class manejadorAumentoMejoraSalarial implements Serializable {
         return getDependenciasFacade().findByDirNac(direccionNacional);
     }
 
-    public List<Empleados> fetchFilteredEmps() {
-        return getEmpleadosFacade().findByDependencia(dependecia);
+    public List<Empleados> fetchFilteredEmpsInd() {
+        return getEmpleadosFacade().findByDependencia(dependeciaIndividual);
+    }
+
+    public List<Empleados> fetchFilteredEmpsCol() {
+        return getEmpleadosFacade().findByDependencia(dependenciaColectivo);
     }
 
     public List<TipoMejoraSalarial> fetchTiposMejora() {

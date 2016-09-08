@@ -37,14 +37,14 @@
                                     </div>
                                     <div class="form-group">
                                         <h:outputLabel value="Dependencia / Unidad organizativa:"/>
-                                        <h:selectOneMenu class="form-control" id="filtrarDependencia"  style="width: 100%" value="#{manejadorAumentoMejoraSalarial.dependecia}" rendered="true" requiredMessage="Seleccione una Dependencia/Unidad Organizativa">
+                                        <h:selectOneMenu class="form-control" id="filtrarDependencia"  style="width: 100%" value="#{manejadorAumentoMejoraSalarial.dependeciaIndividual}" rendered="true" requiredMessage="Seleccione una Dependencia/Unidad Organizativa">
                                             <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
                                             <f:selectItems value="#{manejadorAumentoMejoraSalarial.fetchDependenciasFiltradas()}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
                                             <p:ajax update="empleadoList"/>
                                         </h:selectOneMenu>
                                     </div>
                                     <div class="form-group">
-                                        <p:dataTable id="empleadoList" value="#{manejadorAumentoMejoraSalarial.fetchFilteredEmps()}" var="emp" rowKey="#{emp.idEmpleado}" rows="10" paginator="true" rowsPerPageTemplate="10,15,25">
+                                        <p:dataTable id="empleadoList" value="#{manejadorAumentoMejoraSalarial.fetchFilteredEmpsInd()}" var="emp" rowKey="#{emp.idEmpleado}" rows="10" paginator="true" rowsPerPageTemplate="10,15,25">
                                             <p:column filterBy="#{emp.nombreEmpleado}" filterMatchMode="contains">
                                                 <f:facet name="header">
                                                     <h:outputText value="Nombre completo"/>
@@ -67,7 +67,7 @@
                                                 <f:facet name="header">
                                                     <h:outputText value="Editar"/>
                                                 </f:facet>
-                                                <p:commandButton icon="fa fa-pencil" process="@this empleadoList" oncomplete="PF('dlgHistSalByEmp').show();" update="tbl-historial-salarial">
+                                                <p:commandButton icon="fa fa-pencil" value="Ver" process="@this empleadoList" oncomplete="PF('dlgHistSalByEmp').show();" update="tbl-historial-salarial">
                                                     <f:setPropertyActionListener  value="#{emp}" target="#{manejadorAumentoMejoraSalarial.selectedEmp}"/>
                                                 </p:commandButton>
                                             </p:column>
@@ -75,7 +75,45 @@
                                     </div>
                                 </p:tab>
                                 <p:tab title="Colectivo">
-
+                                    <div class="form-group">
+                                        <h:outputLabel value="Dirección Nacional:"/>                                
+                                        <h:selectOneMenu class="form-control" style="width: 100%" value="#{manejadorAumentoMejoraSalarial.direccionNacional}" rendered="true" requiredMessage="Seleccione una Dirección Nacional">
+                                            <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                            <f:selectItems value="#{manejadorAumentoMejoraSalarial.fetchDireccionesNacionales()}" var="dirNacional" itemLabel="#{dirNacional.nombreDirNac}" itemValue="#{dirNacional.idDirNac}"/>
+                                            <p:ajax update="filtrarDependenciaCol"/>
+                                        </h:selectOneMenu>
+                                    </div>
+                                    <div class="form-group">
+                                        <h:outputLabel value="Dependencia / Unidad organizativa:"/>
+                                        <h:selectOneMenu class="form-control" id="filtrarDependenciaCol"  style="width: 100%" value="#{manejadorAumentoMejoraSalarial.dependenciaColectivo}" rendered="true" requiredMessage="Seleccione una Dependencia/Unidad Organizativa">
+                                            <f:selectItem itemLabel="Seleccione uno..." noSelectionOption="true" itemValue=""/>
+                                            <f:selectItems value="#{manejadorAumentoMejoraSalarial.fetchDependenciasFiltradas()}" var="a" itemLabel="#{a.nombreDependencia}" itemValue="#{a.idDependencia}"/>
+                                            <p:ajax update="empleadosList"/>
+                                        </h:selectOneMenu>
+                                    </div>
+                                    <div class="form-group">
+                                        <p:dataTable id="empleadosList" value="#{manejadorAumentoMejoraSalarial.fetchFilteredEmpsCol()}" var="empCol" rowKey="#{empCol.idEmpleado}" selection="#{manejadorAumentoMejoraSalarial.selectedEmployees}" rows="10" paginator="true" rowsPerPageTemplate="10,15,25">
+                                            <p:column selectionMode="multiple" style="width:50px;text-align:center"/>
+                                            <p:column filterBy="#{empCol.nombreEmpleado}" filterMatchMode="contains">
+                                                <f:facet name="header">
+                                                    <h:outputText value="Nombre completo"/>
+                                                </f:facet>
+                                                <h:outputText value="#{empCol.nombreEmpleado}"/>
+                                            </p:column>
+                                            <p:column filterBy="#{empCol.nrEmpleado}" filterMatchMode="contains">
+                                                <f:facet name="header">
+                                                    <h:outputText value="NR"/>
+                                                </f:facet>
+                                                <h:outputText value="#{empCol.nrEmpleado}"/>
+                                            </p:column>
+                                            <p:column filterBy="#{empCol.numDui}" filterMatchMode="contains">
+                                                <f:facet name="header">
+                                                    <h:outputText value="DUI"/>
+                                                </f:facet>
+                                                <h:outputText value="#{empCol.numDui}"/>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </div>
                                 </p:tab>
                             </p:tabView>
                         </div>
